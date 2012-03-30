@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2012 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2011-2012 Geometer Plus <contact@lancer.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,18 +28,18 @@ const char * const AndroidUtil::Class_java_util_Collection = "java/util/Collecti
 const char * const AndroidUtil::Class_java_util_Locale = "java/util/Locale";
 const char * const AndroidUtil::Class_java_io_InputStream = "java/io/InputStream";
 const char * const AndroidUtil::Class_java_io_PrintStream = "java/io/PrintStream";
-const char * const AndroidUtil::Class_ZLibrary = "org/geometerplus/zlibrary/core/library/ZLibrary";
-const char * const AndroidUtil::Class_NativeFormatPlugin = "org/geometerplus/fbreader/formats/NativeFormatPlugin";
-const char * const AndroidUtil::Class_PluginCollection = "org/geometerplus/fbreader/formats/PluginCollection";
-const char * const AndroidUtil::Class_Encoding = "org/geometerplus/zlibrary/core/encodings/Encoding";
-const char * const AndroidUtil::Class_EncodingConverter = "org/geometerplus/zlibrary/core/encodings/EncodingConverter";
-const char * const AndroidUtil::Class_JavaEncodingCollection = "org/geometerplus/zlibrary/core/encodings/JavaEncodingCollection";
-const char * const AndroidUtil::Class_Paths = "org/geometerplus/fbreader/Paths";
-const char * const AndroidUtil::Class_ZLFile = "org/geometerplus/zlibrary/core/filesystem/ZLFile";
-const char * const AndroidUtil::Class_Book = "org/geometerplus/fbreader/library/Book";
-const char * const AndroidUtil::Class_Tag = "org/geometerplus/fbreader/library/Tag";
-const char * const AndroidUtil::Class_NativeBookModel = "org/geometerplus/fbreader/bookmodel/NativeBookModel";
-const char * const AndroidUtil::Class_BookReadingException = "org/geometerplus/fbreader/bookmodel/BookReadingException";
+const char * const AndroidUtil::Class_ZLibrary = "org/lancer/zlibrary/core/library/ZLibrary";
+const char * const AndroidUtil::Class_NativeFormatPlugin = "org/lancer/fbreader/formats/NativeFormatPlugin";
+const char * const AndroidUtil::Class_PluginCollection = "org/lancer/fbreader/formats/PluginCollection";
+const char * const AndroidUtil::Class_Encoding = "org/lancer/zlibrary/core/encodings/Encoding";
+const char * const AndroidUtil::Class_EncodingConverter = "org/lancer/zlibrary/core/encodings/EncodingConverter";
+const char * const AndroidUtil::Class_JavaEncodingCollection = "org/lancer/zlibrary/core/encodings/JavaEncodingCollection";
+const char * const AndroidUtil::Class_Paths = "org/lancer/fbreader/Paths";
+const char * const AndroidUtil::Class_ZLFile = "org/lancer/zlibrary/core/filesystem/ZLFile";
+const char * const AndroidUtil::Class_Book = "org/lancer/fbreader/library/Book";
+const char * const AndroidUtil::Class_Tag = "org/lancer/fbreader/library/Tag";
+const char * const AndroidUtil::Class_NativeBookModel = "org/lancer/fbreader/bookmodel/NativeBookModel";
+const char * const AndroidUtil::Class_BookReadingException = "org/lancer/fbreader/bookmodel/BookReadingException";
 
 jmethodID AndroidUtil::MID_java_lang_String_toLowerCase;
 jmethodID AndroidUtil::MID_java_lang_String_toUpperCase;
@@ -148,22 +148,22 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_ZLibrary) );
-	CHECK_NULL( SMID_ZLibrary_Instance = env->GetStaticMethodID(cls, "Instance", "()Lorg/geometerplus/zlibrary/core/library/ZLibrary;") );
+	CHECK_NULL( SMID_ZLibrary_Instance = env->GetStaticMethodID(cls, "Instance", "()Lorg/lancer/zlibrary/core/library/ZLibrary;") );
 	CHECK_NULL( MID_ZLibrary_getVersionName = env->GetMethodID(cls, "getVersionName", "()Ljava/lang/String;") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_NativeFormatPlugin) );
 	CHECK_NULL( MID_NativeFormatPlugin_init = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;)V") );
 	CHECK_NULL( MID_NativeFormatPlugin_supportedFileType = env->GetMethodID(cls, "supportedFileType", "()Ljava/lang/String;") );
-	//CHECK_NULL( SMID_NativeFormatPlugin_createImage = env->GetStaticMethodID(cls, "createImage", "(Ljava/lang/String;Ljava/lang/String;II)Lorg/geometerplus/zlibrary/core/image/ZLImage;") );
+	//CHECK_NULL( SMID_NativeFormatPlugin_createImage = env->GetStaticMethodID(cls, "createImage", "(Ljava/lang/String;Ljava/lang/String;II)Lorg/lancer/zlibrary/core/image/ZLImage;") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_PluginCollection) );
-	CHECK_NULL( SMID_PluginCollection_Instance = env->GetStaticMethodID(cls, "Instance", "()Lorg/geometerplus/fbreader/formats/PluginCollection;") );
+	CHECK_NULL( SMID_PluginCollection_Instance = env->GetStaticMethodID(cls, "Instance", "()Lorg/lancer/fbreader/formats/PluginCollection;") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_Encoding) );
-	CHECK_NULL( MID_Encoding_createConverter = env->GetMethodID(cls, "createConverter", "()Lorg/geometerplus/zlibrary/core/encodings/EncodingConverter;") );
+	CHECK_NULL( MID_Encoding_createConverter = env->GetMethodID(cls, "createConverter", "()Lorg/lancer/zlibrary/core/encodings/EncodingConverter;") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_EncodingConverter) );
@@ -173,14 +173,14 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_JavaEncodingCollection) );
-	CHECK_NULL( SMID_JavaEncodingCollection_Instance = env->GetStaticMethodID(cls, "Instance", "()Lorg/geometerplus/zlibrary/core/encodings/JavaEncodingCollection;") );
-	CHECK_NULL( MID_JavaEncodingCollection_getEncoding_String = env->GetMethodID(cls, "getEncoding", "(Ljava/lang/String;)Lorg/geometerplus/zlibrary/core/encodings/Encoding;") );
-	CHECK_NULL( MID_JavaEncodingCollection_getEncoding_int = env->GetMethodID(cls, "getEncoding", "(I)Lorg/geometerplus/zlibrary/core/encodings/Encoding;") );
+	CHECK_NULL( SMID_JavaEncodingCollection_Instance = env->GetStaticMethodID(cls, "Instance", "()Lorg/lancer/zlibrary/core/encodings/JavaEncodingCollection;") );
+	CHECK_NULL( MID_JavaEncodingCollection_getEncoding_String = env->GetMethodID(cls, "getEncoding", "(Ljava/lang/String;)Lorg/lancer/zlibrary/core/encodings/Encoding;") );
+	CHECK_NULL( MID_JavaEncodingCollection_getEncoding_int = env->GetMethodID(cls, "getEncoding", "(I)Lorg/lancer/zlibrary/core/encodings/Encoding;") );
 	CHECK_NULL( MID_JavaEncodingCollection_providesConverterFor = env->GetMethodID(cls, "providesConverterFor", "(Ljava/lang/String;)Z") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_ZLFile) );
-	CHECK_NULL( SMID_ZLFile_createFileByPath = env->GetStaticMethodID(cls, "createFileByPath", "(Ljava/lang/String;)Lorg/geometerplus/zlibrary/core/filesystem/ZLFile;") );
+	CHECK_NULL( SMID_ZLFile_createFileByPath = env->GetStaticMethodID(cls, "createFileByPath", "(Ljava/lang/String;)Lorg/lancer/zlibrary/core/filesystem/ZLFile;") );
 	CHECK_NULL( MID_ZLFile_children = env->GetMethodID(cls, "children", "()Ljava/util/List;") );
 	CHECK_NULL( MID_ZLFile_exists = env->GetMethodID(cls, "exists", "()Z") );
 	CHECK_NULL( MID_ZLFile_isDirectory = env->GetMethodID(cls, "isDirectory", "()Z") );
@@ -194,7 +194,7 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_Book) );
-	CHECK_NULL( FID_Book_File = env->GetFieldID(cls, "File", "Lorg/geometerplus/zlibrary/core/filesystem/ZLFile;") );
+	CHECK_NULL( FID_Book_File = env->GetFieldID(cls, "File", "Lorg/lancer/zlibrary/core/filesystem/ZLFile;") );
 	CHECK_NULL( MID_Book_getTitle = env->GetMethodID(cls, "getTitle", "()Ljava/lang/String;") );
 	CHECK_NULL( MID_Book_getLanguage = env->GetMethodID(cls, "getLanguage", "()Ljava/lang/String;") );
 	CHECK_NULL( MID_Book_getEncodingNoDetection = env->GetMethodID(cls, "getEncodingNoDetection", "()Ljava/lang/String;") );
@@ -203,26 +203,26 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	CHECK_NULL( MID_Book_setLanguage = env->GetMethodID(cls, "setLanguage", "(Ljava/lang/String;)V") );
 	CHECK_NULL( MID_Book_setEncoding = env->GetMethodID(cls, "setEncoding", "(Ljava/lang/String;)V") );
 	CHECK_NULL( MID_Book_addAuthor = env->GetMethodID(cls, "addAuthor", "(Ljava/lang/String;Ljava/lang/String;)V") );
-	CHECK_NULL( MID_Book_addTag = env->GetMethodID(cls, "addTag", "(Lorg/geometerplus/fbreader/library/Tag;)V") );
+	CHECK_NULL( MID_Book_addTag = env->GetMethodID(cls, "addTag", "(Lorg/lancer/fbreader/library/Tag;)V") );
 	CHECK_NULL( MID_Book_save = env->GetMethodID(cls, "save", "()Z") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_Tag) );
-	CHECK_NULL( SMID_Tag_getTag = env->GetStaticMethodID(cls, "getTag", "(Lorg/geometerplus/fbreader/library/Tag;Ljava/lang/String;)Lorg/geometerplus/fbreader/library/Tag;") );
+	CHECK_NULL( SMID_Tag_getTag = env->GetStaticMethodID(cls, "getTag", "(Lorg/lancer/fbreader/library/Tag;Ljava/lang/String;)Lorg/lancer/fbreader/library/Tag;") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_NativeBookModel) );
-	CHECK_NULL( FID_NativeBookModel_Book = env->GetFieldID(cls, "Book", "Lorg/geometerplus/fbreader/library/Book;") );
+	CHECK_NULL( FID_NativeBookModel_Book = env->GetFieldID(cls, "Book", "Lorg/lancer/fbreader/library/Book;") );
 	CHECK_NULL( MID_NativeBookModel_initImageMap = env->GetMethodID(cls, "initImageMap", "([Ljava/lang/String;[I[ILjava/lang/String;Ljava/lang/String;I)V") );
 	CHECK_NULL( MID_NativeBookModel_initInternalHyperlinks = env->GetMethodID(cls, "initInternalHyperlinks", "(Ljava/lang/String;Ljava/lang/String;I)V") );
-	CHECK_NULL( MID_NativeBookModel_initTOC = env->GetMethodID(cls, "initTOC", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;[I[I)V") );
-	CHECK_NULL( MID_NativeBookModel_createTextModel = env->GetMethodID(cls, "createTextModel", "(Ljava/lang/String;Ljava/lang/String;I[I[I[I[I[BLjava/lang/String;Ljava/lang/String;I)Lorg/geometerplus/zlibrary/text/model/ZLTextModel;") );
-	CHECK_NULL( MID_NativeBookModel_setBookTextModel = env->GetMethodID(cls, "setBookTextModel", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;)V") );
-	CHECK_NULL( MID_NativeBookModel_setFootnoteModel = env->GetMethodID(cls, "setFootnoteModel", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;)V") );
+	CHECK_NULL( MID_NativeBookModel_initTOC = env->GetMethodID(cls, "initTOC", "(Lorg/lancer/zlibrary/text/model/ZLTextModel;[I[I)V") );
+	CHECK_NULL( MID_NativeBookModel_createTextModel = env->GetMethodID(cls, "createTextModel", "(Ljava/lang/String;Ljava/lang/String;I[I[I[I[I[BLjava/lang/String;Ljava/lang/String;I)Lorg/lancer/zlibrary/text/model/ZLTextModel;") );
+	CHECK_NULL( MID_NativeBookModel_setBookTextModel = env->GetMethodID(cls, "setBookTextModel", "(Lorg/lancer/zlibrary/text/model/ZLTextModel;)V") );
+	CHECK_NULL( MID_NativeBookModel_setFootnoteModel = env->GetMethodID(cls, "setFootnoteModel", "(Lorg/lancer/zlibrary/text/model/ZLTextModel;)V") );
 	env->DeleteLocalRef(cls);
 
 	CHECK_NULL( cls = env->FindClass(Class_BookReadingException) );
-	CHECK_NULL( SMID_BookReadingException_throwForFile = env->GetStaticMethodID(cls, "throwForFile", "(Ljava/lang/String;Lorg/geometerplus/zlibrary/core/filesystem/ZLFile;)V") );
+	CHECK_NULL( SMID_BookReadingException_throwForFile = env->GetStaticMethodID(cls, "throwForFile", "(Ljava/lang/String;Lorg/lancer/zlibrary/core/filesystem/ZLFile;)V") );
 	env->DeleteLocalRef(cls);
 
 	return true;
@@ -310,7 +310,7 @@ void AndroidUtil::throwRuntimeException(JNIEnv *env, const std::string &message)
 
 void AndroidUtil::throwBookReadingException(const std::string &resourceId, const ZLFile &file) {
 	JNIEnv *env = getEnv();
-	jclass cls = env->FindClass("org/geometerplus/fbreader/bookmodel/BookReadingException");
+	jclass cls = env->FindClass("org/lancer/fbreader/bookmodel/BookReadingException");
 	env->CallStaticVoidMethod(
 		cls,
 		SMID_BookReadingException_throwForFile,

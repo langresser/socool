@@ -1,0 +1,6 @@
+# Ignore generated files in test subdirectories.
+bin/
+gen/
+libs/
+obj/
+`
