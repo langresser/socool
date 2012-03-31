@@ -1,6 +1,12 @@
-# Ignore generated files in test subdirectories.
+default.properties
+build.properties
+local.properties
 bin/
 gen/
-libs/
+res/drawable/
+res/raw/
 obj/
-`
+.classpath
+.settings
+*.so
+*~

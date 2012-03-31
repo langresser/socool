@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-#include <string.h>
+#include <cstring>
 
 #include <ZLFile.h>
 #include <ZLInputStream.h>
@@ -162,4 +162,8 @@ void ZLXMLReaderInternal::init(const char *encoding) {
 
 bool ZLXMLReaderInternal::parseBuffer(const char *buffer, size_t len) {
 	return XML_Parse(myParser, buffer, len, 0) != XML_STATUS_ERROR;
+}
+
+size_t ZLXMLReaderInternal::getCurrentPosition() const {
+	return XML_GetCurrentByteIndex(myParser);
 }

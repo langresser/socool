@@ -1,4 +1,26 @@
+/*
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
+#include <AndroidUtil.h>
+
 #include <ZLImage.h>
+#include <ZLFileImage.h>
 #include <ZLLogger.h>
 
 #include "BookReader.h"
@@ -172,9 +194,18 @@ void BookReader::flushTextBufferToParagraph() {
 }
 
 void BookReader::addImage(const std::string &id, shared_ptr<const ZLImage> image) {
-	if (!image.isNull()) {
-		myModel.myImagesWriter->addImage(id, *image);
+	if (image.isNull()) {
+		return;
 	}
+
+	JNIEnv *env = AndroidUtil::getEnv();
+
+	jobject javaImage = AndroidUtil::createJavaImage(env, (const ZLFileImage&)*image);
+	jstring javaId = AndroidUtil::createJavaString(env, id);
+	env->CallObjectMethod(myModel.myJavaModel, AndroidUtil::MID_NativeBookModel_addImage, javaId, javaImage);
+
+	env->DeleteLocalRef(javaId);
+	env->DeleteLocalRef(javaImage);
 }
 
 void BookReader::insertEndParagraph(ZLTextParagraph::Kind kind) {

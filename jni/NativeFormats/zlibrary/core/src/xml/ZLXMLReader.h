@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,6 +94,7 @@ protected:
 	virtual void collectExternalEntities(std::map<std::string,std::string> &entityMap);
 
 	bool isInterrupted() const;
+	size_t getCurrentPosition() const;
 
 protected:
 	void interrupt();

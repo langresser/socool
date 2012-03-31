@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ ZLFileInfo ZLAndroidFSManager::fileInfo(const std::string &path) const {
 	ZLFileInfo info;
 
 	JNIEnv *env = AndroidUtil::getEnv();
-	jobject javaFile = AndroidUtil::createZLFile(env, path);
+	jobject javaFile = AndroidUtil::createJavaFile(env, path);
 	if (javaFile == 0) {
 		return info;
 	}

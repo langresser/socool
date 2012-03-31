@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
+#include <AndroidUtil.h>
+
 #include <ZLImage.h>
 #include <ZLFile.h>
 
@@ -8,9 +29,10 @@
 #include "../library/Book.h"
 #include "../library/Library.h"
 
-BookModel::BookModel(const shared_ptr<Book> book) : myBook(book) {
+BookModel::BookModel(const shared_ptr<Book> book, jobject javaModel) : myBook(book) {
+	myJavaModel = AndroidUtil::getEnv()->NewGlobalRef(javaModel);
+
 	const std::string cacheDirectory = Library::Instance().cacheDirectory();
-	myImagesWriter = new ZLImageMapWriter(131072, cacheDirectory, "nimages");
 	myBookTextModel = new ZLTextPlainModel(std::string(), book->language(), 131072, cacheDirectory, "ncache");
 	myContentsModel = new ContentsModel(book->language(), cacheDirectory, "ncontents");
 	/*shared_ptr<FormatPlugin> plugin = PluginCollection::Instance().plugin(book->file(), false);
@@ -20,6 +42,7 @@ BookModel::BookModel(const shared_ptr<Book> book) : myBook(book) {
 }
 
 BookModel::~BookModel() {
+	AndroidUtil::getEnv()->DeleteGlobalRef(myJavaModel);
 }
 
 void BookModel::setHyperlinkMatcher(shared_ptr<HyperlinkMatcher> matcher) {
@@ -56,7 +79,6 @@ const shared_ptr<Book> BookModel::book() const {
 void BookModel::flush() {
 	myBookTextModel->flush();
 	myContentsModel->flush();
-	myImagesWriter->flush();
 
 	std::map<std::string,shared_ptr<ZLTextModel> >::const_iterator it = myFootnotes.begin();
 	for (; it != myFootnotes.end(); ++it) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ private:
 
 inline ZLStreamImage::ZLStreamImage(const std::string &mimeType, const std::string &encoding, size_t offset, size_t size) : ZLSingleImage(mimeType), myEncoding(encoding), myOffset(offset), mySize(size) {}
 inline const std::string &ZLStreamImage::encoding() const { return myEncoding; }
- inline size_t ZLStreamImage::offset() const { return myOffset; }
- inline size_t ZLStreamImage::size() const { return mySize; }
+inline size_t ZLStreamImage::offset() const { return myOffset; }
+inline size_t ZLStreamImage::size() const { return mySize; }
 
 #endif /* __ZLSTREAMIMAGE_H__ */

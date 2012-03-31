@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2011-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ JavaInputStream::~JavaInputStream() {
 
 void JavaInputStream::initStream(JNIEnv *env) {
 	if (myJavaFile == 0) {
-		jobject javaFile = AndroidUtil::createZLFile(env, myName);
+		jobject javaFile = AndroidUtil::createJavaFile(env, myName);
 		myJavaFile = env->NewGlobalRef(javaFile);
 		env->DeleteLocalRef(javaFile);
 		if (myJavaFile == 0) {

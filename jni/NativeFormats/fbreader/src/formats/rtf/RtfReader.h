@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,6 +128,11 @@ protected:
 
 public:
 	virtual void run(RtfReader &reader, int *parameter) const = 0;
+};
+
+class RtfDummyCommand : public RtfCommand {
+public:
+	void run(RtfReader &reader, int *parameter) const;
 };
 
 class RtfNewParagraphCommand : public RtfCommand {

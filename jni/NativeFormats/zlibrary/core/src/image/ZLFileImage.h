@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ private:
 
 inline ZLFileImage::ZLFileImage(const ZLFile &file, const std::string &encoding, size_t offset, size_t size) : ZLStreamImage(file.mimeType(), encoding, offset, size), myFile(file) {}
 //inline ZLSingleImage::Kind ZLFileImage::kind() const { return FILE_IMAGE; }
- inline const ZLFile &ZLFileImage::file() const { return myFile; }
+inline const ZLFile &ZLFileImage::file() const { return myFile; }
 //inline shared_ptr<ZLInputStream> ZLFileImage::inputStream() const { return myFile.inputStream(); }
 
 #endif /* __ZLFILEIMAGE_H__ */

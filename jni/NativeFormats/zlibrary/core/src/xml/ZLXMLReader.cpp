@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -219,4 +219,8 @@ const std::string &ZLXMLReader::errorMessage() const {
 void ZLXMLReader::setErrorMessage(const std::string &message) {
 	myErrorMessage = message;
 	interrupt();
+}
+
+size_t ZLXMLReader::getCurrentPosition() const {
+	return myInternalReader != 0 ? myInternalReader->getCurrentPosition() : (size_t)-1;
 }

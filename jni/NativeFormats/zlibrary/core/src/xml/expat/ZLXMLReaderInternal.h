@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2012 Geometer Plus <wangjiatc@gmail.com>
+ * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ public:
 	~ZLXMLReaderInternal();
 	void init(const char *encoding = 0);
 	bool parseBuffer(const char *buffer, size_t len);
+	size_t getCurrentPosition() const;
 
 private:
 	void setupEntities();
