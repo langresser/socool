@@ -34,7 +34,7 @@ import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 
-import org.socool.socoolreader.R;
+import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidActivity;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
@@ -52,7 +52,7 @@ import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.util.UIUtil;
 
-public final class SCReader extends ZLAndroidActivity {
+public final class FBReader extends ZLAndroidActivity {
 	public static final String BOOK_PATH_KEY = "BookPath";
 
 	public static final int REQUEST_PREFERENCES = 1;
@@ -84,7 +84,7 @@ public final class SCReader extends ZLAndroidActivity {
 					for (PluginApi.ActionInfo info : myPluginActions) {
 						fbReader.addAction(
 							PLUGIN_ACTION_PREFIX + index++,
-							new RunPluginAction(SCReader.this, fbReader, info.getId())
+							new RunPluginAction(FBReader.this, fbReader, info.getId())
 						);
 					}
 				}
@@ -111,7 +111,7 @@ public final class SCReader extends ZLAndroidActivity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						new TipRunner().start();
-						DictionaryUtil.init(SCReader.this);
+						DictionaryUtil.init(FBReader.this);
 					}
 				});
 			}
@@ -224,7 +224,7 @@ public final class SCReader extends ZLAndroidActivity {
 					} else {
 						runOnUiThread(new Runnable() {
 							public void run() {
-								UIUtil.showErrorMessage(SCReader.this, "textNotFound");
+								UIUtil.showErrorMessage(FBReader.this, "textNotFound");
 								popup.StartPosition = null;
 							}
 						});
@@ -292,12 +292,12 @@ public final class SCReader extends ZLAndroidActivity {
 			switch (manager.requiredAction()) {
 				case Initialize:
 					startActivity(new Intent(
-						TipsActivity.INITIALIZE_ACTION, null, SCReader.this, TipsActivity.class
+						TipsActivity.INITIALIZE_ACTION, null, FBReader.this, TipsActivity.class
 					));
 					break;
 				case Show:
 					startActivity(new Intent(
-						TipsActivity.SHOW_TIP_ACTION, null, SCReader.this, TipsActivity.class
+						TipsActivity.SHOW_TIP_ACTION, null, FBReader.this, TipsActivity.class
 					));
 					break;
 				case Download:

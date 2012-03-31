@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.socool.socoolreader.R;
+import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
 import org.geometerplus.zlibrary.ui.android.error.ErrorUtil;
 
@@ -54,7 +54,7 @@ public class BookReadingErrorActivity extends Activity implements ErrorKeys {
 				final Intent sendIntent = new Intent(Intent.ACTION_SEND);
 				sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "issues@fbreader.org" });
 				sendIntent.putExtra(Intent.EXTRA_TEXT, getIntent().getStringExtra(STACKTRACE));
-				sendIntent.putExtra(Intent.EXTRA_SUBJECT, "SCReader " + new ErrorUtil(BookReadingErrorActivity.this).getVersionName() + " book reading issue report");
+				sendIntent.putExtra(Intent.EXTRA_SUBJECT, "FBReader " + new ErrorUtil(BookReadingErrorActivity.this).getVersionName() + " book reading issue report");
 				sendIntent.setType("message/rfc822");
 				startActivity(sendIntent);
 				finish();

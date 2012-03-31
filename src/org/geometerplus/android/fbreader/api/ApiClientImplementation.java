@@ -87,7 +87,7 @@ public class ApiClientImplementation implements ServiceConnection, Api, ApiMetho
 
 	private synchronized void checkConnection() throws ApiException {
 		if (myInterface == null) {
-			throw new ApiException("Not connected to SCReader");
+			throw new ApiException("Not connected to FBReader");
 		}
 	}
 

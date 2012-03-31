@@ -30,9 +30,9 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.Paths;
 
-import org.socool.socoolreader.R;
+import org.geometerplus.zlibrary.ui.android.R;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.FBReader;
 
 public class FixBooksDirectoryActivity extends Activity {
 	@Override
@@ -57,7 +57,7 @@ public class FixBooksDirectoryActivity extends Activity {
 		okButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				Paths.BooksDirectoryOption().setValue(directoryView.getText().toString());
-				startActivity(new Intent(FixBooksDirectoryActivity.this, SCReader.class));
+				startActivity(new Intent(FixBooksDirectoryActivity.this, FBReader.class));
 				finish();
 			}
 		});
