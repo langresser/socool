@@ -33,7 +33,7 @@ abstract class PopupPanel extends ZLApplication.PopupPanel {
 	public ZLTextWordCursor StartPosition;
 
 	protected volatile PopupWindow myWindow;
-	private volatile FBReader myActivity;
+	private volatile SCReader myActivity;
 	private volatile RelativeLayout myRoot;
 
 	PopupPanel(FBReaderApp fbReader) {
@@ -96,10 +96,10 @@ abstract class PopupPanel extends ZLApplication.PopupPanel {
 		}
 	}
 
-	public void setPanelInfo(FBReader activity, RelativeLayout root) {
+	public void setPanelInfo(SCReader activity, RelativeLayout root) {
 		myActivity = activity;
 		myRoot = root;
 	}
 
-	public abstract void createControlPanel(FBReader activity, RelativeLayout root);
+	public abstract void createControlPanel(SCReader activity, RelativeLayout root);
 }

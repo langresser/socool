@@ -48,7 +48,7 @@ public class BugReportActivity extends Activity implements ErrorKeys {
 		reportTextView.setLongClickable(false);
 
 		final String versionName = new ErrorUtil(this).getVersionName();
-		reportTextView.append("FBReader " + versionName + " has been crached, sorry. You can help to fix this bug by sending the report below to FBReader developers. The report will be sent by e-mail. Thank you in advance!\n\n");
+		reportTextView.append("SCReader " + versionName + " has been crached, sorry. You can help to fix this bug by sending the report below to SCReader developers. The report will be sent by e-mail. Thank you in advance!\n\n");
 		reportTextView.append(reportText);
 
 		findViewById(R.id.send_report).setOnClickListener(
@@ -57,7 +57,7 @@ public class BugReportActivity extends Activity implements ErrorKeys {
 					Intent sendIntent = new Intent(Intent.ACTION_SEND);
 					sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "exception@geometerplus.com" });
 					sendIntent.putExtra(Intent.EXTRA_TEXT, reportText.toString());
-					sendIntent.putExtra(Intent.EXTRA_SUBJECT, "FBReader " + versionName + " exception report");
+					sendIntent.putExtra(Intent.EXTRA_SUBJECT, "SCReader " + versionName + " exception report");
 					sendIntent.setType("message/rfc822");
 					startActivity(sendIntent);
 					finish();

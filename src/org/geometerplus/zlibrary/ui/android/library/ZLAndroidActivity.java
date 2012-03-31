@@ -122,7 +122,7 @@ public abstract class ZLAndroidActivity extends Activity {
 					myWakeLockToCreate = false;
 					myWakeLock =
 						((PowerManager)getSystemService(POWER_SERVICE)).
-							newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "FBReader");
+							newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "SCReader");
 					myWakeLock.acquire();
 				}
 			}
