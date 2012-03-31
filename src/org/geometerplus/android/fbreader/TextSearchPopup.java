@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader;
 
 import android.widget.RelativeLayout;
 
-import org.geometerplus.zlibrary.ui.android.R;
+import org.socool.socoolreader.base.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
