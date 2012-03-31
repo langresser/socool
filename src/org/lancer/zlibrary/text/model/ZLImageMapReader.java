@@ -22,7 +22,6 @@ package org.lancer.zlibrary.text.model;
 import org.lancer.zlibrary.core.filesystem.ZLFile;
 import org.lancer.zlibrary.core.image.ZLFileImage;
 import org.lancer.zlibrary.core.image.ZLImage;
-import org.lancer.zlibrary.core.image.ZLSingleImage;
 import org.lancer.zlibrary.core.util.MimeType;
 
 class ZLImageMapReader {

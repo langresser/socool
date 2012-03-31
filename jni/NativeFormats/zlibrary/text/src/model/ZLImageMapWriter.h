@@ -28,6 +28,10 @@
 #include <ZLTextParagraph.h>
 #include <ZLCachedMemoryAllocator.h>
 
+class ZLImage;
+class ZLFileImage;
+class ZLMultiImage;
+
 class ZLImageMapWriter {
 
 public:
@@ -44,7 +48,7 @@ public:
 	const ZLCachedMemoryAllocator &allocator() const;
 
 private:
-	void addSingleImageEntry(const ZLSingleImage &image);
+	void addSingleImageEntry(const ZLFileImage &image);
 	void addMultiImageEntry(const ZLMultiImage &image);
 
 private:
