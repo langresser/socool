@@ -32,7 +32,7 @@ import android.os.PowerManager;
 import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
-import org.socool.socoolreader.base.R;
+import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.application.ZLAndroidApplicationWindow;
 
 public abstract class ZLAndroidActivity extends Activity {
@@ -122,7 +122,7 @@ public abstract class ZLAndroidActivity extends Activity {
 					myWakeLockToCreate = false;
 					myWakeLock =
 						((PowerManager)getSystemService(POWER_SERVICE)).
-							newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "SCReader");
+							newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "FBReader");
 					myWakeLock.acquire();
 				}
 			}
@@ -193,7 +193,10 @@ public abstract class ZLAndroidActivity extends Activity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		ZLApplication.Instance().openFile(fileFromIntent(intent), null);
+		final String action = intent.getAction();
+		if (Intent.ACTION_VIEW.equals(action) || "android.fbreader.action.VIEW".equals(action)) {
+			ZLApplication.Instance().openFile(fileFromIntent(intent), null);
+		}
 	}
 
 	private static ZLAndroidLibrary getLibrary() {

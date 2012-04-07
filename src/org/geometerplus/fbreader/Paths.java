@@ -49,6 +49,6 @@ public abstract class Paths {
 	}
 
 	public static String systemShareDirectory() {
-		return "/system/usr/share/SCReader";
+		return "/system/usr/share/FBReader";
 	}
 }

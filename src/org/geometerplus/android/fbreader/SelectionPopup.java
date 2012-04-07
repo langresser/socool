@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.socool.socoolreader.base.R;
+import org.geometerplus.zlibrary.ui.android.R;
 
 class SelectionPopup extends ButtonsPopupPanel {
 	final static String ID = "SelectionPopup";
@@ -39,7 +39,7 @@ class SelectionPopup extends ButtonsPopupPanel {
 	}
 
 	@Override
-	public void createControlPanel(SCReader activity, RelativeLayout root) {
+	public void createControlPanel(FBReader activity, RelativeLayout root) {
 		if (myWindow != null && activity == myWindow.getActivity()) {
 			return;
 		}

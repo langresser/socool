@@ -34,7 +34,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import org.socool.socoolreader.base.R;
+import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.network.*;
@@ -42,7 +42,7 @@ import org.geometerplus.zlibrary.core.network.*;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
 import org.geometerplus.fbreader.network.urlInfo.BookUrlInfo;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.FBReader;
 
 public class BookDownloaderService extends Service {
 	public static final String BOOK_FORMAT_KEY = "org.geometerplus.android.fbreader.network.BookFormat";
@@ -195,7 +195,7 @@ public class BookDownloaderService extends Service {
 	}
 
 	private Intent getFBReaderIntent(final File file) {
-		final Intent intent = new Intent(getApplicationContext(), SCReader.class);
+		final Intent intent = new Intent(getApplicationContext(), FBReader.class);
 		if (file != null) {
 			intent.setAction(Intent.ACTION_VIEW).setData(Uri.fromFile(file));
 		}

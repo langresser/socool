@@ -30,7 +30,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 
-import org.socool.socoolreader.base.R;
+import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -73,7 +73,7 @@ final class NavigationPopup extends PopupPanel {
 	}
 
 	@Override
-	public void createControlPanel(SCReader activity, RelativeLayout root) {
+	public void createControlPanel(FBReader activity, RelativeLayout root) {
 		if (myWindow != null && activity == myWindow.getActivity()) {
 			return;
 		}

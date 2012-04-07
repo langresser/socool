@@ -40,14 +40,14 @@ import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
 
-import org.socool.socoolreader.base.R;
+import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
 
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.network.HtmlUtil;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.FBReader;
 import org.geometerplus.android.fbreader.preferences.EditBookInfoActivity;
 
 public class BookInfoActivity extends Activity {
@@ -79,7 +79,7 @@ public class BookInfoActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
 
-		myResult = SCReader.RESULT_DO_NOTHING;
+		myResult = FBReader.RESULT_DO_NOTHING;
 		setResult(myResult, getIntent());
 	}
 
@@ -105,9 +105,9 @@ public class BookInfoActivity extends Activity {
 					finish();
 				} else {
 					startActivity(
-						new Intent(getApplicationContext(), SCReader.class)
+						new Intent(getApplicationContext(), FBReader.class)
 							.setAction(Intent.ACTION_VIEW)
-							.putExtra(SCReader.BOOK_PATH_KEY, myFile.getPath())
+							.putExtra(FBReader.BOOK_PATH_KEY, myFile.getPath())
 							.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 					);
 				}

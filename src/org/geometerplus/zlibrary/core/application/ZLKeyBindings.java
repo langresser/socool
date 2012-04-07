@@ -57,7 +57,7 @@ public final class ZLKeyBindings {
 		}
  		myKeysOption = new ZLStringListOption(name, "KeyList", new ArrayList<String>(keys), ",");
 
-		// this code is for migration from SCReader versions <= 1.1.2
+		// this code is for migration from FBReader versions <= 1.1.2
 		ZLStringOption oldBackKeyOption = new ZLStringOption(myName + ":" + ACTION, "<Back>", "");
 		if (!"".equals(oldBackKeyOption.getValue())) {
 			bindKey(KeyEvent.KEYCODE_BACK, false, oldBackKeyOption.getValue());

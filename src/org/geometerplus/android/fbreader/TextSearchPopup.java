@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader;
 
 import android.widget.RelativeLayout;
 
-import org.socool.socoolreader.base.R;
+import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -45,7 +45,7 @@ final class TextSearchPopup extends ButtonsPopupPanel {
 	}
 
 	@Override
-	public void createControlPanel(SCReader activity, RelativeLayout root) {
+	public void createControlPanel(FBReader activity, RelativeLayout root) {
 		if (myWindow != null && activity == myWindow.getActivity()) {
 			return;
 		}

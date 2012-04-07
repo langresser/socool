@@ -29,9 +29,9 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.Paths;
 
-import org.socool.socoolreader.base.R;
+import org.geometerplus.zlibrary.ui.android.R;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.FBReader;
 
 public class MissingNativeLibraryActivity extends Activity {
 	@Override
