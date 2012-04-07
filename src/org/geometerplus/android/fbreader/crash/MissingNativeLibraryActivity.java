@@ -29,7 +29,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.Paths;
 
-import org.geometerplus.zlibrary.ui.android.R;
+import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.android.fbreader.FBReader;
 

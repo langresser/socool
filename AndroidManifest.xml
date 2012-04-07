@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.geometerplus.zlibrary.ui.android" android:versionCode="104051" android:versionName="1.4.5" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.reader" android:versionCode="104051" android:versionName="1.4.5" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="5" android:maxSdkVersion="10"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<application android:name="org.geometerplus.android.fbreader.FBReaderApplication" android:icon="@drawable/fbreader" android:label="FBReader">
+	<application android:name="org.geometerplus.android.fbreader.FBReaderApplication" android:icon="@drawable/socool_icon" android:label="@string/app_name">
 		<activity android:name="org.geometerplus.android.fbreader.error.BookReadingErrorActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" android:process=":error">
 			<intent-filter>
 				<action android:name="android.fbreader.action.ERROR" />
@@ -13,7 +13,7 @@
 				<data android:scheme="BookReadingException" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".error.BugReportActivity" android:label="FBReader crash" android:configChanges="orientation|keyboardHidden" android:process=":crash" />
+		<activity android:name="org.geometerplus.zlibrary.ui.android.error.BugReportActivity" android:label="FBReader crash" android:configChanges="orientation|keyboardHidden" android:process=":crash" />
 		<activity android:name="org.geometerplus.android.fbreader.crash.FixBooksDirectoryActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" android:process=":crash">
 			<intent-filter>
 				<action android:name="android.fbreader.action.CRASH" />
@@ -34,7 +34,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</service>
-		<activity android:name="org.geometerplus.android.fbreader.FBReader" android:launchMode="singleTask" android:icon="@drawable/fbreader" android:label="FBReader" android:configChanges="orientation|keyboardHidden">
+		<activity android:name="org.geometerplus.android.fbreader.FBReader" android:launchMode="singleTask" android:icon="@drawable/socool_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
