@@ -1,4 +1,4 @@
-package org.amse.ys.zip;
+package org.geometerplus.zlibrary.core.zip;
 
 import java.io.*;
 import java.util.*;

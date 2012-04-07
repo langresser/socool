@@ -1,4 +1,4 @@
-package org.vimgadgets.linebreak;
+package org.geometerplus.zlibrary.core;
 
 public final class LineBreaker {
 	static {

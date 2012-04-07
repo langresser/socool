@@ -20,7 +20,7 @@
 package org.geometerplus.zlibrary.text.view;
 
 import java.util.*;
-import org.vimgadgets.linebreak.LineBreaker;
+import org.geometerplus.zlibrary.core.LineBreaker;
 
 import org.geometerplus.zlibrary.core.image.*;
 import org.geometerplus.zlibrary.text.model.*;

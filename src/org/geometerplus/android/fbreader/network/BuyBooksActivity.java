@@ -31,7 +31,7 @@ import android.widget.Button;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.money.Money;
+import org.geometerplus.zlibrary.core.Money;
 
 import org.socool.socoolreader.reader.R;
 

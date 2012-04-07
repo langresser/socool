@@ -1,4 +1,4 @@
-package org.amse.ys.zip;
+package org.geometerplus.zlibrary.core.zip;
 
 /**
  * Class consists of constants, describing a compressed file. Contains only

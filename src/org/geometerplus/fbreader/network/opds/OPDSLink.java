@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 import org.geometerplus.zlibrary.core.xml.ZLStringMap;
-import org.geometerplus.zlibrary.core.money.Money;
+import org.geometerplus.zlibrary.core.Money;
 
 import org.geometerplus.fbreader.network.atom.ATOMLink;
 

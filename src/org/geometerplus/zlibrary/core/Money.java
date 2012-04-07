@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.core.money;
+package org.geometerplus.zlibrary.core;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -75,8 +75,9 @@ public class Money implements Comparable<Money>, Serializable {
 				return;
 			}
 		}
-
-		throw new MoneyException("Unknown money format: '" + text + "'");
+		
+		Amount = new BigDecimal("0");
+		Currency = "USD";
 	}
 
 	public Money add(Money m) {
@@ -88,7 +89,7 @@ public class Money implements Comparable<Money>, Serializable {
 		}
 
 		if (!Currency.equals(m.Currency)) {
-			throw new MoneyException("Different currencies");
+			return null;
 		}
 		return new Money(Amount.add(m.Amount), Currency);
 	}
@@ -102,7 +103,7 @@ public class Money implements Comparable<Money>, Serializable {
 		}
 
 		if (!Currency.equals(m.Currency)) {
-			throw new MoneyException("Different currencies");
+			return null;
 		}
 		return new Money(Amount.subtract(m.Amount), Currency);
 	}
@@ -116,7 +117,7 @@ public class Money implements Comparable<Money>, Serializable {
 		}
 
 		if (!Currency.equals(m.Currency)) {
-			throw new MoneyException("Different currencies");
+			return 1;
 		}
 		return Amount.compareTo(m.Amount);
 	}

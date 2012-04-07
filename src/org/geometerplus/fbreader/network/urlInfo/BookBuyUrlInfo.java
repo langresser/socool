@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.urlInfo;
 
-import org.geometerplus.zlibrary.core.money.Money;
+import org.geometerplus.zlibrary.core.Money;
 
 public class BookBuyUrlInfo extends BookUrlInfo {
 	private static final long serialVersionUID = 7877935250896069650L;

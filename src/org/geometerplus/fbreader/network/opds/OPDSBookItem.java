@@ -23,7 +23,7 @@ import java.util.*;
 import java.io.*;
 
 import org.geometerplus.zlibrary.core.network.*;
-import org.geometerplus.zlibrary.core.money.Money;
+import org.geometerplus.zlibrary.core.Money;
 import org.geometerplus.zlibrary.core.util.MimeType;
 import org.geometerplus.zlibrary.core.util.ZLNetworkUtil;
 
