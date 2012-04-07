@@ -31,7 +31,7 @@ import org.geometerplus.fbreader.Paths;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.fbreader.FBReader;
+import org.geometerplus.android.fbreader.SCReader;
 
 public class MissingNativeLibraryActivity extends Activity {
 	@Override

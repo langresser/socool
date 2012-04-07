@@ -121,6 +121,6 @@ public class ZLNetworkUtil {
 	}
 
 	public static String getUserAgent() {
-		return "FBReader/" + ZLibrary.Instance().getVersionName() + "(java)";
+		return "SCReader/" + ZLibrary.Instance().getVersionName() + "(java)";
 	}
 }

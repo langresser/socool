@@ -34,7 +34,7 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 
 import org.geometerplus.android.util.PackageUtil;
 
-import org.geometerplus.android.fbreader.api.PluginApi;
+import org.geometerplus.android.fbreader.PluginApi;
 
 public class AuthorizationMenuActivity extends MenuActivity {
 	public static void runMenu(Context context, INetworkLink link) {

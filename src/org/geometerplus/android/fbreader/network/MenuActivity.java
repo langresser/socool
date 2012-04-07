@@ -30,7 +30,7 @@ import android.widget.*;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.fbreader.api.PluginApi;
+import org.geometerplus.android.fbreader.PluginApi;
 
 abstract class MenuActivity extends ListActivity implements AdapterView.OnItemClickListener {
 	protected List<PluginApi.MenuActionInfo> myInfos;

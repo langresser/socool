@@ -2,7 +2,7 @@
  * This code is in the public domain.
  */
 
-package org.geometerplus.android.fbreader.api;
+package org.geometerplus.android.fbreader;
 
 import java.util.*;
 

@@ -27,7 +27,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.network.NetworkLibrary;
 
-import org.geometerplus.android.fbreader.api.PluginApi;
+import org.geometerplus.android.fbreader.PluginApi;
 
 public class AddCatalogMenuActivity extends MenuActivity {
 	private final ZLResource myResource =

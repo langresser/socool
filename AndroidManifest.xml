@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.reader" android:versionCode="104051" android:versionName="1.4.5" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="5" android:maxSdkVersion="10"/>
+	<uses-sdk android:minSdkVersion="5" android:maxSdkVersion="10" android:targetSdkVersion="8"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -28,13 +28,7 @@
 				<data android:scheme="ExceptionInInitializerError" />
 			</intent-filter>
 		</activity>
-		<service android:name="org.geometerplus.android.fbreader.api.ApiService">
-			<intent-filter>
-				<action android:name="android.fbreader.action.API" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</service>
-		<activity android:name="org.geometerplus.android.fbreader.FBReader" android:launchMode="singleTask" android:icon="@drawable/socool_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
+		<activity android:name="org.geometerplus.android.fbreader.SCReader" android:launchMode="singleTask" android:icon="@drawable/socool_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

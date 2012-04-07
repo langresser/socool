@@ -37,7 +37,7 @@ import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.android.util.PackageUtil;
 
-import org.geometerplus.android.fbreader.api.PluginApi;
+import org.geometerplus.android.fbreader.PluginApi;
 
 public class TopupMenuActivity extends MenuActivity {
 	private static final String AMOUNT_KEY = "topup:amount";
