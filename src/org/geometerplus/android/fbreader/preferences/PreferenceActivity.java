@@ -35,7 +35,7 @@ import org.geometerplus.zlibrary.ui.android.view.ZLAndroidPaintContext;
 import org.geometerplus.fbreader.fbreader.*;
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
-import org.geometerplus.fbreader.tips.TipsManager;
+import org.geometerplus.android.fbreader.tips.TipsManager;
 
 import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.android.fbreader.DictionaryUtil;

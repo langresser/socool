@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.fbreader.tips;
+package org.geometerplus.android.fbreader.tips;
 
 import java.util.*;
 import java.io.File;

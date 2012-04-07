@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.tips;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -29,7 +29,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.fbreader.tips.*;
+import org.geometerplus.android.fbreader.tips.*;
 
 public class TipsActivity extends Activity {
 	public static final String INITIALIZE_ACTION = "android.fbreader.action.tips.INITIALIZE";

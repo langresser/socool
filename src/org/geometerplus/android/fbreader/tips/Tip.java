@@ -17,20 +17,14 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.fbreader.tips;
+package org.geometerplus.android.fbreader.tips;
 
-import java.util.*;
-
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-
-import org.geometerplus.fbreader.network.atom.*;
-
-class TipsFeedHandler extends AbstractATOMFeedHandler {
-	final List<Tip> Tips = new LinkedList<Tip>();
-
-	@Override
-	public boolean processFeedEntry(ATOMEntry entry) {
-		Tips.add(new Tip(entry.Title, entry.Content));
-		return false;
+public class Tip {
+	public final CharSequence Title;
+	public final CharSequence Content;
+	
+	Tip(CharSequence title, CharSequence content) {
+		Title = title;
+		Content = content;
 	}
 }
