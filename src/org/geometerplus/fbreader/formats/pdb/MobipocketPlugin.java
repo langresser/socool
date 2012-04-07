@@ -25,7 +25,7 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.image.*;
 import org.geometerplus.zlibrary.core.encodings.Encoding;
 import org.geometerplus.zlibrary.core.encodings.JavaEncodingCollection;
-import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
+import org.geometerplus.zlibrary.core.util.ZLLanguageUtil;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
 import org.geometerplus.fbreader.library.Book;

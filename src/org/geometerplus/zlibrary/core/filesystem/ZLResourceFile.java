@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.core.filesystem;
 
-import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;
 
 public abstract class ZLResourceFile extends ZLFile {
 	public static ZLResourceFile createResourceFile(String path) {

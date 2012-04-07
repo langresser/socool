@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.opds;
 
-import org.geometerplus.zlibrary.core.constants.XMLNamespaces;
+import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.core.Money;
 import org.geometerplus.zlibrary.core.xml.*;
 

@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 
-import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;
 import org.geometerplus.zlibrary.core.util.ZLBoolean3;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

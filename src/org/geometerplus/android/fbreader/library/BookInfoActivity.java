@@ -38,7 +38,7 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
+import org.geometerplus.zlibrary.core.util.ZLLanguageUtil;
 
 import org.socool.socoolreader.reader.R;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;

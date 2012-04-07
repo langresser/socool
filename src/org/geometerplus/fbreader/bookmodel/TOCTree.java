@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.bookmodel;
 
-import org.geometerplus.zlibrary.core.tree.ZLTree;
+import org.geometerplus.zlibrary.core.util.ZLTree;
 
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 

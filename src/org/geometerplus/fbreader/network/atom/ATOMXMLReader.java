@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.network.atom;
 
 import java.util.Map;
 
-import org.geometerplus.zlibrary.core.constants.XMLNamespaces;
+import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.core.util.MimeType;
 import org.geometerplus.zlibrary.core.xml.ZLStringMap;
 import org.geometerplus.zlibrary.core.xml.ZLXMLReaderAdapter;

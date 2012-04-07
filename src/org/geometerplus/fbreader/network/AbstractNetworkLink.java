@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.network;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
+import org.geometerplus.zlibrary.core.util.ZLLanguageUtil;
 import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
 
 import org.geometerplus.fbreader.network.urlInfo.*;

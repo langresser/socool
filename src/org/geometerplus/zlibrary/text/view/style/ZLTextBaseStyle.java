@@ -20,7 +20,7 @@
 package org.geometerplus.zlibrary.text.view.style;
 
 import org.geometerplus.zlibrary.core.options.*;
-import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;
 
 import org.geometerplus.zlibrary.text.model.ZLTextAlignmentType;
 import org.geometerplus.zlibrary.text.view.ZLTextStyle;

@@ -25,7 +25,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
+import org.geometerplus.zlibrary.core.util.ZLLanguageUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;

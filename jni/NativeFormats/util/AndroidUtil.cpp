@@ -34,7 +34,7 @@ JavaClass AndroidUtil::Class_java_util_List("java/util/List");
 JavaClass AndroidUtil::Class_java_util_Locale("java/util/Locale");
 JavaClass AndroidUtil::Class_java_io_InputStream("java/io/InputStream");
 
-JavaClass AndroidUtil::Class_ZLibrary("org/geometerplus/zlibrary/core/library/ZLibrary");
+JavaClass AndroidUtil::Class_ZLibrary("org/geometerplus/zlibrary/core/application/ZLibrary");
 JavaClass AndroidUtil::Class_ZLFile("org/geometerplus/zlibrary/core/filesystem/ZLFile");
 JavaClass AndroidUtil::Class_ZLFileImage("org/geometerplus/zlibrary/core/image/ZLFileImage");
 JavaClass AndroidUtil::Class_ZLTextModel("org/geometerplus/zlibrary/text/model/ZLTextModel");

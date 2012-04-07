@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.core.language;
+package org.geometerplus.zlibrary.core.util;
 
 import java.util.*;
 

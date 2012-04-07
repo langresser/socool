@@ -22,7 +22,7 @@ package org.geometerplus.zlibrary.core.util;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
-import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;;
 
 public class ZLNetworkUtil {
 

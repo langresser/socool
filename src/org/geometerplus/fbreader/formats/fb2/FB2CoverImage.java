@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.formats.fb2;
 
-import org.geometerplus.zlibrary.core.constants.XMLNamespaces;
+import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.image.ZLSingleImage;
 import org.geometerplus.zlibrary.core.image.ZLImageProxy;

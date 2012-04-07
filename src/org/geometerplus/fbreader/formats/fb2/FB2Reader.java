@@ -22,9 +22,9 @@ package org.geometerplus.fbreader.formats.fb2;
 import java.util.*;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.constants.XMLNamespaces;
+import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;
 import org.geometerplus.zlibrary.core.util.*;
 import org.geometerplus.zlibrary.core.xml.*;
 

@@ -22,7 +22,7 @@ package org.geometerplus.fbreader.formats.oeb;
 import java.util.*;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.constants.XMLNamespaces;
+import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.image.ZLFileImage;
 import org.geometerplus.zlibrary.core.util.MimeType;

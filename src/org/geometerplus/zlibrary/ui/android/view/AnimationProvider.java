@@ -24,7 +24,7 @@ import java.util.*;
 import android.graphics.*;
 import android.util.FloatMath;
 
-import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;
 import org.geometerplus.zlibrary.core.view.ZLView;
 
 abstract class AnimationProvider {

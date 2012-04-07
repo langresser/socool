@@ -26,7 +26,7 @@ import android.app.ListActivity;
 
 import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.tree.ZLTree;
+import org.geometerplus.zlibrary.core.util.ZLTree;
 
 import org.socool.socoolreader.reader.R;
 

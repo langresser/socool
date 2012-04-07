@@ -25,7 +25,7 @@ import java.io.IOException;
 import org.geometerplus.zlibrary.core.xml.*;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.filesystem.ZLArchiveEntryFile;
-import org.geometerplus.zlibrary.core.constants.XMLNamespaces;
+import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
 
 import org.geometerplus.fbreader.bookmodel.*;
 import org.geometerplus.fbreader.formats.util.MiscUtil;
