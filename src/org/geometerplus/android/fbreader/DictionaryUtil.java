@@ -38,8 +38,8 @@ import org.geometerplus.zlibrary.text.view.ZLTextWord;
 
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 
-import org.geometerplus.android.util.UIUtil;
-import org.geometerplus.android.util.PackageUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
+import org.geometerplus.android.fbreader.util.PackageUtil;
 
 public abstract class DictionaryUtil {
 	private static int FLAG_INSTALLED_ONLY = 1;

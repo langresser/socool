@@ -40,7 +40,7 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class AuthenticationActivity extends Activity {
 	private static final Map<Long,Runnable> ourOnSuccessRunnableMap =

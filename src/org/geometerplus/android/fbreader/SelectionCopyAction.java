@@ -26,7 +26,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class SelectionCopyAction extends FBAndroidAction {
 	SelectionCopyAction(SCReader baseActivity, FBReaderApp fbreader) {

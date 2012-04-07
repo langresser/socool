@@ -26,7 +26,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 import org.geometerplus.fbreader.tree.FBTree;
 

@@ -52,7 +52,7 @@ import org.geometerplus.fbreader.network.opds.OPDSBookItem;
 import org.geometerplus.android.fbreader.network.action.OpenCatalogAction;
 import org.geometerplus.android.fbreader.network.action.NetworkBookActions;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class NetworkBookInfoActivity extends Activity implements NetworkLibrary.ChangeListener {
 	private NetworkBookTree myTree;

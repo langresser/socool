@@ -37,7 +37,7 @@ import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.opds.OPDSCustomNetworkLink;
 import org.geometerplus.fbreader.network.urlInfo.*;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class AddCustomCatalogActivity extends Activity {
 	static final String TYPE = "type";

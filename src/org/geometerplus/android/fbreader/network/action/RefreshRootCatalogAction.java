@@ -28,7 +28,7 @@ import org.geometerplus.fbreader.network.NetworkLibrary;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class RefreshRootCatalogAction extends RootAction {
 	public RefreshRootCatalogAction(Activity activity) {

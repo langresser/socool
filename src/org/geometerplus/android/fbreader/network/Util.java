@@ -33,8 +33,8 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
 import org.geometerplus.fbreader.network.urlInfo.BookUrlInfo;
 
-import org.geometerplus.android.util.UIUtil;
-import org.geometerplus.android.util.PackageUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
+import org.geometerplus.android.fbreader.util.PackageUtil;
 
 public abstract class Util implements UserRegistrationConstants {
 	static final String AUTHORIZATION_ACTION = "android.fbreader.action.network.AUTHORIZATION";

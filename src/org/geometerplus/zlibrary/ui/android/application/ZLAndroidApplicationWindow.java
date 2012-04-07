@@ -38,7 +38,7 @@ import org.geometerplus.zlibrary.core.view.ZLViewWidget;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public final class ZLAndroidApplicationWindow extends ZLApplicationWindow {
 	private final HashMap<MenuItem,String> myMenuItemMap = new HashMap<MenuItem,String>();

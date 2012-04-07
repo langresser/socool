@@ -30,7 +30,7 @@ import org.geometerplus.fbreader.network.tree.*;
 import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
 import org.geometerplus.android.fbreader.network.NetworkLibrarySecondaryActivity;
 
-import org.geometerplus.android.util.PackageUtil;
+import org.geometerplus.android.fbreader.util.PackageUtil;
 
 public class OpenCatalogAction extends Action {
 	public OpenCatalogAction(Activity activity) {

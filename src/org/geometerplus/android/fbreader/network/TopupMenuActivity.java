@@ -35,7 +35,7 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.util.PackageUtil;
+import org.geometerplus.android.fbreader.util.PackageUtil;
 
 import org.geometerplus.android.fbreader.PluginApi;
 

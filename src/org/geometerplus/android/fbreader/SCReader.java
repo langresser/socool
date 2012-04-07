@@ -50,7 +50,7 @@ import org.geometerplus.android.fbreader.library.KillerCallback;
 import org.geometerplus.android.fbreader.api.*;
 import org.geometerplus.android.fbreader.TipsActivity;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public final class SCReader extends ZLAndroidActivity {
 	public static final String BOOK_PATH_KEY = "BookPath";

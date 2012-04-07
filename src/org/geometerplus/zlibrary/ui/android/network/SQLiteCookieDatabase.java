@@ -31,7 +31,7 @@ import org.apache.http.impl.cookie.BasicClientCookie2;
 
 import org.geometerplus.zlibrary.core.network.CookieDatabase;
 
-import org.geometerplus.android.util.SQLiteUtil;
+import org.geometerplus.android.fbreader.util.SQLiteUtil;
 
 public class SQLiteCookieDatabase extends CookieDatabase {
 	public static void init(Context context) {

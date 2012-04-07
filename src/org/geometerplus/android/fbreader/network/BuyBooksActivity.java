@@ -35,7 +35,7 @@ import org.geometerplus.zlibrary.core.Money;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.tree.NetworkBookTree;

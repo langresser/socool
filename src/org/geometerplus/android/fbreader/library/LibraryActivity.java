@@ -35,7 +35,7 @@ import org.socool.socoolreader.reader.R;
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.tree.FBTree;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
 

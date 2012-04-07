@@ -36,8 +36,8 @@ import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 
 import org.geometerplus.fbreader.library.*;
 
-import org.geometerplus.android.util.UIUtil;
-import org.geometerplus.android.util.SQLiteUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
+import org.geometerplus.android.fbreader.util.SQLiteUtil;
 
 public final class SQLiteBooksDatabase extends BooksDatabase {
 	private final String myInstanceId;

@@ -30,7 +30,7 @@ import android.database.sqlite.SQLiteStatement;
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.urlInfo.*;
 
-import org.geometerplus.android.util.SQLiteUtil;
+import org.geometerplus.android.fbreader.util.SQLiteUtil;
 
 class SQLiteNetworkDatabase extends NetworkDatabase {
 	private final SQLiteDatabase myDatabase;

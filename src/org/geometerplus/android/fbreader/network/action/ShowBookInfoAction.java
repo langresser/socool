@@ -29,7 +29,7 @@ import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
 import org.geometerplus.android.fbreader.network.NetworkBookInfoActivity;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class ShowBookInfoAction extends BookAction {
 	public ShowBookInfoAction(Activity activity) {

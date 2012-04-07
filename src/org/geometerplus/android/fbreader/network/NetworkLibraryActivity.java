@@ -42,7 +42,7 @@ import org.geometerplus.fbreader.network.tree.*;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
 import org.geometerplus.android.fbreader.network.action.*;
 
-import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public abstract class NetworkLibraryActivity extends TreeActivity implements ListView.OnScrollListener, NetworkLibrary.ChangeListener {
 	static final String OPEN_CATALOG_ACTION = "android.fbreader.action.OPEN_NETWORK_CATALOG";
