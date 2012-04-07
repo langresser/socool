@@ -19,15 +19,19 @@
 
 package org.geometerplus.android.fbreader;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import android.app.SearchManager;
 import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.*;
 import android.widget.RelativeLayout;
 
+import org.geometerplus.zlibrary.core.application.ZLApplication;
+import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 
@@ -35,7 +39,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 
 import org.socool.socoolreader.reader.R;
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidActivity;
+import org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
@@ -51,7 +55,15 @@ import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
 
-public final class SCReader extends ZLAndroidActivity {
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import org.geometerplus.android.fbreader.FBReaderApplication;
+
+public final class SCReader extends Activity {
+	private static final String REQUESTED_ORIENTATION_KEY = "org.geometerplus.zlibrary.ui.android.library.androidActiviy.RequestedOrientation";
+	private static final String ORIENTATION_CHANGE_COUNTER_KEY = "org.geometerplus.zlibrary.ui.android.library.androidActiviy.ChangeCounter";
+
 	public static final String BOOK_PATH_KEY = "BookPath";
 
 	public static final int REQUEST_PREFERENCES = 1;
@@ -91,7 +103,6 @@ public final class SCReader extends ZLAndroidActivity {
 		}
 	};
 
-	@Override
 	protected ZLFile fileFromIntent(Intent intent) {
 		String filePath = intent.getStringExtra(BOOK_PATH_KEY);
 		if (filePath == null) {
@@ -103,7 +114,6 @@ public final class SCReader extends ZLAndroidActivity {
 		return filePath != null ? ZLFile.createFileByPath(filePath) : null;
 	}
 
-	@Override
 	protected Runnable getPostponedInitAction() {
 		return new Runnable() {
 			public void run() {
@@ -120,6 +130,30 @@ public final class SCReader extends ZLAndroidActivity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
+
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.main);
+		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+
+		getLibrary().setActivity(this);
+
+		final FBReaderApplication androidApplication = (FBReaderApplication)getApplication();
+		if (androidApplication.myMainWindow == null) {
+			final ZLApplication application = createApplication();
+			androidApplication.myMainWindow = new ZLApplicationWindow(application);
+			application.initWindow();
+		}
+
+		new Thread() {
+			public void run() {
+				ZLApplication.Instance().openFile(fileFromIntent(getIntent()), getPostponedInitAction());
+				ZLApplication.Instance().getViewWidget().repaint();
+			}
+		}.start();
+
+		ZLApplication.Instance().getViewWidget().repaint();
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		final ZLAndroidLibrary zlibrary = (ZLAndroidLibrary)ZLibrary.Instance();
@@ -204,6 +238,10 @@ public final class SCReader extends ZLAndroidActivity {
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
 			super.onNewIntent(intent);
+			final String action = intent.getAction();
+			if (Intent.ACTION_VIEW.equals(action) || "android.fbreader.action.VIEW".equals(action)) {
+				ZLApplication.Instance().openFile(fileFromIntent(intent), null);
+			}
 		} else if (Intent.ACTION_VIEW.equals(intent.getAction())
 					&& data != null && "fbreader-action".equals(data.getScheme())) {
 			fbReader.doAction(data.getEncodedSchemeSpecificPart(), data.getFragment());
@@ -233,6 +271,10 @@ public final class SCReader extends ZLAndroidActivity {
 			UIUtil.wait("search", runnable, this);
 		} else {
 			super.onNewIntent(intent);
+			final String action = intent.getAction();
+			if (Intent.ACTION_VIEW.equals(action) || "android.fbreader.action.VIEW".equals(action)) {
+				ZLApplication.Instance().openFile(fileFromIntent(intent), null);
+			}
 		}
 	}
 
@@ -311,6 +353,23 @@ public final class SCReader extends ZLAndroidActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		switchWakeLock(
+			getLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
+			ZLApplication.Instance().getBatteryLevel()
+		);
+		myStartTimer = true;
+		final int brightnessLevel =
+			getLibrary().ScreenBrightnessLevelOption.getValue();
+		if (brightnessLevel != 0) {
+			setScreenBrightness(brightnessLevel);
+		} else {
+			setScreenBrightnessAuto();
+		}
+		if (getLibrary().DisableButtonLightsOption.getValue()) {
+			setButtonLight(false);
+		}
+
+		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		try {
 			sendBroadcast(new Intent(getApplicationContext(), KillerCallback.class));
 		} catch (Throwable t) {
@@ -324,7 +383,6 @@ public final class SCReader extends ZLAndroidActivity {
 		super.onStop();
 	}
 
-	@Override
 	protected FBReaderApp createApplication() {
 		if (SQLiteBooksDatabase.Instance() == null) {
 			new SQLiteBooksDatabase(this, "READER");
@@ -470,4 +528,125 @@ public final class SCReader extends ZLAndroidActivity {
 
 		return true;
 	}
+	
+	public void setScreenBrightnessAuto() {
+		final WindowManager.LayoutParams attrs = getWindow().getAttributes();
+		attrs.screenBrightness = -1.0f;
+		getWindow().setAttributes(attrs);
+	}
+
+	public void setScreenBrightness(int percent) {
+		if (percent < 1) {
+			percent = 1;
+		} else if (percent > 100) {
+			percent = 100;
+		}
+		final WindowManager.LayoutParams attrs = getWindow().getAttributes();
+		attrs.screenBrightness = percent / 100.0f;
+		getWindow().setAttributes(attrs);
+		getLibrary().ScreenBrightnessLevelOption.setValue(percent);
+	}
+
+	final public int getScreenBrightness() {
+		final int level = (int)(100 * getWindow().getAttributes().screenBrightness);
+		return (level >= 0) ? level : 50;
+	}
+
+	private void setButtonLight(boolean enabled) {
+		try {
+			final WindowManager.LayoutParams attrs = getWindow().getAttributes();
+			final Class<?> cls = attrs.getClass();
+			final Field fld = cls.getField("buttonBrightness");
+			if (fld != null && "float".equals(fld.getType().toString())) {
+				fld.setFloat(attrs, enabled ? -1.0f : 0.0f);
+				getWindow().setAttributes(attrs);
+			}
+		} catch (NoSuchFieldException e) {
+		} catch (IllegalAccessException e) {
+		}
+	}
+
+	private PowerManager.WakeLock myWakeLock;
+	private boolean myWakeLockToCreate;
+	private boolean myStartTimer;
+
+	public final void createWakeLock() {
+		if (myWakeLockToCreate) {
+			synchronized (this) {
+				if (myWakeLockToCreate) {
+					myWakeLockToCreate = false;
+					myWakeLock =
+						((PowerManager)getSystemService(POWER_SERVICE)).
+							newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "SCReader");
+					myWakeLock.acquire();
+				}
+			}
+		}
+		if (myStartTimer) {
+			ZLApplication.Instance().startTimer();
+			myStartTimer = false;
+		}
+	}
+
+	private final void switchWakeLock(boolean on) {
+		if (on) {
+			if (myWakeLock == null) {
+				myWakeLockToCreate = true;
+			}
+		} else {
+			if (myWakeLock != null) {
+				synchronized (this) {
+					if (myWakeLock != null) {
+						myWakeLock.release();
+						myWakeLock = null;
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onPause() {
+		unregisterReceiver(myBatteryInfoReceiver);
+		ZLApplication.Instance().stopTimer();
+		switchWakeLock(false);
+		if (getLibrary().DisableButtonLightsOption.getValue()) {
+			setButtonLight(true);
+		}
+		ZLApplication.Instance().onWindowClosing();
+		super.onPause();
+	}
+
+	@Override
+	public void onLowMemory() {
+		ZLApplication.Instance().onWindowClosing();
+		super.onLowMemory();
+	}
+
+	private static ZLAndroidLibrary getLibrary() {
+		return (ZLAndroidLibrary)ZLAndroidLibrary.Instance();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		View view = findViewById(R.id.main_view);
+		return ((view != null) && view.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		View view = findViewById(R.id.main_view);
+		return ((view != null) && view.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
+	}
+
+	BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			final int level = intent.getIntExtra("level", 100);
+			final FBReaderApplication application = (FBReaderApplication)getApplication();
+			application.myMainWindow.setBatteryLevel(level);
+			switchWakeLock(
+				getLibrary().BatteryLevelToTurnScreenOffOption.getValue() < level
+			);
+		}
+	};
 }

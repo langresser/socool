@@ -41,6 +41,7 @@ import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 
 import org.socool.socoolreader.reader.R;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
+import org.geometerplus.android.fbreader.SCReader;
 
 public final class ZLAndroidLibrary extends ZLibrary {
 	public final ZLBooleanOption ShowStatusBarOption = new ZLBooleanOption("LookNFeel", "ShowStatusBar", hasNoHardwareMenuButton());
@@ -72,7 +73,7 @@ public final class ZLAndroidLibrary extends ZLibrary {
 		return "GT-S5830".equals(Build.MODEL);
 	}
 
-	private ZLAndroidActivity myActivity;
+	private SCReader myActivity;
 	private final Application myApplication;
 	private ZLAndroidWidget myWidget;
 
@@ -80,7 +81,7 @@ public final class ZLAndroidLibrary extends ZLibrary {
 		myApplication = application;
 	}
 
-	void setActivity(ZLAndroidActivity activity) {
+	public void setActivity(SCReader activity) {
 		myActivity = activity;
 		myWidget = null;
 	}
@@ -91,7 +92,7 @@ public final class ZLAndroidLibrary extends ZLibrary {
 		}
 	}
 
-	public ZLAndroidActivity getActivity() {
+	public SCReader getActivity() {
 		return myActivity;
 	}
 
