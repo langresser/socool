@@ -19,12 +19,25 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
+import android.app.Application;
 
-public class FBReaderApplication extends ZLAndroidApplication {
+import org.geometerplus.zlibrary.core.sqliteconfig.ZLSQLiteConfig;
+
+import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
+import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
+import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
+import org.geometerplus.zlibrary.core.sqliteconfig.ZLSQLiteConfig;
+import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
+import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
+
+public class FBReaderApplication extends Application {
+	public ZLApplicationWindow myMainWindow;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		//bindService(new Intent(this, LibraryService.class), null, LibraryService.BIND_AUTO_CREATE);
+		new ZLSQLiteConfig(this);
+		new ZLAndroidImageManager();
+		new ZLAndroidLibrary(this);
 	}
 }

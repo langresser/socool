@@ -36,7 +36,6 @@ import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 
 import org.socool.socoolreader.reader.R;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidActivity;
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
@@ -410,22 +409,22 @@ public final class SCReader extends ZLAndroidActivity {
 	}
 
 	private Menu addSubMenu(Menu menu, String id) {
-		final ZLAndroidApplication application = (ZLAndroidApplication)getApplication();
+		final FBReaderApplication application = (FBReaderApplication)getApplication();
 		return application.myMainWindow.addSubMenu(menu, id);
 	}
 
 	private void addMenuItem(Menu menu, String actionId, String name) {
-		final ZLAndroidApplication application = (ZLAndroidApplication)getApplication();
+		final FBReaderApplication application = (FBReaderApplication)getApplication();
 		application.myMainWindow.addMenuItem(menu, actionId, null, name);
 	}
 
 	private void addMenuItem(Menu menu, String actionId, int iconId) {
-		final ZLAndroidApplication application = (ZLAndroidApplication)getApplication();
+		final FBReaderApplication application = (FBReaderApplication)getApplication();
 		application.myMainWindow.addMenuItem(menu, actionId, iconId, null);
 	}
 
 	private void addMenuItem(Menu menu, String actionId) {
-		final ZLAndroidApplication application = (ZLAndroidApplication)getApplication();
+		final FBReaderApplication application = (FBReaderApplication)getApplication();
 		application.myMainWindow.addMenuItem(menu, actionId, null, null);
 	}
 
@@ -466,7 +465,7 @@ public final class SCReader extends ZLAndroidActivity {
 			}
 		}
 
-		final ZLAndroidApplication application = (ZLAndroidApplication)getApplication();
+		final FBReaderApplication application = (FBReaderApplication)getApplication();
 		application.myMainWindow.refresh();
 
 		return true;

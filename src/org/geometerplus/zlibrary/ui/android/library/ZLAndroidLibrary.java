@@ -76,7 +76,7 @@ public final class ZLAndroidLibrary extends ZLibrary {
 	private final Application myApplication;
 	private ZLAndroidWidget myWidget;
 
-	ZLAndroidLibrary(Application application) {
+	public ZLAndroidLibrary(Application application) {
 		myApplication = application;
 	}
 

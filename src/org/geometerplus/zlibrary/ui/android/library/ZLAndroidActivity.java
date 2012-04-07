@@ -34,6 +34,7 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
 import org.socool.socoolreader.reader.R;
 import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
+import org.geometerplus.android.fbreader.FBReaderApplication;
 
 public abstract class ZLAndroidActivity extends Activity {
 	protected abstract ZLApplication createApplication();
@@ -92,7 +93,7 @@ public abstract class ZLAndroidActivity extends Activity {
 
 		getLibrary().setActivity(this);
 
-		final ZLAndroidApplication androidApplication = (ZLAndroidApplication)getApplication();
+		final FBReaderApplication androidApplication = (FBReaderApplication)getApplication();
 		if (androidApplication.myMainWindow == null) {
 			final ZLApplication application = createApplication();
 			androidApplication.myMainWindow = new ZLApplicationWindow(application);
@@ -218,7 +219,7 @@ public abstract class ZLAndroidActivity extends Activity {
 	BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			final int level = intent.getIntExtra("level", 100);
-			final ZLAndroidApplication application = (ZLAndroidApplication)getApplication();
+			final FBReaderApplication application = (FBReaderApplication)getApplication();
 			application.myMainWindow.setBatteryLevel(level);
 			switchWakeLock(
 				getLibrary().BatteryLevelToTurnScreenOffOption.getValue() < level
