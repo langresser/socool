@@ -33,7 +33,7 @@ import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
 import org.socool.socoolreader.reader.R;
-import org.geometerplus.zlibrary.ui.android.application.ZLAndroidApplicationWindow;
+import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
 
 public abstract class ZLAndroidActivity extends Activity {
 	protected abstract ZLApplication createApplication();
@@ -95,7 +95,7 @@ public abstract class ZLAndroidActivity extends Activity {
 		final ZLAndroidApplication androidApplication = (ZLAndroidApplication)getApplication();
 		if (androidApplication.myMainWindow == null) {
 			final ZLApplication application = createApplication();
-			androidApplication.myMainWindow = new ZLAndroidApplicationWindow(application);
+			androidApplication.myMainWindow = new ZLApplicationWindow(application);
 			application.initWindow();
 		}
 
