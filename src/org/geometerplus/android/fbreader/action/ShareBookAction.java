@@ -20,9 +20,11 @@
 package org.geometerplus.android.fbreader.action;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class ShareBookAction extends FBAndroidAction {
-	ShareBookAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
+	public ShareBookAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
@@ -33,6 +35,6 @@ public class ShareBookAction extends FBAndroidAction {
 
 	@Override
 	protected void run(Object ... params) {
-		Util.shareBook(BaseActivity, Reader.Model.Book);
+		UIUtil.shareBook(BaseActivity, Reader.Model.Book);
 	}
 }

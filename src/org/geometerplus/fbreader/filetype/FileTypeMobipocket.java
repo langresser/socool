@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.fbreader.filetype.FileTypePalm;
 
 class FileTypeMobipocket extends FileTypePalm {
 	FileTypeMobipocket() {
@@ -48,6 +49,6 @@ class FileTypeMobipocket extends FileTypePalm {
 
 	@Override
 	public MimeType mimeType(ZLFile file) {
-		return acceptsFile(file) ? MimeType.APP_MOBI : MimeType.NULL;
+		return acceptsFile(file) ? MimeType.APP_MOBIPOCKET : MimeType.NULL;
 	}
 }
