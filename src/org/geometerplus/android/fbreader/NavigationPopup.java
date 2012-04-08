@@ -25,8 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
 
+import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 

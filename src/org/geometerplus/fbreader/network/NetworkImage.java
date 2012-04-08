@@ -23,12 +23,12 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.image.ZLFileImage;
-import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.util.MimeType;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkManager;
+import org.geometerplus.zlibrary.util.MimeType;
 
 import org.geometerplus.fbreader.Paths;
 

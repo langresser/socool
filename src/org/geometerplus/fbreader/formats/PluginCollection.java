@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.formats;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.fbreader.formats.fb2.FB2Plugin;
 import org.geometerplus.fbreader.formats.oeb.OEBPlugin;

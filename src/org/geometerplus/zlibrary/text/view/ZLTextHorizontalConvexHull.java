@@ -21,7 +21,7 @@ package org.geometerplus.zlibrary.text.view;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.view.ZLPaintContext;
+import org.geometerplus.zlibrary.view.ZLPaintContext;
 
 class ZLTextHorizontalConvexHull {
 	private final LinkedList<Rectangle> myRectangles = new LinkedList<Rectangle>();

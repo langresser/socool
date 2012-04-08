@@ -21,8 +21,10 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.util.ZLColor;
-import org.geometerplus.zlibrary.core.options.*;
+import org.geometerplus.zlibrary.options.ZLColorOption;
+import org.geometerplus.zlibrary.options.ZLIntegerOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.util.ZLColor;
 
 public class ColorProfile {
 	public static final String DAY = "defaultLight";

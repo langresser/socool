@@ -21,8 +21,8 @@ package org.geometerplus.fbreader.filetype;
 
 import java.util.List;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.util.MimeType;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.util.MimeType;
 
 class FileTypeFB2Zip extends FileType {
 	FileTypeFB2Zip() {

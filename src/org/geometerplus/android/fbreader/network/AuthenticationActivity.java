@@ -29,10 +29,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkManager;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;
@@ -105,7 +105,7 @@ public class AuthenticationActivity extends Activity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 		setContentView(R.layout.authentication);
 
 		final Intent intent = getIntent();

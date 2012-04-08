@@ -19,14 +19,13 @@
 
 package org.geometerplus.fbreader.bookmodel;
 
-import org.geometerplus.zlibrary.core.util.*;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 
-import org.geometerplus.zlibrary.core.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.text.model.*;
+import org.geometerplus.zlibrary.util.ZLArrayUtils;
 
 public class BookReader {
 	public final JavaBookModel Model;

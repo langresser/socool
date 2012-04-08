@@ -21,15 +21,19 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.application.ZLibrary;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.filesystem.*;
-import org.geometerplus.zlibrary.core.application.*;
-import org.geometerplus.zlibrary.core.options.*;
-import org.geometerplus.zlibrary.core.util.ZLColor;
+import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.application.*;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
+import org.geometerplus.zlibrary.options.ZLBooleanOption;
+import org.geometerplus.zlibrary.options.ZLColorOption;
+import org.geometerplus.zlibrary.options.ZLEnumOption;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.util.ZLColor;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;

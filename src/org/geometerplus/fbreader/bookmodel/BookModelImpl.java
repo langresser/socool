@@ -21,7 +21,8 @@ package org.geometerplus.fbreader.bookmodel;
 
 import java.util.HashMap;
 
-import org.geometerplus.zlibrary.core.image.*;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImageMap;
 
 import org.geometerplus.zlibrary.text.model.*;
 

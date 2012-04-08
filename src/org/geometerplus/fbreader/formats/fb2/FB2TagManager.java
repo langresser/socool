@@ -21,8 +21,9 @@ package org.geometerplus.fbreader.formats.fb2;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 import org.geometerplus.fbreader.library.Tag;
 

@@ -30,16 +30,16 @@ import android.os.PowerManager;
 import android.view.*;
 import android.widget.RelativeLayout;
 
-import org.geometerplus.zlibrary.core.application.ZLApplication;
-import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.application.ZLibrary;
+import org.geometerplus.zlibrary.application.ZLApplication;
+import org.geometerplus.zlibrary.application.ZLApplicationWindow;
+import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 
 import org.socool.socoolreader.reader.R;
-import org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

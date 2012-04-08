@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
-import org.geometerplus.zlibrary.core.util.ZLMiscUtil;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkManager;
+import org.geometerplus.zlibrary.network.ZLNetworkRequest;
+import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.geometerplus.fbreader.network.ICustomNetworkLink;
 import org.geometerplus.fbreader.network.NetworkException;

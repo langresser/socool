@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.formats.pdb;
 
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 abstract class PalmDocLikeStream extends PdbStream {
 	protected int myMaxRecordIndex;

@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
 
-import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
 
 import org.geometerplus.fbreader.FBTree;
 

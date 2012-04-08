@@ -19,11 +19,11 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
-import org.geometerplus.zlibrary.core.util.ZLBoolean3;
-import org.geometerplus.zlibrary.core.options.*;
-
+import org.geometerplus.zlibrary.options.ZLIntegerOption;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.text.view.ZLTextStyle;
 import org.geometerplus.zlibrary.text.view.ZLTextHyperlink;
+import org.geometerplus.zlibrary.util.ZLBoolean3;
 
 
 public class ZLTextFullStyleDecoration extends ZLTextStyleDecoration {

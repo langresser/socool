@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.formats.util;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 public class MiscUtil {
 	public static String htmlDirectoryPrefix(ZLFile file) {

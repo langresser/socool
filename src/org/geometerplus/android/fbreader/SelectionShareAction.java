@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader;
 
 import android.content.Intent;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 

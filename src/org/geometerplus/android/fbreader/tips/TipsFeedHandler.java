@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader.tips;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.fbreader.network.atom.*;
 

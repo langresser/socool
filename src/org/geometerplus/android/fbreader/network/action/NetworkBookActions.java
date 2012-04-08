@@ -28,8 +28,8 @@ import android.net.Uri;
 import android.content.Intent;
 import android.content.DialogInterface;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 

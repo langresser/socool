@@ -19,9 +19,10 @@
 
 package org.geometerplus.zlibrary.text.model;
 
-import org.geometerplus.zlibrary.core.util.*;
+import org.geometerplus.zlibrary.util.*;
 
-import org.geometerplus.zlibrary.core.image.ZLImageMap;
+import org.geometerplus.zlibrary.image.ZLImageMap;
+import org.geometerplus.zlibrary.util.ZLArrayUtils;
 
 public final class ZLTextWritablePlainModel extends ZLTextPlainModel implements ZLTextWritableModel {
 	private char[] myCurrentDataBlock;

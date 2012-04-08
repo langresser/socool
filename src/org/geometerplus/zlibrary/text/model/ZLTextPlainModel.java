@@ -21,8 +21,10 @@ package org.geometerplus.zlibrary.text.model;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.util.*;
-import org.geometerplus.zlibrary.core.image.ZLImageMap;
+import org.geometerplus.zlibrary.util.*;
+import org.geometerplus.zlibrary.image.ZLImageMap;
+import org.geometerplus.zlibrary.util.ZLSearchPattern;
+import org.geometerplus.zlibrary.util.ZLSearchUtil;
 
 public class ZLTextPlainModel implements ZLTextModel {
 	private final String myId;

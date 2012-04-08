@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.tree;
 
-import org.geometerplus.zlibrary.core.util.ZLBoolean3;
+import org.geometerplus.zlibrary.util.ZLBoolean3;
 
 import org.geometerplus.fbreader.network.*;
 

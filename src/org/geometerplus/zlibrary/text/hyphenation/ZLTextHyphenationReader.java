@@ -19,9 +19,9 @@
 
 package org.geometerplus.zlibrary.text.hyphenation;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
-import org.geometerplus.zlibrary.core.xml.ZLXMLReaderAdapter;
-import org.geometerplus.zlibrary.core.util.ZLArrayUtils;
+import org.geometerplus.zlibrary.util.ZLArrayUtils;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 final  class ZLTextHyphenationReader extends ZLXMLReaderAdapter {
 	private static final String PATTERN = "pattern";

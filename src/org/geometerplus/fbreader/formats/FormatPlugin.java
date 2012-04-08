@@ -19,9 +19,9 @@
 
 package org.geometerplus.fbreader.formats;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.encodings.EncodingCollection;
-import org.geometerplus.zlibrary.core.image.ZLImage;
+import org.geometerplus.zlibrary.encodings.EncodingCollection;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;

@@ -22,8 +22,8 @@ package org.geometerplus.fbreader.formats.pdb;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.util.ZLInputStreamWithOffset;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.util.ZLInputStreamWithOffset;
 
 public abstract class PdbStream extends InputStream {
 	protected final ZLInputStreamWithOffset myBase;

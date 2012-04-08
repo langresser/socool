@@ -29,9 +29,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.Money;
+import org.geometerplus.zlibrary.misc.Money;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 
@@ -74,7 +74,7 @@ public class BuyBooksActivity extends Activity implements NetworkLibrary.ChangeL
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 
 		myLibrary = NetworkLibrary.Instance();
 

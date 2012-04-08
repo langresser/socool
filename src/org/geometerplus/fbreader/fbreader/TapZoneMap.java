@@ -21,9 +21,9 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.HashMap;
 
-import org.geometerplus.zlibrary.core.xml.ZLXMLReaderAdapter;
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 public class TapZoneMap {
 	public static enum Tap {

@@ -53,7 +53,7 @@ public class BookDownloader extends Activity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 
 		final Intent intent = getIntent();
 		Uri uri = intent.getData();

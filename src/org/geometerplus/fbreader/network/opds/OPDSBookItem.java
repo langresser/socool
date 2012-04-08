@@ -22,10 +22,12 @@ package org.geometerplus.fbreader.network.opds;
 import java.util.*;
 import java.io.*;
 
-import org.geometerplus.zlibrary.core.network.*;
-import org.geometerplus.zlibrary.core.Money;
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.util.ZLNetworkUtil;
+import org.geometerplus.zlibrary.misc.Money;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkManager;
+import org.geometerplus.zlibrary.network.ZLNetworkRequest;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.util.ZLNetworkUtil;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkBookItem;

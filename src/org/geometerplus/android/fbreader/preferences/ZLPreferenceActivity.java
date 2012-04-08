@@ -26,8 +26,11 @@ import android.os.Bundle;
 import android.preference.*;
 import android.content.Intent;
 
-import org.geometerplus.zlibrary.core.options.*;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.options.ZLBooleanOption;
+import org.geometerplus.zlibrary.options.ZLColorOption;
+import org.geometerplus.zlibrary.options.ZLEnumOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 abstract class ZLPreferenceActivity extends android.preference.PreferenceActivity {
 	public static String SCREEN_KEY = "screen";
@@ -123,7 +126,7 @@ abstract class ZLPreferenceActivity extends android.preference.PreferenceActivit
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 
 		myScreen = getPreferenceManager().createPreferenceScreen(this);
 

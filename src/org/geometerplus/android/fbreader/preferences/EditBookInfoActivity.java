@@ -24,12 +24,12 @@ import java.util.*;
 import android.content.Context;
 import android.content.Intent;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.encodings.Encoding;
-import org.geometerplus.zlibrary.core.util.ZLLanguageUtil;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.encodings.Encoding;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
+import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
+import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;

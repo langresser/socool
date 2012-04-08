@@ -29,7 +29,7 @@
 static z_stream*			ourStreams[SIZE]			= { 0 };
 
 extern "C"
-jint Java_org_geometerplus_zlibrary_core_zip_DeflatingDecompressor_startInflating(JNIEnv *env, jobject thiz) {
+jint Java_org_geometerplus_zlibrary_zip_DeflatingDecompressor_startInflating(JNIEnv *env, jobject thiz) {
 	int i;
 	for (i = 0; i < SIZE; ++i) {
 		if (ourStreams[i] == 0) {
@@ -43,7 +43,7 @@ jint Java_org_geometerplus_zlibrary_core_zip_DeflatingDecompressor_startInflatin
 }
 
 extern "C"
-void Java_org_geometerplus_zlibrary_core_zip_DeflatingDecompressor_endInflating(JNIEnv *env, jobject thiz, jint inflatorId) {
+void Java_org_geometerplus_zlibrary_zip_DeflatingDecompressor_endInflating(JNIEnv *env, jobject thiz, jint inflatorId) {
 	if (inflatorId >= 0 && inflatorId < SIZE) {
 		inflateEnd(ourStreams[inflatorId]);
 		delete ourStreams[inflatorId];
@@ -53,7 +53,7 @@ void Java_org_geometerplus_zlibrary_core_zip_DeflatingDecompressor_endInflating(
 
 // returns (endFlag << 32) + ((used inLength) << 16) + outLength
 extern "C"
-jlong Java_org_geometerplus_zlibrary_core_zip_DeflatingDecompressor_inflate(JNIEnv *env, jobject thiz, jint inflatorId, jbyteArray in, jint inOffset, jint inLength, jbyteArray out) {
+jlong Java_org_geometerplus_zlibrary_zip_DeflatingDecompressor_inflate(JNIEnv *env, jobject thiz, jint inflatorId, jbyteArray in, jint inOffset, jint inLength, jbyteArray out) {
 	if (inflatorId < 0 || inflatorId >= SIZE) {
 		return -1;
 	}

@@ -19,10 +19,10 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.core.options.ZLBooleanOption;
-import org.geometerplus.zlibrary.core.options.ZLEnumOption;
-import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.core.view.ZLView;
+import org.geometerplus.zlibrary.options.ZLBooleanOption;
+import org.geometerplus.zlibrary.options.ZLEnumOption;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.view.ZLView;
 
 public class ScrollingPreferences {
 	private static ScrollingPreferences ourInstance;

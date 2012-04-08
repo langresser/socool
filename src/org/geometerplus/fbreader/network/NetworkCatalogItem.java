@@ -21,10 +21,10 @@ package org.geometerplus.fbreader.network;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.util.ZLBoolean3;
-import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkManager;
+import org.geometerplus.zlibrary.network.ZLNetworkRequest;
+import org.geometerplus.zlibrary.util.ZLBoolean3;
 
 import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationManager;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfoCollection;

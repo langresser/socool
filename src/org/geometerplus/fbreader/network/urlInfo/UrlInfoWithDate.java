@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.network.urlInfo;
 
 import java.util.Date;
 
-import org.geometerplus.zlibrary.core.util.ZLMiscUtil;
+import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 public final class UrlInfoWithDate extends UrlInfo {
 	private static final long serialVersionUID = -896768978957787222L;

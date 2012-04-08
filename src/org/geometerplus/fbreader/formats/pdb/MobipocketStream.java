@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.formats.pdb;
 
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 class MobipocketStream extends PalmDocLikeStream {
 	private final int myFileSize;

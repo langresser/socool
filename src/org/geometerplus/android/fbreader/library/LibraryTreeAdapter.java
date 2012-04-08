@@ -23,7 +23,7 @@ import android.graphics.Bitmap;
 import android.view.*;
 import android.widget.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.socool.socoolreader.reader.R;
 

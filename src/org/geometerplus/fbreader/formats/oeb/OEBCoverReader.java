@@ -19,9 +19,9 @@
 
 package org.geometerplus.fbreader.formats.oeb;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.image.ZLSingleImage;
-import org.geometerplus.zlibrary.core.image.ZLImageProxy;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLImageProxy;
+import org.geometerplus.zlibrary.image.ZLSingleImage;
 
 class OEBCoverReader {
 	private static class OEBCoverImage extends ZLImageProxy {

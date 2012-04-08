@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.text.model;
 
-import org.geometerplus.zlibrary.core.image.ZLImageMap;
+import org.geometerplus.zlibrary.image.ZLImageMap;
 
 public class ZLTextNativeModel extends ZLTextPlainModel {
 	public ZLTextNativeModel(

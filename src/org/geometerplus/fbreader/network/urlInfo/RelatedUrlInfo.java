@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.urlInfo;
 
-import org.geometerplus.zlibrary.core.util.MimeType;
+import org.geometerplus.zlibrary.util.MimeType;
 
 public class RelatedUrlInfo extends UrlInfo {
 	private static final long serialVersionUID = -893514485257788098L;

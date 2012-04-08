@@ -22,9 +22,11 @@ package org.geometerplus.fbreader.formats.oeb;
 import java.util.*;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.xml.XMLNamespaces;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 class OEBAnnotationReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 	private String myDescriptionTag;

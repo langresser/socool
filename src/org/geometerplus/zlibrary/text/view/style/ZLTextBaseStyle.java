@@ -19,9 +19,12 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
-import org.geometerplus.zlibrary.core.options.*;
-import org.geometerplus.zlibrary.core.application.ZLibrary;
+import org.geometerplus.zlibrary.options.*;
+import org.geometerplus.zlibrary.application.ZLibrary;
 
+import org.geometerplus.zlibrary.options.ZLBooleanOption;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.text.model.ZLTextAlignmentType;
 import org.geometerplus.zlibrary.text.view.ZLTextStyle;
 import org.geometerplus.zlibrary.text.view.ZLTextHyperlink;

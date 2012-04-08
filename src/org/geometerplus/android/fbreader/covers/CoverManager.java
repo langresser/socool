@@ -28,11 +28,11 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
+import org.geometerplus.zlibrary.image.ZLAndroidImageData;
+import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
 
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 
 import org.geometerplus.fbreader.FBTree;
 

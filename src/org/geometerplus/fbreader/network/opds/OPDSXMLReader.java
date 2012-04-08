@@ -19,9 +19,9 @@
 
 package org.geometerplus.fbreader.network.opds;
 
-import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
-import org.geometerplus.zlibrary.core.Money;
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.misc.Money;
+import org.geometerplus.zlibrary.xml.XMLNamespaces;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.network.atom.*;
 

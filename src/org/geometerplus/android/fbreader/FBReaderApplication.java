@@ -21,11 +21,11 @@ package org.geometerplus.android.fbreader;
 
 import android.app.Application;
 
-import org.geometerplus.zlibrary.core.sqliteconfig.ZLSQLiteConfig;
 
-import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
-import org.geometerplus.zlibrary.core.application.ZLibrary;
+import org.geometerplus.zlibrary.application.ZLApplicationWindow;
+import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
+import org.geometerplus.zlibrary.misc.ZLSQLiteConfig;
 
 public class FBReaderApplication extends Application {
 	public ZLApplicationWindow myMainWindow;

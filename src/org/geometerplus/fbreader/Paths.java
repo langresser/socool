@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader;
 
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
 
 import android.os.Environment;
 

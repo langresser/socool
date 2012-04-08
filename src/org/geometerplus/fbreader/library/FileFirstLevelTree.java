@@ -19,8 +19,8 @@
 
 package org.geometerplus.fbreader.library;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.geometerplus.fbreader.Paths;
 

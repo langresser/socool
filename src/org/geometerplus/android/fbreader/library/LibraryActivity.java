@@ -26,9 +26,9 @@ import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 

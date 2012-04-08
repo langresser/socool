@@ -25,7 +25,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.*;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 

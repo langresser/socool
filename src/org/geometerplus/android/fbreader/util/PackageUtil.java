@@ -34,8 +34,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.CheckBox;
 
-import org.geometerplus.zlibrary.core.options.ZLBooleanOption;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.options.ZLBooleanOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 

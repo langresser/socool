@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.tree;
 
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
 
 import org.geometerplus.fbreader.network.*;
 

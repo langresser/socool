@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.text.view;
 
-import org.geometerplus.zlibrary.core.application.ZLibrary;
+import org.geometerplus.zlibrary.application.ZLibrary;
 
 public enum ZLTextSelectionCursor {
 	None,

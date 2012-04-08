@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.tree;
 
-import org.geometerplus.zlibrary.core.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.fbreader.network.*;
 

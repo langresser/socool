@@ -19,14 +19,14 @@
 
 package org.geometerplus.zlibrary.text.view;
 
-import org.geometerplus.zlibrary.core.application.ZLApplication;
-import org.geometerplus.zlibrary.core.util.ZLColor;
-import org.geometerplus.zlibrary.core.view.ZLView;
-import org.geometerplus.zlibrary.core.view.ZLPaintContext;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.application.ZLApplication;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleDecoration;
+import org.geometerplus.zlibrary.util.ZLColor;
+import org.geometerplus.zlibrary.view.ZLPaintContext;
+import org.geometerplus.zlibrary.view.ZLView;
 
 abstract class ZLTextViewBase extends ZLView {
 	private ZLTextStyle myTextStyle;

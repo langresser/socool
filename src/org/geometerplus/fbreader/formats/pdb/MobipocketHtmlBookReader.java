@@ -23,10 +23,10 @@ import java.util.*;
 import java.io.*;
 import java.nio.charset.CharsetDecoder;
 
-import org.geometerplus.zlibrary.core.html.ZLByteBuffer;
-import org.geometerplus.zlibrary.core.html.ZLHtmlAttributeMap;
-import org.geometerplus.zlibrary.core.image.ZLFileImage;
-import org.geometerplus.zlibrary.core.util.MimeType;
+import org.geometerplus.zlibrary.html.ZLByteBuffer;
+import org.geometerplus.zlibrary.html.ZLHtmlAttributeMap;
+import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.util.MimeType;
 
 import org.geometerplus.fbreader.formats.html.HtmlReader;
 import org.geometerplus.fbreader.formats.html.HtmlTag;

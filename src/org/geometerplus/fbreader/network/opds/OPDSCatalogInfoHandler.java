@@ -21,8 +21,8 @@ package org.geometerplus.fbreader.network.opds;
 
 import java.util.List;
 
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.util.ZLNetworkUtil;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.util.ZLNetworkUtil;
 
 import org.geometerplus.fbreader.network.atom.ATOMLink;
 

@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader.preferences;
 import android.content.Context;
 import android.preference.ListPreference;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 abstract class ZLStringListPreference extends ListPreference {
 	private final ZLResource myResource;

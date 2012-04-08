@@ -23,8 +23,8 @@ import java.util.Currency;
 import java.util.LinkedList;
 import java.util.Locale;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
-import org.geometerplus.zlibrary.core.Money;
+import org.geometerplus.zlibrary.misc.Money;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.network.atom.ATOMLink;
 

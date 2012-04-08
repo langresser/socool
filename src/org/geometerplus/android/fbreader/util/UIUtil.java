@@ -29,7 +29,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 public abstract class UIUtil {
 	private static final Object ourMonitor = new Object();

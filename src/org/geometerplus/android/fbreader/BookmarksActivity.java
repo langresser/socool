@@ -27,9 +27,9 @@ import android.view.*;
 import android.widget.*;
 import android.content.*;
 
-import org.geometerplus.zlibrary.core.util.ZLMiscUtil;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.socool.socoolreader.reader.R;
 
@@ -66,7 +66,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);

@@ -22,12 +22,12 @@
 #include "liblinebreak-2.0/linebreak.h"
 
 extern "C"
-void Java_org_geometerplus_zlibrary_core_LineBreaker_init(JNIEnv *env, jobject thiz) {
+void Java_org_geometerplus_zlibrary_misc_LineBreaker_init(JNIEnv *env, jobject thiz) {
 	init_linebreak();
 }
 
 extern "C"
-void Java_org_geometerplus_zlibrary_core_LineBreaker_setLineBreaksForCharArray(JNIEnv *env, jobject thiz, jcharArray data, jint offset, jint length, jstring lang, jbyteArray breaks) {
+void Java_org_geometerplus_zlibrary_misc_LineBreaker_setLineBreaksForCharArray(JNIEnv *env, jobject thiz, jcharArray data, jint offset, jint length, jstring lang, jbyteArray breaks) {
 	jchar* dataArray = env->GetCharArrayElements(data, 0);
 	jbyte* breaksArray = env->GetByteArrayElements(breaks, 0);
 	const char *langArray = (lang != 0) ? env->GetStringUTFChars(lang, 0) : 0;
@@ -49,7 +49,7 @@ void Java_org_geometerplus_zlibrary_core_LineBreaker_setLineBreaksForCharArray(J
 }
 
 extern "C"
-void Java_org_geometerplus_zlibrary_core_LineBreaker_setLineBreaksForString(JNIEnv *env, jobject thiz, jstring data, jstring lang, jbyteArray breaks) {
+void Java_org_geometerplus_zlibrary_misc_LineBreaker_setLineBreaksForString(JNIEnv *env, jobject thiz, jstring data, jstring lang, jbyteArray breaks) {
 	const jchar* dataArray = env->GetStringChars(data, 0);
 	jbyte* breaksArray = env->GetByteArrayElements(breaks, 0);
 	const size_t len = env->GetStringLength(data);

@@ -20,9 +20,10 @@
 package org.geometerplus.zlibrary.text.view;
 
 import java.util.*;
-import org.geometerplus.zlibrary.core.LineBreaker;
 
-import org.geometerplus.zlibrary.core.image.*;
+
+import org.geometerplus.zlibrary.image.*;
+import org.geometerplus.zlibrary.misc.LineBreaker;
 import org.geometerplus.zlibrary.text.model.*;
 
 public final class ZLTextParagraphCursor {

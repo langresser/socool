@@ -21,8 +21,10 @@ package org.geometerplus.fbreader.library;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.util.ZLMiscUtil;
-import org.geometerplus.zlibrary.core.filesystem.*;
+import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 public final class FileInfoSet {
 	private static final class Pair {

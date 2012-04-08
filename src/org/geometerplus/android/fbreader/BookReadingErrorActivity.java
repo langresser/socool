@@ -26,11 +26,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.error.ErrorKeys;
+import org.geometerplus.zlibrary.error.ErrorUtil;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
-import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
-import org.geometerplus.zlibrary.ui.android.error.ErrorUtil;
 
 public class BookReadingErrorActivity extends Activity implements ErrorKeys {
 	@Override

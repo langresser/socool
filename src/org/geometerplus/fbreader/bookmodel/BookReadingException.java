@@ -21,10 +21,10 @@ package org.geometerplus.fbreader.bookmodel;
 
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.zip.ZipException;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.zip.ZipException;
 
 public final class BookReadingException extends Exception {
 	public static void throwForFile(String resourceId, ZLFile file) throws BookReadingException {

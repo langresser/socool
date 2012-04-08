@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.atom;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 abstract class ATOMCommonAttributes {
 	public static final String XML_BASE = "xml:base";

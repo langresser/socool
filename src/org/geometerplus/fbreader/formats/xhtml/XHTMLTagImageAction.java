@@ -19,10 +19,10 @@
 
 package org.geometerplus.fbreader.formats.xhtml;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.image.ZLFileImage;
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.formats.util.MiscUtil;
 import org.geometerplus.fbreader.bookmodel.BookReader;

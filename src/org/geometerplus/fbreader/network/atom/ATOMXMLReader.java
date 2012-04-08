@@ -21,10 +21,10 @@ package org.geometerplus.fbreader.network.atom;
 
 import java.util.Map;
 
-import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
-import org.geometerplus.zlibrary.core.xml.ZLXMLReaderAdapter;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.xml.XMLNamespaces;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 public class ATOMXMLReader<MetadataType extends ATOMFeedMetadata,EntryType extends ATOMEntry> extends ZLXMLReaderAdapter {
 	public static String intern(String str) {

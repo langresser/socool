@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.library;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.text.view.ZLTextPosition;
 

@@ -21,8 +21,8 @@ package org.geometerplus.fbreader.filetype;
 
 import java.io.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.options.ZLStringOption;
 
 abstract class FileTypePalm extends FileType {
 	private static String palmFileType(final ZLFile file) {

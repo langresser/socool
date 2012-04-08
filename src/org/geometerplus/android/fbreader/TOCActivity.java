@@ -24,13 +24,13 @@ import android.view.*;
 import android.widget.*;
 import android.app.ListActivity;
 
-import org.geometerplus.zlibrary.core.application.ZLApplication;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.ZLTree;
+import org.geometerplus.zlibrary.application.ZLApplication;
 
 import org.socool.socoolreader.reader.R;
 
+import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
+import org.geometerplus.zlibrary.util.ZLTree;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
@@ -42,7 +42,7 @@ public class TOCActivity extends ListActivity {
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 

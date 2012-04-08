@@ -22,7 +22,10 @@ package org.geometerplus.fbreader.library;
 import java.io.File;
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.filesystem.*;
+import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.Paths;

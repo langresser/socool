@@ -21,8 +21,10 @@ package org.geometerplus.fbreader.formats.fb2;
 
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 public class FB2AnnotationReader extends ZLXMLReaderAdapter {
 	private final static int READ_NOTHING = 0;

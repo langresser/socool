@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.atom;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 public interface ATOMFeedHandler<MetadataType extends ATOMFeedMetadata,EntryType extends ATOMEntry> {
 	void processFeedStart();

@@ -21,10 +21,10 @@ package org.geometerplus.fbreader.network.opds;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
-import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
+import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.xml.XMLNamespaces;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.atom.*;

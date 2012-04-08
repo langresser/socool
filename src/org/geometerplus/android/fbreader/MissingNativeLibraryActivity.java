@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.geometerplus.fbreader.Paths;
 

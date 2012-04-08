@@ -27,12 +27,12 @@ import android.preference.DialogPreference;
 import android.view.View;
 import android.widget.SeekBar;
 
-import org.geometerplus.zlibrary.core.util.ZLColor;
-import org.geometerplus.zlibrary.core.options.ZLColorOption;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.options.ZLColorOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.util.ZLAndroidColorUtil;
+import org.geometerplus.zlibrary.util.ZLColor;
 
 import org.socool.socoolreader.reader.R;
-import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
 class ZLColorPreference extends DialogPreference {
 	private final ZLColorOption myOption;

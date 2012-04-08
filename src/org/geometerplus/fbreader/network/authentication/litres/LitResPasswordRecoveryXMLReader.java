@@ -19,8 +19,8 @@
 
 package org.geometerplus.fbreader.network.authentication.litres;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.network.NetworkException;
 

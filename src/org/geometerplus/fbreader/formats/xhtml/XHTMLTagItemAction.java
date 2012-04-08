@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.formats.xhtml;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.bookmodel.BookReader;
 

@@ -22,11 +22,12 @@ package org.geometerplus.fbreader.formats.oeb;
 import java.util.*;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.xml.XMLNamespaces;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.image.ZLFileImage;
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.xml.XMLNamespaces;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 import org.geometerplus.fbreader.bookmodel.*;
 import org.geometerplus.fbreader.formats.xhtml.XHTMLReader;

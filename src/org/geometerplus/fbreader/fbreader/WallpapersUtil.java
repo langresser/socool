@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.List;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.fbreader.Paths;
 

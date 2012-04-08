@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.network.authentication.litres;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.network.NetworkBookItem;
 import org.geometerplus.fbreader.network.opds.OPDSBookItem;

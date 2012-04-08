@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.atom;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 public class ATOMId extends ATOMCommonAttributes {
 	public String Uri;

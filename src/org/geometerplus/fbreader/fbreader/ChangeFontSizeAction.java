@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
 class ChangeFontSizeAction extends FBAction {

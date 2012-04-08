@@ -26,11 +26,12 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.geometerplus.zlibrary.core.util.ZLMiscUtil;
-import org.geometerplus.zlibrary.core.filesystem.*;
-import org.geometerplus.zlibrary.core.image.ZLImage;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.geometerplus.fbreader.formats.*;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;

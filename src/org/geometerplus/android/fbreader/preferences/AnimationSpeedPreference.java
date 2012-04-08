@@ -27,8 +27,8 @@ import android.preference.DialogPreference;
 import android.view.View;
 import android.widget.SeekBar;
 
-import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 

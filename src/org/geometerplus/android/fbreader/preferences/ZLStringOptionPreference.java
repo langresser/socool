@@ -19,8 +19,8 @@
 
 package org.geometerplus.android.fbreader.preferences;
 
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 import android.content.Context;
 

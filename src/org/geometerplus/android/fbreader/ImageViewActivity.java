@@ -27,14 +27,15 @@ import android.os.Bundle;
 import android.util.FloatMath;
 import android.view.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.image.*;
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.util.ZLColor;
-
-import org.geometerplus.zlibrary.core.application.ZLibrary;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
+import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLAndroidImageData;
+import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.image.ZLImageData;
+import org.geometerplus.zlibrary.image.ZLImageManager;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.util.ZLAndroidColorUtil;
+import org.geometerplus.zlibrary.util.ZLColor;
 
 public class ImageViewActivity extends Activity {
 	public static final String BACKGROUND_COLOR_KEY = "bgColor";
@@ -55,7 +56,7 @@ public class ImageViewActivity extends Activity {
 		);
 
 		Thread.setDefaultUncaughtExceptionHandler(
-			new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this)
+			new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this)
 		);
 
 		setContentView(new ImageView());

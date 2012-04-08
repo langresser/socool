@@ -26,7 +26,7 @@ import android.net.Uri;
 import android.view.*;
 import android.widget.*;
 
-import org.geometerplus.zlibrary.core.Money;
+import org.geometerplus.zlibrary.misc.Money;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;

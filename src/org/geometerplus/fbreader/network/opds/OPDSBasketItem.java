@@ -21,8 +21,8 @@ package org.geometerplus.fbreader.network.opds;
 
 import java.util.List;
 
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.util.ZLMiscUtil;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.geometerplus.fbreader.network.BasketItem;
 import org.geometerplus.fbreader.network.urlInfo.*;

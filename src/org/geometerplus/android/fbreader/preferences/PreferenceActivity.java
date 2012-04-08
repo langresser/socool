@@ -22,15 +22,15 @@ package org.geometerplus.android.fbreader.preferences;
 import android.content.Intent;
 import android.view.KeyEvent;
 
-import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
-import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
-import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.application.ZLKeyBindings;
 
+import org.geometerplus.zlibrary.options.ZLIntegerOption;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.text.view.style.*;
+import org.geometerplus.zlibrary.view.AndroidFontUtil;
+import org.geometerplus.zlibrary.view.ZLAndroidPaintContext;
 
-import org.geometerplus.zlibrary.core.application.ZLibrary;
-import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
-import org.geometerplus.zlibrary.ui.android.view.ZLAndroidPaintContext;
+import org.geometerplus.zlibrary.application.ZLibrary;
 
 import org.geometerplus.fbreader.fbreader.*;
 import org.geometerplus.fbreader.Paths;

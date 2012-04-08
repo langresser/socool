@@ -27,10 +27,10 @@ import android.database.sqlite.SQLiteStatement;
 import android.database.SQLException;
 import android.database.Cursor;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
-import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
-import org.geometerplus.zlibrary.core.config.ZLConfig;
+import org.geometerplus.zlibrary.config.ZLConfig;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.options.ZLIntegerOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.text.view.ZLTextPosition;
 import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 

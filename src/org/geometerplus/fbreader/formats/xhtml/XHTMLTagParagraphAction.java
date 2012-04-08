@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.formats.xhtml;
 
-import org.geometerplus.zlibrary.core.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 class XHTMLTagParagraphAction extends XHTMLTagAction {
 	protected void doAtStart(XHTMLReader reader, ZLStringMap xmlattributes) {

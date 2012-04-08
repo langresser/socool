@@ -34,15 +34,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.ZLLanguageUtil;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLAndroidImageData;
+import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
+import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
 import org.socool.socoolreader.reader.R;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
 
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.network.HtmlUtil;
@@ -65,7 +65,7 @@ public class BookInfoActivity extends Activity {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		Thread.setDefaultUncaughtExceptionHandler(
-			new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this)
+			new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this)
 		);
 
 		final String path = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);

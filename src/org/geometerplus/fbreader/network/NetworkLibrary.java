@@ -22,14 +22,14 @@ package org.geometerplus.fbreader.network;
 import java.util.*;
 import java.lang.ref.WeakReference;
 
-import org.geometerplus.zlibrary.core.application.ZLibrary;
-import org.geometerplus.zlibrary.core.util.ZLNetworkUtil;
-import org.geometerplus.zlibrary.core.util.MimeType;
-import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.util.ZLLanguageUtil;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.util.ZLLanguageUtil;
+import org.geometerplus.zlibrary.util.ZLNetworkUtil;
 
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.network.tree.*;

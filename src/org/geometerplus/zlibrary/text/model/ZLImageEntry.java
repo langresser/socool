@@ -19,8 +19,8 @@
 
 package org.geometerplus.zlibrary.text.model;
 
-import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.image.ZLImageMap;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImageMap;
 
 public final class ZLImageEntry {
 	private final ZLImageMap myImageMap;

@@ -22,8 +22,8 @@ package org.geometerplus.fbreader.network.authentication.litres;
 import java.io.InputStream;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 
 public class LitResNetworkRequest extends ZLNetworkRequest {
 	public final LitResAuthenticationXMLReader Reader;

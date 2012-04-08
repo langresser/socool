@@ -22,10 +22,10 @@ package org.geometerplus.fbreader.network.opds;
 import java.util.*;
 import java.io.*;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLPhysicalFile;
-import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
+import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.network.ZLNetworkManager;
+import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.network.*;

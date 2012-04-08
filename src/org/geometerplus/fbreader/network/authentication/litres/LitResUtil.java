@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.authentication.litres;
 
-import org.geometerplus.zlibrary.core.util.ZLNetworkUtil;
+import org.geometerplus.zlibrary.util.ZLNetworkUtil;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 

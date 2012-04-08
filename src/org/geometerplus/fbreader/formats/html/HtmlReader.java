@@ -26,11 +26,13 @@ import java.nio.charset.*;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReader;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
-import org.geometerplus.zlibrary.core.html.*;
-import org.geometerplus.zlibrary.core.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.text.model.ZLTextParagraph;
+import org.geometerplus.zlibrary.util.ZLArrayUtils;
+import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
 
-import org.geometerplus.zlibrary.core.xml.ZLXMLProcessor;
+import org.geometerplus.zlibrary.html.ZLHtmlAttributeMap;
+import org.geometerplus.zlibrary.html.ZLHtmlProcessor;
+import org.geometerplus.zlibrary.html.ZLHtmlReader;
 import org.geometerplus.fbreader.formats.xhtml.XHTMLReader;
 
 public class HtmlReader extends BookReader implements ZLHtmlReader {

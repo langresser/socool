@@ -19,11 +19,11 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
-import org.geometerplus.zlibrary.core.application.ZLibrary;
-import org.geometerplus.zlibrary.core.util.ZLBoolean3;
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.xml.*;
 import org.geometerplus.zlibrary.text.model.ZLTextAlignmentType;
-import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
+import org.geometerplus.zlibrary.util.ZLBoolean3;
+import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
 public class ZLTextStyleCollection {
 	private static ZLTextStyleCollection ourInstance = null;

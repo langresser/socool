@@ -34,15 +34,15 @@ import android.widget.*;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.MimeType;
+import org.geometerplus.zlibrary.image.ZLAndroidImageData;
+import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
+import org.geometerplus.zlibrary.network.SQLiteCookieDatabase;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.util.MimeType;
 
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.ui.android.network.SQLiteCookieDatabase;
 
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.tree.NetworkBookTree;
@@ -65,7 +65,7 @@ public class NetworkBookInfoActivity extends Activity implements NetworkLibrary.
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 
 		SQLiteCookieDatabase.init(this);
 

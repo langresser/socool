@@ -21,14 +21,14 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.util.ZLColor;
-import org.geometerplus.zlibrary.core.application.ZLibrary;
-import org.geometerplus.zlibrary.core.view.ZLPaintContext;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
+import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.util.ZLColor;
+import org.geometerplus.zlibrary.view.ZLPaintContext;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;

@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.library;
 
-import org.geometerplus.zlibrary.core.util.ZLTree;
+import org.geometerplus.zlibrary.util.ZLTree;
 
 public final class FileInfo extends ZLTree<FileInfo> {
 	public final String Name;

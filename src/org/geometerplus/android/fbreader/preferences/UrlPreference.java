@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.preference.Preference;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.resources.ZLResource;
 
 class UrlPreference extends Preference implements Preference.OnPreferenceClickListener {
 	private final String myUrl;

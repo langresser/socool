@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.text.view;
 
-import org.geometerplus.zlibrary.core.image.ZLImageData;
+import org.geometerplus.zlibrary.image.ZLImageData;
 
 public final class ZLTextImageElement extends ZLTextElement {
 	public final String Id;

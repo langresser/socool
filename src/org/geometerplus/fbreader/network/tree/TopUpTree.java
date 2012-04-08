@@ -19,9 +19,9 @@
 
 package org.geometerplus.fbreader.network.tree;
 
-import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.Money;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.misc.Money;
+import org.geometerplus.zlibrary.network.ZLNetworkException;
 
 import org.geometerplus.fbreader.network.TopUpItem;
 import org.geometerplus.fbreader.network.NetworkTree;

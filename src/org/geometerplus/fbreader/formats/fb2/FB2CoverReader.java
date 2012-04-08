@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.formats.fb2;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 public class FB2CoverReader {
 	public FB2CoverImage readCover(ZLFile file) {

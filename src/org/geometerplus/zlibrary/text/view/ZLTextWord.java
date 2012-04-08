@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.text.view;
 
-import org.geometerplus.zlibrary.core.view.ZLPaintContext;
+import org.geometerplus.zlibrary.view.ZLPaintContext;
 
 public final class ZLTextWord extends ZLTextElement { 
 	public final char[] Data;
