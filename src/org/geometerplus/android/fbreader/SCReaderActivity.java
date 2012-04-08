@@ -59,7 +59,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import org.geometerplus.android.fbreader.FBReaderApplication;
 
-public final class SCReader extends Activity {
+public final class SCReaderActivity extends Activity {
 	private static final String REQUESTED_ORIENTATION_KEY = "org.geometerplus.zlibrary.ui.android.library.androidActiviy.RequestedOrientation";
 	private static final String ORIENTATION_CHANGE_COUNTER_KEY = "org.geometerplus.zlibrary.ui.android.library.androidActiviy.ChangeCounter";
 
@@ -94,7 +94,7 @@ public final class SCReader extends Activity {
 					for (PluginApi.ActionInfo info : myPluginActions) {
 						fbReader.addAction(
 							PLUGIN_ACTION_PREFIX + index++,
-							new RunPluginAction(SCReader.this, fbReader, info.getId())
+							new RunPluginAction(SCReaderActivity.this, fbReader, info.getId())
 						);
 					}
 				}
@@ -119,7 +119,7 @@ public final class SCReader extends Activity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						new TipRunner().start();
-						DictionaryUtil.init(SCReader.this);
+						DictionaryUtil.init(SCReaderActivity.this);
 					}
 				});
 			}
@@ -260,7 +260,7 @@ public final class SCReader extends Activity {
 					} else {
 						runOnUiThread(new Runnable() {
 							public void run() {
-								UIUtil.showErrorMessage(SCReader.this, "textNotFound");
+								UIUtil.showErrorMessage(SCReaderActivity.this, "textNotFound");
 								popup.StartPosition = null;
 							}
 						});
@@ -332,12 +332,12 @@ public final class SCReader extends Activity {
 			switch (manager.requiredAction()) {
 				case Initialize:
 					startActivity(new Intent(
-						TipsActivity.INITIALIZE_ACTION, null, SCReader.this, TipsActivity.class
+						TipsActivity.INITIALIZE_ACTION, null, SCReaderActivity.this, TipsActivity.class
 					));
 					break;
 				case Show:
 					startActivity(new Intent(
-						TipsActivity.SHOW_TIP_ACTION, null, SCReader.this, TipsActivity.class
+						TipsActivity.SHOW_TIP_ACTION, null, SCReaderActivity.this, TipsActivity.class
 					));
 					break;
 				case Download:
@@ -576,7 +576,7 @@ public final class SCReader extends Activity {
 					myWakeLockToCreate = false;
 					myWakeLock =
 						((PowerManager)getSystemService(POWER_SERVICE)).
-							newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "SCReader");
+							newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "SCReaderActivity");
 					myWakeLock.acquire();
 				}
 			}

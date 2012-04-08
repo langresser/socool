@@ -47,7 +47,7 @@ import org.socool.socoolreader.reader.R;
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.network.HtmlUtil;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.preferences.EditBookInfoActivity;
 
 public class BookInfoActivity extends Activity {
@@ -79,7 +79,7 @@ public class BookInfoActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
 
-		myResult = SCReader.RESULT_DO_NOTHING;
+		myResult = SCReaderActivity.RESULT_DO_NOTHING;
 		setResult(myResult, getIntent());
 	}
 
@@ -105,9 +105,9 @@ public class BookInfoActivity extends Activity {
 					finish();
 				} else {
 					startActivity(
-						new Intent(getApplicationContext(), SCReader.class)
+						new Intent(getApplicationContext(), SCReaderActivity.class)
 							.setAction(Intent.ACTION_VIEW)
-							.putExtra(SCReader.BOOK_PATH_KEY, myFile.getPath())
+							.putExtra(SCReaderActivity.BOOK_PATH_KEY, myFile.getPath())
 							.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 					);
 				}

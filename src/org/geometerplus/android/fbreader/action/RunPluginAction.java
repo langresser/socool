@@ -23,13 +23,13 @@ import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class RunPluginAction extends FBAndroidAction {
 	private final Uri myUri;
 
-	public RunPluginAction(SCReader baseActivity, FBReaderApp fbreader, Uri uri) {
+	public RunPluginAction(SCReaderActivity baseActivity, FBReaderApp fbreader, Uri uri) {
 		super(baseActivity, fbreader);
 		myUri = uri;
 	}

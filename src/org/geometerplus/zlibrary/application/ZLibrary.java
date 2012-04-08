@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
@@ -44,6 +44,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetFileDescriptor;
 import android.os.Build;
+import android.graphics.Point;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
@@ -116,11 +117,11 @@ public class ZLibrary {
 		return "GT-S5830".equals(Build.MODEL);
 	}
 
-	private SCReader myActivity;
+	private SCReaderActivity myActivity;
 	private final Application myApplication;
 	private ZLAndroidWidget myWidget;
 
-	public void setActivity(SCReader activity) {
+	public void setActivity(SCReaderActivity activity) {
 		myActivity = activity;
 		myWidget = null;
 	}
@@ -131,7 +132,7 @@ public class ZLibrary {
 		}
 	}
 
-	public SCReader getActivity() {
+	public SCReaderActivity getActivity() {
 		return myActivity;
 	}
 
@@ -184,13 +185,38 @@ public class ZLibrary {
 		return (myActivity != null) ? myActivity.getScreenBrightness() : 0;
 	}
 
+	private DisplayMetrics myMetrics;
 	public int getDisplayDPI() {
-		if (myActivity == null) {
-			return 0;
+		if (myMetrics == null) {
+			if (myActivity == null) {
+				return 0;
+			}
+			myMetrics = new DisplayMetrics();
+			myActivity.getWindowManager().getDefaultDisplay().getMetrics(myMetrics);
 		}
-		DisplayMetrics metrics = new DisplayMetrics();
-		myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		return (int)(160 * metrics.density);
+		return (int)(160 * myMetrics.density);
+	}
+
+	public int getPixelWidth() {
+		if (myMetrics == null) {
+			if (myActivity == null) {
+				return 0;
+			}
+			myMetrics = new DisplayMetrics();
+			myActivity.getWindowManager().getDefaultDisplay().getMetrics(myMetrics);
+		}
+		return myMetrics.widthPixels;
+	}
+
+	public int getPixelHeight() {
+		if (myMetrics == null) {
+			if (myActivity == null) {
+				return 0;
+			}
+			myMetrics = new DisplayMetrics();
+			myActivity.getWindowManager().getDefaultDisplay().getMetrics(myMetrics);
+		}
+		return myMetrics.heightPixels;
 	}
 
 	public Collection<String> defaultLanguageCodes() {

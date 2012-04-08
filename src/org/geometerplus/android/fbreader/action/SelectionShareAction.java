@@ -23,11 +23,11 @@ import android.content.Intent;
 
 import org.geometerplus.zlibrary.resources.ZLResource;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class SelectionShareAction extends FBAndroidAction {
-	public SelectionShareAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public SelectionShareAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 

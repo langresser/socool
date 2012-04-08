@@ -24,11 +24,11 @@ import android.content.Intent;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.library.LibraryActivity;
 
 public class ShowLibraryAction extends FBAndroidAction {
-	public ShowLibraryAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public ShowLibraryAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 

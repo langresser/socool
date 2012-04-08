@@ -21,11 +21,11 @@ package org.geometerplus.android.fbreader.action;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.network.NetworkLibraryPrimaryActivity;
 
 public class ShowNetworkLibraryAction extends RunActivityAction {
-	public ShowNetworkLibraryAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public ShowNetworkLibraryAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader, NetworkLibraryPrimaryActivity.class);
 	}
 }

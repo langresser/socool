@@ -19,11 +19,11 @@
 
 package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class SelectionHidePanelAction extends FBAndroidAction {
-	public SelectionHidePanelAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public SelectionHidePanelAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 

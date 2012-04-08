@@ -19,14 +19,14 @@
 
 package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBAction;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 abstract class FBAndroidAction extends FBAction {
-	protected final SCReader BaseActivity;
+	protected final SCReaderActivity BaseActivity;
 
-	public FBAndroidAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public FBAndroidAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(fbreader);
 		BaseActivity = baseActivity;
 	}

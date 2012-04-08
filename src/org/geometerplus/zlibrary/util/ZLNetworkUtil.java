@@ -121,6 +121,6 @@ public class ZLNetworkUtil {
 	}
 
 	public static String getUserAgent() {
-		return "SCReader/" + ZLibrary.Instance().getVersionName() + "(java)";
+		return "SCReaderActivity/" + ZLibrary.Instance().getVersionName() + "(java)";
 	}
 }

@@ -25,7 +25,7 @@ import android.content.pm.ActivityInfo;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class SetOrientationAction extends FBAndroidAction {
@@ -47,7 +47,7 @@ public class SetOrientationAction extends FBAndroidAction {
 
 	private final String myOptionValue;
 
-	public SetOrientationAction(SCReader baseActivity, FBReaderApp fbreader, String optionValue) {
+	public SetOrientationAction(SCReaderActivity baseActivity, FBReaderApp fbreader, String optionValue) {
 		super(baseActivity, fbreader);
 		myOptionValue = optionValue;
 	}

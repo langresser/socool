@@ -20,11 +20,11 @@
 package org.geometerplus.android.fbreader.action;
 
 import org.geometerplus.android.fbreader.BookmarksActivity;
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowBookmarksAction extends RunActivityAction {
-	public ShowBookmarksAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public ShowBookmarksAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader, BookmarksActivity.class);
 	}
 }

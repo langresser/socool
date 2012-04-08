@@ -26,7 +26,7 @@ import android.util.AttributeSet;
 
 import org.geometerplus.zlibrary.application.ZLApplication;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 
 public class ZLAndroidWidget extends View implements ZLViewWidget, View.OnLongClickListener {
 	private final Paint myPaint = new Paint();
@@ -70,8 +70,8 @@ public class ZLAndroidWidget extends View implements ZLViewWidget, View.OnLongCl
 	@Override
 	protected void onDraw(final Canvas canvas) {
 		final Context context = getContext();
-		if (context instanceof SCReader) {
-			((SCReader)context).createWakeLock();
+		if (context instanceof SCReaderActivity) {
+			((SCReaderActivity)context).createWakeLock();
 		} else {
 			System.err.println("A surprise: view's context is not a ZLAndroidActivity");
 		}

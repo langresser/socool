@@ -24,11 +24,11 @@ import java.util.List;
 import android.content.Intent;
 
 import org.geometerplus.android.fbreader.CancelActivity;
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowCancelMenuAction extends FBAndroidAction {
-	public ShowCancelMenuAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public ShowCancelMenuAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
@@ -49,7 +49,7 @@ public class ShowCancelMenuAction extends FBAndroidAction {
 					intent.putExtra(CancelActivity.ITEM_SUMMARY + index, description.Summary);
 					++index;
 				}
-				BaseActivity.startActivityForResult(intent, SCReader.REQUEST_CANCEL_MENU);
+				BaseActivity.startActivityForResult(intent, SCReaderActivity.REQUEST_CANCEL_MENU);
 			}
 		}
 	}

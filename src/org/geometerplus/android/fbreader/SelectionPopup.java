@@ -39,7 +39,7 @@ class SelectionPopup extends ButtonsPopupPanel {
 	}
 
 	@Override
-	public void createControlPanel(SCReader activity, RelativeLayout root) {
+	public void createControlPanel(SCReaderActivity activity, RelativeLayout root) {
 		if (myWindow != null && activity == myWindow.getActivity()) {
 			return;
 		}

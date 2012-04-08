@@ -25,11 +25,11 @@ import org.geometerplus.fbreader.library.Bookmark;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.fbreader.FBView;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class SelectionBookmarkAction extends FBAndroidAction {
-	public SelectionBookmarkAction(SCReader baseApplication, FBReaderApp fbreader) {
+	public SelectionBookmarkAction(SCReaderActivity baseApplication, FBReaderApp fbreader) {
 		super(baseApplication, fbreader);
 	}
 

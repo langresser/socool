@@ -31,7 +31,7 @@ import org.geometerplus.fbreader.Paths;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 
 public class FixBooksDirectoryActivity extends Activity {
 	@Override
@@ -56,7 +56,7 @@ public class FixBooksDirectoryActivity extends Activity {
 		okButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				Paths.BooksDirectoryOption().setValue(directoryView.getText().toString());
-				startActivity(new Intent(FixBooksDirectoryActivity.this, SCReader.class));
+				startActivity(new Intent(FixBooksDirectoryActivity.this, SCReaderActivity.class));
 				finish();
 			}
 		});

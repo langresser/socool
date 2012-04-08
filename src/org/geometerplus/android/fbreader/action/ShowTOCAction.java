@@ -19,12 +19,12 @@
 
 package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.TOCActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowTOCAction extends RunActivityAction {
-	public ShowTOCAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public ShowTOCAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader, TOCActivity.class);
 	}
 

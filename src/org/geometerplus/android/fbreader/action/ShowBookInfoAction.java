@@ -23,11 +23,11 @@ import android.content.Intent;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.library.BookInfoActivity;
 
 public class ShowBookInfoAction extends FBAndroidAction {
-	public ShowBookInfoAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public ShowBookInfoAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
@@ -42,7 +42,7 @@ public class ShowBookInfoAction extends FBAndroidAction {
 			new Intent(BaseActivity.getApplicationContext(), BookInfoActivity.class)
 				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, Reader.Model.Book.File.getPath())
 				.putExtra(BookInfoActivity.FROM_READING_MODE_KEY, true),
-			SCReader.REQUEST_BOOK_INFO
+			SCReaderActivity.REQUEST_BOOK_INFO
 		);
 	}
 }

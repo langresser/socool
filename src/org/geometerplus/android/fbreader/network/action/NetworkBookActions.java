@@ -33,7 +33,7 @@ import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.SCReaderActivity;
 
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.tree.NetworkBookTree;
@@ -209,7 +209,7 @@ public abstract class NetworkBookActions {
 				new Intent(Intent.ACTION_VIEW,
 					Uri.fromFile(new File(local)),
 					activity.getApplicationContext(),
-					SCReader.class
+					SCReaderActivity.class
 				).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK)
 			);
 		}
