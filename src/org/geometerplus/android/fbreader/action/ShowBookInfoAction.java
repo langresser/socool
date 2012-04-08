@@ -17,27 +17,32 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.zlibrary.text.model.ZLTextModel;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import android.content.Intent;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class ShowNavigationAction extends FBAndroidAction {
-	ShowNavigationAction(SCReader baseActivity, FBReaderApp fbreader) {
+import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.library.BookInfoActivity;
+
+public class ShowBookInfoAction extends FBAndroidAction {
+	public ShowBookInfoAction(SCReader baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
 	@Override
 	public boolean isVisible() {
-		final ZLTextView view = (ZLTextView)Reader.getCurrentView();
-		final ZLTextModel textModel = view.getModel();
-		return textModel != null && textModel.getParagraphsNumber() != 0;
+		return Reader.Model != null;
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		BaseActivity.navigate();
+		BaseActivity.startActivityForResult(
+			new Intent(BaseActivity.getApplicationContext(), BookInfoActivity.class)
+				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, Reader.Model.Book.File.getPath())
+				.putExtra(BookInfoActivity.FROM_READING_MODE_KEY, true),
+			SCReader.REQUEST_BOOK_INFO
+		);
 	}
 }

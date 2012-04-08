@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.fbreader.fbreader.FBAction;
+import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.TOCActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-abstract class FBAndroidAction extends FBAction {
-	protected final SCReader BaseActivity;
+public class ShowTOCAction extends RunActivityAction {
+	public ShowTOCAction(SCReader baseActivity, FBReaderApp fbreader) {
+		super(baseActivity, fbreader, TOCActivity.class);
+	}
 
-	FBAndroidAction(SCReader baseActivity, FBReaderApp fbreader) {
-		super(fbreader);
-		BaseActivity = baseActivity;
+	public boolean isVisible() {
+		return (Reader.Model != null) && Reader.Model.TOCTree.hasChildren();
 	}
 }

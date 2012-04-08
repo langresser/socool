@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2012 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2010-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,15 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class SelectionHidePanelAction extends FBAndroidAction {
-	SelectionHidePanelAction(SCReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
-	}
+import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.network.NetworkLibraryPrimaryActivity;
 
-	@Override
-    protected void run(Object ... params) {
-		BaseActivity.hideSelectionPanel();
+public class ShowNetworkLibraryAction extends RunActivityAction {
+	public ShowNetworkLibraryAction(SCReader baseActivity, FBReaderApp fbreader) {
+		super(baseActivity, fbreader, NetworkLibraryPrimaryActivity.class);
 	}
 }

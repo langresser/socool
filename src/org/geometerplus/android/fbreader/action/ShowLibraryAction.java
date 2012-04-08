@@ -17,33 +17,28 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
-import android.app.Application;
-import android.text.ClipboardManager;
-
-import org.geometerplus.zlibrary.resources.ZLResource;
+import android.content.Intent;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.bookmodel.BookModel;
 
-import org.geometerplus.android.fbreader.util.UIUtil;
+import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.library.LibraryActivity;
 
-public class SelectionCopyAction extends FBAndroidAction {
-	SelectionCopyAction(SCReader baseActivity, FBReaderApp fbreader) {
+public class ShowLibraryAction extends FBAndroidAction {
+	public ShowLibraryAction(SCReader baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
 	@Override
-    protected void run(Object ... params) {
-		final String text = Reader.getTextView().getSelectedText();
-		Reader.getTextView().clearSelection();
-
-		final ClipboardManager clipboard =
-			(ClipboardManager)BaseActivity.getApplication().getSystemService(Application.CLIPBOARD_SERVICE);
-		clipboard.setText(text);
-		UIUtil.showMessageText(
-			BaseActivity,
-			ZLResource.resource("selection").getResource("textInBuffer").getValue().replace("%s", clipboard.getText())
-		);
+	protected void run(Object ... params) {
+		final BookModel model = Reader.Model;
+		Intent intent = new Intent(BaseActivity.getApplicationContext(), LibraryActivity.class);
+		if (model != null && model.Book != null) {
+			intent.putExtra(LibraryActivity.SELECTED_BOOK_PATH_KEY, model.Book.File.getPath());
+		}
+		BaseActivity.startActivity(intent);
 	}
 }

@@ -17,12 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class ShowBookmarksAction extends RunActivityAction {
-	ShowBookmarksAction(SCReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader, BookmarksActivity.class);
+public class ShowMenuAction extends FBAndroidAction {
+	public ShowMenuAction(SCReader baseActivity, FBReaderApp fbreader) {
+		super(baseActivity, fbreader);
+	}
+
+	@Override
+	protected void run(Object ... params) {
+		BaseActivity.openOptionsMenu();
 	}
 }

@@ -17,17 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class ShowMenuAction extends FBAndroidAction {
-	ShowMenuAction(SCReader baseActivity, FBReaderApp fbreader) {
+public class SelectionHidePanelAction extends FBAndroidAction {
+	public SelectionHidePanelAction(SCReader baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
 	@Override
-	protected void run(Object ... params) {
-		BaseActivity.openOptionsMenu();
+    protected void run(Object ... params) {
+		BaseActivity.hideSelectionPanel();
 	}
 }

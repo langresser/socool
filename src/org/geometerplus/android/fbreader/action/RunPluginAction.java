@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2012 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2010-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,26 +17,28 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
 import android.content.Intent;
+import android.content.ActivityNotFoundException;
+import android.net.Uri;
 
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.fbreader.preferences.PreferenceActivity;
+public class RunPluginAction extends FBAndroidAction {
+	private final Uri myUri;
 
-class ShowPreferencesAction extends FBAndroidAction {
-	ShowPreferencesAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public RunPluginAction(SCReader baseActivity, FBReaderApp fbreader, Uri uri) {
 		super(baseActivity, fbreader);
+		myUri = uri;
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		final Intent intent =
-			new Intent(BaseActivity.getApplicationContext(), PreferenceActivity.class);
-		if (params.length == 1 && params[0] instanceof String) {
-			intent.putExtra(PreferenceActivity.SCREEN_KEY, (String)params[0]);
+		try {
+			BaseActivity.startActivity(new Intent("android.fbreader.action.plugin.RUN", myUri));
+		} catch (ActivityNotFoundException e) {
 		}
-		BaseActivity.startActivityForResult(intent, SCReader.REQUEST_PREFERENCES);
 	}
 }

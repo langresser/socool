@@ -17,31 +17,23 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
-import android.content.Intent;
-
-import org.geometerplus.zlibrary.resources.ZLResource;
-
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-public class SelectionShareAction extends FBAndroidAction {
-	SelectionShareAction(SCReader baseActivity, FBReaderApp fbreader) {
+public class SelectionShowPanelAction extends FBAndroidAction {
+	public SelectionShowPanelAction(SCReader baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
 	@Override
-    protected void run(Object ... params) {
-		final String text = Reader.getTextView().getSelectedText();
-		final String title = Reader.Model.Book.getTitle();
-		Reader.getTextView().clearSelection();
+	public boolean isEnabled() {
+		return !Reader.getTextView().isSelectionEmpty();
+	}
 
-		final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-		intent.setType("text/plain");
-		intent.putExtra(android.content.Intent.EXTRA_SUBJECT, 
-			ZLResource.resource("selection").getResource("quoteFrom").getValue().replace("%s", title)
-		);
-		intent.putExtra(android.content.Intent.EXTRA_TEXT, text);
-		BaseActivity.startActivity(Intent.createChooser(intent, null));
+	@Override
+    protected void run(Object ... params) {
+		BaseActivity.showSelectionPanel();
 	}
 }

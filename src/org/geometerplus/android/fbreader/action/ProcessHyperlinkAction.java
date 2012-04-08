@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
@@ -33,10 +33,12 @@ import org.geometerplus.fbreader.network.NetworkLibrary;
 
 import org.geometerplus.android.fbreader.network.BookDownloader;
 import org.geometerplus.android.fbreader.network.BookDownloaderService;
+import org.geometerplus.android.fbreader.DictionaryUtil;
 import org.geometerplus.android.fbreader.ImageViewActivity;
+import org.geometerplus.android.fbreader.SCReader;
 
-class ProcessHyperlinkAction extends FBAndroidAction {
-	ProcessHyperlinkAction(SCReader baseActivity, FBReaderApp fbreader) {
+public class ProcessHyperlinkAction extends FBAndroidAction {
+	public ProcessHyperlinkAction(SCReader baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 

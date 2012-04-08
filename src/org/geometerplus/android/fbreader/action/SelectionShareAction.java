@@ -17,38 +17,32 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
+
+import android.content.Intent;
 
 import org.geometerplus.zlibrary.resources.ZLResource;
 
-import org.geometerplus.fbreader.library.Bookmark;
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.fbreader.FBView;
 
-import org.geometerplus.android.fbreader.util.UIUtil;
-
-public class SelectionBookmarkAction extends FBAndroidAction {
-	SelectionBookmarkAction(SCReader baseApplication, FBReaderApp fbreader) {
-		super(baseApplication, fbreader);
+public class SelectionShareAction extends FBAndroidAction {
+	public SelectionShareAction(SCReader baseActivity, FBReaderApp fbreader) {
+		super(baseActivity, fbreader);
 	}
 
 	@Override
     protected void run(Object ... params) {
-		final FBView fbview = Reader.getTextView();
-		final String text = fbview.getSelectedText();
+		final String text = Reader.getTextView().getSelectedText();
+		final String title = Reader.Model.Book.getTitle();
+		Reader.getTextView().clearSelection();
 
-		new Bookmark(
-			Reader.Model.Book,
-			fbview.getModel().getId(),
-			fbview.getSelectionStartPosition(), 
-			text,
-			true
-		).save();
-        fbview.clearSelection();
-
-		UIUtil.showMessageText(
-			BaseActivity,
-			ZLResource.resource("selection").getResource("bookmarkCreated").getValue().replace("%s", text)
+		final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(android.content.Intent.EXTRA_SUBJECT, 
+			ZLResource.resource("selection").getResource("quoteFrom").getValue().replace("%s", title)
 		);
+		intent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+		BaseActivity.startActivity(Intent.createChooser(intent, null));
 	}
 }

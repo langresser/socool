@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2012 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,28 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
+import org.geometerplus.zlibrary.text.model.ZLTextModel;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
+
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.fbreader.network.NetworkLibraryPrimaryActivity;
+public class ShowNavigationAction extends FBAndroidAction {
+	public ShowNavigationAction(SCReader baseActivity, FBReaderApp fbreader) {
+		super(baseActivity, fbreader);
+	}
 
-class ShowNetworkLibraryAction extends RunActivityAction {
-	ShowNetworkLibraryAction(SCReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader, NetworkLibraryPrimaryActivity.class);
+	@Override
+	public boolean isVisible() {
+		final ZLTextView view = (ZLTextView)Reader.getCurrentView();
+		final ZLTextModel textModel = view.getModel();
+		return textModel != null && textModel.getParagraphsNumber() != 0;
+	}
+
+	@Override
+	protected void run(Object ... params) {
+		BaseActivity.navigate();
 	}
 }

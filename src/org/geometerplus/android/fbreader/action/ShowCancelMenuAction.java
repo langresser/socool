@@ -17,16 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
 import java.util.List;
 
 import android.content.Intent;
 
+import org.geometerplus.android.fbreader.CancelActivity;
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class ShowCancelMenuAction extends FBAndroidAction {
-	ShowCancelMenuAction(SCReader baseActivity, FBReaderApp fbreader) {
+public class ShowCancelMenuAction extends FBAndroidAction {
+	public ShowCancelMenuAction(SCReader baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 

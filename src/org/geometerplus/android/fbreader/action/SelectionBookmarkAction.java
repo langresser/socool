@@ -17,26 +17,39 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
+import org.geometerplus.zlibrary.resources.ZLResource;
+
+import org.geometerplus.fbreader.library.Bookmark;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.fbreader.FBView;
 
-public class SelectionTranslateAction extends FBAndroidAction {
-    SelectionTranslateAction(SCReader baseActivity, FBReaderApp fbreader) {
-        super(baseActivity, fbreader);
-    }
+import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.util.UIUtil;
+
+public class SelectionBookmarkAction extends FBAndroidAction {
+	public SelectionBookmarkAction(SCReader baseApplication, FBReaderApp fbreader) {
+		super(baseApplication, fbreader);
+	}
 
 	@Override
     protected void run(Object ... params) {
-        final FBView fbview = Reader.getTextView();
-        DictionaryUtil.openTextInDictionary(
-			BaseActivity,
-        	fbview.getSelectedText(),
-			fbview.getCountOfSelectedWords() == 1,
-        	fbview.getSelectionStartY(),
-			fbview.getSelectionEndY()
-		);
+		final FBView fbview = Reader.getTextView();
+		final String text = fbview.getSelectedText();
+
+		new Bookmark(
+			Reader.Model.Book,
+			fbview.getModel().getId(),
+			fbview.getSelectionStartPosition(), 
+			text,
+			true
+		).save();
         fbview.clearSelection();
-    }
+
+		UIUtil.showMessageText(
+			BaseActivity,
+			ZLResource.resource("selection").getResource("bookmarkCreated").getValue().replace("%s", text)
+		);
+	}
 }

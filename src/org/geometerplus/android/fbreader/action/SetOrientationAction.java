@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -25,10 +25,11 @@ import android.content.pm.ActivityInfo;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
 
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class SetScreenOrientationAction extends FBAndroidAction {
-	static void setOrientation(Activity activity, String optionValue) {
+public class SetOrientationAction extends FBAndroidAction {
+	public static void setOrientation(Activity activity, String optionValue) {
 		int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 		if (ZLibrary.SCREEN_ORIENTATION_SENSOR.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
@@ -46,7 +47,7 @@ class SetScreenOrientationAction extends FBAndroidAction {
 
 	private final String myOptionValue;
 
-	SetScreenOrientationAction(SCReader baseActivity, FBReaderApp fbreader, String optionValue) {
+	public SetOrientationAction(SCReader baseActivity, FBReaderApp fbreader, String optionValue) {
 		super(baseActivity, fbreader);
 		myOptionValue = optionValue;
 	}

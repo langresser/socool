@@ -17,31 +17,23 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
 import android.content.Intent;
 
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.fbreader.library.BookInfoActivity;
+abstract class RunActivityAction extends FBAndroidAction {
+	private final Class<?> myActivityClass;
 
-class ShowBookInfoAction extends FBAndroidAction {
-	ShowBookInfoAction(SCReader baseActivity, FBReaderApp fbreader) {
+	public RunActivityAction(SCReader baseActivity, FBReaderApp fbreader, Class<?> activityClass) {
 		super(baseActivity, fbreader);
-	}
-
-	@Override
-	public boolean isVisible() {
-		return Reader.Model != null;
+		myActivityClass = activityClass;
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		BaseActivity.startActivityForResult(
-			new Intent(BaseActivity.getApplicationContext(), BookInfoActivity.class)
-				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, Reader.Model.Book.File.getPath())
-				.putExtra(BookInfoActivity.FROM_READING_MODE_KEY, true),
-			SCReader.REQUEST_BOOK_INFO
-		);
+		BaseActivity.startActivity(new Intent(BaseActivity.getApplicationContext(), myActivityClass));
 	}
 }

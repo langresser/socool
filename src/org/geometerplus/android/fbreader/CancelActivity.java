@@ -28,9 +28,9 @@ import android.view.*;
 import org.socool.socoolreader.reader.R;
 
 public class CancelActivity extends ListActivity {
-	static final String LIST_SIZE = "listSize";
-	static final String ITEM_TITLE = "title";
-	static final String ITEM_SUMMARY = "summary";
+	public static final String LIST_SIZE = "listSize";
+	public static final String ITEM_TITLE = "title";
+	public static final String ITEM_SUMMARY = "summary";
 
 	@Override
 	protected void onCreate(Bundle icicle) {

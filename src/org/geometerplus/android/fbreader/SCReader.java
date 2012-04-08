@@ -47,6 +47,7 @@ import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.android.fbreader.tips.TipsManager;
 
+import org.geometerplus.android.fbreader.action.*;
 import org.geometerplus.android.fbreader.library.SQLiteBooksDatabase;
 import org.geometerplus.android.fbreader.library.KillerCallback;
 import org.geometerplus.android.fbreader.tips.TipsActivity;
@@ -193,13 +194,13 @@ public final class SCReader extends Activity {
 
 		fbReader.addAction(ActionCode.SHOW_CANCEL_MENU, new ShowCancelMenuAction(this, fbReader));
 
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new SetScreenOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_SYSTEM));
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new SetScreenOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_SENSOR));
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetScreenOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_PORTRAIT));
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetScreenOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_LANDSCAPE));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_SYSTEM));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_SENSOR));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_PORTRAIT));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_LANDSCAPE));
 		if (ZLibrary.Instance().supportsAllOrientations()) {
-			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new SetScreenOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
-			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new SetScreenOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
+			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
+			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
 		}
 	}
 
@@ -291,7 +292,7 @@ public final class SCReader extends Activity {
 			startActivity(new Intent(this, getClass()));
 		}
 
-		SetScreenOrientationAction.setOrientation(this, zlibrary.OrientationOption.getValue());
+		SetOrientationAction.setOrientation(this, zlibrary.OrientationOption.getValue());
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		final RelativeLayout root = (RelativeLayout)findViewById(R.id.root_view);

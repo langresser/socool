@@ -17,22 +17,28 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
 
+import org.geometerplus.android.fbreader.DictionaryUtil;
+import org.geometerplus.android.fbreader.SCReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.fbreader.FBView;
 
-class SearchAction extends FBAndroidAction {
-	SearchAction(SCReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
-	}
-
-	@Override
-	public boolean isVisible() {
-		return Reader.Model != null;
-	}
+public class SelectionTranslateAction extends FBAndroidAction {
+	public SelectionTranslateAction(SCReader baseActivity, FBReaderApp fbreader) {
+        super(baseActivity, fbreader);
+    }
 
 	@Override
-	protected void run(Object ... params) {
-		BaseActivity.onSearchRequested();
-	}
+    protected void run(Object ... params) {
+        final FBView fbview = Reader.getTextView();
+        DictionaryUtil.openTextInDictionary(
+			BaseActivity,
+        	fbview.getSelectedText(),
+			fbview.getCountOfSelectedWords() == 1,
+        	fbview.getSelectionStartY(),
+			fbview.getSelectionEndY()
+		);
+        fbview.clearSelection();
+    }
 }

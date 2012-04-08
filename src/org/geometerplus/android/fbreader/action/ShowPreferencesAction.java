@@ -17,16 +17,27 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.geometerplus.android.fbreader.action;
+
+import android.content.Intent;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class ShowTOCAction extends RunActivityAction {
-	ShowTOCAction(SCReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader, TOCActivity.class);
+import org.geometerplus.android.fbreader.SCReader;
+import org.geometerplus.android.fbreader.preferences.PreferenceActivity;
+
+public class ShowPreferencesAction extends FBAndroidAction {
+	public ShowPreferencesAction(SCReader baseActivity, FBReaderApp fbreader) {
+		super(baseActivity, fbreader);
 	}
 
-	public boolean isVisible() {
-		return (Reader.Model != null) && Reader.Model.TOCTree.hasChildren();
+	@Override
+	protected void run(Object ... params) {
+		final Intent intent =
+			new Intent(BaseActivity.getApplicationContext(), PreferenceActivity.class);
+		if (params.length == 1 && params[0] instanceof String) {
+			intent.putExtra(PreferenceActivity.SCREEN_KEY, (String)params[0]);
+		}
+		BaseActivity.startActivityForResult(intent, SCReader.REQUEST_PREFERENCES);
 	}
 }
