@@ -25,6 +25,7 @@
 #include <ZLDir.h>
 #include <ZLOutputStream.h>
 #include <ZLStringUtil.h>
+#include <AndroidUtil.h>
 
 #include "ZLCachedMemoryAllocator.h"
 
@@ -72,6 +73,10 @@ void ZLCachedMemoryAllocator::writeCache(size_t blockLength) {
 	const std::string fileName = makeFileName(index);
 	ZLFile file(fileName);
 	shared_ptr<ZLOutputStream> stream = file.outputStream();
+	if (stream.isNull() || !stream->open()) {
+			//AndroidUtil::throwCachedCharStorageException("Cannot create file " + fileName);
+			return;
+	}
 	stream->open();
 	stream->write(myPool[index], blockLength);
 	stream->close();

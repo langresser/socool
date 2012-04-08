@@ -222,3 +222,18 @@ jobject StaticObjectMethod::call(...) {
 	ZLLogger::Instance().println(JNI_LOGGER_CLASS, "finished StaticObjectMethod " + myName);
 	return result;
 }
+
+std::string StringMethod::callForCppString(jobject base, ...) {
+	ZLLogger::Instance().println(JNI_LOGGER_CLASS, "calling StringMethod " + myName);
+	JNIEnv *env = AndroidUtil::getEnv();
+	va_list lst;
+	va_start(lst, base);
+	jstring j = (jstring)env->CallObjectMethodV(base, myId, lst);
+	va_end(lst);
+	std::string str = AndroidUtil::fromJavaString(env, j);
+	if (j != 0) {
+		env->DeleteLocalRef(j);
+	}
+	ZLLogger::Instance().println(JNI_LOGGER_CLASS, "calling StringMethod " + myName);
+	return str;
+}
