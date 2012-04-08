@@ -28,7 +28,7 @@ import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.view.ZLViewWidget;
 import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -98,7 +98,7 @@ public class ZLApplicationWindow {
 
 	public void runWithMessage(String key, Runnable action, Runnable postAction) {
 		final Activity activity = 
-			((ZLAndroidLibrary)ZLAndroidLibrary.Instance()).getActivity();
+			((ZLibrary)ZLibrary.Instance()).getActivity();
 		if (activity != null) {
 			UIUtil.runWithMessage(activity, key, action, postAction, false);
 		} else {
@@ -110,7 +110,7 @@ public class ZLApplicationWindow {
 		exception.printStackTrace();
 
 		final Activity activity = 
-			((ZLAndroidLibrary)ZLAndroidLibrary.Instance()).getActivity();
+			((ZLibrary)ZLibrary.Instance()).getActivity();
 		final Intent intent = new Intent(
 			"android.fbreader.action.ERROR",
 			new Uri.Builder().scheme(exception.getClass().getSimpleName()).build()
@@ -137,7 +137,7 @@ public class ZLApplicationWindow {
 
 	public void setTitle(final String title) {
 		final Activity activity = 
-			((ZLAndroidLibrary)ZLAndroidLibrary.Instance()).getActivity();
+			((ZLibrary)ZLibrary.Instance()).getActivity();
 		if (activity != null) {
 			activity.runOnUiThread(new Runnable() {
 				public void run() {
@@ -148,11 +148,11 @@ public class ZLApplicationWindow {
 	}
 
 	protected ZLViewWidget getViewWidget() {
-		return ((ZLAndroidLibrary)ZLAndroidLibrary.Instance()).getWidget();
+		return ((ZLibrary)ZLibrary.Instance()).getWidget();
 	}
 
 	public void close() {
-		((ZLAndroidLibrary)ZLAndroidLibrary.Instance()).finish();
+		((ZLibrary)ZLibrary.Instance()).finish();
 	}
 
 	private int myBatteryLevel;

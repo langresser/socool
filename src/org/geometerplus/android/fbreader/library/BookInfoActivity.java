@@ -65,7 +65,7 @@ public class BookInfoActivity extends Activity {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		Thread.setDefaultUncaughtExceptionHandler(
-			new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this)
+			new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this)
 		);
 
 		final String path = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);

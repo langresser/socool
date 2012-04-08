@@ -28,7 +28,7 @@ import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 
 import org.geometerplus.zlibrary.text.view.style.*;
 
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
+import org.geometerplus.zlibrary.core.application.ZLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidPaintContext;
 
@@ -50,7 +50,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		setResult(SCReader.RESULT_REPAINT);
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		final ZLAndroidLibrary androidLibrary = (ZLAndroidLibrary)ZLAndroidLibrary.Instance();
+		final ZLibrary androidLibrary = (ZLibrary)ZLibrary.Instance();
 		final ColorProfile profile = fbReader.getColorProfile();
 
 		final Screen directoriesScreen = createPreferenceScreen("directories");

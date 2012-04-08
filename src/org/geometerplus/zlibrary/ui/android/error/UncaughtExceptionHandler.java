@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.ui.android.library;
+package org.geometerplus.zlibrary.ui.android.error;
 
 import java.io.*;
 
@@ -26,7 +26,6 @@ import android.content.*;
 import android.os.Process;
 import android.net.Uri;
 
-import org.geometerplus.zlibrary.ui.android.error.BugReportActivity;
 
 public class UncaughtExceptionHandler implements java.lang.Thread.UncaughtExceptionHandler {
 	private final Context myContext;

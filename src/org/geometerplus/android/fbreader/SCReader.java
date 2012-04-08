@@ -39,8 +39,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 
 import org.socool.socoolreader.reader.R;
-import org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler;
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
+import org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -156,7 +155,7 @@ public final class SCReader extends Activity {
 		ZLApplication.Instance().getViewWidget().repaint();
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		final ZLAndroidLibrary zlibrary = (ZLAndroidLibrary)ZLibrary.Instance();
+		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
 		myFullScreenFlag =
 			zlibrary.ShowStatusBarOption.getValue() ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
 		getWindow().setFlags(
@@ -207,7 +206,7 @@ public final class SCReader extends Activity {
 
  	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		final ZLAndroidLibrary zlibrary = (ZLAndroidLibrary)ZLibrary.Instance();
+		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
 		if (!zlibrary.isKindleFire() && !zlibrary.ShowStatusBarOption.getValue()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
@@ -217,7 +216,7 @@ public final class SCReader extends Activity {
 	@Override
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
-		final ZLAndroidLibrary zlibrary = (ZLAndroidLibrary)ZLibrary.Instance();
+		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
 		if (!zlibrary.isKindleFire() && !zlibrary.ShowStatusBarOption.getValue()) {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
@@ -225,7 +224,7 @@ public final class SCReader extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		final ZLAndroidLibrary zlibrary = (ZLAndroidLibrary)ZLibrary.Instance();
+		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
 		if (!zlibrary.isKindleFire() && !zlibrary.ShowStatusBarOption.getValue()) {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
@@ -284,7 +283,7 @@ public final class SCReader extends Activity {
 
 		initPluginActions();
 
-		final ZLAndroidLibrary zlibrary = (ZLAndroidLibrary)ZLibrary.Instance();
+		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
 
 		final int fullScreenFlag =
 			zlibrary.ShowStatusBarOption.getValue() ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
@@ -623,8 +622,8 @@ public final class SCReader extends Activity {
 		super.onLowMemory();
 	}
 
-	private static ZLAndroidLibrary getLibrary() {
-		return (ZLAndroidLibrary)ZLAndroidLibrary.Instance();
+	private static ZLibrary getLibrary() {
+		return (ZLibrary)ZLibrary.Instance();
 	}
 
 	@Override

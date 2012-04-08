@@ -74,7 +74,7 @@ public class BuyBooksActivity extends Activity implements NetworkLibrary.ChangeL
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.error.UncaughtExceptionHandler(this));
 
 		myLibrary = NetworkLibrary.Instance();
 
