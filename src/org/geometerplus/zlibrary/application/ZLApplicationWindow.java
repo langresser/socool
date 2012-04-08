@@ -53,7 +53,7 @@ public class ZLApplicationWindow {
 	private final MenuItem.OnMenuItemClickListener myMenuListener =
 		new MenuItem.OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				getApplication().doAction(myMenuItemMap.get(item));
+				getApplication().runAction(myMenuItemMap.get(item));
 				return true;
 			}
 		};

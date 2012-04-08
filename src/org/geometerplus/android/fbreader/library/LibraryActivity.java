@@ -38,7 +38,6 @@ import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.library.*;
-import org.geometerplus.fbreader.filetype.FileTypeCollection;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.android.fbreader.SCReaderActivity;
@@ -132,23 +131,6 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 			BOOK_INFO_REQUEST
 		);
 	}
-	
-	private void shareBook(Book book) {
-		try {
-			final ZLPhysicalFile file = book.File.getPhysicalFile();
-			if (file == null) {
-				// That should be impossible
-				return;
-			}
-			startActivity(
-				new Intent(Intent.ACTION_SEND)
-					.setType(FileTypeCollection.Instance.mimeType(book.File).Name)
-					.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.javaFile()))
-			);
-		} catch (ActivityNotFoundException e) {
-			// TODO: show toast
-		}
-	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int returnCode, Intent intent) {
@@ -237,7 +219,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 				showBookInfo(book);
 				return true;
 			case SHARE_BOOK_ITEM_ID:
-				shareBook(book);
+				UIUtil.shareBook(this, book);
 				return true;
 			case ADD_TO_FAVORITES_ITEM_ID:
 				myLibrary.addBookToFavorites(book);

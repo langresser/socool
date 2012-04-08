@@ -182,6 +182,7 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.SHOW_MENU, new ShowMenuAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_NAVIGATION, new ShowNavigationAction(this, fbReader));
 		fbReader.addAction(ActionCode.SEARCH, new SearchAction(this, fbReader));
+		fbReader.addAction(ActionCode.SHARE_BOOK, new ShareBookAction(this, fbReader));
 
 		fbReader.addAction(ActionCode.SELECTION_SHOW_PANEL, new SelectionShowPanelAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_HIDE_PANEL, new SelectionHidePanelAction(this, fbReader));
@@ -243,7 +244,7 @@ public final class SCReaderActivity extends Activity {
 			}
 		} else if (Intent.ACTION_VIEW.equals(intent.getAction())
 					&& data != null && "fbreader-action".equals(data.getScheme())) {
-			fbReader.doAction(data.getEncodedSchemeSpecificPart(), data.getFragment());
+			fbReader.runAction(data.getEncodedSchemeSpecificPart(), data.getFragment());
 		} else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			final String pattern = intent.getStringExtra(SearchManager.QUERY);
 			final Runnable runnable = new Runnable() {
@@ -495,6 +496,7 @@ public final class SCReaderActivity extends Activity {
 		addMenuItem(menu, ActionCode.SWITCH_TO_NIGHT_PROFILE, R.drawable.ic_menu_night);
 		addMenuItem(menu, ActionCode.SWITCH_TO_DAY_PROFILE, R.drawable.ic_menu_day);
 		addMenuItem(menu, ActionCode.SEARCH, R.drawable.ic_menu_search);
+		addMenuItem(menu, ActionCode.SHARE_BOOK, R.drawable.ic_menu_search);
 		addMenuItem(menu, ActionCode.SHOW_PREFERENCES);
 		addMenuItem(menu, ActionCode.SHOW_BOOK_INFO);
 		final Menu subMenu = addSubMenu(menu, "screenOrientation");

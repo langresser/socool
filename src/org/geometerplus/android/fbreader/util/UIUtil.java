@@ -30,6 +30,10 @@ import android.os.Message;
 import android.widget.Toast;
 
 import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
+
+import org.geometerplus.fbreader.library.Book;
+import org.geometerplus.fbreader.filetype.FileTypeCollection;
 
 public abstract class UIUtil {
 	private static final Object ourMonitor = new Object();
@@ -156,5 +160,22 @@ public abstract class UIUtil {
 			context,
 			ZLResource.resource("errorMessage").getResource(resourceKey).getValue().replace("%s", parameter)
 		);
+	}
+	
+	public static void shareBook(Activity activity, Book book) {
+		try {
+			final ZLPhysicalFile file = book.File.getPhysicalFile();
+			if (file == null) {
+				// That should be impossible
+				return;
+			}
+			activity.startActivity(
+				new Intent(Intent.ACTION_SEND)
+					.setType(FileTypeCollection.Instance.mimeType(book.File).Name)
+					.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.javaFile()))
+			);
+		} catch (ActivityNotFoundException e) {
+			// TODO: show toast
+		}
 	}
 }
