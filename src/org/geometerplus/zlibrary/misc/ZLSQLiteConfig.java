@@ -28,7 +28,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
-import org.geometerplus.zlibrary.config.ZLConfig;
 
 public final class ZLSQLiteConfig extends ZLConfig {
 	private final SQLiteDatabase myDatabase;
