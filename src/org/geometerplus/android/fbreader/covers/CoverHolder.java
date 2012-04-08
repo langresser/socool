@@ -27,7 +27,7 @@ import android.graphics.Bitmap;
 
 import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 
 class CoverHolder {
 	private final CoverManager myManager;

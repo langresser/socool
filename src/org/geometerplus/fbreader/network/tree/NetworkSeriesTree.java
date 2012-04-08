@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.core.image.ZLImage;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.network.*;
 
 

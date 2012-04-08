@@ -24,7 +24,7 @@ import java.util.*;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 
 public abstract class NetworkTree extends FBTree {
 	protected NetworkTree() {

@@ -24,7 +24,7 @@ import java.util.*;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.util.ZLBoolean3;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
 

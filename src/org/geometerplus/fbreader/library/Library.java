@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.core.filesystem.*;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.Paths;
 
 public final class Library extends AbstractLibrary {

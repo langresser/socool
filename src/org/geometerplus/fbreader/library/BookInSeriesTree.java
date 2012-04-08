@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.library;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 
 public final class BookInSeriesTree extends BookTree {
 	BookInSeriesTree(Book book) {

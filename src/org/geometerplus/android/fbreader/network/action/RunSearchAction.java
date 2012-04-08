@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader.network.action;
 import android.app.Activity;
 import android.os.Bundle;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.network.NetworkLibrary;
 import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.fbreader.network.tree.SearchCatalogTree;

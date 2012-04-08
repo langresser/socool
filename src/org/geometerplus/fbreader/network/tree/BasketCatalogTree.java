@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.network.tree;
 
 import java.util.*;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.network.NetworkItem;
 import org.geometerplus.fbreader.network.NetworkBookItem;
 import org.geometerplus.fbreader.network.BasketItem;

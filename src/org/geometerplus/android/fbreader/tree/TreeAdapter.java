@@ -23,7 +23,7 @@ import java.util.*;
 
 import android.widget.BaseAdapter;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 
 public abstract class TreeAdapter extends BaseAdapter {
 	private final TreeActivity myActivity;

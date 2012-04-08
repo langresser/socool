@@ -23,7 +23,7 @@ import java.util.*;
 
 import android.graphics.Bitmap;
 
-import org.geometerplus.fbreader.tree.FBTree;
+import org.geometerplus.fbreader.FBTree;
 
 class CoverCache {
 	static class NullObjectException extends Exception {
