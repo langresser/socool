@@ -26,6 +26,8 @@ import org.geometerplus.zlibrary.text.model.*;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
+import android.os.Debug;
+
 public abstract class BookModel {
 	public static BookModel createModel(Book book) throws BookReadingException {
 		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(book.File);
@@ -47,7 +49,9 @@ public abstract class BookModel {
 				throw new BookReadingException("unknownPluginType", plugin.type().toString(), null);
 		}
 
+//		Debug.startMethodTracing("socoolreader.trace");//calc为文件生成名
 		plugin.readModel(model);
+//		Debug.stopMethodTracing();
 		return model;
 	}
 

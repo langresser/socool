@@ -29,10 +29,36 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
+#libiconv.so
+LOCAL_MODULE := libiconv
+LOCAL_CFLAGS := \
+  -Wno-multichar \
+  -DANDROID \
+  -DLIBDIR="c" \
+  -DBUILDING_LIBICONV \
+  -DIN_LIBRARY
+
+LOCAL_SRC_FILES := \
+  libiconv-1.14/libcharset/lib/localcharset.c \
+  libiconv-1.14/lib/iconv.c \
+  libiconv-1.14/lib/relocatable.c
+
+LOCAL_C_INCLUDES += \
+  $(LOCAL_PATH)/libiconv-1.14/include \
+  $(LOCAL_PATH)/libiconv-1.14/libcharset \
+  $(LOCAL_PATH)/libiconv-1.14/lib \
+  $(LOCAL_PATH)/libiconv-1.14/libcharset/include \
+  $(LOCAL_PATH)/libiconv-1.14/srclib
+#include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
+
+
+include $(CLEAR_VARS)
+
 LOCAL_MODULE                  := NativeFormats-v2
 LOCAL_CFLAGS                  := -Wall
 LOCAL_LDLIBS                  := -lz -llog
-LOCAL_STATIC_LIBRARIES        := expat
+LOCAL_STATIC_LIBRARIES        := expat libiconv
 
 LOCAL_SRC_FILES               := \
 	NativeFormats/main.cpp \
@@ -124,3 +150,4 @@ LOCAL_C_INCLUDES              := \
 	$(LOCAL_PATH)/NativeFormats/zlibrary/text/src/model
 
 include $(BUILD_SHARED_LIBRARY)
+

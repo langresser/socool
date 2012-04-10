@@ -23,10 +23,10 @@
 
 #include "TxtReader.h"
 
-#include <android/log.h>
-#define LOG_TAG "show infomation"
-#define LOGW(a )  __android_log_write(ANDROID_LOG_WARN,LOG_TAG,a)
-#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+//#include <android/log.h>
+//#define LOG_TAG "show infomation"
+//#define LOGW(a )  __android_log_write(ANDROID_LOG_WARN,LOG_TAG,a)
+//#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 TxtReader::TxtReader(const std::string &encoding) : EncodedTextReader(encoding) {
 }
@@ -59,7 +59,6 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 	int parBegin = 0;
 	for (int i = parBegin; i < maxLength; ++i) {
 		char c = inputBuffer[i];
-//TODO: 支持多种换行符
 		if (c == '\n' || c == '\r') {
 			bool skipNewLine = false;
 			if (c == '\r' && (i + 1) != maxLength && inputBuffer[i + 1] == '\n') {
@@ -69,7 +68,7 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 			if (parBegin != i) {
 				str.erase();
 				myConverter->convert(str, inputBuffer.c_str() + parBegin, inputBuffer.c_str() + i + 1);
-				LOGD(str.c_str());
+//				LOGD(str.c_str());
 				characterDataHandler(str);
 			}
 			// 跳过'\n'
@@ -90,7 +89,6 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 		myConverter->convert(str, inputBuffer.c_str() + parBegin, inputBuffer.c_str() + maxLength);
 		characterDataHandler(str);
 	}
-//	printf(str.c_str());
 
 	endDocumentHandler();
 }
