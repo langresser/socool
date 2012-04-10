@@ -22,10 +22,12 @@
 #include <ZLStringUtil.h>
 #include <ZLUnicodeUtil.h>
 #include <ZLXMLReader.h>
+#include <ZLLogger.h>
 
 #include "ZLEncodingConverter.h"
 #include "DummyEncodingConverter.h"
 #include "JavaEncodingConverter.h"
+#include "IconvEncodingConverter.h"
 
 ZLEncodingCollection *ZLEncodingCollection::ourInstance = 0;
 
@@ -42,7 +44,8 @@ std::string ZLEncodingCollection::encodingDescriptionPath() {
 
 ZLEncodingCollection::ZLEncodingCollection() {
 	registerProvider(new DummyEncodingConverterProvider());
-	registerProvider(new JavaEncodingConverterProvider());
+	registerProvider(new IconvEncodingConverterProvider());
+//	registerProvider(new JavaEncodingConverterProvider());
 }
 
 void ZLEncodingCollection::registerProvider(shared_ptr<ZLEncodingConverterProvider> provider) {

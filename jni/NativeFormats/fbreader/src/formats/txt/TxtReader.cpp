@@ -20,13 +20,9 @@
 #include <cctype>
 
 #include <ZLInputStream.h>
+#include <ZLLogger.h>
 
 #include "TxtReader.h"
-
-//#include <android/log.h>
-//#define LOG_TAG "show infomation"
-//#define LOGW(a )  __android_log_write(ANDROID_LOG_WARN,LOG_TAG,a)
-//#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 TxtReader::TxtReader(const std::string &encoding) : EncodedTextReader(encoding) {
 }
@@ -68,7 +64,6 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 			if (parBegin != i) {
 				str.erase();
 				myConverter->convert(str, inputBuffer.c_str() + parBegin, inputBuffer.c_str() + i + 1);
-//				LOGD(str.c_str());
 				characterDataHandler(str);
 			}
 			// Ìø¹ý'\n'

@@ -18,7 +18,7 @@
  */
 
 #include "EncodedTextReader.h"
-
+#include <ZLLogger.h>
 EncodedTextReader::EncodedTextReader(const std::string &encoding) {
 	ZLEncodingCollection &collection = ZLEncodingCollection::Instance();
 	myConverter = collection.converter(encoding);

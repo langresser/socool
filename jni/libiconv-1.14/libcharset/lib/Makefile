@@ -23,7 +23,7 @@ DEFS = -DLIBDIR=\"$(libdir)\" -DBUILDING_LIBCHARSET -DBUILDING_DLL \
 -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"$(libdir)\" -DNO_XMALLOC \
 -Dset_relocation_prefix=libcharset_set_relocation_prefix \
 -Drelocate=libcharset_relocate -DHAVE_CONFIG_H
-LIBTOOL = /bin/sh $(top_builddir)/libtool
+LIBTOOL = /bin/bash $(top_builddir)/libtool
 LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
 LIBTOOL_INSTALL = $(LIBTOOL) --mode=install
@@ -65,7 +65,7 @@ relocatable.lo : $(srcdir)/relocatable.c $(srcdir)/relocatable.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CFLAGS) $(CPPFLAGS) $(DEFS) -c $(srcdir)/relocatable.c
 
 charset.alias: $(srcdir)/config.charset
-	$(SHELL) $(srcdir)/config.charset 'i686-pc-cygwin' > t-$@
+	$(SHELL) $(srcdir)/config.charset 'x86_64-unknown-linux-gnu' > t-$@
 	mv t-$@ $@
 
 ref-add.sed : $(srcdir)/ref-add.sin
@@ -95,8 +95,8 @@ install-lib : all force
 # avoid installing it.
 
 install : all force
-	if test no = no; then \
-	  case 'cygwin' in \
+	if test yes = no; then \
+	  case 'linux-gnu' in \
 	    darwin[56]*) \
 	      need_charset_alias=true ;; \
 	    darwin* | cygwin* | mingw* | pw32* | cegcc*) \

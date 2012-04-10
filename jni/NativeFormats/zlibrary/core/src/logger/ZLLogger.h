@@ -45,4 +45,8 @@ private:
 	std::set<std::string> myRegisteredClasses;
 };
 
+#include <android/log.h>
+#define LOG_TAG "show infomation"
+#define LOGW(a )  __android_log_write(ANDROID_LOG_WARN,LOG_TAG,a)
+#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #endif /* __ZLLOGGER_H__ */

@@ -13,9 +13,9 @@ libdir = ${exec_prefix}/lib
 
 # Programs used by "make":
 CC = gcc
-CFLAGS = -g -O2 
+CFLAGS = -g -O2 -fvisibility=hidden
 CPPFLAGS = 
-LDFLAGS =  $(LDFLAGS_yes)
+LDFLAGS =  $(LDFLAGS_no)
 LDFLAGS_yes = -Wl,--export-all-symbols
 LDFLAGS_no =
 INCLUDES = -I. -I$(srcdir) -I../include -I$(srcdir)/../include -I.. -I$(srcdir)/..
@@ -25,13 +25,13 @@ DEFS = -DLIBDIR=\"$(libdir)\" -DBUILDING_LIBICONV -DBUILDING_DLL \
 -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"$(libdir)\" -DNO_XMALLOC \
 -Dset_relocation_prefix=libiconv_set_relocation_prefix \
 -Drelocate=libiconv_relocate -DHAVE_CONFIG_H
-LIBTOOL = /bin/sh $(top_builddir)/libtool
+LIBTOOL = /bin/bash $(top_builddir)/libtool
 LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
 LIBTOOL_INSTALL = $(LIBTOOL) --mode=install
 LIBTOOL_UNINSTALL = $(LIBTOOL) --mode=uninstall
 # Windows resource compiler (windres). Used via libtool.
-RC = windres
+RC = 
 CP = cp
 MV = mv
 LN = ln
@@ -59,7 +59,7 @@ top_builddir = ..
 
 SOURCES = $(srcdir)/iconv.c $(srcdir)/../libcharset/lib/localcharset.c $(srcdir)/relocatable.c
 
-OBJECTS = iconv.lo localcharset.lo relocatable.lo $(OBJECTS_EXP_yes) $(OBJECTS_RES_yes)
+OBJECTS = iconv.lo localcharset.lo relocatable.lo $(OBJECTS_EXP_no) $(OBJECTS_RES_no)
 OBJECTS_EXP_yes = iconv-exports.lo
 OBJECTS_EXP_no =
 OBJECTS_RES_yes = libiconv.res.lo
@@ -104,7 +104,7 @@ install-lib : all force
 install : all force
 	if [ ! -d $(DESTDIR)$(libdir) ] ; then $(mkinstalldirs) $(DESTDIR)$(libdir) ; fi
 	$(LIBTOOL_INSTALL) $(INSTALL_DATA) libiconv.la $(DESTDIR)$(libdir)/libiconv.la
-	case "cygwin" in \
+	case "linux-gnu" in \
 	  aix*) (cd $(DESTDIR)$(libdir) && \
 	         objects=`ar t libiconv.a`" "`ar t /lib/libiconv.a` && \
 	         ar x libiconv.a && ar x /lib/libiconv.a && \

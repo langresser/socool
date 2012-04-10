@@ -25,7 +25,7 @@
 /* #undef C_ALLOCA */
 
 /* Define to 1 if // is a file system root distinct from /. */
-#define DOUBLE_SLASH_IS_DISTINCT_ROOT 1
+/* #undef DOUBLE_SLASH_IS_DISTINCT_ROOT */
 
 /* Define as good substitute value for EILSEQ. */
 /* #undef EILSEQ */
@@ -42,7 +42,7 @@
 
 /* Define to 1 if realpath() can malloc memory, always gives an absolute path,
    and handles trailing slash correctly. */
-/* #undef FUNC_REALPATH_WORKS */
+#define FUNC_REALPATH_WORKS 1
 
 /* Define to a C preprocessor expression that evaluates to 1 or 0, depending
    whether the gnulib module canonicalize-lgpl shall be considered present. */
@@ -108,39 +108,39 @@
 
 /* Define to 1 if you have the declaration of `clearerr_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_CLEARERR_UNLOCKED 0
+#define HAVE_DECL_CLEARERR_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `feof_unlocked', and to 0 if you
    don't. */
-#define HAVE_DECL_FEOF_UNLOCKED 0
+#define HAVE_DECL_FEOF_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `ferror_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_FERROR_UNLOCKED 0
+#define HAVE_DECL_FERROR_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `fflush_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_FFLUSH_UNLOCKED 0
+#define HAVE_DECL_FFLUSH_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `fgets_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_FGETS_UNLOCKED 0
+#define HAVE_DECL_FGETS_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `fputc_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_FPUTC_UNLOCKED 0
+#define HAVE_DECL_FPUTC_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `fputs_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_FPUTS_UNLOCKED 0
+#define HAVE_DECL_FPUTS_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `fread_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_FREAD_UNLOCKED 0
+#define HAVE_DECL_FREAD_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `fwrite_unlocked', and to 0 if
    you don't. */
-#define HAVE_DECL_FWRITE_UNLOCKED 0
+#define HAVE_DECL_FWRITE_UNLOCKED 1
 
 /* Define to 1 if you have the declaration of `getchar_unlocked', and to 0 if
    you don't. */
@@ -196,7 +196,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Define if you have <langinfo.h> and nl_langinfo(CODESET). */
-#define HAVE_LANGINFO_CODESET 0
+#define HAVE_LANGINFO_CODESET 1
 
 /* Define to 1 if the system has the type `long long int'. */
 #define HAVE_LONG_LONG_INT 1
@@ -266,13 +266,13 @@
 #define HAVE_RAW_DECL_FCNTL 1
 
 /* Define to 1 if ffsl is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_FFSL */
+#define HAVE_RAW_DECL_FFSL 1
 
 /* Define to 1 if ffsll is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_FFSLL */
+#define HAVE_RAW_DECL_FFSLL 1
 
 /* Define to 1 if fpurge is declared even after undefining macros. */
-#define HAVE_RAW_DECL_FPURGE 1
+/* #undef HAVE_RAW_DECL_FPURGE */
 
 /* Define to 1 if fseeko is declared even after undefining macros. */
 #define HAVE_RAW_DECL_FSEEKO 1
@@ -314,7 +314,7 @@
 #define HAVE_RAW_DECL_GETLINE 1
 
 /* Define to 1 if getloadavg is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_GETLOADAVG */
+#define HAVE_RAW_DECL_GETLOADAVG 1
 
 /* Define to 1 if getlogin is declared even after undefining macros. */
 #define HAVE_RAW_DECL_GETLOGIN 1
@@ -335,13 +335,13 @@
 #define HAVE_RAW_DECL_GRANTPT 1
 
 /* Define to 1 if group_member is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_GROUP_MEMBER */
+#define HAVE_RAW_DECL_GROUP_MEMBER 1
 
 /* Define to 1 if initstat_r is declared even after undefining macros. */
 /* #undef HAVE_RAW_DECL_INITSTAT_R */
 
 /* Define to 1 if lchmod is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_LCHMOD */
+#define HAVE_RAW_DECL_LCHMOD 1
 
 /* Define to 1 if lchown is declared even after undefining macros. */
 #define HAVE_RAW_DECL_LCHOWN 1
@@ -365,7 +365,7 @@
 #define HAVE_RAW_DECL_MEMPCPY 1
 
 /* Define to 1 if memrchr is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_MEMRCHR */
+#define HAVE_RAW_DECL_MEMRCHR 1
 
 /* Define to 1 if mkdirat is declared even after undefining macros. */
 #define HAVE_RAW_DECL_MKDIRAT 1
@@ -422,10 +422,10 @@
 #define HAVE_RAW_DECL_PWRITE 1
 
 /* Define to 1 if random_r is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_RANDOM_R */
+#define HAVE_RAW_DECL_RANDOM_R 1
 
 /* Define to 1 if rawmemchr is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_RAWMEMCHR */
+#define HAVE_RAW_DECL_RAWMEMCHR 1
 
 /* Define to 1 if readlink is declared even after undefining macros. */
 #define HAVE_RAW_DECL_READLINK 1
@@ -443,13 +443,13 @@
 #define HAVE_RAW_DECL_RMDIR 1
 
 /* Define to 1 if rpmatch is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_RPMATCH */
+#define HAVE_RAW_DECL_RPMATCH 1
 
 /* Define to 1 if setenv is declared even after undefining macros. */
 #define HAVE_RAW_DECL_SETENV 1
 
 /* Define to 1 if setstate_r is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_SETSTATE_R */
+#define HAVE_RAW_DECL_SETSTATE_R 1
 
 /* Define to 1 if setusershell is declared even after undefining macros. */
 #define HAVE_RAW_DECL_SETUSERSHELL 1
@@ -485,7 +485,7 @@
 #define HAVE_RAW_DECL_SNPRINTF 1
 
 /* Define to 1 if srandom_r is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_SRANDOM_R */
+#define HAVE_RAW_DECL_SRANDOM_R 1
 
 /* Define to 1 if stat is declared even after undefining macros. */
 #define HAVE_RAW_DECL_STAT 1
@@ -539,7 +539,7 @@
 #define HAVE_RAW_DECL_STRTOULL 1
 
 /* Define to 1 if strverscmp is declared even after undefining macros. */
-/* #undef HAVE_RAW_DECL_STRVERSCMP */
+#define HAVE_RAW_DECL_STRVERSCMP 1
 
 /* Define to 1 if symlink is declared even after undefining macros. */
 #define HAVE_RAW_DECL_SYMLINK 1
@@ -657,7 +657,7 @@
 
 /* Define to 1 or 0, depending whether the compiler supports simple visibility
    declarations. */
-#define HAVE_VISIBILITY 0
+#define HAVE_VISIBILITY 1
 
 /* Define to 1 if you have the <wchar.h> header file. */
 #define HAVE_WCHAR_H 1
@@ -672,7 +672,7 @@
 /* #undef HAVE_WINSOCK2_H */
 
 /* Define to 1 if O_NOATIME works. */
-#define HAVE_WORKING_O_NOATIME 1
+#define HAVE_WORKING_O_NOATIME 0
 
 /* Define to 1 if O_NOFOLLOW works. */
 #define HAVE_WORKING_O_NOFOLLOW 1
@@ -769,7 +769,7 @@
 
 /* Define to the prefix of C symbols at the assembler and linker level, either
    an underscore or empty. */
-#define USER_LABEL_PREFIX _
+#define USER_LABEL_PREFIX 
 
 /* Define to 1 if you want getc etc. to use unlocked I/O if available.
    Unlocked I/O can improve performance in unithreaded apps, but it is not

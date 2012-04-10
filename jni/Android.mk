@@ -30,7 +30,7 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 #libiconv.so
-LOCAL_MODULE := libiconv
+LOCAL_MODULE := iconv
 LOCAL_CFLAGS := \
   -Wno-multichar \
   -DANDROID \
@@ -49,6 +49,8 @@ LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/libiconv-1.14/lib \
   $(LOCAL_PATH)/libiconv-1.14/libcharset/include \
   $(LOCAL_PATH)/libiconv-1.14/srclib
+ 
+LOCAL_EXPORT_C_INCLUDES       := $(LOCAL_PATH)/libiconv-1.14/include
 #include $(BUILD_SHARED_LIBRARY)
 include $(BUILD_STATIC_LIBRARY)
 
@@ -58,7 +60,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE                  := NativeFormats-v2
 LOCAL_CFLAGS                  := -Wall
 LOCAL_LDLIBS                  := -lz -llog
-LOCAL_STATIC_LIBRARIES        := expat libiconv
+LOCAL_STATIC_LIBRARIES        := expat iconv
 
 LOCAL_SRC_FILES               := \
 	NativeFormats/main.cpp \
@@ -69,6 +71,7 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/zlibrary/core/src/constants/ZLXMLNamespace.cpp \
 	NativeFormats/zlibrary/core/src/encoding/DummyEncodingConverter.cpp \
 	NativeFormats/zlibrary/core/src/encoding/JavaEncodingConverter.cpp \
+	NativeFormats/zlibrary/core/src/encoding/IconvEncodingConverter.cpp \
 	NativeFormats/zlibrary/core/src/encoding/ZLEncodingCollection.cpp \
 	NativeFormats/zlibrary/core/src/encoding/ZLEncodingConverter.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/ZLDir.cpp \

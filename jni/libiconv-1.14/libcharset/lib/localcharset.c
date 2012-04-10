@@ -120,7 +120,7 @@ static const char *
 get_charset_aliases (void)
 {
   const char *cp;
-    int c;
+  int c;
 
   cp = charset_aliases;
   if (cp == NULL)
