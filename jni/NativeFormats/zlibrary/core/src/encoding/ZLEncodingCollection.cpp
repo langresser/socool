@@ -45,7 +45,7 @@ std::string ZLEncodingCollection::encodingDescriptionPath() {
 ZLEncodingCollection::ZLEncodingCollection() {
 	registerProvider(new DummyEncodingConverterProvider());
 	registerProvider(new IconvEncodingConverterProvider());
-//	registerProvider(new JavaEncodingConverterProvider());
+	registerProvider(new JavaEncodingConverterProvider());
 }
 
 void ZLEncodingCollection::registerProvider(shared_ptr<ZLEncodingConverterProvider> provider) {
