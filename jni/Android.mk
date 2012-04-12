@@ -101,18 +101,18 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/zlibrary/core/src/xml/ZLAsynchronousInputStream.cpp \
 	NativeFormats/zlibrary/core/src/xml/ZLXMLReader.cpp \
 	NativeFormats/zlibrary/core/src/xml/expat/ZLXMLReaderInternal.cpp \
-	NativeFormats/zlibrary/core/src/unix/filesystem/ZLUnixFSDir.cpp \
-	NativeFormats/zlibrary/core/src/unix/filesystem/ZLUnixFSManager.cpp \
-	NativeFormats/zlibrary/core/src/unix/filesystem/ZLUnixFileInputStream.cpp \
-	NativeFormats/zlibrary/core/src/unix/filesystem/ZLUnixFileOutputStream.cpp \
-	NativeFormats/zlibrary/core/src/unix/library/ZLUnixLibrary.cpp \
+	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFSDir.cpp \
+	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFSManager.cpp \
+	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFileInputStream.cpp \
+	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFileOutputStream.cpp \
+	NativeFormats/zlibrary/core/src/library/ZLUnixLibrary.cpp \
 	NativeFormats/zlibrary/text/src/model/ZLCachedMemoryAllocator.cpp \
 	NativeFormats/zlibrary/text/src/model/ZLTextModel.cpp \
 	NativeFormats/zlibrary/text/src/model/ZLTextParagraph.cpp \
-	NativeFormats/zlibrary/ui/src/android/filesystem/JavaFSDir.cpp \
-	NativeFormats/zlibrary/ui/src/android/filesystem/JavaInputStream.cpp \
-	NativeFormats/zlibrary/ui/src/android/filesystem/ZLAndroidFSManager.cpp \
-	NativeFormats/zlibrary/ui/src/android/library/ZLAndroidLibraryImplementation.cpp \
+	NativeFormats/zlibrary/core/src/filesystem/JavaFSDir.cpp \
+	NativeFormats/zlibrary/core/src/filesystem/JavaInputStream.cpp \
+	NativeFormats/zlibrary/core/src/filesystem/ZLAndroidFSManager.cpp \
+	NativeFormats/zlibrary/core/src/library/ZLAndroidLibraryImplementation.cpp \
 	NativeFormats/fbreader/src/bookmodel/BookModel.cpp \
 	NativeFormats/fbreader/src/bookmodel/BookReader.cpp \
 	NativeFormats/fbreader/src/formats/EncodedTextReader.cpp \

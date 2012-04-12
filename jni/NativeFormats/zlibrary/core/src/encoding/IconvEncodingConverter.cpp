@@ -56,15 +56,36 @@ void IconvEncodingConverter::convert(std::string &dst, const char *srcStart, con
 	int srcLen = srcEnd - srcStart;
 	int outLen = srcLen * 2;
 
-	char* outBuffer = new char[outLen];
-	memset(outBuffer, 0, outLen);
+	if (m_encoding == "utf-8") {
+		char* outBuffer = new char[srcLen + 1];
+		memcpy(outBuffer, srcStart, srcLen);
+		outBuffer[srcLen] = 0;
+		dst = outBuffer;
+		return;
+	}
 
-	// iconv会写tempOutBuffer指针，最终其会指向转换未完成的部分
-	char* tempOutBuffer = outBuffer;
-	size_t ret = iconv(m_converter, (char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
-	dst = outBuffer;
-//	LOGD(dst.c_str());
-	delete[] outBuffer;
+	if (outLen < 1024) {
+		outLen = 1024;
+		static char s_outBuffer[1024] = {0};
+		memset(s_outBuffer, 0, outLen);
+
+		// iconv会写tempOutBuffer指针，最终其会指向转换未完成的部分
+		char* tempOutBuffer = s_outBuffer;
+		size_t ret = iconv(m_converter, (char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
+		dst = s_outBuffer;
+	//	LOGD(dst.c_str());
+	} else {
+		char* outBuffer = new char[outLen];
+		memset(outBuffer, 0, outLen);
+
+		// iconv会写tempOutBuffer指针，最终其会指向转换未完成的部分
+		char* tempOutBuffer = outBuffer;
+		size_t ret = iconv(m_converter, (char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
+		dst = outBuffer;
+	//	LOGD(dst.c_str());
+		delete[] outBuffer;
+	}
+
 }
 
 void IconvEncodingConverter::reset() {

@@ -17,46 +17,32 @@
  * 02110-1301, USA.
  */
 
-#ifndef __ZLANDROIDFSMANAGER_H__
-#define __ZLANDROIDFSMANAGER_H__
+#ifndef __ZLUNIXFSMANAGER_H__
+#define __ZLUNIXFSMANAGER_H__
 
-#include "../../../../core/src/unix/filesystem/ZLUnixFSManager.h"
+#include "ZLFSManager.h"
 
-class ZLAndroidFSManager : public ZLUnixFSManager {
-
-public:
-	static void createInstance();
-
-private:
-	ZLAndroidFSManager();
+class ZLUnixFSManager : public ZLFSManager {
 
 protected:
-	std::string convertFilenameToUtf8(const std::string &name) const;
-	std::string mimeType(const std::string &path) const;
-
-private:
-	static bool useNativeImplementation(const std::string &path);
-
-protected: // Overridden methods
 	void normalizeRealPath(std::string &path) const;
 
+protected:
 	std::string resolveSymlink(const std::string &path) const;
 	ZLFSDir *createNewDirectory(const std::string &path) const;
 	ZLFSDir *createPlainDirectory(const std::string &path) const;
 	ZLInputStream *createPlainInputStream(const std::string &path) const;
-	//ZLOutputStream *createOutputStream(const std::string &path) const;
+	ZLOutputStream *createOutputStream(const std::string &path) const;
 	bool removeFile(const std::string &path) const;
 
 	ZLFileInfo fileInfo(const std::string &path) const;
 
+	int findArchiveFileNameDelimiter(const std::string &path) const;
+	shared_ptr<ZLDir> rootDirectory() const;
+	const std::string &rootDirectoryPath() const;
+	std::string parentPath(const std::string &path) const;
+
 	bool canRemoveFile(const std::string &path) const;
 };
 
-inline ZLAndroidFSManager::ZLAndroidFSManager() {}
-inline void ZLAndroidFSManager::createInstance() { ourInstance = new ZLAndroidFSManager(); }
-
-inline bool ZLAndroidFSManager::useNativeImplementation(const std::string &path) {
-	return path.length() > 0 && path[0] == '/';
-}
-
-#endif /* __ZLANDROIDFSMANAGER_H__ */
+#endif /* __ZLUNIXFSMANAGER_H__ */

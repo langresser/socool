@@ -20,7 +20,7 @@
 #ifndef __ZLUNIXFSDIR_H__
 #define __ZLUNIXFSDIR_H__
 
-#include "../../filesystem/ZLFSDir.h"
+#include "ZLFSDir.h"
 
 class ZLUnixFSDir : public ZLFSDir {
 
