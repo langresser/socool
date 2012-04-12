@@ -34,9 +34,9 @@ class ZLOutputStream;
 class ZLFSManager {
 
 public:
+	static void createInstance();
 	static void deleteInstance();
 	static ZLFSManager &Instance();
-
 protected:
 	static ZLFSManager *ourInstance;
 	
@@ -46,26 +46,27 @@ protected:
 	
 public:
 	void normalize(std::string &path) const;
-	virtual std::string resolveSymlink(const std::string &path) const = 0;
-
 protected:
-	virtual void normalizeRealPath(std::string &path) const = 0;
-	virtual ZLInputStream *createPlainInputStream(const std::string &path) const = 0;
-	virtual ZLOutputStream *createOutputStream(const std::string &path) const = 0;
-	virtual ZLFSDir *createPlainDirectory(const std::string &path) const = 0;
-	virtual ZLFSDir *createNewDirectory(const std::string &path) const = 0;
-	virtual ZLFileInfo fileInfo(const std::string &path) const = 0;
-	virtual bool removeFile(const std::string &path) const = 0;
-	virtual std::string convertFilenameToUtf8(const std::string &name) const = 0;
-	virtual std::string mimeType(const std::string &path) const = 0;
+	void normalizeRealPath(std::string &path) const;
+	bool useNativeImplementation(const std::string &path) const;
+	std::string mimeType(const std::string &path) const;
+protected:
+	std::string resolveSymlink(const std::string &path) const;
+	ZLFSDir *createNewDirectory(const std::string &path) const;
+	ZLFSDir *createPlainDirectory(const std::string &path) const;
+	ZLInputStream *createPlainInputStream(const std::string &path) const;
+	ZLOutputStream *createOutputStream(const std::string &path) const;
+	bool removeFile(const std::string &path) const;
 
-	virtual int findArchiveFileNameDelimiter(const std::string &path) const = 0;
+	ZLFileInfo fileInfo(const std::string &path) const;
+
 	int findLastFileNameDelimiter(const std::string &path) const;
-	virtual shared_ptr<ZLDir> rootDirectory() const = 0;
-	virtual const std::string &rootDirectoryPath() const = 0;
-	virtual std::string parentPath(const std::string &path) const = 0;
+	int findArchiveFileNameDelimiter(const std::string &path) const;
+	shared_ptr<ZLDir> rootDirectory() const;
+	const std::string &rootDirectoryPath() const;
+	std::string parentPath(const std::string &path) const;
 
-	virtual bool canRemoveFile(const std::string &path) const = 0;
+	bool canRemoveFile(const std::string &path) const;
 
 private:
 	std::map<std::string,ZLFile::ArchiveType> myForcedFiles;
@@ -73,6 +74,11 @@ private:
 friend class ZLFile;
 friend class ZLDir;
 };
+
+// 返回true代表读取的是实际目录资源，如sdcard；返回false代表读取的是apk包内资源
+inline bool ZLFSManager::useNativeImplementation(const std::string &path) const {
+	return path.length() > 0 && path[0] == '/';
+}
 
 inline ZLFSManager &ZLFSManager::Instance() { return *ourInstance; }
 inline ZLFSManager::ZLFSManager() {}

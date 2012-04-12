@@ -18,6 +18,7 @@
  */
 
 #include "ZLUnixFileInputStream.h"
+#include <ZLLogger.h>
 
 ZLUnixFileInputStream::ZLUnixFileInputStream(const std::string &name) : myName(name), myNeedRepositionToStart(false) {
 	myFile = 0;

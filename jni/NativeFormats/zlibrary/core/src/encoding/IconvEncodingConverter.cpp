@@ -73,7 +73,7 @@ void IconvEncodingConverter::convert(std::string &dst, const char *srcStart, con
 		char* tempOutBuffer = s_outBuffer;
 		size_t ret = iconv(m_converter, (char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
 		dst = s_outBuffer;
-	//	LOGD(dst.c_str());
+		LOGD(dst.c_str());
 	} else {
 		char* outBuffer = new char[outLen];
 		memset(outBuffer, 0, outLen);

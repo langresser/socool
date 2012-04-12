@@ -102,7 +102,6 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/zlibrary/core/src/xml/ZLXMLReader.cpp \
 	NativeFormats/zlibrary/core/src/xml/expat/ZLXMLReaderInternal.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFSDir.cpp \
-	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFSManager.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFileInputStream.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFileOutputStream.cpp \
 	NativeFormats/zlibrary/core/src/library/ZLUnixLibrary.cpp \
@@ -111,7 +110,6 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/zlibrary/text/src/model/ZLTextParagraph.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/JavaFSDir.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/JavaInputStream.cpp \
-	NativeFormats/zlibrary/core/src/filesystem/ZLAndroidFSManager.cpp \
 	NativeFormats/zlibrary/core/src/library/ZLAndroidLibraryImplementation.cpp \
 	NativeFormats/fbreader/src/bookmodel/BookModel.cpp \
 	NativeFormats/fbreader/src/bookmodel/BookReader.cpp \

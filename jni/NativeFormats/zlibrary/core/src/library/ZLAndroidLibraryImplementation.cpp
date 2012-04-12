@@ -24,7 +24,7 @@
 
 #include "ZLibraryImplementation.h"
 
-#include "../filesystem/ZLAndroidFSManager.h"
+#include "../filesystem/ZLFSManager.h"
 
 class ZLAndroidLibraryImplementation : public ZLibraryImplementation {
 
@@ -39,7 +39,7 @@ void initLibrary() {
 void ZLAndroidLibraryImplementation::init(int &argc, char **&argv) {
 	ZLibrary::parseArguments(argc, argv);
 
-	ZLAndroidFSManager::createInstance();
+	ZLFSManager::createInstance();
 }
 
 std::string ZLibrary::Language() {

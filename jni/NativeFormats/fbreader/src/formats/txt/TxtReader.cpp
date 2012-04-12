@@ -40,18 +40,31 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 	const size_t BUFSIZE = 2048;
 	char *buffer = new char[BUFSIZE + 1];
 	std::string str;
-	std::string inputBuffer;
+	size_t currentLen = 0;
+	size_t currentBufferSize = BUFSIZE * 2 + 1;
+	char* inputBuffer = new char[currentBufferSize];
+	memset(inputBuffer, 0, currentBufferSize);
+
 	size_t length;
 	do {
 		length = stream.read(buffer, BUFSIZE);
 		buffer[length] = 0;
 
-		inputBuffer += buffer;
+		if (currentLen + length >= currentBufferSize) {
+			currentBufferSize = currentBufferSize * 2 + 1;
+			char* temp = new char[currentBufferSize];
+			memcpy(temp, inputBuffer, currentLen);
+			delete[] inputBuffer;
+			inputBuffer = temp;
+		}
+
+		memcpy(inputBuffer + currentLen, buffer, length);
+		currentLen += length;
 	} while (length == BUFSIZE);
 	delete[] buffer;
 	stream.close();
 
-	int maxLength = inputBuffer.size();
+	int maxLength = currentLen;
 	int parBegin = 0;
 	for (int i = parBegin; i < maxLength; ++i) {
 		char c = inputBuffer[i];
@@ -63,10 +76,10 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 			}
 			if (parBegin != i) {
 				str.erase();
-				myConverter->convert(str, inputBuffer.c_str() + parBegin, inputBuffer.c_str() + i + 1);
+				myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
 				characterDataHandler(str);
 			}
-			// 跳过'\n'
+			// 跳过'\n'(\r\n的情况)
 			if (skipNewLine) {
 				++i;
 			}
@@ -81,9 +94,10 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 	}
 	if (parBegin != maxLength) {
 		str.erase();
-		myConverter->convert(str, inputBuffer.c_str() + parBegin, inputBuffer.c_str() + maxLength);
+		myConverter->convert(str, inputBuffer + parBegin, inputBuffer + maxLength);
 		characterDataHandler(str);
 	}
 
+	delete[] inputBuffer;
 	endDocumentHandler();
 }

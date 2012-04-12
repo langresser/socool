@@ -213,7 +213,8 @@ std::string ZLFile::resolvedPath() const {
 }
 
 std::string ZLFile::fileNameToUtf8(const std::string &fileName) {
-	return ZLFSManager::Instance().convertFilenameToUtf8(fileName);
+	return fileName;
+//	return ZLFSManager::Instance().convertFilenameToUtf8(fileName);
 }
 
 bool ZLFile::exists() const {
