@@ -25,6 +25,7 @@ import android.graphics.*;
 import android.util.FloatMath;
 
 import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 abstract class AnimationProvider {
 	static enum Mode {
@@ -46,7 +47,7 @@ abstract class AnimationProvider {
 	protected int myStartY;
 	protected int myEndX;
 	protected int myEndY;
-	protected ZLView.Direction myDirection;
+	protected ZLTextView.Direction myDirection;
 	protected float mySpeed;
 
 	protected int myWidth;
@@ -86,7 +87,7 @@ abstract class AnimationProvider {
 			return;
 		}
 
-		if (getPageToScrollTo(x, y) == ZLView.PageIndex.current) {
+		if (getPageToScrollTo(x, y) == ZLTextView.PageIndex.current) {
 			return;
 		}
 
@@ -122,7 +123,7 @@ abstract class AnimationProvider {
 		}
 		myDrawInfos.clear();
 
-		if (getPageToScrollTo() == ZLView.PageIndex.previous) {
+		if (getPageToScrollTo() == ZLTextView.PageIndex.previous) {
 			forward = !forward;
 		}
 
@@ -140,7 +141,7 @@ abstract class AnimationProvider {
 		startAnimatedScrollingInternal(speed);
 	}
 
-	public void startAnimatedScrolling(ZLView.PageIndex pageIndex, Integer x, Integer y, int speed) {
+	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, Integer x, Integer y, int speed) {
 		if (myMode.Auto) {
 			return;
 		}
@@ -151,11 +152,11 @@ abstract class AnimationProvider {
 		switch (myDirection) {
 			case up:
 			case rightToLeft:
-				mySpeed = pageIndex == ZLView.PageIndex.next ? -15 : 15;
+				mySpeed = pageIndex == ZLTextView.PageIndex.next ? -15 : 15;
 				break;
 			case leftToRight:
 			case down:
-				mySpeed = pageIndex == ZLView.PageIndex.next ? 15 : -15;
+				mySpeed = pageIndex == ZLTextView.PageIndex.next ? 15 : -15;
 				break;
 		}
 		setupAnimatedScrollingStart(x, y);
@@ -173,7 +174,7 @@ abstract class AnimationProvider {
 		return myDirection.IsHorizontal ? myEndX - myStartX : myEndY - myStartY;
 	}
 
-	final void setup(ZLView.Direction direction, int width, int height) {
+	final void setup(ZLTextView.Direction direction, int width, int height) {
 		myDirection = direction;
 		myWidth = width;
 		myHeight = height;
@@ -213,14 +214,14 @@ abstract class AnimationProvider {
 
 	protected abstract void drawInternal(Canvas canvas);
 
-	abstract ZLView.PageIndex getPageToScrollTo(int x, int y);
+	abstract ZLTextView.PageIndex getPageToScrollTo(int x, int y);
 
-	final ZLView.PageIndex getPageToScrollTo() {
+	final ZLTextView.PageIndex getPageToScrollTo() {
 		return getPageToScrollTo(myEndX, myEndY);
 	}
 
 	protected Bitmap getBitmapFrom() {
-		return myBitmapManager.getBitmap(ZLView.PageIndex.current);
+		return myBitmapManager.getBitmap(ZLTextView.PageIndex.current);
 	}
 
 	protected Bitmap getBitmapTo() {

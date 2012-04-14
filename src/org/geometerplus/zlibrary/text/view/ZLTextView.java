@@ -31,9 +31,8 @@ import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleDecoration;
 import org.geometerplus.zlibrary.util.ZLColor;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
-import org.geometerplus.zlibrary.view.ZLView;
 
-public abstract class ZLTextView extends ZLView {
+public abstract class ZLTextView {
 	public static final int MAX_SELECTION_DISTANCE = 10;
 
 	public interface ScrollingMode {
@@ -64,9 +63,12 @@ public abstract class ZLTextView extends ZLView {
 
 	private ZLTextSelection mySelection;
 	private ZLTextHighlighting myHighlighting;
+	
+	public final ZLApplication Application;
+	protected ZLPaintContext myContext = new DummyPaintContext();
 
 	public ZLTextView(ZLApplication application) {
-		super(application);
+		Application = application;
 		resetTextStyle();
 		mySelection = new ZLTextSelection(this);
 		myHighlighting = new ZLTextHighlighting();
@@ -207,7 +209,6 @@ public abstract class ZLTextView extends ZLView {
 		return (myModel == null) || myModel.getMarks().isEmpty();
 	}
 
-	@Override
 	public synchronized void onScrollingFinished(PageIndex pageIndex) {
 		switch (pageIndex) {
 			case current:
@@ -377,7 +378,6 @@ public abstract class ZLTextView extends ZLView {
 		context.drawPolygonalLine(xs, ys);
 	}
 
-	@Override
 	public synchronized void paint(ZLPaintContext context, PageIndex pageIndex) {
 		myContext = context;
 		final ZLFile wallpaper = getWallpaperFile();
@@ -499,17 +499,14 @@ public abstract class ZLTextView extends ZLView {
 		}
 	}
 
-	@Override
 	public final synchronized int getScrollbarFullSize() {
 		return sizeOfFullText();
 	}
 
-	@Override
 	public final synchronized int getScrollbarThumbPosition(PageIndex pageIndex) {
 		return scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS ? 0 : getCurrentCharNumber(pageIndex, true);
 	}
 
-	@Override
 	public final synchronized int getScrollbarThumbLength(PageIndex pageIndex) {
 		int start = scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS
 			? 0 : getCurrentCharNumber(pageIndex, true);
@@ -1452,12 +1449,10 @@ public abstract class ZLTextView extends ZLView {
 		return myCurrentPage.TextElementMap.binarySearch(x, y);
 	}
 
-	@Override
 	public boolean onFingerMove(int x, int y) {
 		return false;
 	}
 
-	@Override
 	public boolean onFingerRelease(int x, int y) {
 		return false;
 	}
@@ -1563,7 +1558,6 @@ public abstract class ZLTextView extends ZLView {
 		return myCurrentPage.TextElementMap.nextRegion(getSelectedRegion(), direction, filter);
 	}
 
-	@Override
 	public boolean canScroll(PageIndex index) {
 		switch (index) {
 			default:
@@ -1824,5 +1818,88 @@ public abstract class ZLTextView extends ZLView {
 				context.drawString(x, y, str, offset + pos, length - pos);
 			}
 		}
+	}
+
+	public final ZLPaintContext getContext() {
+		return myContext;
+	}
+
+	abstract public interface FooterArea {
+		int getHeight();
+		void paint(ZLPaintContext context);
+	}
+
+	abstract public FooterArea getFooterArea();
+
+	public static enum PageIndex {
+		previous, current, next;
+
+		public PageIndex getNext() {
+			switch (this) {
+				case previous:
+					return current;
+				case current:
+					return next;
+				default:
+					return null;
+			}
+		}
+
+		public PageIndex getPrevious() {
+			switch (this) {
+				case next:
+					return current;
+				case current:
+					return previous;
+				default:
+					return null;
+			}
+		}
+	};
+	public static enum Direction {
+		leftToRight(true), rightToLeft(true), up(false), down(false);
+
+		public final boolean IsHorizontal;
+
+		Direction(boolean isHorizontal) {
+			IsHorizontal = isHorizontal;
+		}
+	};
+	public static enum Animation {
+		none, curl, slide, shift
+	}
+
+	public abstract Animation getAnimationType();
+
+	public boolean onFingerPress(int x, int y) {
+		return false;
+	}
+
+	public boolean onFingerLongPress(int x, int y) {
+		return false;
+	}
+
+	public boolean onFingerReleaseAfterLongPress(int x, int y) {
+		return false;
+	}
+
+	public boolean onFingerMoveAfterLongPress(int x, int y) {
+		return false;
+	}
+
+	public boolean onFingerSingleTap(int x, int y) {
+		return false;
+	}
+
+	public boolean onFingerDoubleTap(int x, int y) {
+		return false;
+	}
+
+	public boolean isDoubleTapSupported() {
+		return false;
+	}
+
+	public boolean onTrackballRotated(int diffX, int diffY) {
+		return false;
 	}
 }

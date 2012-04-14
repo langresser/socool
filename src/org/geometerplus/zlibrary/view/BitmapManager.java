@@ -19,20 +19,22 @@
 
 package org.geometerplus.zlibrary.view;
 
+import org.geometerplus.zlibrary.text.view.ZLTextView;
+
 import android.graphics.Bitmap;
 
 
 class BitmapManager {
 	private final int SIZE = 2;
 	private final Bitmap[] myBitmaps = new Bitmap[SIZE];
-	private final ZLView.PageIndex[] myIndexes = new ZLView.PageIndex[SIZE];
+	private final ZLTextView.PageIndex[] myIndexes = new ZLTextView.PageIndex[SIZE];
 
 	private int myWidth;
 	private int myHeight;
 
-	private final ZLAndroidWidget myWidget;
+	private final ZLViewWidget myWidget;
 
-	BitmapManager(ZLAndroidWidget widget) {
+	BitmapManager(ZLViewWidget widget) {
 		myWidget = widget;
 	}
 
@@ -50,7 +52,7 @@ class BitmapManager {
 		}
 	}
 
-	Bitmap getBitmap(ZLView.PageIndex index) {
+	Bitmap getBitmap(ZLTextView.PageIndex index) {
 		for (int i = 0; i < SIZE; ++i) {
 			if (index == myIndexes[i]) {
 				return myBitmaps[i];
@@ -71,14 +73,14 @@ class BitmapManager {
 		return myBitmaps[iIndex];
 	}
 
-	private int getInternalIndex(ZLView.PageIndex index) {
+	private int getInternalIndex(ZLTextView.PageIndex index) {
 		for (int i = 0; i < SIZE; ++i) {
 			if (myIndexes[i] == null) {
 				return i;
 			}
 		}
 		for (int i = 0; i < SIZE; ++i) {
-			if (myIndexes[i] != ZLView.PageIndex.current) {
+			if (myIndexes[i] != ZLTextView.PageIndex.current) {
 				return i;
 			}
 		}

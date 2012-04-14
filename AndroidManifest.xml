@@ -13,7 +13,7 @@
 				<data android:scheme="BookReadingException" />
 			</intent-filter>
 		</activity>
-		<activity android:name="org.geometerplus.zlibrary.error.BugReportActivity" android:label="FBReader crash" android:configChanges="orientation|keyboardHidden" android:process=":crash" />
+		<activity android:name="org.geometerplus.zlibrary.error.BugReportActivity" android:label="SocoolReader crash" android:configChanges="orientation|keyboardHidden" android:process=":crash" />
 		<activity android:name="org.geometerplus.android.fbreader.FixBooksDirectoryActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" android:process=":crash">
 			<intent-filter>
 				<action android:name="android.fbreader.action.CRASH" />

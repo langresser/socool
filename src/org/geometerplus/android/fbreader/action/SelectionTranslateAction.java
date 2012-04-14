@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader.action;
 import org.geometerplus.android.fbreader.DictionaryUtil;
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.fbreader.FBView;
+import org.geometerplus.fbreader.fbreader.FBTextView;
 
 public class SelectionTranslateAction extends FBAndroidAction {
 	public SelectionTranslateAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
@@ -31,7 +31,7 @@ public class SelectionTranslateAction extends FBAndroidAction {
 
 	@Override
     protected void run(Object ... params) {
-        final FBView fbview = Reader.getTextView();
+        final FBTextView fbview = Reader.getTextView();
         DictionaryUtil.openTextInDictionary(
 			BaseActivity,
         	fbview.getSelectedText(),

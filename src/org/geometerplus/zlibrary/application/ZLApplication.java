@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
-import org.geometerplus.zlibrary.view.ZLView;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
 
 public abstract class ZLApplication {
@@ -36,7 +36,7 @@ public abstract class ZLApplication {
 	public static final String NoAction = "none";
 
 	private volatile ZLApplicationWindow myWindow;
-	private volatile ZLView myView;
+	private volatile ZLTextView myView;
 
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 
@@ -44,7 +44,7 @@ public abstract class ZLApplication {
 		ourInstance = this;
 	}
 
-	protected final void setView(ZLView view) {
+	protected final void setView(ZLTextView view) {
 		if (view != null) {
 			myView = view;
 			final ZLViewWidget widget = getViewWidget();
@@ -56,7 +56,7 @@ public abstract class ZLApplication {
 		}
 	}
 
-	public final ZLView getCurrentView() {
+	public final ZLTextView getCurrentView() {
 		return myView;
 	}
 

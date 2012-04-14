@@ -31,9 +31,9 @@ class VolumeKeyTurnPageAction extends FBAction {
 	public void run(Object ... params) {
 		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
 		Reader.getViewWidget().startAnimatedScrolling(
-			myForward ? FBView.PageIndex.next : FBView.PageIndex.previous,
+			myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
 			preferences.HorizontalOption.getValue()
-				? FBView.Direction.rightToLeft : FBView.Direction.up,
+				? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
 			preferences.AnimationSpeedOption.getValue()
 		);
 	}

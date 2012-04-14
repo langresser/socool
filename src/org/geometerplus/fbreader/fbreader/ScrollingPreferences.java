@@ -22,7 +22,7 @@ package org.geometerplus.fbreader.fbreader;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLEnumOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.view.ZLView;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 public class ScrollingPreferences {
 	private static ScrollingPreferences ourInstance;
@@ -37,8 +37,8 @@ public class ScrollingPreferences {
 	public final ZLEnumOption<FingerScrolling> FingerScrollingOption =
 		new ZLEnumOption<FingerScrolling>("Scrolling", "Finger", FingerScrolling.byTapAndFlick);
 
-	public final ZLEnumOption<ZLView.Animation> AnimationOption =
-		new ZLEnumOption<ZLView.Animation>("Scrolling", "Animation", ZLView.Animation.slide);
+	public final ZLEnumOption<ZLTextView.Animation> AnimationOption =
+		new ZLEnumOption<ZLTextView.Animation>("Scrolling", "Animation", ZLTextView.Animation.slide);
 	public final ZLIntegerRangeOption AnimationSpeedOption =
 		new ZLIntegerRangeOption("Scrolling", "AnimationSpeed", 1, 10, 4);
 

@@ -84,7 +84,7 @@ public final class FBReaderApp extends ZLApplication {
 	}
 
 	public final ZLIntegerRangeOption ScrollbarTypeOption =
-		new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 3, FBView.SCROLLBAR_SHOW_AS_FOOTER);
+		new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 3, FBTextView.SCROLLBAR_SHOW_AS_FOOTER);
 	public final ZLIntegerRangeOption FooterHeightOption =
 		new ZLIntegerRangeOption("Options", "FooterHeight", 8, 20, 9);
 	public final ZLBooleanOption FooterShowTOCMarksOption =
@@ -113,8 +113,8 @@ public final class FBReaderApp extends ZLApplication {
 
 	private final ZLKeyBindings myBindings = new ZLKeyBindings("Keys");
 
-	public final FBView BookTextView;
-	public final FBView FootnoteView;
+	public final FBTextView BookTextView;
+	public final FBTextView FootnoteView;
 
 	public volatile BookModel Model;
 
@@ -134,10 +134,10 @@ public final class FBReaderApp extends ZLApplication {
 		addAction(ActionCode.TURN_PAGE_FORWARD, new TurnPageAction(this, true));
 		addAction(ActionCode.TURN_PAGE_BACK, new TurnPageAction(this, false));
 
-		addAction(ActionCode.MOVE_CURSOR_UP, new MoveCursorAction(this, FBView.Direction.up));
-		addAction(ActionCode.MOVE_CURSOR_DOWN, new MoveCursorAction(this, FBView.Direction.down));
-		addAction(ActionCode.MOVE_CURSOR_LEFT, new MoveCursorAction(this, FBView.Direction.rightToLeft));
-		addAction(ActionCode.MOVE_CURSOR_RIGHT, new MoveCursorAction(this, FBView.Direction.leftToRight));
+		addAction(ActionCode.MOVE_CURSOR_UP, new MoveCursorAction(this, FBTextView.Direction.up));
+		addAction(ActionCode.MOVE_CURSOR_DOWN, new MoveCursorAction(this, FBTextView.Direction.down));
+		addAction(ActionCode.MOVE_CURSOR_LEFT, new MoveCursorAction(this, FBTextView.Direction.rightToLeft));
+		addAction(ActionCode.MOVE_CURSOR_RIGHT, new MoveCursorAction(this, FBTextView.Direction.leftToRight));
 
 		addAction(ActionCode.VOLUME_KEY_SCROLL_FORWARD, new VolumeKeyTurnPageAction(this, true));
 		addAction(ActionCode.VOLUME_KEY_SCROLL_BACK, new VolumeKeyTurnPageAction(this, false));
@@ -147,8 +147,8 @@ public final class FBReaderApp extends ZLApplication {
 
 		addAction(ActionCode.EXIT, new ExitAction(this));
 
-		BookTextView = new FBView(this);
-		FootnoteView = new FBView(this);
+		BookTextView = new FBTextView(this);
+		FootnoteView = new FBTextView(this);
 
 		setView(BookTextView);
 	}
@@ -211,8 +211,8 @@ public final class FBReaderApp extends ZLApplication {
 		return myBindings;
 	}
 
-	public FBView getTextView() {
-		return (FBView)getCurrentView();
+	public FBTextView getTextView() {
+		return (FBTextView)getCurrentView();
 	}
 
 	public void tryOpenFootnote(String id) {
@@ -499,7 +499,7 @@ public final class FBReaderApp extends ZLApplication {
 	}
 
 	public Bookmark addBookmark(int maxLength, boolean visible) {
-		final FBView view = getTextView();
+		final FBTextView view = getTextView();
 		final ZLTextWordCursor cursor = view.getStartCursor();
 
 		if (cursor.isNull()) {

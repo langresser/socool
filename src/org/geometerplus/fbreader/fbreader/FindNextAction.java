@@ -26,7 +26,7 @@ class FindNextAction extends FBAction {
 
 	@Override
 	public boolean isEnabled() {
-		FBView view = Reader.getTextView();
+		FBTextView view = Reader.getTextView();
 		return (view != null) && view.canFindNext();
 	}
 

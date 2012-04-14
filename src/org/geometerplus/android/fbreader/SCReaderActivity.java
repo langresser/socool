@@ -55,8 +55,6 @@ import org.geometerplus.android.fbreader.tips.TipsActivity;
 import org.geometerplus.android.fbreader.util.UIUtil;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import org.geometerplus.android.fbreader.FBReaderApplication;
 
 public final class SCReaderActivity extends Activity {

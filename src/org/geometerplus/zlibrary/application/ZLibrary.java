@@ -35,7 +35,7 @@ import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
-import org.geometerplus.zlibrary.view.ZLAndroidWidget;
+import org.geometerplus.zlibrary.view.ZLViewWidget;
 import org.socool.socoolreader.reader.R;
 
 import android.app.Application;
@@ -112,7 +112,7 @@ public class ZLibrary {
 
 	private SCReaderActivity myActivity;
 	private final Application myApplication;
-	private ZLAndroidWidget myWidget;
+	private ZLViewWidget myWidget;
 
 	public void setActivity(SCReaderActivity activity) {
 		myActivity = activity;
@@ -129,9 +129,9 @@ public class ZLibrary {
 		return myActivity;
 	}
 
-	public ZLAndroidWidget getWidget() {
+	public ZLViewWidget getWidget() {
 		if (myWidget == null) {
-			myWidget = (ZLAndroidWidget)myActivity.findViewById(R.id.main_view);
+			myWidget = (ZLViewWidget)myActivity.findViewById(R.id.main_view);
 		}
 		return myWidget;
 	}

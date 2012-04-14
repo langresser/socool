@@ -304,7 +304,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			protected void onDialogClosed(boolean result) {
 				super.onDialogClosed(result);
 				footerPreferences.setEnabled(
-					findIndexOfValue(getValue()) == FBView.SCROLLBAR_SHOW_AS_FOOTER
+					findIndexOfValue(getValue()) == FBTextView.SCROLLBAR_SHOW_AS_FOOTER
 				);
 			}
 		});
@@ -324,7 +324,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			fbReader.FooterFontOption, false
 		)));
 		footerPreferences.setEnabled(
-			fbReader.ScrollbarTypeOption.getValue() == FBView.SCROLLBAR_SHOW_AS_FOOTER
+			fbReader.ScrollbarTypeOption.getValue() == FBTextView.SCROLLBAR_SHOW_AS_FOOTER
 		);
 
 		/*

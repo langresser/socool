@@ -19,6 +19,8 @@
 
 package org.geometerplus.zlibrary.view;
 
+import org.geometerplus.zlibrary.text.view.ZLTextView;
+
 
 abstract class SimpleAnimationProvider extends AnimationProvider {
 	private float mySpeedFactor;
@@ -28,22 +30,22 @@ abstract class SimpleAnimationProvider extends AnimationProvider {
 	}
 
 	@Override
-	ZLView.PageIndex getPageToScrollTo(int x, int y) {
+	ZLTextView.PageIndex getPageToScrollTo(int x, int y) {
 		if (myDirection == null) {
-			return ZLView.PageIndex.current;
+			return ZLTextView.PageIndex.current;
 		}
 
 		switch (myDirection) {
 			case rightToLeft:
-				return myStartX < x ? ZLView.PageIndex.previous : ZLView.PageIndex.next;
+				return myStartX < x ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
 			case leftToRight:
-				return myStartX < x ? ZLView.PageIndex.next : ZLView.PageIndex.previous;
+				return myStartX < x ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous;
 			case up:
-				return myStartY < y ? ZLView.PageIndex.previous : ZLView.PageIndex.next;
+				return myStartY < y ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
 			case down:
-				return myStartY < y ? ZLView.PageIndex.next : ZLView.PageIndex.previous;
+				return myStartY < y ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous;
 		}
-		return ZLView.PageIndex.current;
+		return ZLTextView.PageIndex.current;
 	}
 
 	@Override
