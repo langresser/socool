@@ -73,8 +73,6 @@ public final class SCReaderActivity extends Activity {
 	public static final int RESULT_REPAINT = RESULT_FIRST_USER + 1;
 	public static final int RESULT_RELOAD_BOOK = RESULT_FIRST_USER + 2;
 
-	private int myFullScreenFlag;
-
 	private static final String PLUGIN_ACTION_PREFIX = "___";
 	private final List<PluginApi.ActionInfo> myPluginActions =
 		new LinkedList<PluginApi.ActionInfo>();
@@ -136,7 +134,7 @@ public final class SCReaderActivity extends Activity {
 		setContentView(R.layout.main);
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
-		getLibrary().setActivity(this);
+		ZLibrary.Instance().setActivity(this);
 
 		final FBReaderApplication androidApplication = (FBReaderApplication)getApplication();
 		if (androidApplication.myMainWindow == null) {
@@ -155,10 +153,7 @@ public final class SCReaderActivity extends Activity {
 		ZLApplication.Instance().getViewWidget().repaint();
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		myFullScreenFlag = 0;
-		getWindow().setFlags(
-			WindowManager.LayoutParams.FLAG_FULLSCREEN, myFullScreenFlag
-		);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 0);
 
 		if (fbReader.getPopupById(TextSearchPopup.ID) == null) {
 			new TextSearchPopup(fbReader);
@@ -205,28 +200,16 @@ public final class SCReaderActivity extends Activity {
 
  	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire()) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-		}
 		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
-		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire()) {
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire()) {
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -283,13 +266,6 @@ public final class SCReaderActivity extends Activity {
 		initPluginActions();
 
 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-
-		final int fullScreenFlag = 0;
-		if (fullScreenFlag != myFullScreenFlag) {
-			finish();
-			startActivity(new Intent(this, getClass()));
-		}
-
 		SetOrientationAction.setOrientation(this, zlibrary.OrientationOption.getValue());
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
@@ -351,12 +327,11 @@ public final class SCReaderActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		switchWakeLock(
-			getLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
+			ZLibrary.Instance().BatteryLevelToTurnScreenOffOption.getValue() <
 			ZLApplication.Instance().getBatteryLevel()
 		);
 		myStartTimer = true;
-		final int brightnessLevel =
-			getLibrary().ScreenBrightnessLevelOption.getValue();
+		final int brightnessLevel = ZLibrary.Instance().ScreenBrightnessLevelOption.getValue();
 		if (brightnessLevel != 0) {
 			setScreenBrightness(brightnessLevel);
 		} else {
@@ -538,7 +513,7 @@ public final class SCReaderActivity extends Activity {
 		final WindowManager.LayoutParams attrs = getWindow().getAttributes();
 		attrs.screenBrightness = percent / 100.0f;
 		getWindow().setAttributes(attrs);
-		getLibrary().ScreenBrightnessLevelOption.setValue(percent);
+		ZLibrary.Instance().ScreenBrightnessLevelOption.setValue(percent);
 	}
 
 	final public int getScreenBrightness() {
@@ -600,10 +575,6 @@ public final class SCReaderActivity extends Activity {
 		super.onLowMemory();
 	}
 
-	private static ZLibrary getLibrary() {
-		return (ZLibrary)ZLibrary.Instance();
-	}
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		View view = findViewById(R.id.main_view);
@@ -622,7 +593,7 @@ public final class SCReaderActivity extends Activity {
 			final FBReaderApplication application = (FBReaderApplication)getApplication();
 			application.myMainWindow.setBatteryLevel(level);
 			switchWakeLock(
-				getLibrary().BatteryLevelToTurnScreenOffOption.getValue() < level
+				ZLibrary.Instance().BatteryLevelToTurnScreenOffOption.getValue() < level
 			);
 		}
 	};
