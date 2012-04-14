@@ -25,7 +25,7 @@ bool IconvEncodingConverterProvider::providesConverter(const std::string &encodi
 		return false;
 	}
 
-	iconv_t cd = iconv_open("utf-8//IGNORE", encoding.c_str());
+	iconv_t cd = iconv_open("utf-8//TRANSLIT", encoding.c_str());
 	iconv_close(cd);
 	return cd != 0;
 }
@@ -35,8 +35,9 @@ shared_ptr<ZLEncodingConverter> IconvEncodingConverterProvider::createConverter(
 }
 
 IconvEncodingConverter::IconvEncodingConverter(const std::string &encoding) {
+	LOGD(encoding.c_str());
 	m_encoding = encoding;
-	m_converter = iconv_open("utf-8//IGNORE", encoding.c_str());
+	m_converter = iconv_open("utf-8//TRANSLIT", encoding.c_str());
 }
 
 IconvEncodingConverter::~IconvEncodingConverter() {
@@ -71,16 +72,16 @@ void IconvEncodingConverter::convert(std::string &dst, const char *srcStart, con
 
 		// iconv会写tempOutBuffer指针，最终其会指向转换未完成的部分
 		char* tempOutBuffer = s_outBuffer;
-		size_t ret = iconv(m_converter, (char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
+		size_t ret = iconv(m_converter, (const char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
 		dst = s_outBuffer;
-		LOGD(dst.c_str());
+//		LOGD(dst.c_str());
 	} else {
 		char* outBuffer = new char[outLen];
 		memset(outBuffer, 0, outLen);
 
 		// iconv会写tempOutBuffer指针，最终其会指向转换未完成的部分
 		char* tempOutBuffer = outBuffer;
-		size_t ret = iconv(m_converter, (char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
+		size_t ret = iconv(m_converter, (const char**)&srcStart, (size_t *)&srcLen, &tempOutBuffer, (size_t *)&outLen);
 		dst = outBuffer;
 	//	LOGD(dst.c_str());
 		delete[] outBuffer;

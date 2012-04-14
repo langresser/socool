@@ -35,20 +35,14 @@ LOCAL_CFLAGS := \
   -Wno-multichar \
   -DANDROID \
   -DLIBDIR="c" \
-  -DBUILDING_LIBICONV \
-  -DIN_LIBRARY
+  -DUSING_STATIC_LIBICONV
 
 LOCAL_SRC_FILES := \
-  libiconv-1.14/libcharset/lib/localcharset.c \
-  libiconv-1.14/lib/iconv.c \
-  libiconv-1.14/lib/relocatable.c
+  libiconv-1.14/localcharset.c \
+  libiconv-1.14/iconv.c \
+  libiconv-1.14/relocatable.c
 
-LOCAL_C_INCLUDES += \
-  $(LOCAL_PATH)/libiconv-1.14/include \
-  $(LOCAL_PATH)/libiconv-1.14/libcharset \
-  $(LOCAL_PATH)/libiconv-1.14/lib \
-  $(LOCAL_PATH)/libiconv-1.14/libcharset/include \
-  $(LOCAL_PATH)/libiconv-1.14/srclib
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/libiconv-1.14/include
  
 LOCAL_EXPORT_C_INCLUDES       := $(LOCAL_PATH)/libiconv-1.14/include
 #include $(BUILD_SHARED_LIBRARY)
@@ -58,7 +52,7 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE                  := NativeFormats-v2
-LOCAL_CFLAGS                  := -Wall
+LOCAL_CFLAGS                  := -Wall -DUSING_STATIC_LIBICONV
 LOCAL_LDLIBS                  := -lz -llog
 LOCAL_STATIC_LIBRARIES        := expat iconv
 
