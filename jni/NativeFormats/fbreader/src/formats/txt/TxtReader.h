@@ -28,6 +28,13 @@
 
 class ZLInputStream;
 
+enum {
+	kAnsi,
+	kUtf8,
+	kUtf16le,
+	kUtf16be,
+};
+
 class TxtReader : public EncodedTextReader {
 
 public:
@@ -43,6 +50,8 @@ protected:
 
 	virtual bool characterDataHandler(std::string &str) = 0;
 	virtual bool newLineHandler() = 0;
+
+	int m_unicodeFlag;
 };
 
 #endif /* __TXTREADER_H__ */

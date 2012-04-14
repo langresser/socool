@@ -25,6 +25,17 @@
 #include "TxtReader.h"
 
 TxtReader::TxtReader(const std::string &encoding) : EncodedTextReader(encoding) {
+	if (strcasecmp(encoding.c_str(), "utf-8") == 0) {
+		m_unicodeFlag = kUtf8;
+	} else if (strcasecmp(encoding.c_str(), "utf-16") == 0) {
+		m_unicodeFlag = kUtf16le;
+	} else if (strcasecmp(encoding.c_str(), "utf-16be") == 0) {
+		m_unicodeFlag = kUtf16be;
+	} else if (strcasecmp(encoding.c_str(), "utf-16le") == 0) {
+		m_unicodeFlag = kUtf16le;
+	} else {
+		m_unicodeFlag = kAnsi;
+	}
 }
 
 TxtReader::~TxtReader() {
@@ -66,32 +77,102 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 
 	int maxLength = currentLen;
 	int parBegin = 0;
-	for (int i = parBegin; i < maxLength; ++i) {
-		char c = inputBuffer[i];
-		if (c == '\n' || c == '\r') {
-			bool skipNewLine = false;
-			if (c == '\r' && (i + 1) != maxLength && inputBuffer[i + 1] == '\n') {
-				skipNewLine = true;
-				inputBuffer[i] = '\n';
+	if (m_unicodeFlag == kUtf16le) {
+		for (int i = parBegin; i < maxLength; ++i) {
+			char c = inputBuffer[i];
+			char cn = -1;
+			if ((i + 1) < maxLength) {
+				cn = inputBuffer[i + 1];
 			}
-			if (parBegin != i) {
-				str.erase();
-				myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
-				characterDataHandler(str);
+			if ((c == '\n' || c == '\r') && cn == 0) {
+				bool newPar = false;
+				bool skipNewLine = false;
+				if (c == '\r' && cn == 0
+						&& (i + 3) < maxLength
+						&& inputBuffer[i + 2] == '\n'
+						&& inputBuffer[i + 3] == 0) {
+					skipNewLine = true;
+					inputBuffer[i] = '\n';
+				}
+				if (parBegin != i) {
+					str.erase();
+					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 2);
+					characterDataHandler(str);
+				}
+				// 跳过'\n'(\r\n的情况)
+				if (skipNewLine) {
+					i += 3; // 0d 00 0a 00
+				}
+				parBegin = i + 1;
+				newLineHandler();
+			} else if (isspace(c) && cn == 0) {
+				if (c != '\t') {
+					inputBuffer[i] = ' ';
+				}
 			}
-			// 跳过'\n'(\r\n的情况)
-			if (skipNewLine) {
-				++i;
+		}
+	} else if (m_unicodeFlag == kUtf16be) {
+		for (int i = parBegin; i < maxLength; ++i) {
+			char c = inputBuffer[i];
+			char cp = -1;
+			if (i - 1 >= 0) {
+				cp = inputBuffer[i - 1];
 			}
-			parBegin = i + 1;
-			newLineHandler();
-		} else if (isspace(c)) {
-			if (c != '\t') {
-				inputBuffer[i] = ' ';
+			if ((c == '\n' || c == '\r') && cp == 0) {
+				bool skipNewLine = false;
+				if (c == '\r' && cp == 0
+						&& (i + 2) < maxLength
+						&& inputBuffer[i + 1] == 0
+						&& inputBuffer[i + 2] == '\n') {
+					skipNewLine = true;
+					inputBuffer[i] = '\n';
+				}
+				if (parBegin != i) {
+					str.erase();
+					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
+					characterDataHandler(str);
+				}
+				// 跳过'\n'(\r\n的情况)
+				if (skipNewLine) {
+					i += 2; // 00 0d 00 0a
+				}
+				parBegin = i + 1;
+				newLineHandler();
+			} else if (isspace(c) && cp == 0) {
+				if (c != '\t') {
+					inputBuffer[i] = ' ';
+				}
 			}
-		} else {
+		}
+	} else {
+		for (int i = parBegin; i < maxLength; ++i) {
+			char c = inputBuffer[i];
+			if (c == '\n' || c == '\r') {
+				bool newPar = false;
+				bool skipNewLine = false;
+				if (c == '\r' && (i + 1) != maxLength && inputBuffer[i + 1] == '\n') {
+					skipNewLine = true;
+					inputBuffer[i] = '\n';
+				}
+				if (parBegin != i) {
+					str.erase();
+					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
+					characterDataHandler(str);
+				}
+				// 跳过'\n'(\r\n的情况)
+				if (skipNewLine) {
+					++i; // 0d 0a
+				}
+				parBegin = i + 1;
+				newLineHandler();
+			} else if (isspace(c)) {
+				if (c != '\t') {
+					inputBuffer[i] = ' ';
+				}
+			}
 		}
 	}
+
 	if (parBegin != maxLength) {
 		str.erase();
 		myConverter->convert(str, inputBuffer + parBegin, inputBuffer + maxLength);

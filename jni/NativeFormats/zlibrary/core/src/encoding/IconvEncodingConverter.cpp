@@ -37,7 +37,13 @@ shared_ptr<ZLEncodingConverter> IconvEncodingConverterProvider::createConverter(
 IconvEncodingConverter::IconvEncodingConverter(const std::string &encoding) {
 	LOGD(encoding.c_str());
 	m_encoding = encoding;
-	m_converter = iconv_open("utf-8//TRANSLIT", encoding.c_str());
+
+	// 直接传utf-16，如果没有bom信息的话，会当做be来读，这里改为le
+	if (strcasecmp(m_encoding.c_str(), "utf-16") == 0) {
+		m_encoding += "le";
+	}
+
+	m_converter = iconv_open("utf-8//TRANSLIT", m_encoding.c_str());
 }
 
 IconvEncodingConverter::~IconvEncodingConverter() {
