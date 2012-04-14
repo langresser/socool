@@ -94,8 +94,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		));
 		*/
 		appearanceScreen.addOption(androidLibrary.ShowStatusBarOption, "showStatusBar");
-		appearanceScreen.addOption(androidLibrary.DisableButtonLightsOption, "disableButtonLights");
-
 		final Screen textScreen = createPreferenceScreen("text");
 
 		final Screen fontPropertiesScreen = textScreen.createPreferenceScreen("fontProperties");

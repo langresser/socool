@@ -35,7 +35,6 @@ shared_ptr<ZLEncodingConverter> IconvEncodingConverterProvider::createConverter(
 }
 
 IconvEncodingConverter::IconvEncodingConverter(const std::string &encoding) {
-	LOGD(encoding.c_str());
 	m_encoding = encoding;
 
 	// 直接传utf-16，如果没有bom信息的话，会当做be来读，这里改为le

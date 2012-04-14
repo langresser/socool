@@ -32,8 +32,6 @@ void FormatPlugin::detectEncodingAndLanguage(Book &book, ZLInputStream &stream) 
 	std::string language = book.language();
 	std::string encoding = book.encoding();
 
-	LOGD("lan:%s   enc:%s", language.c_str(), encoding.c_str());
-
 	if (!encoding.empty()) {
 		return;
 	}

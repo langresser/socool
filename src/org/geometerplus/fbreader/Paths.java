@@ -41,7 +41,7 @@ public abstract class Paths {
 	}
 
 	public static String cacheDirectory() {
-		return BooksDirectoryOption().getValue() + "/.FBReader";
+		return BooksDirectoryOption().getValue() + "/.SocoolReader";
 	}
 
 	public static String networkCacheDirectory() {
@@ -49,6 +49,6 @@ public abstract class Paths {
 	}
 
 	public static String systemShareDirectory() {
-		return "/system/usr/share/SCReaderActivity";
+		return "/system/usr/share/SocoolReader";
 	}
 }

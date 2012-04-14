@@ -365,10 +365,6 @@ public final class SCReaderActivity extends Activity {
 		} else {
 			setScreenBrightnessAuto();
 		}
-		if (getLibrary().DisableButtonLightsOption.getValue()) {
-			setButtonLight(false);
-		}
-
 		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		try {
 			sendBroadcast(new Intent(getApplicationContext(), KillerCallback.class));
@@ -611,9 +607,6 @@ public final class SCReaderActivity extends Activity {
 		unregisterReceiver(myBatteryInfoReceiver);
 		ZLApplication.Instance().stopTimer();
 		switchWakeLock(false);
-		if (getLibrary().DisableButtonLightsOption.getValue()) {
-			setButtonLight(true);
-		}
 		ZLApplication.Instance().onWindowClosing();
 		super.onPause();
 	}
