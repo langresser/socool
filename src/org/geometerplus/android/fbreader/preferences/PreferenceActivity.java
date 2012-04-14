@@ -93,7 +93,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			"dontTurnScreenOffDuringCharging"
 		));
 		*/
-		appearanceScreen.addOption(androidLibrary.ShowStatusBarOption, "showStatusBar");
 		final Screen textScreen = createPreferenceScreen("text");
 
 		final Screen fontPropertiesScreen = textScreen.createPreferenceScreen("fontProperties");

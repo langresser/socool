@@ -83,7 +83,6 @@ public class ZLibrary {
 			};
 	}
 	
-	public final ZLBooleanOption ShowStatusBarOption = new ZLBooleanOption("LookNFeel", "ShowStatusBar", hasNoHardwareMenuButton());
 	public final ZLIntegerRangeOption BatteryLevelToTurnScreenOffOption = new ZLIntegerRangeOption("LookNFeel", "BatteryLevelToTurnScreenOff", 0, 100, 50);
 	public final ZLBooleanOption DontTurnScreenOffDuringChargingOption = new ZLBooleanOption("LookNFeel", "DontTurnScreenOffDuringCharging", true);
 	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 0);
@@ -109,10 +108,6 @@ public class ZLibrary {
 				Build.MODEL.toLowerCase().matches(KINDLE_MODEL_REGEXP);
 		}
 		return myIsKindleFire;
-	}
-
-	public boolean hasButtonLightsBug() {
-		return "GT-S5830".equals(Build.MODEL);
 	}
 
 	private SCReaderActivity myActivity;

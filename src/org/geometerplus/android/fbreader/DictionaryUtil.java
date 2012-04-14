@@ -268,8 +268,6 @@ public abstract class DictionaryUtil {
 				final int minHeight = Math.min(200, screenHeight * 2 / 3);
 				intent.putExtra(ColorDict3.HEIGHT, Math.max(minHeight, Math.min(maxHeight, space)));
 				intent.putExtra(ColorDict3.GRAVITY, showAtBottom ? Gravity.BOTTOM : Gravity.TOP);
-				final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-				intent.putExtra(ColorDict3.FULLSCREEN, !zlibrary.ShowStatusBarOption.getValue());
 			}
 			activity.startActivity(intent);
 		} catch (ActivityNotFoundException e) {

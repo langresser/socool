@@ -48,11 +48,9 @@ public class ImageViewActivity extends Activity {
 		super.onCreate(icicle);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		final ZLibrary library = (ZLibrary)ZLibrary.Instance();
-		final boolean showStatusBar = library.ShowStatusBarOption.getValue();
 		getWindow().setFlags(
 			WindowManager.LayoutParams.FLAG_FULLSCREEN,
-			showStatusBar ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN
+			0
 		);
 
 		Thread.setDefaultUncaughtExceptionHandler(

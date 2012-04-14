@@ -155,9 +155,7 @@ public final class SCReaderActivity extends Activity {
 		ZLApplication.Instance().getViewWidget().repaint();
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		myFullScreenFlag =
-			zlibrary.ShowStatusBarOption.getValue() ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
+		myFullScreenFlag = 0;
 		getWindow().setFlags(
 			WindowManager.LayoutParams.FLAG_FULLSCREEN, myFullScreenFlag
 		);
@@ -208,7 +206,7 @@ public final class SCReaderActivity extends Activity {
  	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire() && !zlibrary.ShowStatusBarOption.getValue()) {
+		if (!zlibrary.isKindleFire()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 		return super.onPrepareOptionsMenu(menu);
@@ -218,7 +216,7 @@ public final class SCReaderActivity extends Activity {
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire() && !zlibrary.ShowStatusBarOption.getValue()) {
+		if (!zlibrary.isKindleFire()) {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 	}
@@ -226,7 +224,7 @@ public final class SCReaderActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire() && !zlibrary.ShowStatusBarOption.getValue()) {
+		if (!zlibrary.isKindleFire()) {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 		return super.onOptionsItemSelected(item);
@@ -286,8 +284,7 @@ public final class SCReaderActivity extends Activity {
 
 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
 
-		final int fullScreenFlag =
-			zlibrary.ShowStatusBarOption.getValue() ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
+		final int fullScreenFlag = 0;
 		if (fullScreenFlag != myFullScreenFlag) {
 			finish();
 			startActivity(new Intent(this, getClass()));
@@ -547,20 +544,6 @@ public final class SCReaderActivity extends Activity {
 	final public int getScreenBrightness() {
 		final int level = (int)(100 * getWindow().getAttributes().screenBrightness);
 		return (level >= 0) ? level : 50;
-	}
-
-	private void setButtonLight(boolean enabled) {
-		try {
-			final WindowManager.LayoutParams attrs = getWindow().getAttributes();
-			final Class<?> cls = attrs.getClass();
-			final Field fld = cls.getField("buttonBrightness");
-			if (fld != null && "float".equals(fld.getType().toString())) {
-				fld.setFloat(attrs, enabled ? -1.0f : 0.0f);
-				getWindow().setAttributes(attrs);
-			}
-		} catch (NoSuchFieldException e) {
-		} catch (IllegalAccessException e) {
-		}
 	}
 
 	private PowerManager.WakeLock myWakeLock;
