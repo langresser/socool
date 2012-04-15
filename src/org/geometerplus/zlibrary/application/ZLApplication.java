@@ -25,6 +25,7 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
+import org.geometerplus.zlibrary.view.ZLGLWidget;
 
 public abstract class ZLApplication {
 	public static ZLApplication Instance() {
@@ -47,11 +48,20 @@ public abstract class ZLApplication {
 	protected final void setView(ZLTextView view) {
 		if (view != null) {
 			myView = view;
-			final ZLViewWidget widget = getViewWidget();
-			if (widget != null) {
-				widget.reset();
-				widget.repaint();
+			if (ZLibrary.Instance().m_is3DCurAnimation) {
+				final ZLGLWidget widget = ZLibrary.Instance().getWidgetGL();
+				if (widget != null) {
+					widget.reset();
+					widget.repaint();
+				}
+			} else {
+				final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+				if (widget != null) {
+					widget.reset();
+					widget.repaint();
+				}
 			}
+			
 			onViewChanged();
 		}
 	}
@@ -84,10 +94,6 @@ public abstract class ZLApplication {
 		if (myWindow != null) {
 			myWindow.processException(e);
 		}
-	}
-
-	public final ZLViewWidget getViewWidget() {
-		return myWindow != null ? myWindow.getViewWidget() : null;
 	}
 
 	public final void onRepaintFinished() {

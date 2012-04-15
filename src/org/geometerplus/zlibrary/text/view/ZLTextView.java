@@ -22,6 +22,7 @@ package org.geometerplus.zlibrary.text.view;
 import java.util.*;
 
 import org.geometerplus.zlibrary.application.ZLApplication;
+import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
@@ -87,7 +88,7 @@ public abstract class ZLTextView {
 				myCurrentPage.moveStartCursor(ZLTextParagraphCursor.cursor(myModel, 0));
 			}
 		}
-		Application.getViewWidget().reset();
+		ZLibrary.Instance().resetWidget();
 	}
 
 	public ZLTextModel getModel() {
@@ -141,8 +142,8 @@ public abstract class ZLTextView {
 			if (myCurrentPage.StartCursor.isNull()) {
 				preparePaintInfo(myCurrentPage);
 			}
-			Application.getViewWidget().reset();
-			Application.getViewWidget().repaint();
+			ZLibrary.Instance().resetWidget();
+			ZLibrary.Instance().repaintWidget();
 		}
 	}
 
@@ -166,8 +167,8 @@ public abstract class ZLTextView {
 					(backward ? myModel.getLastMark() : myModel.getFirstMark()) :
 					(backward ? myModel.getPreviousMark(mark) : myModel.getNextMark(mark)));
 			}
-			Application.getViewWidget().reset();
-			Application.getViewWidget().repaint();
+			ZLibrary.Instance().resetWidget();
+			ZLibrary.Instance().repaintWidget();
 		}
 		return count;
 	}
@@ -200,8 +201,8 @@ public abstract class ZLTextView {
 		if (!findResultsAreEmpty()) {
 			myModel.removeAllMarks();
 			rebuildPaintInfo();
-			Application.getViewWidget().reset();
-			Application.getViewWidget().repaint();
+			ZLibrary.Instance().resetWidget();
+			ZLibrary.Instance().repaintWidget();
 		}
 	}
 
@@ -230,7 +231,7 @@ public abstract class ZLTextView {
 					myNextPage.reset();
 					myNextPage.StartCursor.setCursor(myCurrentPage.EndCursor);
 					myNextPage.PaintState = PaintStateEnum.START_IS_KNOWN;
-					Application.getViewWidget().reset();
+					ZLibrary.Instance().resetWidget();
 				}
 				break;
 			}
@@ -253,14 +254,14 @@ public abstract class ZLTextView {
 
 	public void highlight(ZLTextPosition start, ZLTextPosition end) {
 		myHighlighting.setup(start, end);
-		Application.getViewWidget().reset();
-		Application.getViewWidget().repaint();
+		ZLibrary.Instance().resetWidget();
+		ZLibrary.Instance().repaintWidget();
 	}
 
 	public void clearHighlighting() {
 		if (myHighlighting.clear()) {
-			Application.getViewWidget().reset();
-			Application.getViewWidget().repaint();
+			ZLibrary.Instance().resetWidget();
+			ZLibrary.Instance().repaintWidget();
 		}
 	}
 
@@ -268,14 +269,14 @@ public abstract class ZLTextView {
 		y -= ZLTextSelectionCursor.getHeight() / 2 + ZLTextSelectionCursor.getAccent() / 2;
 		mySelection.setCursorInMovement(cursor, x, y);
 		mySelection.expandTo(x, y);
-		Application.getViewWidget().reset();
-		Application.getViewWidget().repaint();
+		ZLibrary.Instance().resetWidget();
+		ZLibrary.Instance().repaintWidget();
 	}
 
 	protected void releaseSelectionCursor() {
 		mySelection.stop();
-		Application.getViewWidget().reset();
-		Application.getViewWidget().repaint();
+		ZLibrary.Instance().resetWidget();
+		ZLibrary.Instance().repaintWidget();
 	}
 
 	protected ZLTextSelectionCursor getSelectionCursorInMovement() {
@@ -1175,7 +1176,7 @@ public abstract class ZLTextView {
 
 	public final synchronized void gotoPosition(int paragraphIndex, int wordIndex, int charIndex) {
 		if (myModel != null && myModel.getParagraphsNumber() > 0) {
-			Application.getViewWidget().reset();
+			ZLibrary.Instance().resetWidget();
 			myCurrentPage.moveStartCursor(paragraphIndex, wordIndex, charIndex);
 			myPreviousPage.reset();
 			myNextPage.reset();
@@ -1341,7 +1342,7 @@ public abstract class ZLTextView {
 
 	public void clearCaches() {
 		rebuildPaintInfo();
-		Application.getViewWidget().reset();
+		ZLibrary.Instance().resetWidget();
 		myCharWidth = -1;
 	}
 
@@ -1459,7 +1460,7 @@ public abstract class ZLTextView {
 
 	public void hideSelectedRegionBorder() {
 		myHighlightSelectedRegion = false;
-		Application.getViewWidget().reset();
+		ZLibrary.Instance().resetWidget();
 	}
 
 	private ZLTextRegion getSelectedRegion(ZLTextPage page) {
@@ -1491,15 +1492,15 @@ public abstract class ZLTextView {
 		if (!mySelection.start(x, y)) {
 			return false;
 		}
-		Application.getViewWidget().reset();
-		Application.getViewWidget().repaint();
+		ZLibrary.Instance().resetWidget();
+		ZLibrary.Instance().repaintWidget();
 		return true;
 	}
 
 	public void clearSelection() {
 		if (mySelection.clear()) {
-			Application.getViewWidget().reset();
-			Application.getViewWidget().repaint();
+			ZLibrary.Instance().resetWidget();
+			ZLibrary.Instance().repaintWidget();
 		}
 	}
 

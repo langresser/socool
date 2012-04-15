@@ -28,7 +28,6 @@ import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.error.ErrorKeys;
 import org.geometerplus.zlibrary.resources.ZLResource;
-import org.geometerplus.zlibrary.view.ZLViewWidget;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -147,12 +146,8 @@ public class ZLApplicationWindow {
 		}
 	}
 
-	protected ZLViewWidget getViewWidget() {
-		return ((ZLibrary)ZLibrary.Instance()).getWidget();
-	}
-
 	public void close() {
-		((ZLibrary)ZLibrary.Instance()).finish();
+		(ZLibrary.Instance()).finish();
 	}
 
 	private int myBatteryLevel;

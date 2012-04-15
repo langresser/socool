@@ -234,7 +234,7 @@ public final class FBReaderApp extends ZLApplication {
 					setView(FootnoteView);
 					FootnoteView.gotoPosition(label.ParagraphIndex, 0, 0);
 				}
-				getViewWidget().repaint();
+				ZLibrary.Instance().resetWidget();
 			}
 		}
 	}
@@ -284,8 +284,8 @@ public final class FBReaderApp extends ZLApplication {
 				processException(e);
 			}
 		}
-		getViewWidget().reset();
-		getViewWidget().repaint();
+		ZLibrary.Instance().resetWidget();
+		ZLibrary.Instance().repaintWidget();
 	}
 
 	public boolean jumpBack() {
@@ -331,7 +331,7 @@ public final class FBReaderApp extends ZLApplication {
 			FootnoteView.gotoPosition(bookmark);
 			setView(FootnoteView);
 		}
-		getViewWidget().repaint();
+		ZLibrary.Instance().repaintWidget();
 	}
 
 	public void showBookTextView() {

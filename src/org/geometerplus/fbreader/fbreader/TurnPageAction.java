@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.fbreader;
 
+import org.geometerplus.zlibrary.application.ZLibrary;
+
 class TurnPageAction extends FBAction {
 	private final boolean myForward;
 
@@ -44,20 +46,41 @@ class TurnPageAction extends FBAction {
 		if (params.length == 2 && params[0] instanceof Integer && params[1] instanceof Integer) {
 			final int x = (Integer)params[0];
 			final int y = (Integer)params[1];
-			Reader.getViewWidget().startAnimatedScrolling(
-				myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
-				x, y,
-				preferences.HorizontalOption.getValue()
-					? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
-				preferences.AnimationSpeedOption.getValue()
-			);
+			
+			if (ZLibrary.Instance().m_is3DCurAnimation) {
+				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+						x, y,
+						preferences.HorizontalOption.getValue()
+							? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+						preferences.AnimationSpeedOption.getValue()
+					);
+			} else {
+				ZLibrary.Instance().getWidget().startAnimatedScrolling(
+						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+						x, y,
+						preferences.HorizontalOption.getValue()
+							? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+						preferences.AnimationSpeedOption.getValue()
+					);
+			}
+			
 		} else {
-			Reader.getViewWidget().startAnimatedScrolling(
-				myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
-				preferences.HorizontalOption.getValue()
-					? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
-				preferences.AnimationSpeedOption.getValue()
-			);
+			if (ZLibrary.Instance().m_is3DCurAnimation) {
+				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+					preferences.HorizontalOption.getValue()
+						? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+					preferences.AnimationSpeedOption.getValue()
+				);
+			} else {
+				ZLibrary.Instance().getWidget().startAnimatedScrolling(
+						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+						preferences.HorizontalOption.getValue()
+							? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+						preferences.AnimationSpeedOption.getValue()
+					);
+			}
 		}
 	}
 }

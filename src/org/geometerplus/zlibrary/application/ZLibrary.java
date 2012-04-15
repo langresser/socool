@@ -36,6 +36,7 @@ import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
+import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.socool.socoolreader.reader.R;
 
 import android.app.Application;
@@ -86,6 +87,7 @@ public class ZLibrary {
 	public final ZLIntegerRangeOption BatteryLevelToTurnScreenOffOption = new ZLIntegerRangeOption("LookNFeel", "BatteryLevelToTurnScreenOff", 0, 100, 50);
 	public final ZLBooleanOption DontTurnScreenOffDuringChargingOption = new ZLBooleanOption("LookNFeel", "DontTurnScreenOffDuringCharging", true);
 	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 0);
+	public boolean m_is3DCurAnimation = true;	// 是否是opengles绘制的3d翻页效果
 	public ZLibrary(Application application) {
 		ourImplementation = this;
 		myApplication = application;
@@ -113,6 +115,7 @@ public class ZLibrary {
 	private SCReaderActivity myActivity;
 	private final Application myApplication;
 	private ZLViewWidget myWidget;
+	private ZLGLWidget myWidgetGL;
 
 	public void setActivity(SCReaderActivity activity) {
 		myActivity = activity;
@@ -134,6 +137,31 @@ public class ZLibrary {
 			myWidget = (ZLViewWidget)myActivity.findViewById(R.id.main_view);
 		}
 		return myWidget;
+	}
+	
+	public ZLGLWidget getWidgetGL() {
+		if (myWidgetGL == null) {
+			myWidgetGL = (ZLGLWidget)myActivity.findViewById(R.id.main_view);
+		}
+		return myWidgetGL;
+	}
+	
+	public void resetWidget()
+	{
+		if (m_is3DCurAnimation) {
+			getWidgetGL().reset();
+		} else {
+			getWidget().reset();
+		}
+	}
+	
+	public void repaintWidget()
+	{
+		if (m_is3DCurAnimation) {
+			getWidgetGL().repaint();
+		} else {
+			getWidget().repaint();
+		}
 	}
 
 	public ZLResourceFile createResourceFile(String path) {

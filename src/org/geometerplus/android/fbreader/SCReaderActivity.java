@@ -144,11 +144,11 @@ public final class SCReaderActivity extends Activity {
 		new Thread() {
 			public void run() {
 				ZLApplication.Instance().openFile(fileFromIntent(getIntent()), getPostponedInitAction());
-				ZLApplication.Instance().getViewWidget().repaint();
+				ZLibrary.Instance().repaintWidget();
 			}
 		}.start();
 
-		ZLApplication.Instance().getViewWidget().repaint();
+		ZLibrary.Instance().repaintWidget();
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 0);
@@ -406,7 +406,7 @@ public final class SCReaderActivity extends Activity {
 					}
 				}
 				fbReader.clearTextCaches();
-				fbReader.getViewWidget().repaint();
+				ZLibrary.Instance().repaintWidget();
 				break;
 			}
 			case RESULT_RELOAD_BOOK:

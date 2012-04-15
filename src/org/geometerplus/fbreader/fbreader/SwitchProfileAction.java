@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.fbreader;
 
+import org.geometerplus.zlibrary.application.ZLibrary;
+
 class SwitchProfileAction extends FBAction {
 	private String myProfileName;
 
@@ -35,7 +37,7 @@ class SwitchProfileAction extends FBAction {
 	@Override
 	public void run(Object ... params) {
 		Reader.setColorProfileName(myProfileName);
-		Reader.getViewWidget().reset();
-		Reader.getViewWidget().repaint();
+		ZLibrary.Instance().resetWidget();
+		ZLibrary.Instance().repaintWidget();
 	}
 }

@@ -24,6 +24,7 @@ import android.content.ActivityNotFoundException;
 import android.net.Uri;
 
 
+import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.text.view.*;
 
@@ -57,7 +58,7 @@ public class ProcessHyperlinkAction extends FBAndroidAction {
 		final ZLTextRegion.Soul soul = region.getSoul();
 		if (soul instanceof ZLTextHyperlinkRegionSoul) {
 			Reader.getTextView().hideSelectedRegionBorder();
-			Reader.getViewWidget().repaint();
+			ZLibrary.Instance().repaintWidget();
 			final ZLTextHyperlink hyperlink = ((ZLTextHyperlinkRegionSoul)soul).Hyperlink;
 			switch (hyperlink.Type) {
 				case FBHyperlinkType.EXTERNAL:
@@ -70,7 +71,7 @@ public class ProcessHyperlinkAction extends FBAndroidAction {
 			}
 		} else if (soul instanceof ZLTextImageRegionSoul) {
 			Reader.getTextView().hideSelectedRegionBorder();
-			Reader.getViewWidget().repaint();
+			ZLibrary.Instance().repaintWidget();
 			final String uriString = ((ZLTextImageRegionSoul)soul).ImageElement.URI;
 			if (uriString != null) {
 				try {

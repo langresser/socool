@@ -31,7 +31,7 @@ import org.geometerplus.android.fbreader.SCReaderActivity;
 
 public class ZLViewWidget extends View implements View.OnLongClickListener {
 	private final Paint myPaint = new Paint();
-	private final BitmapManager myBitmapManager = new BitmapManager(this);
+	private final BitmapManager myBitmapManager = new BitmapManager();
 	private Bitmap myFooterBitmap;
 
 	public ZLViewWidget(Context context, AttributeSet attrs, int defStyle) {
@@ -100,7 +100,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 					myAnimationProvider = new NoneAnimationProvider(myBitmapManager);
 					break;
 				case curl:
-					myAnimationProvider = new CurlAnimationProvider(myBitmapManager);
+					myAnimationProvider = new Curl3DAnimationProvider(myBitmapManager);
 					break;
 				case slide:
 					myAnimationProvider = new SlideAnimationProvider(myBitmapManager);

@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.fbreader;
 
+import org.geometerplus.zlibrary.application.ZLibrary;
+
 class VolumeKeyTurnPageAction extends FBAction {
 	private final boolean myForward;
 
@@ -30,11 +32,21 @@ class VolumeKeyTurnPageAction extends FBAction {
 	@Override
 	public void run(Object ... params) {
 		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
-		Reader.getViewWidget().startAnimatedScrolling(
-			myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
-			preferences.HorizontalOption.getValue()
-				? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
-			preferences.AnimationSpeedOption.getValue()
-		);
+		if (ZLibrary.Instance().m_is3DCurAnimation) {
+			ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+					preferences.HorizontalOption.getValue()
+						? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+					preferences.AnimationSpeedOption.getValue()
+				);
+		} else {
+			ZLibrary.Instance().getWidget().startAnimatedScrolling(
+					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+					preferences.HorizontalOption.getValue()
+						? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+					preferences.AnimationSpeedOption.getValue()
+				);
+		}
+		
 	}
 }

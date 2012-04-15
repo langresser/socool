@@ -20,9 +20,9 @@
 package org.geometerplus.zlibrary.view;
 
 import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.application.ZLibrary;
 
 import android.graphics.Bitmap;
-
 
 class BitmapManager {
 	private final int SIZE = 2;
@@ -32,12 +32,9 @@ class BitmapManager {
 	private int myWidth;
 	private int myHeight;
 
-	private final ZLViewWidget myWidget;
-
-	BitmapManager(ZLViewWidget widget) {
-		myWidget = widget;
+	BitmapManager() {
 	}
-
+	
 	void setSize(int w, int h) {
 		if (myWidth != w || myHeight != h) {
 			myWidth = w;
@@ -69,7 +66,13 @@ class BitmapManager {
 				myBitmaps[iIndex] = Bitmap.createBitmap(myWidth, myHeight, Bitmap.Config.RGB_565);
 			}
 		}
-		myWidget.drawOnBitmap(myBitmaps[iIndex], index);
+		
+		if (ZLibrary.Instance().m_is3DCurAnimation) {
+			ZLibrary.Instance().getWidgetGL().drawOnBitmap(myBitmaps[iIndex], index);
+		} else {
+			ZLibrary.Instance().getWidget().drawOnBitmap(myBitmaps[iIndex], index);
+		}
+
 		return myBitmaps[iIndex];
 	}
 
