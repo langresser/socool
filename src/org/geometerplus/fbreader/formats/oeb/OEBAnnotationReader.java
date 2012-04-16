@@ -29,8 +29,6 @@ import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 class OEBAnnotationReader extends ZLXMLReaderAdapter implements XMLNamespaces {
-	private String myDescriptionTag;
-	
 	private static final int READ_NONE = 0;
 	private static final int READ_DESCRIPTION = 1;
 	private int myReadState;
@@ -62,19 +60,10 @@ class OEBAnnotationReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 	}
 
 	@Override
-	public void namespaceMapChangedHandler(Map<String,String> namespaceMap) {
-		myDescriptionTag = null;
-		for (Map.Entry<String,String> entry : namespaceMap.entrySet()) {
-			final String id = entry.getValue();
-			if (id.startsWith(DublinCorePrefix) || id.startsWith(DublinCoreLegacyPrefix)) {
-				myDescriptionTag = entry.getKey() + ":description";
-			}
-		}
-	}
-
-	@Override
 	public boolean startElementHandler(String tag, ZLStringMap attributes) {
-		if (tag.equalsIgnoreCase(myDescriptionTag)) {
+		tag = tag.toLowerCase();
+		if (testTag(DublinCore, "description", tag) ||
+			testTag(DublinCoreLegacy, "description", tag)) {
 			myReadState = READ_DESCRIPTION;
 		} else if (myReadState == READ_DESCRIPTION) {
 			// TODO: process tags
@@ -96,7 +85,8 @@ class OEBAnnotationReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			return false;
 		}
 		tag = tag.toLowerCase();
-		if (tag.equalsIgnoreCase(myDescriptionTag)) {
+		if (testTag(DublinCore, "description", tag) ||
+			testTag(DublinCoreLegacy, "description", tag)) {
 			return true;
 		}
 		// TODO: process tags
