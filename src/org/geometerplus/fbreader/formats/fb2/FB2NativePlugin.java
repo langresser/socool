@@ -19,12 +19,10 @@
 
 package org.geometerplus.fbreader.formats.fb2;
 
-import org.geometerplus.zlibrary.core.encodings.EncodingCollection;
-import org.geometerplus.zlibrary.core.encodings.AutoEncodingCollection;
-
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-
 import org.geometerplus.fbreader.formats.NativeFormatPlugin;
+import org.geometerplus.zlibrary.encodings.AutoEncodingCollection;
+import org.geometerplus.zlibrary.encodings.EncodingCollection;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 public class FB2NativePlugin extends NativeFormatPlugin {
 	public FB2NativePlugin() {

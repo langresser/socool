@@ -19,6 +19,7 @@
 
 package org.geometerplus.fbreader.library;
 
+import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.zlibrary.image.ZLImage;
 
 public class BookTree extends LibraryTree {

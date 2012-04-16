@@ -22,9 +22,8 @@ package org.geometerplus.fbreader.formats.oeb;
 import java.util.*;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.core.constants.XMLNamespaces;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.xml.*;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.xml.*;
 
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;

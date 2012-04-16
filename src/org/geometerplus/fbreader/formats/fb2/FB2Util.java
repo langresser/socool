@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.formats.fb2;
 
 import java.util.List;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 abstract class FB2Util {
 	static ZLFile getRealFB2File(ZLFile file) {
