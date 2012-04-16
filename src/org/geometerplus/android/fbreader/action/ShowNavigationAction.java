@@ -32,8 +32,7 @@ public class ShowNavigationAction extends FBAndroidAction {
 
 	@Override
 	public boolean isVisible() {
-		final ZLTextView view = (ZLTextView)Reader.getCurrentView();
-		final ZLTextModel textModel = view.getModel();
+		final ZLTextModel textModel = Reader.getCurrentView().getModel();
 		return textModel != null && textModel.getParagraphsNumber() != 0;
 	}
 

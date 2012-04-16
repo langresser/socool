@@ -87,7 +87,7 @@ public class ZLibrary {
 	public final ZLIntegerRangeOption BatteryLevelToTurnScreenOffOption = new ZLIntegerRangeOption("LookNFeel", "BatteryLevelToTurnScreenOff", 0, 100, 50);
 	public final ZLBooleanOption DontTurnScreenOffDuringChargingOption = new ZLBooleanOption("LookNFeel", "DontTurnScreenOffDuringCharging", true);
 	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 0);
-	public boolean m_is3DCurAnimation = true;	// 是否是opengles绘制的3d翻页效果
+	public boolean m_is3DCurAnimation = false;	// 是否是opengles绘制的3d翻页效果
 	public ZLibrary(Application application) {
 		ourImplementation = this;
 		myApplication = application;
@@ -114,12 +114,9 @@ public class ZLibrary {
 
 	private SCReaderActivity myActivity;
 	private final Application myApplication;
-	private ZLViewWidget myWidget;
-	private ZLGLWidget myWidgetGL;
 
 	public void setActivity(SCReaderActivity activity) {
 		myActivity = activity;
-		myWidget = null;
 	}
 
 	public void finish() {
@@ -133,17 +130,11 @@ public class ZLibrary {
 	}
 
 	public ZLViewWidget getWidget() {
-		if (myWidget == null) {
-			myWidget = (ZLViewWidget)myActivity.findViewById(R.id.main_view);
-		}
-		return myWidget;
+		return myActivity.m_bookView;
 	}
 	
 	public ZLGLWidget getWidgetGL() {
-		if (myWidgetGL == null) {
-			myWidgetGL = (ZLGLWidget)myActivity.findViewById(R.id.main_view);
-		}
-		return myWidgetGL;
+		return myActivity.m_bookViewGL;
 	}
 	
 	public void resetWidget()

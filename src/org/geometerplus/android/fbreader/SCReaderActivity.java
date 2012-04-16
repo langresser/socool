@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.*;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
 import org.geometerplus.zlibrary.application.ZLApplication;
@@ -38,6 +39,8 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
+import org.geometerplus.zlibrary.view.ZLGLWidget;
+import org.geometerplus.zlibrary.view.ZLViewWidget;
 
 import org.socool.socoolreader.reader.R;
 
@@ -122,6 +125,8 @@ public final class SCReaderActivity extends Activity {
 		};
 	}
 
+	public ZLGLWidget m_bookViewGL;
+	public ZLViewWidget m_bookView;
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -129,10 +134,24 @@ public final class SCReaderActivity extends Activity {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.main);
+		
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
 		ZLibrary.Instance().setActivity(this);
+		
+		RelativeLayout mainLayout = new RelativeLayout(this);
+		mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+		if (ZLibrary.Instance().m_is3DCurAnimation) {
+			m_bookViewGL = new ZLGLWidget(this);
+			m_bookViewGL.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+			mainLayout.addView(m_bookViewGL);
+		} else {
+			m_bookView = new ZLViewWidget(this);
+			m_bookView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+			mainLayout.addView(m_bookView);
+		}
+
+		setContentView(mainLayout);
 
 		final FBReaderApplication androidApplication = (FBReaderApplication)getApplication();
 		if (androidApplication.myMainWindow == null) {
