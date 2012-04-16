@@ -205,11 +205,11 @@ public final class FBTextView extends ZLTextView {
 
 		if (isFlickScrollingEnabled()) {
 			if (ZLibrary.Instance().m_is3DCurAnimation) {
-				ZLibrary.Instance().getWidget().startAnimatedScrolling(
+				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
 						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
 					);
 			} else {
-				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
 					);
 			}

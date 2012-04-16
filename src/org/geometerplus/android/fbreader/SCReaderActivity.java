@@ -127,6 +127,7 @@ public final class SCReaderActivity extends Activity {
 
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
+	public RelativeLayout m_mainLayout;
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -139,19 +140,26 @@ public final class SCReaderActivity extends Activity {
 
 		ZLibrary.Instance().setActivity(this);
 		
-		RelativeLayout mainLayout = new RelativeLayout(this);
-		mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+		m_mainLayout = new RelativeLayout(this);
+		m_mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
 		if (ZLibrary.Instance().m_is3DCurAnimation) {
 			m_bookViewGL = new ZLGLWidget(this);
 			m_bookViewGL.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-			mainLayout.addView(m_bookViewGL);
+			m_bookViewGL.setFocusable(true);
+//			m_bookViewGL.setScrollbarFadingEnabled(false);
+			m_mainLayout.addView(m_bookViewGL);
 		} else {
 			m_bookView = new ZLViewWidget(this);
 			m_bookView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-			mainLayout.addView(m_bookView);
+			m_bookView.setFocusable(true);
+//			m_bookView.setScrollbarFadingEnabled(false);
+			//m_bookView.setScrollBarStyle();
+			//android:scrollbars="vertical"
+			//android:scrollbarAlwaysDrawVerticalTrack="true"
+			m_mainLayout.addView(m_bookView);
 		}
 
-		setContentView(mainLayout);
+		setContentView(m_mainLayout);
 
 		final FBReaderApplication androidApplication = (FBReaderApplication)getApplication();
 		if (androidApplication.myMainWindow == null) {
@@ -286,10 +294,9 @@ public final class SCReaderActivity extends Activity {
 		SetOrientationAction.setOrientation(this, zlibrary.OrientationOption.getValue());
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		final RelativeLayout root = (RelativeLayout)findViewById(R.id.root_view);
-		((PopupPanel)fbReader.getPopupById(TextSearchPopup.ID)).setPanelInfo(this, root);
-		((PopupPanel)fbReader.getPopupById(NavigationPopup.ID)).setPanelInfo(this, root);
-		((PopupPanel)fbReader.getPopupById(SelectionPopup.ID)).setPanelInfo(this, root);
+		((PopupPanel)fbReader.getPopupById(TextSearchPopup.ID)).setPanelInfo(this, m_mainLayout);
+		((PopupPanel)fbReader.getPopupById(NavigationPopup.ID)).setPanelInfo(this, m_mainLayout);
+		((PopupPanel)fbReader.getPopupById(SelectionPopup.ID)).setPanelInfo(this, m_mainLayout);
 	}
 
 	private void initPluginActions() {
@@ -594,14 +601,20 @@ public final class SCReaderActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		View view = findViewById(R.id.main_view);
-		return ((view != null) && view.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
+		if (ZLibrary.Instance().m_is3DCurAnimation) {
+			return ((m_bookViewGL != null) && m_bookViewGL.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
+		} else {
+			return ((m_bookView != null) && m_bookView.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
+		}	
 	}
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		View view = findViewById(R.id.main_view);
-		return ((view != null) && view.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
+		if (ZLibrary.Instance().m_is3DCurAnimation) {
+			return ((m_bookViewGL != null) && m_bookViewGL.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
+		} else {
+			return ((m_bookView != null) && m_bookView.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
+		}
 	}
 
 	BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
