@@ -230,16 +230,16 @@ public class ImageViewActivity extends Activity {
 					break;
 				case MotionEvent.ACTION_POINTER_DOWN:
 				{
-					final float diffX = event.getX(0) - event.getX(1); 
-					final float diffY = event.getY(0) - event.getY(1); 
+					final float diffX = event.getX(0) - event.getX(1);
+					final float diffY = event.getY(0) - event.getY(1);
 					myStartPinchDistance2 = Math.max(diffX * diffX + diffY * diffY, 10f);
 					myStartZoomFactor = myZoomFactor;
 					break;
 				}
 				case MotionEvent.ACTION_MOVE:
 				{
-					final float diffX = event.getX(0) - event.getX(1); 
-					final float diffY = event.getY(0) - event.getY(1); 
+					final float diffX = event.getX(0) - event.getX(1);
+					final float diffY = event.getY(0) - event.getY(1);
 					final float distance2 = Math.max(diffX * diffX + diffY * diffY, 10f);
 					if (myStartPinchDistance2 < 0) {
 						myStartPinchDistance2 = distance2;

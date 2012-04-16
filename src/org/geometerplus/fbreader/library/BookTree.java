@@ -87,6 +87,23 @@ public class BookTree extends LibraryTree {
 	}
 
 	@Override
+	protected String getSortKey() {
+		return "BSK:" + super.getSortKey();
+	}
+
+	@Override
+	public int compareTo(FBTree tree) {
+		final int cmp = super.compareTo(tree);
+		if (cmp == 0 && tree instanceof BookTree) {
+			final Book b = ((BookTree)tree).Book;
+			if (Book != null && b != null) {
+				return Book.File.getPath().compareTo(b.File.getPath());
+			}
+		}
+		return cmp;
+	}
+
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) {
 			return true;
