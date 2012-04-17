@@ -19,8 +19,6 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.text.view.ZLTextView;
-
 class FindPreviousAction extends FBAction {
 	FindPreviousAction(FBReaderApp fbreader) {
 		super(fbreader);
@@ -28,8 +26,7 @@ class FindPreviousAction extends FBAction {
 
 	@Override
 	public boolean isEnabled() {
-		ZLTextView view = Reader.getTextView();
-		return (view != null) && view.canFindPrevious();
+		return Reader.getTextView().canFindPrevious();
 	}
 
 	@Override
