@@ -1867,7 +1867,7 @@ public abstract class ZLTextView {
 		}
 	};
 	public static enum Animation {
-		none, curl, slide, shift
+		none, shift, curl, curl3d
 	}
 
 	public abstract Animation getAnimationType();

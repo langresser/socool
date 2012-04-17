@@ -100,10 +100,10 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 					myAnimationProvider = new NoneAnimationProvider(myBitmapManager);
 					break;
 				case curl:
-					myAnimationProvider = new Curl3DAnimationProvider(myBitmapManager);
+					myAnimationProvider = new CurlAnimationProvider(myBitmapManager);
 					break;
-				case slide:
-					myAnimationProvider = new SlideAnimationProvider(myBitmapManager);
+				case curl3d:
+					myAnimationProvider = new Curl3DAnimationProvider(myBitmapManager);
 					break;
 				case shift:
 					myAnimationProvider = new ShiftAnimationProvider(myBitmapManager);

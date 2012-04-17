@@ -601,10 +601,10 @@
 					<node name="summaryOff" value="Lower (louder) key turns to next (previous) page"/>
 				</node>
 				<node name="animation" value="Animation">
-					<node name="none" value="Turn pages with no animation"/>
+					<node name="none" value="no animation"/>
+					<node name=shift value="shift animation"/>
 					<node name="curl" value="Curl animation"/>
-					<node name="slide" value="Slide animation"/>
-					<node name="shift" value="Shift animation"/>
+					<node name="curl3d" value="3D Curl animation"/>
 				</node>
 				<node name="animationSpeed" value="Animation speed">
 					<node name="fast" value="fast"/>

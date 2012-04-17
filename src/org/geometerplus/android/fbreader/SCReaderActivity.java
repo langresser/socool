@@ -36,6 +36,7 @@ import org.geometerplus.zlibrary.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
 
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
@@ -128,6 +129,8 @@ public final class SCReaderActivity extends Activity {
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
+	public ZLApplicationWindow myMainWindow;
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -135,7 +138,7 @@ public final class SCReaderActivity extends Activity {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
 		ZLibrary.Instance().setActivity(this);
@@ -146,13 +149,11 @@ public final class SCReaderActivity extends Activity {
 			m_bookViewGL = new ZLGLWidget(this);
 			m_bookViewGL.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
 			m_bookViewGL.setFocusable(true);
-//			m_bookViewGL.setScrollbarFadingEnabled(false);
 			m_mainLayout.addView(m_bookViewGL);
 		} else {
 			m_bookView = new ZLViewWidget(this);
 			m_bookView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
 			m_bookView.setFocusable(true);
-//			m_bookView.setScrollbarFadingEnabled(false);
 			//m_bookView.setScrollBarStyle();
 			//android:scrollbars="vertical"
 			//android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -161,11 +162,12 @@ public final class SCReaderActivity extends Activity {
 
 		setContentView(m_mainLayout);
 
-		final FBReaderApplication androidApplication = (FBReaderApplication)getApplication();
-		if (androidApplication.myMainWindow == null) {
-			final ZLApplication application = createApplication();
-			androidApplication.myMainWindow = new ZLApplicationWindow(application);
-			application.initWindow();
+		if (myMainWindow == null) {
+			if (SQLiteBooksDatabase.Instance() == null) {
+				new SQLiteBooksDatabase(this, "READER");
+			}
+
+			myMainWindow = new ZLApplicationWindow(new FBReaderApp());
 		}
 
 		new Thread() {
@@ -175,11 +177,9 @@ public final class SCReaderActivity extends Activity {
 			}
 		}.start();
 
-		ZLibrary.Instance().repaintWidget();
-
-		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 0);
 
+		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		if (fbReader.getPopupById(TextSearchPopup.ID) == null) {
 			new TextSearchPopup(fbReader);
 		}
@@ -375,13 +375,6 @@ public final class SCReaderActivity extends Activity {
 		super.onStop();
 	}
 
-	protected FBReaderApp createApplication() {
-		if (SQLiteBooksDatabase.Instance() == null) {
-			new SQLiteBooksDatabase(this, "READER");
-		}
-		return new FBReaderApp();
-	}
-
 	@Override
 	public boolean onSearchRequested() {
 		final FBReaderApp fbreader = (FBReaderApp)FBReaderApp.Instance();
@@ -459,23 +452,19 @@ public final class SCReaderActivity extends Activity {
 	}
 
 	private Menu addSubMenu(Menu menu, String id) {
-		final FBReaderApplication application = (FBReaderApplication)getApplication();
-		return application.myMainWindow.addSubMenu(menu, id);
+		return myMainWindow.addSubMenu(menu, id);
 	}
 
 	private void addMenuItem(Menu menu, String actionId, String name) {
-		final FBReaderApplication application = (FBReaderApplication)getApplication();
-		application.myMainWindow.addMenuItem(menu, actionId, null, name);
+		myMainWindow.addMenuItem(menu, actionId, null, name);
 	}
 
 	private void addMenuItem(Menu menu, String actionId, int iconId) {
-		final FBReaderApplication application = (FBReaderApplication)getApplication();
-		application.myMainWindow.addMenuItem(menu, actionId, iconId, null);
+		myMainWindow.addMenuItem(menu, actionId, iconId, null);
 	}
 
 	private void addMenuItem(Menu menu, String actionId) {
-		final FBReaderApplication application = (FBReaderApplication)getApplication();
-		application.myMainWindow.addMenuItem(menu, actionId, null, null);
+		myMainWindow.addMenuItem(menu, actionId, null, null);
 	}
 
 	@Override
@@ -516,8 +505,7 @@ public final class SCReaderActivity extends Activity {
 			}
 		}
 
-		final FBReaderApplication application = (FBReaderApplication)getApplication();
-		application.myMainWindow.refresh();
+		myMainWindow.refresh();
 
 		return true;
 	}
@@ -620,8 +608,7 @@ public final class SCReaderActivity extends Activity {
 	BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			final int level = intent.getIntExtra("level", 100);
-			final FBReaderApplication application = (FBReaderApplication)getApplication();
-			application.myMainWindow.setBatteryLevel(level);
+			myMainWindow.setBatteryLevel(level);
 			switchWakeLock(
 				ZLibrary.Instance().BatteryLevelToTurnScreenOffOption.getValue() < level
 			);

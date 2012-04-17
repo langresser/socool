@@ -28,8 +28,6 @@ import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.misc.ZLSQLiteConfig;
 
 public class FBReaderApplication extends Application {
-	public ZLApplicationWindow myMainWindow;
-
 	@Override
 	public void onCreate() {
 		super.onCreate();

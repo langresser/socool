@@ -133,18 +133,18 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 		if (myAnimationProvider == null || myAnimationType != type) {
 			myAnimationType = type;
 			switch (type) {
-				case none:
-					myAnimationProvider = new NoneAnimationProvider(myBitmapManager);
-					break;
-				case curl:
-					myAnimationProvider = new Curl3DAnimationProvider(myBitmapManager);
-					break;
-				case slide:
-					myAnimationProvider = new SlideAnimationProvider(myBitmapManager);
-					break;
-				case shift:
-					myAnimationProvider = new ShiftAnimationProvider(myBitmapManager);
-					break;
+			case none:
+				myAnimationProvider = new NoneAnimationProvider(myBitmapManager);
+				break;
+			case curl:
+				myAnimationProvider = new CurlAnimationProvider(myBitmapManager);
+				break;
+			case curl3d:
+				myAnimationProvider = new Curl3DAnimationProvider(myBitmapManager);
+				break;
+			case shift:
+				myAnimationProvider = new ShiftAnimationProvider(myBitmapManager);
+				break;
 			}
 		}
 		return myAnimationProvider;

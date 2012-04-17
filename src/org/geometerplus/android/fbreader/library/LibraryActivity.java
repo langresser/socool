@@ -21,18 +21,14 @@ package org.geometerplus.android.fbreader.library;
 
 import android.app.AlertDialog;
 import android.content.*;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
-import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.options.ZLStringOption;
-import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.resources.ZLResource;
-import org.geometerplus.zlibrary.util.MimeType;
 
 import org.socool.socoolreader.reader.R;
 
