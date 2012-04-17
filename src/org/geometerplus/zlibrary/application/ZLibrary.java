@@ -30,11 +30,13 @@ import java.util.Locale;
 import java.util.TreeSet;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.fbreader.fbreader.ScrollingPreferences;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
 import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.socool.socoolreader.reader.R;
@@ -87,7 +89,7 @@ public class ZLibrary {
 	public final ZLIntegerRangeOption BatteryLevelToTurnScreenOffOption = new ZLIntegerRangeOption("LookNFeel", "BatteryLevelToTurnScreenOff", 0, 100, 50);
 	public final ZLBooleanOption DontTurnScreenOffDuringChargingOption = new ZLBooleanOption("LookNFeel", "DontTurnScreenOffDuringCharging", true);
 	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 0);
-	public boolean m_is3DCurAnimation = false;	// 是否是opengles绘制的3d翻页效果
+
 	public ZLibrary(Application application) {
 		ourImplementation = this;
 		myApplication = application;
@@ -102,6 +104,12 @@ public class ZLibrary {
 	}
 
 	private Boolean myIsKindleFire = null;
+	
+	// 是否是opengles绘制的3d翻页效果
+	public boolean isUseGLView() {
+		return ScrollingPreferences.Instance().AnimationOption.getValue() == ZLTextView.Animation.curl3d;
+	}
+
 	public boolean isKindleFire() {
 		if (myIsKindleFire == null) {
 			final String KINDLE_MODEL_REGEXP = ".*kindle(\\s+)fire.*";
@@ -139,7 +147,7 @@ public class ZLibrary {
 	
 	public void resetWidget()
 	{
-		if (m_is3DCurAnimation) {
+		if (isUseGLView()) {
 			getWidgetGL().reset();
 		} else {
 			getWidget().reset();
@@ -148,7 +156,7 @@ public class ZLibrary {
 	
 	public void repaintWidget()
 	{
-		if (m_is3DCurAnimation) {
+		if (isUseGLView()) {
 			getWidgetGL().repaint();
 		} else {
 			getWidget().repaint();

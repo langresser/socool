@@ -47,6 +47,7 @@ import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.fbreader.ScrollingPreferences;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.android.fbreader.tips.TipsManager;
@@ -145,7 +146,7 @@ public final class SCReaderActivity extends Activity {
 		
 		m_mainLayout = new RelativeLayout(this);
 		m_mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-		if (ZLibrary.Instance().m_is3DCurAnimation) {
+		if (ZLibrary.Instance().isUseGLView()) {
 			m_bookViewGL = new ZLGLWidget(this);
 			m_bookViewGL.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
 			m_bookViewGL.setFocusable(true);
@@ -589,7 +590,7 @@ public final class SCReaderActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (ZLibrary.Instance().m_is3DCurAnimation) {
+		if (ZLibrary.Instance().isUseGLView()) {
 			return ((m_bookViewGL != null) && m_bookViewGL.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
 		} else {
 			return ((m_bookView != null) && m_bookView.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
@@ -598,7 +599,7 @@ public final class SCReaderActivity extends Activity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (ZLibrary.Instance().m_is3DCurAnimation) {
+		if (ZLibrary.Instance().isUseGLView()) {
 			return ((m_bookViewGL != null) && m_bookViewGL.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
 		} else {
 			return ((m_bookView != null) && m_bookView.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);

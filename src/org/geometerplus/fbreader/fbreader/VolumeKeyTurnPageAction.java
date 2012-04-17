@@ -32,7 +32,7 @@ class VolumeKeyTurnPageAction extends FBAction {
 	@Override
 	public void run(Object ... params) {
 		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
-		if (ZLibrary.Instance().m_is3DCurAnimation) {
+		if (ZLibrary.Instance().isUseGLView()) {
 			ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
 					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
 					preferences.HorizontalOption.getValue()

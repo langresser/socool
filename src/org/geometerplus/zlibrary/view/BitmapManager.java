@@ -67,7 +67,7 @@ class BitmapManager {
 			}
 		}
 		
-		if (ZLibrary.Instance().m_is3DCurAnimation) {
+		if (ZLibrary.Instance().isUseGLView()) {
 			ZLibrary.Instance().getWidgetGL().drawOnBitmap(myBitmaps[iIndex], index);
 		} else {
 			ZLibrary.Instance().getWidget().drawOnBitmap(myBitmaps[iIndex], index);

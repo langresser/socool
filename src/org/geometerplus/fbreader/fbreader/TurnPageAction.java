@@ -47,7 +47,7 @@ class TurnPageAction extends FBAction {
 			final int x = (Integer)params[0];
 			final int y = (Integer)params[1];
 			
-			if (ZLibrary.Instance().m_is3DCurAnimation) {
+			if (ZLibrary.Instance().isUseGLView()) {
 				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
 						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
 						x, y,
@@ -66,7 +66,7 @@ class TurnPageAction extends FBAction {
 			}
 			
 		} else {
-			if (ZLibrary.Instance().m_is3DCurAnimation) {
+			if (ZLibrary.Instance().isUseGLView()) {
 				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
 					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
 					preferences.HorizontalOption.getValue()
