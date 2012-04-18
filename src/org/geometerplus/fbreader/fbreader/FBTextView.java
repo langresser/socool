@@ -147,7 +147,7 @@ public final class FBTextView extends ZLTextView {
 		final Direction direction = horizontal ? Direction.rightToLeft : Direction.up;
 		
 		if (ZLibrary.Instance().isUseGLView()) {
-			ZLibrary.Instance().getWidgetGL().startManualScrolling(x, y, direction);
+//			ZLibrary.Instance().getWidgetGL().startManualScrolling(x, y, direction);
 		} else {
 			ZLibrary.Instance().getWidget().startManualScrolling(x, y, direction);
 		}
@@ -178,7 +178,7 @@ public final class FBTextView extends ZLTextView {
 
 			if (isFlickScrollingEnabled()) {
 				if (ZLibrary.Instance().isUseGLView()) {
-					ZLibrary.Instance().getWidgetGL().scrollManuallyTo(x, y);
+//					ZLibrary.Instance().getWidgetGL().scrollManuallyTo(x, y);
 				} else {
 					ZLibrary.Instance().getWidget().scrollManuallyTo(x, y);
 				}
@@ -205,9 +205,9 @@ public final class FBTextView extends ZLTextView {
 
 		if (isFlickScrollingEnabled()) {
 			if (ZLibrary.Instance().isUseGLView()) {
-				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
-						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
-					);
+//				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+//						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
+//					);
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()

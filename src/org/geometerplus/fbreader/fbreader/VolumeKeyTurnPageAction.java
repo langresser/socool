@@ -33,12 +33,12 @@ class VolumeKeyTurnPageAction extends FBAction {
 	public void run(Object ... params) {
 		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
 		if (ZLibrary.Instance().isUseGLView()) {
-			ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
-					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
-					preferences.HorizontalOption.getValue()
-						? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
-					preferences.AnimationSpeedOption.getValue()
-				);
+//			ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+//					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+//					preferences.HorizontalOption.getValue()
+//						? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+//					preferences.AnimationSpeedOption.getValue()
+//				);
 		} else {
 			ZLibrary.Instance().getWidget().startAnimatedScrolling(
 					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,

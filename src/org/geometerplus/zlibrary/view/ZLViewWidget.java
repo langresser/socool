@@ -429,46 +429,6 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		}
 	}
 
-	protected int computeVerticalScrollExtent() {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
-		if (!view.isScrollbarShown()) {
-			return 0;
-		}
-		final AnimationProvider animator = getAnimationProvider();
-		if (animator.inProgress()) {
-			final int from = view.getScrollbarThumbLength(ZLTextView.PageIndex.current);
-			final int to = view.getScrollbarThumbLength(animator.getPageToScrollTo());
-			final int percent = animator.getScrolledPercent();
-			return (from * (100 - percent) + to * percent) / 100;
-		} else {
-			return view.getScrollbarThumbLength(ZLTextView.PageIndex.current);
-		}
-	}
-
-	protected int computeVerticalScrollOffset() {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
-		if (!view.isScrollbarShown()) {
-			return 0;
-		}
-		final AnimationProvider animator = getAnimationProvider();
-		if (animator.inProgress()) {
-			final int from = view.getScrollbarThumbPosition(ZLTextView.PageIndex.current);
-			final int to = view.getScrollbarThumbPosition(animator.getPageToScrollTo());
-			final int percent = animator.getScrolledPercent();
-			return (from * (100 - percent) + to * percent) / 100;
-		} else {
-			return view.getScrollbarThumbPosition(ZLTextView.PageIndex.current);
-		}
-	}
-
-	protected int computeVerticalScrollRange() {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
-		if (!view.isScrollbarShown()) {
-			return 0;
-		}
-		return view.getScrollbarFullSize();
-	}
-
 	private int getMainAreaHeight() {
 		final ZLTextView.FooterArea footer = ZLApplication.Instance().getCurrentView().getFooterArea();
 		return footer != null ? getHeight() - footer.getHeight() : getHeight();

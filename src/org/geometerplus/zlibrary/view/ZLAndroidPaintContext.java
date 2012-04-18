@@ -38,7 +38,7 @@ public final class ZLAndroidPaintContext extends ZLPaintContext {
 	public static ZLBooleanOption DitheringOption = new ZLBooleanOption("Fonts", "Dithering", false);
 	public static ZLBooleanOption SubpixelOption = new ZLBooleanOption("Fonts", "Subpixel", false);
 
-	private final Canvas myCanvas;
+	public final Canvas myCanvas;
 	private final Paint myTextPaint = new Paint();
 	private final Paint myLinePaint = new Paint();
 	private final Paint myFillPaint = new Paint();
