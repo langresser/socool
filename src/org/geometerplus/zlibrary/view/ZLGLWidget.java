@@ -32,7 +32,6 @@ import org.geometerplus.android.fbreader.SCReaderActivity;
 
 public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener, 
 										View.OnLongClickListener, CurlRenderer.Observer  {
-	private final Paint myPaint = new Paint();
 	private final BitmapManager myBitmapManager = new BitmapManager();
 	private Bitmap myFooterBitmap;
 	
@@ -667,8 +666,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 			// If there is something to show on left page, simply add it to
 			// renderer.
 			if (mCurrentIndex > 0) {
-				mPageLeft
-						.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_LEFT));
+				mPageLeft.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_LEFT));
 				mPageLeft.reset();
 				if (mRenderLeftPage) {
 					mRenderer.addCurlMesh(mPageLeft);
@@ -765,13 +763,13 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 			rightIdx++;
 		}
 
-		Bitmap bitmapRight = myBitmapManager.getBitmap(ZLTextView.PageIndex.next);
+		Bitmap bitmapRight = myBitmapManager.getBitmap(ZLTextView.PageIndex.current);
 		mPageRight.setBitmap(bitmapRight);
 		mPageRight.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
 		mPageRight.reset();
 		mRenderer.addCurlMesh(mPageRight);
 
-		Bitmap bitmapLeft = myBitmapManager.getBitmap(ZLTextView.PageIndex.previous);
+		Bitmap bitmapLeft = myBitmapManager.getBitmap(ZLTextView.PageIndex.current);
 		mPageLeft.setBitmap(bitmapLeft);
 		mPageLeft.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_LEFT));
 		mPageLeft.reset();
@@ -782,8 +780,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 		Bitmap bitmapCur = myBitmapManager.getBitmap(ZLTextView.PageIndex.current);
 		mPageCurl.setBitmap(bitmapCur);
 		if (mCurlState == CURL_RIGHT) {
-			mPageCurl.setRect(mRenderer
-					.getPageRect(CurlRenderer.PAGE_RIGHT));
+			mPageCurl.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
 		} else {
 			mPageCurl
 					.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_LEFT));

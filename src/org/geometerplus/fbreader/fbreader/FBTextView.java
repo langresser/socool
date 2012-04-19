@@ -28,6 +28,7 @@ import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
 import org.geometerplus.zlibrary.util.ZLColor;
+import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
@@ -462,11 +463,14 @@ public final class FBTextView extends ZLTextView {
 		}
 
 		public synchronized void paint(ZLPaintContext context) {
-			final ZLFile wallpaper = getWallpaperFile();
-			if (wallpaper != null) {
-				context.clear(wallpaper, wallpaper instanceof ZLResourceFile);
-			} else {
-				context.clear(getBackgroundColor());
+			// glwidget是将整体作为一整张贴图处理，与普通view有区别
+			if (!ZLibrary.Instance().isUseGLView()) {
+				final ZLFile wallpaper = getWallpaperFile();
+				if (wallpaper != null) {
+					context.clear(wallpaper, wallpaper instanceof ZLResourceFile);
+				} else {
+					context.clear(getBackgroundColor());
+				}
 			}
 
 			final FBReaderApp reader = myReader;
@@ -488,6 +492,13 @@ public final class FBTextView extends ZLTextView {
 			final int height = getHeight();
 			final int lineWidth = height <= 10 ? 1 : 2;
 			final int delta = height <= 10 ? 0 : 1;
+			int offsetY = 0;
+			
+			if (ZLibrary.Instance().isUseGLView()) {
+				final ZLGLWidget widget = ZLibrary.Instance().getWidgetGL();
+				offsetY = widget.getHeight() - getHeight() * 2;
+			}
+
 			context.setFont(
 				reader.FooterFontOption.getValue(),
 				height <= 10 ? height + 3 : height + 1,
@@ -521,7 +532,7 @@ public final class FBTextView extends ZLTextView {
 
 			// draw info text
 			context.setTextColor(fgColor);
-			context.drawString(right - infoWidth, height - delta, infoString);
+			context.drawString(right - infoWidth, offsetY + height - delta, infoString);
 
 			// draw gauge
 			final int gaugeRight = right - (infoWidth == 0 ? 0 : infoWidth + 10);
@@ -529,16 +540,16 @@ public final class FBTextView extends ZLTextView {
 
 			context.setLineColor(fgColor);
 			context.setLineWidth(lineWidth);
-			context.drawLine(left, lineWidth, left, height - lineWidth);
-			context.drawLine(left, height - lineWidth, gaugeRight, height - lineWidth);
-			context.drawLine(gaugeRight, height - lineWidth, gaugeRight, lineWidth);
-			context.drawLine(gaugeRight, lineWidth, left, lineWidth);
+			context.drawLine(left, offsetY + lineWidth, left, offsetY + height - lineWidth);
+			context.drawLine(left, offsetY + height - lineWidth, gaugeRight, offsetY + height - lineWidth);
+			context.drawLine(gaugeRight, offsetY + height - lineWidth, gaugeRight, offsetY + lineWidth);
+			context.drawLine(gaugeRight, offsetY + lineWidth, left, offsetY + lineWidth);
 
 			final int gaugeInternalRight =
 				left + lineWidth + (int)(1.0 * myGaugeWidth * pagePosition.Current / pagePosition.Total);
 
 			context.setFillColor(fillColor);
-			context.fillRectangle(left + 1, height - 2 * lineWidth, gaugeInternalRight, lineWidth + 1);
+			context.fillRectangle(left + 1, offsetY + height - 2 * lineWidth, gaugeInternalRight, offsetY + lineWidth + 1);
 
 			if (reader.FooterShowTOCMarksOption.getValue()) {
 				if (myTOCMarks == null) {
