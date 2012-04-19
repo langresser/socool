@@ -121,27 +121,21 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 		if (view == null) {
 			return;
 		}
-		
-		final ZLTextView.FooterArea footer = view.getFooterArea();
 
 		final ZLAndroidPaintContext context = new ZLAndroidPaintContext(
 			new Canvas(bitmap),
 			getWidth(),
-			getMainAreaHeight(),
+			getHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
 		view.paint(context, index);
 
+		final ZLTextView.FooterArea footer = view.getFooterArea();
 		if (footer == null) {
 			return;
 		}
 
 		footer.paint(context);
-	}
-
-	public void drawFooter() {
-		
-//		canvas.drawBitmap(myFooterBitmap, 0, getHeight() - footer.getHeight(), myPaint);
 	}
 
 	@Override

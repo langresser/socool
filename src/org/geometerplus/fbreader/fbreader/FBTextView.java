@@ -559,23 +559,6 @@ public final class FBTextView extends ZLTextView {
 
 		// TODO: remove
 		int myGaugeWidth = 1;
-		/*public int getGaugeWidth() {
-			return myGaugeWidth;
-		}*/
-
-		/*public void setProgress(int x) {
-			// set progress according to tap coordinate
-			int gaugeWidth = getGaugeWidth();
-			float progress = 1.0f * Math.min(x, gaugeWidth) / gaugeWidth;
-			int page = (int)(progress * computePageNumber());
-			if (page <= 1) {
-				gotoHome();
-			} else {
-				gotoPage(page);
-			}
-			myReader.getViewWidget().reset();
-			myReader.getViewWidget().repaint();
-		}*/
 	}
 
 	private Footer myFooter;
