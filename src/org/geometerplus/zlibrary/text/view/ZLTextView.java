@@ -521,6 +521,10 @@ public abstract class ZLTextView {
 			return -1;
 		}
 		final int paragraphIndex = paragraphCursor.Index;
+		if (paragraphIndex == 0) {
+			return 0;
+		}
+
 		int sizeOfText = myModel.getTextLength(paragraphIndex - 1);
 		final int paragraphLength = paragraphCursor.getParagraphLength();
 		if (paragraphLength > 0) {

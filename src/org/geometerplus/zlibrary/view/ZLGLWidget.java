@@ -387,13 +387,22 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 	public ZLTextView.PageIndex getPageToScrollTo(int x, int y)
 	{
+		int width = getWidth();
 		switch (mCurlState) {
 		case CURL_NONE:
 			return ZLTextView.PageIndex.current;
 		case CURL_LEFT:
-			return ZLTextView.PageIndex.previous;
+			if (x > width * 1 / 4) {
+				return ZLTextView.PageIndex.previous; 
+			} else {
+				return ZLTextView.PageIndex.current;
+			}
 		case CURL_RIGHT:
-			return ZLTextView.PageIndex.next;
+			if (x < width * 3 / 4) {
+				return ZLTextView.PageIndex.next; 
+			} else {
+				return ZLTextView.PageIndex.current;
+			}
 		}
 		
 		return ZLTextView.PageIndex.current;
@@ -452,7 +461,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		// We need page rects quite extensively so get them for later use.
 		RectF rightRect = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT);
 		RectF leftRect = mRenderer.getPageRect(CurlRenderer.PAGE_LEFT);
-		if (mCurlState == CURL_LEFT || mCurlState == CURL_RIGHT) {
+		if (mCurlState == CURL_RIGHT) {
 			// Animation source is the point from where animation starts.
 			// Also it's handled in a way we actually simulate touch events
 			// meaning the output is exactly the same as if user drags the
@@ -466,7 +475,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 			// Given the explanation, here we decide whether to simulate
 			// drag to left or right end.
-			if ( mAnimationSource.x > (rightRect.left + rightRect.right) / 2) {
+			if ( mAnimationSource.x >= (rightRect.left + (rightRect.right - rightRect.left) * 3 / 4)) {
 				// On right side target is always right page's right border.
 				mAnimationTarget.set(mDragStartPos);
 				mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
@@ -474,11 +483,27 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			} else {
 				// On left side target depends on visible pages.
 				mAnimationTarget.set(mDragStartPos);
-				if (mCurlState == CURL_RIGHT) {
-					mAnimationTarget.x = leftRect.left;
-				} else {
-					mAnimationTarget.x = rightRect.left;
-				}
+				mAnimationTarget.x = leftRect.left;
+				mAnimationTargetEvent = SET_CURL_TO_LEFT;
+			}
+			mAnimate = true;
+			requestRender();
+		} else if (mCurlState == CURL_LEFT) {
+			mAnimationSource.set(x, y);
+			mRenderer.translate(mAnimationSource);
+			mAnimationStartTime = System.currentTimeMillis();
+
+			// Given the explanation, here we decide whether to simulate
+			// drag to left or right end.
+			if ( mAnimationSource.x > (rightRect.left + (rightRect.right - rightRect.left) * 1 / 4)) {
+				// On right side target is always right page's right border.
+				mAnimationTarget.set(mDragStartPos);
+				mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
+				mAnimationTargetEvent = SET_CURL_TO_RIGHT;
+			} else {
+				// On left side target depends on visible pages.
+				mAnimationTarget.set(mDragStartPos);
+				mAnimationTarget.x = rightRect.left;
 				mAnimationTargetEvent = SET_CURL_TO_LEFT;
 			}
 			mAnimate = true;
@@ -495,7 +520,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		// We need page rects quite extensively so get them for later use.
 		RectF rightRect = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT);
 		RectF leftRect = mRenderer.getPageRect(CurlRenderer.PAGE_LEFT);
-		if (mCurlState == CURL_LEFT || mCurlState == CURL_RIGHT) {
+		if (mCurlState == CURL_RIGHT) {
 			// Animation source is the point from where animation starts.
 			// Also it's handled in a way we actually simulate touch events
 			// meaning the output is exactly the same as if user drags the
@@ -509,7 +534,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 			// Given the explanation, here we decide whether to simulate
 			// drag to left or right end.
-			if ( mAnimationSource.x > (rightRect.left + rightRect.right) / 2) {
+			if ( mAnimationSource.x >= (rightRect.left + (rightRect.right - rightRect.left) * 3 / 4)) {
 				// On right side target is always right page's right border.
 				mAnimationTarget.set(mDragStartPos);
 				mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
@@ -517,11 +542,27 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			} else {
 				// On left side target depends on visible pages.
 				mAnimationTarget.set(mDragStartPos);
-				if (mCurlState == CURL_RIGHT) {
-					mAnimationTarget.x = leftRect.left;
-				} else {
-					mAnimationTarget.x = rightRect.left;
-				}
+				mAnimationTarget.x = leftRect.left;
+				mAnimationTargetEvent = SET_CURL_TO_LEFT;
+			}
+			mAnimate = true;
+			requestRender();
+		} else if (mCurlState == CURL_LEFT) {
+			mAnimationSource.set(x, y);
+			mRenderer.translate(mAnimationSource);
+			mAnimationStartTime = System.currentTimeMillis();
+
+			// Given the explanation, here we decide whether to simulate
+			// drag to left or right end.
+			if ( mAnimationSource.x > (rightRect.left + (rightRect.right - rightRect.left) * 1 / 4)) {
+				// On right side target is always right page's right border.
+				mAnimationTarget.set(mDragStartPos);
+				mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
+				mAnimationTargetEvent = SET_CURL_TO_RIGHT;
+			} else {
+				// On left side target depends on visible pages.
+				mAnimationTarget.set(mDragStartPos);
+				mAnimationTarget.x = rightRect.left;
 				mAnimationTargetEvent = SET_CURL_TO_LEFT;
 			}
 			mAnimate = true;
