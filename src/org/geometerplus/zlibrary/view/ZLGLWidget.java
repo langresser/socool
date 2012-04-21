@@ -30,8 +30,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
 
-public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener, 
-										View.OnLongClickListener, CurlRenderer.Observer  {
+public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListener, CurlRenderer.Observer  {
 	private final BitmapManager myBitmapManager = new BitmapManager();
 	private Bitmap myFooterBitmap;
 	
@@ -53,7 +52,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 	
 	// Start position for dragging.
 	private PointF mDragStartPos = new PointF();
-	private PointF mPointerPos = new PointF();
 	private PointF mCurlPos = new PointF();
 	private PointF mCurlDir = new PointF();
 	
@@ -175,31 +173,25 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
         postDelayed(myPendingLongClickRunnable, 2 * ViewConfiguration.getLongPressTimeout());
     }
 
-	private class ShortClickRunnable implements Runnable {
-		public void run() {
-			final ZLTextView view = ZLApplication.Instance().getCurrentView();
-			view.onFingerSingleTap(myPressedX, myPressedY);
-			myPendingPress = false;
-			myPendingShortClickRunnable = null;
-		}
-	}
-	private volatile ShortClickRunnable myPendingShortClickRunnable;
 
 	private volatile boolean myPendingPress;
-	private volatile boolean myPendingDoubleTap;
 	private int myPressedX, myPressedY;
 	private boolean myScreenIsTouched;
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		int x = (int)event.getX();
 		int y = (int)event.getY();
+		
+		// No dragging during animation at the moment.
+		// TODO: Stop animation on touch event and return to drag mode.
+		if (mAnimate) {
+			return false;
+		}
 
 		final ZLTextView view = ZLApplication.Instance().getCurrentView();
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_UP:
-				if (myPendingDoubleTap) {
-					view.onFingerDoubleTap(x, y);
-				} if (myLongClickPerformed) {
+				if (myLongClickPerformed) {
 					view.onFingerReleaseAfterLongPress(x, y);
 				} else {
 					if (myPendingLongClickRunnable != null) {
@@ -207,31 +199,17 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 						myPendingLongClickRunnable = null;
 					}
 					if (myPendingPress) {
-						if (view.isDoubleTapSupported()) {
-        					if (myPendingShortClickRunnable == null) {
-            					myPendingShortClickRunnable = new ShortClickRunnable();
-        					}
-        					postDelayed(myPendingShortClickRunnable, ViewConfiguration.getDoubleTapTimeout());
-						} else {
-							view.onFingerSingleTap(x, y);
-						}
+						view.onFingerSingleTap(x, y);
 					} else {
 						view.onFingerRelease(x, y);
 					}
 				}
-				myPendingDoubleTap = false;
 				myPendingPress = false;
 				myScreenIsTouched = false;
 				break;
 			case MotionEvent.ACTION_DOWN:
-				if (myPendingShortClickRunnable != null) {
-					removeCallbacks(myPendingShortClickRunnable);
-					myPendingShortClickRunnable = null;
-					myPendingDoubleTap = true;
-				} else {
-					postLongClickRunnable();
-					myPendingPress = true;
-				}
+				postLongClickRunnable();
+				myPendingPress = true;
 				myScreenIsTouched = true;
 				myPressedX = x;
 				myPressedY = y;
@@ -239,20 +217,12 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 			case MotionEvent.ACTION_MOVE:
 			{
 				final int slop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-				final boolean isAMove =
-					Math.abs(myPressedX - x) > slop || Math.abs(myPressedY - y) > slop;
-				if (isAMove) {
-					myPendingDoubleTap = false;
-				}
+				final boolean isAMove = Math.abs(myPressedX - x) > slop || Math.abs(myPressedY - y) > slop;
 				if (myLongClickPerformed) {
 					view.onFingerMoveAfterLongPress(x, y);
 				} else {
 					if (myPendingPress) {
 						if (isAMove) {
-							if (myPendingShortClickRunnable != null) {
-								removeCallbacks(myPendingShortClickRunnable);
-								myPendingShortClickRunnable = null;
-							}
 							if (myPendingLongClickRunnable != null) {
 								removeCallbacks(myPendingLongClickRunnable);
 							}
@@ -389,11 +359,12 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 			mAnimate = false;
 			requestRender();
 		} else {
-			mPointerPos = (mAnimationSource);
+			float x = mAnimationSource.x;
+			float y = mAnimationSource.y;
 			float t = (float) Math.sqrt((double) (currentTime - mAnimationStartTime) / mAnimationDurationTime);
-			mPointerPos.x += (mAnimationTarget.x - mAnimationSource.x) * t;
-			mPointerPos.y += (mAnimationTarget.y - mAnimationSource.y) * t;
-			updateCurlPos(mPointerPos);
+			x += (mAnimationTarget.x - mAnimationSource.x) * t;
+			y += (mAnimationTarget.y - mAnimationSource.y) * t;
+			updateCurlPos(x, y);
 		}
 	}
 
@@ -414,103 +385,150 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 		mPageCurl.resetTexture();
 	}
 
-	@Override
-	public boolean onTouch(View view, MotionEvent me) {
-		// No dragging during animation at the moment.
-		// TODO: Stop animation on touch event and return to drag mode.
-		if (mAnimate) {
-			return false;
+	public ZLTextView.PageIndex getPageToScrollTo(int x, int y)
+	{
+		switch (mCurlState) {
+		case CURL_NONE:
+			return ZLTextView.PageIndex.current;
+		case CURL_LEFT:
+			return ZLTextView.PageIndex.previous;
+		case CURL_RIGHT:
+			return ZLTextView.PageIndex.next;
 		}
+		
+		return ZLTextView.PageIndex.current;
+	}
+
+	public void startManualScrolling(int x, int y, ZLTextView.Direction direction) {
 
 		// We need page rects quite extensively so get them for later use.
 		RectF rightRect = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT);
-		RectF leftRect = mRenderer.getPageRect(CurlRenderer.PAGE_LEFT);
 
-		// Store pointer position.
-		mPointerPos.set(me.getX(), me.getY());
-		mRenderer.translate(mPointerPos);
-
-		switch (me.getAction()) {
-		case MotionEvent.ACTION_DOWN: {
-
-			// Once we receive pointer down event its position is mapped to
-			// right or left edge of page and that'll be the position from where
-			// user is holding the paper to make curl happen.
-			mDragStartPos.set(mPointerPos);
-
-			// First we make sure it's not over or below page. Pages are
-			// supposed to be same height so it really doesn't matter do we use
-			// left or right one.
-			if (mDragStartPos.y > rightRect.top) {
-				mDragStartPos.y = rightRect.top;
-			} else if (mDragStartPos.y < rightRect.bottom) {
-				mDragStartPos.y = rightRect.bottom;
-			}
-
-			// Then we have to make decisions for the user whether curl is going
-			// to happen from left or right, and on which page.
-			float halfX = (rightRect.right + rightRect.left) / 2;
-			if (mDragStartPos.x < halfX) {
-				mDragStartPos.x = rightRect.left;
-				startCurl(CURL_LEFT);
-			} else if (mDragStartPos.x >= halfX) {
-				mDragStartPos.x = rightRect.right;
-				startCurl(CURL_RIGHT);
-			}
-			// If we have are in curl state, let this case clause flow through
-			// to next one. We have pointer position and drag position defined
-			// and this will create first render request given these points.
-			if (mCurlState == CURL_NONE) {
-				return false;
-			}
+		// Once we receive pointer down event its position is mapped to
+		// right or left edge of page and that'll be the position from where
+		// user is holding the paper to make curl happen.
+		mDragStartPos.set(x, y);
+		mRenderer.translate(mDragStartPos);
+	
+		// First we make sure it's not over or below page. Pages are
+		// supposed to be same height so it really doesn't matter do we use
+		// left or right one.
+		if (mDragStartPos.y > rightRect.top) {
+			mDragStartPos.y = rightRect.top;
+		} else if (mDragStartPos.y < rightRect.bottom) {
+			mDragStartPos.y = rightRect.bottom;
 		}
-		case MotionEvent.ACTION_MOVE: {
-			updateCurlPos(mPointerPos);
-			break;
+	
+		// Then we have to make decisions for the user whether curl is going
+		// to happen from left or right, and on which page.
+		float halfX = (rightRect.right + rightRect.left) / 2;
+		if (mDragStartPos.x < halfX) {
+			mDragStartPos.x = rightRect.left;
+			startCurl(CURL_LEFT);
+		} else if (mDragStartPos.x >= halfX) {
+			mDragStartPos.x = rightRect.right;
+			startCurl(CURL_RIGHT);
 		}
-		case MotionEvent.ACTION_CANCEL:
-		case MotionEvent.ACTION_UP: {
-			if (mCurlState == CURL_LEFT || mCurlState == CURL_RIGHT) {
-				// Animation source is the point from where animation starts.
-				// Also it's handled in a way we actually simulate touch events
-				// meaning the output is exactly the same as if user drags the
-				// page to other side. While not producing the best looking
-				// result (which is easier done by altering curl position and/or
-				// direction directly), this is done in a hope it made code a
-				// bit more readable and easier to maintain.
-				mAnimationSource.set(mPointerPos);
-				mAnimationStartTime = System.currentTimeMillis();
-
-				// Given the explanation, here we decide whether to simulate
-				// drag to left or right end.
-				if ( mPointerPos.x > (rightRect.left + rightRect.right) / 2) {
-					// On right side target is always right page's right border.
-					mAnimationTarget.set(mDragStartPos);
-					mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
-					mAnimationTargetEvent = SET_CURL_TO_RIGHT;
-				} else {
-					// On left side target depends on visible pages.
-					mAnimationTarget.set(mDragStartPos);
-					if (mCurlState == CURL_RIGHT) {
-						mAnimationTarget.x = leftRect.left;
-					} else {
-						mAnimationTarget.x = rightRect.left;
-					}
-					mAnimationTargetEvent = SET_CURL_TO_LEFT;
-				}
-				mAnimate = true;
-				requestRender();
-			}
-			break;
+		// If we have are in curl state, let this case clause flow through
+		// to next one. We have pointer position and drag position defined
+		// and this will create first render request given these points.
+		if (mCurlState == CURL_NONE) {
+			return;
 		}
-		}
-
-		return true;
 	}
 
-	/**
-	 * Initialize method.
-	 */
+	public void scrollManuallyTo(int x, int y) {
+		PointF point = new PointF(x, y);
+		mRenderer.translate(point);
+		updateCurlPos(point.x, point.y);
+	}
+
+	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, int x, int y, ZLTextView.Direction direction, int speed) {
+		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		if (pageIndex == ZLTextView.PageIndex.current || !view.canScroll(pageIndex)) {
+			return;
+		}
+		
+		// We need page rects quite extensively so get them for later use.
+		RectF rightRect = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT);
+		RectF leftRect = mRenderer.getPageRect(CurlRenderer.PAGE_LEFT);
+		if (mCurlState == CURL_LEFT || mCurlState == CURL_RIGHT) {
+			// Animation source is the point from where animation starts.
+			// Also it's handled in a way we actually simulate touch events
+			// meaning the output is exactly the same as if user drags the
+			// page to other side. While not producing the best looking
+			// result (which is easier done by altering curl position and/or
+			// direction directly), this is done in a hope it made code a
+			// bit more readable and easier to maintain.
+			mAnimationSource.set(x, y);
+			mRenderer.translate(mAnimationSource);
+			mAnimationStartTime = System.currentTimeMillis();
+
+			// Given the explanation, here we decide whether to simulate
+			// drag to left or right end.
+			if ( mAnimationSource.x > (rightRect.left + rightRect.right) / 2) {
+				// On right side target is always right page's right border.
+				mAnimationTarget.set(mDragStartPos);
+				mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
+				mAnimationTargetEvent = SET_CURL_TO_RIGHT;
+			} else {
+				// On left side target depends on visible pages.
+				mAnimationTarget.set(mDragStartPos);
+				if (mCurlState == CURL_RIGHT) {
+					mAnimationTarget.x = leftRect.left;
+				} else {
+					mAnimationTarget.x = rightRect.left;
+				}
+				mAnimationTargetEvent = SET_CURL_TO_LEFT;
+			}
+			mAnimate = true;
+			requestRender();
+		}
+	}
+
+	public void startAnimatedScrolling(int x, int y, int speed) {
+		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		if (!view.canScroll(getPageToScrollTo(x, y))) {
+			return;
+		}
+		
+		// We need page rects quite extensively so get them for later use.
+		RectF rightRect = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT);
+		RectF leftRect = mRenderer.getPageRect(CurlRenderer.PAGE_LEFT);
+		if (mCurlState == CURL_LEFT || mCurlState == CURL_RIGHT) {
+			// Animation source is the point from where animation starts.
+			// Also it's handled in a way we actually simulate touch events
+			// meaning the output is exactly the same as if user drags the
+			// page to other side. While not producing the best looking
+			// result (which is easier done by altering curl position and/or
+			// direction directly), this is done in a hope it made code a
+			// bit more readable and easier to maintain.
+			mAnimationSource.set(x, y);
+			mRenderer.translate(mAnimationSource);
+			mAnimationStartTime = System.currentTimeMillis();
+
+			// Given the explanation, here we decide whether to simulate
+			// drag to left or right end.
+			if ( mAnimationSource.x > (rightRect.left + rightRect.right) / 2) {
+				// On right side target is always right page's right border.
+				mAnimationTarget.set(mDragStartPos);
+				mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
+				mAnimationTargetEvent = SET_CURL_TO_RIGHT;
+			} else {
+				// On left side target depends on visible pages.
+				mAnimationTarget.set(mDragStartPos);
+				if (mCurlState == CURL_RIGHT) {
+					mAnimationTarget.x = leftRect.left;
+				} else {
+					mAnimationTarget.x = rightRect.left;
+				}
+				mAnimationTargetEvent = SET_CURL_TO_LEFT;
+			}
+			mAnimate = true;
+			requestRender();
+		}
+	}
+
 	private void init(Context ctx) {
 		// next line prevent ignoring first onKeyDown DPad event
 		// after any dialog was closed
@@ -521,7 +539,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 		mRenderer = new CurlRenderer(this);
 		setRenderer(mRenderer);
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		setOnTouchListener(this);
 
 		// Even though left and right pages are static we have to allocate room
 		// for curl on them too as we are switching meshes. Another way would be
@@ -600,6 +617,20 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 	 * Switches meshes and loads new bitmaps if available.
 	 */
 	private void startCurl(int page) {
+		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		ZLTextView.PageIndex pageIndex = ZLTextView.PageIndex.current;
+		switch (page) {
+		case CURL_RIGHT:
+			pageIndex = ZLTextView.PageIndex.next;
+			break;
+		case CURL_LEFT:
+			pageIndex = ZLTextView.PageIndex.previous;
+			break;
+		}
+		if (!view.canScroll(pageIndex)) {
+			return;
+		}
+
 		switch (page) {
 
 		// Once right side page is curled, first right page is assigned into
@@ -719,7 +750,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 	/**
 	 * Updates curl position.
 	 */
-	private void updateCurlPos(PointF pointerPos) {
+	private void updateCurlPos(float x, float y) {
 
 		// Default curl radius.
 		double radius = mRenderer.getPageRect(CURL_RIGHT).width() / 3;
@@ -728,7 +759,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 		// actually pointerPos we are doing calculations against. Why? Simply to
 		// optimize code a bit with the cost of making it unreadable. Otherwise
 		// we had to this in both of the next if-else branches.
-		mCurlPos.set(pointerPos);
+		mCurlPos.set(x, y);
 
 		// If curl happens on right page, or on left page on two page mode,
 		// we'll calculate curl position from pointerPos.

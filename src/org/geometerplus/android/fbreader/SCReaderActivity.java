@@ -161,7 +161,6 @@ public final class SCReaderActivity extends Activity {
 		new Thread() {
 			public void run() {
 				ZLApplication.Instance().openFile(fileFromIntent(getIntent()), getPostponedInitAction());
-				ZLibrary.Instance().repaintWidget();
 			}
 		}.start();
 

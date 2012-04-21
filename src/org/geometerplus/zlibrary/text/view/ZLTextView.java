@@ -483,7 +483,7 @@ public abstract class ZLTextView {
 		return myModel.getTextLength(myModel.getParagraphsNumber() - 1);
 	}
 
-	private final synchronized int getCurrentCharNumber(PageIndex pageIndex, boolean startNotEndOfPage) {
+	protected final synchronized int getCurrentCharNumber(PageIndex pageIndex, boolean startNotEndOfPage) {
 		if (myModel == null || myModel.getParagraphsNumber() == 0) {
 			return 0;
 		}
@@ -558,7 +558,7 @@ public abstract class ZLTextView {
 		return charsPerLine * linesPerPage;
 	}
 
-	private synchronized int computeTextPageNumber(int textSize) {
+	protected synchronized int computeTextPageNumber(int textSize) {
 		if (myModel == null || myModel.getParagraphsNumber() == 0) {
 			return 1;
 		}

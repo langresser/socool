@@ -76,6 +76,7 @@ class TurnPageAction extends FBAction {
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+								-1, -1,
 						preferences.HorizontalOption.getValue()
 							? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
 						preferences.AnimationSpeedOption.getValue()

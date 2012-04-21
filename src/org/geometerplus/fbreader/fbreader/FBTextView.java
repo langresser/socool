@@ -60,8 +60,6 @@ public final class FBTextView extends ZLTextView {
 	private TapZoneMap myZoneMap;
 
 	private TapZoneMap getZoneMap() {
-		//final String id =
-		//	ScrollingPreferences.Instance().TapZonesSchemeOption.getValue().toString();
 		final String id =
 			ScrollingPreferences.Instance().HorizontalOption.getValue()
 				? "right_to_left" : "up";
@@ -150,7 +148,7 @@ public final class FBTextView extends ZLTextView {
 		final Direction direction = horizontal ? Direction.rightToLeft : Direction.up;
 		
 		if (ZLibrary.Instance().isUseGLView()) {
-//			ZLibrary.Instance().getWidgetGL().startManualScrolling(x, y, direction);
+			ZLibrary.Instance().getWidgetGL().startManualScrolling(x, y, direction);
 		} else {
 			ZLibrary.Instance().getWidget().startManualScrolling(x, y, direction);
 		}
@@ -181,7 +179,7 @@ public final class FBTextView extends ZLTextView {
 
 			if (isFlickScrollingEnabled()) {
 				if (ZLibrary.Instance().isUseGLView()) {
-//					ZLibrary.Instance().getWidgetGL().scrollManuallyTo(x, y);
+					ZLibrary.Instance().getWidgetGL().scrollManuallyTo(x, y);
 				} else {
 					ZLibrary.Instance().getWidget().scrollManuallyTo(x, y);
 				}
@@ -208,9 +206,9 @@ public final class FBTextView extends ZLTextView {
 
 		if (isFlickScrollingEnabled()) {
 			if (ZLibrary.Instance().isUseGLView()) {
-//				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
-//						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
-//					);
+				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
+					);
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
@@ -500,19 +498,13 @@ public final class FBTextView extends ZLTextView {
 				height > 10, false, false, false
 			);
 
-			final PagePosition pagePosition = FBTextView.this.pagePosition();
-			int pageNumber = pagePosition.Current;
-//			if (pageIndex == PageIndex.next) {
-//				pageNumber++;
-//			} else if (pageIndex == PageIndex.previous) {
-//				pageNumber--;
-//			}
+			int pageNumber = getCurrentCharNumber(pageIndex, true);
+			int totalPageNumber = sizeOfFullText();
+			float percent = (float)pageNumber / totalPageNumber;
 
 			final StringBuilder info = new StringBuilder();
 			if (reader.FooterShowProgressOption.getValue()) {
-				info.append(pageNumber);
-				info.append("/");
-				info.append(pagePosition.Total);
+				info.append(String.format("%.2f%%", percent * 100));
 			}
 			if (reader.FooterShowBatteryOption.getValue()) {
 				if (info.length() > 0) {
@@ -547,7 +539,7 @@ public final class FBTextView extends ZLTextView {
 			context.drawLine(gaugeRight, offsetY + lineWidth, left, offsetY + lineWidth);
 
 			final int gaugeInternalRight =
-				left + lineWidth + (int)(1.0 * myGaugeWidth * pageNumber / pagePosition.Total);
+				left + lineWidth + (int)(1.0 * myGaugeWidth * percent);
 
 			context.setFillColor(fillColor);
 			context.fillRectangle(left + 1, offsetY + height - 2 * lineWidth, gaugeInternalRight, offsetY + lineWidth + 1);
