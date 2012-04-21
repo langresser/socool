@@ -127,7 +127,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			if (animator.getMode().Auto) {
 				postInvalidate();
 			}
-			drawFooter(canvas);
+//			drawFooter(canvas);
 		} else {
 			switch (oldMode) {
 				case AnimatedScrollingForward:
@@ -219,39 +219,26 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
 		view.paint(context, index);
-	}
-
-	private void drawFooter(Canvas canvas) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		
+		// draw footer
 		final ZLTextView.FooterArea footer = view.getFooterArea();
 
 		if (footer == null) {
-			myFooterBitmap = null;
 			return;
 		}
 
-		if (myFooterBitmap != null &&
-			(myFooterBitmap.getWidth() != getWidth() ||
-			 myFooterBitmap.getHeight() != footer.getHeight())) {
-			myFooterBitmap = null;
-		}
-		if (myFooterBitmap == null) {
-			myFooterBitmap = Bitmap.createBitmap(getWidth(), footer.getHeight(), Bitmap.Config.RGB_565);
-		}
-		final ZLAndroidPaintContext context = new ZLAndroidPaintContext(
-			new Canvas(myFooterBitmap),
+		final ZLAndroidPaintContext contextFooter = new ZLAndroidPaintContext(
+			new Canvas(bitmap),
 			getWidth(),
 			footer.getHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
-		footer.paint(context);
-		canvas.drawBitmap(myFooterBitmap, 0, getHeight() - footer.getHeight(), myPaint);
+		footer.paint(contextFooter, index);
 	}
 
 	private void onDrawStatic(Canvas canvas) {
 		myBitmapManager.setSize(getWidth(), getMainAreaHeight());
 		canvas.drawBitmap(myBitmapManager.getBitmap(ZLTextView.PageIndex.current), 0, 0, myPaint);
-		drawFooter(canvas);
 	}
 
 	@Override

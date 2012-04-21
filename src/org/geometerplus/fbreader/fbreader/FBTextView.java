@@ -27,9 +27,11 @@ import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.text.view.ZLTextView.PageIndex;
 import org.geometerplus.zlibrary.util.ZLColor;
 import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
+import org.geometerplus.zlibrary.view.ZLViewWidget;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
@@ -462,17 +464,7 @@ public final class FBTextView extends ZLTextView {
 			}
 		}
 
-		public synchronized void paint(ZLPaintContext context) {
-			// glwidget是将整体作为一整张贴图处理，与普通view有区别
-			if (!ZLibrary.Instance().isUseGLView()) {
-				final ZLFile wallpaper = getWallpaperFile();
-				if (wallpaper != null) {
-					context.clear(wallpaper, wallpaper instanceof ZLResourceFile);
-				} else {
-					context.clear(getBackgroundColor());
-				}
-			}
-
+		public synchronized void paint(ZLPaintContext context, PageIndex pageIndex) {
 			final FBReaderApp reader = myReader;
 			if (reader == null) {
 				return;
@@ -497,6 +489,9 @@ public final class FBTextView extends ZLTextView {
 			if (ZLibrary.Instance().isUseGLView()) {
 				final ZLGLWidget widget = ZLibrary.Instance().getWidgetGL();
 				offsetY = widget.getHeight() - getHeight() * 2;
+			} else {
+				final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+				offsetY = widget.getHeight() - getHeight() * 2;
 			}
 
 			context.setFont(
@@ -506,10 +501,16 @@ public final class FBTextView extends ZLTextView {
 			);
 
 			final PagePosition pagePosition = FBTextView.this.pagePosition();
+			int pageNumber = pagePosition.Current;
+//			if (pageIndex == PageIndex.next) {
+//				pageNumber++;
+//			} else if (pageIndex == PageIndex.previous) {
+//				pageNumber--;
+//			}
 
 			final StringBuilder info = new StringBuilder();
 			if (reader.FooterShowProgressOption.getValue()) {
-				info.append(pagePosition.Current);
+				info.append(pageNumber);
 				info.append("/");
 				info.append(pagePosition.Total);
 			}
@@ -546,7 +547,7 @@ public final class FBTextView extends ZLTextView {
 			context.drawLine(gaugeRight, offsetY + lineWidth, left, offsetY + lineWidth);
 
 			final int gaugeInternalRight =
-				left + lineWidth + (int)(1.0 * myGaugeWidth * pagePosition.Current / pagePosition.Total);
+				left + lineWidth + (int)(1.0 * myGaugeWidth * pageNumber / pagePosition.Total);
 
 			context.setFillColor(fillColor);
 			context.fillRectangle(left + 1, offsetY + height - 2 * lineWidth, gaugeInternalRight, offsetY + lineWidth + 1);

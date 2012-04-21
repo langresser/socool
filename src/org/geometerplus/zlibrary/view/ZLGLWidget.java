@@ -142,7 +142,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnTouchListener,
 			footer.getHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
-		footer.paint(contextFooter);
+		footer.paint(contextFooter, index);
 	}
 
 	@Override

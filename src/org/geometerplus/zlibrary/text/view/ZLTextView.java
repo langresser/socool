@@ -1823,7 +1823,7 @@ public abstract class ZLTextView {
 
 	abstract public interface FooterArea {
 		int getHeight();
-		void paint(ZLPaintContext context);
+		void paint(ZLPaintContext context, PageIndex pageIndex);
 	}
 
 	abstract public FooterArea getFooterArea();
