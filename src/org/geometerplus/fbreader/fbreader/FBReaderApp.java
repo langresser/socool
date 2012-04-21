@@ -139,9 +139,6 @@ public final class FBReaderApp extends ZLApplication {
 		addAction(ActionCode.MOVE_CURSOR_LEFT, new MoveCursorAction(this, FBTextView.Direction.rightToLeft));
 		addAction(ActionCode.MOVE_CURSOR_RIGHT, new MoveCursorAction(this, FBTextView.Direction.leftToRight));
 
-		addAction(ActionCode.VOLUME_KEY_SCROLL_FORWARD, new VolumeKeyTurnPageAction(this, true));
-		addAction(ActionCode.VOLUME_KEY_SCROLL_BACK, new VolumeKeyTurnPageAction(this, false));
-
 		addAction(ActionCode.SWITCH_TO_DAY_PROFILE, new SwitchProfileAction(this, ColorProfile.DAY));
 		addAction(ActionCode.SWITCH_TO_NIGHT_PROFILE, new SwitchProfileAction(this, ColorProfile.NIGHT));
 

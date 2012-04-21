@@ -419,7 +419,7 @@ public final class FBTextView extends ZLTextView {
 	private class Footer implements FooterArea {
 		private Runnable UpdateTask = new Runnable() {
 			public void run() {
-				ZLibrary.Instance().repaintWidget();
+				ZLibrary.Instance().repaintStatusBar();
 			}
 		};
 
@@ -560,9 +560,8 @@ public final class FBTextView extends ZLTextView {
 					TOCTree.Reference reference = tocItem.getReference();
 					if (reference != null) {
 						final int refCoord = sizeOfTextBeforeParagraph(reference.ParagraphIndex);
-						final int xCoord =
-							left + 2 * lineWidth + (int)(1.0 * myGaugeWidth * refCoord / fullLength);
-						context.drawLine(xCoord, height - lineWidth, xCoord, lineWidth);
+						final int xCoord = left + 2 * lineWidth + (int)(1.0 * myGaugeWidth * refCoord / fullLength);
+						context.drawLine(xCoord, offsetY + height - lineWidth, xCoord, offsetY + lineWidth);
 					}
 				}
 			}

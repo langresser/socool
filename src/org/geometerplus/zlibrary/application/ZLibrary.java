@@ -138,10 +138,18 @@ public class ZLibrary {
 	}
 
 	public ZLViewWidget getWidget() {
+		if (myActivity.m_bookView == null) {
+			myActivity.createBookView();
+		}
+
 		return myActivity.m_bookView;
 	}
 	
 	public ZLGLWidget getWidgetGL() {
+		if (myActivity.m_bookViewGL == null) {
+			myActivity.createBookView();
+		}
+
 		return myActivity.m_bookViewGL;
 	}
 	
@@ -154,6 +162,15 @@ public class ZLibrary {
 		}
 	}
 	
+	public void repaintStatusBar()
+	{
+		if (isUseGLView()) {
+//			getWidgetGL().repaintStatusBar();
+		} else {
+			getWidget().repaint();
+		}
+	}
+
 	public void repaintWidget()
 	{
 		if (isUseGLView()) {

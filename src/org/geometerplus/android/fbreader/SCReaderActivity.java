@@ -146,20 +146,7 @@ public final class SCReaderActivity extends Activity {
 		
 		m_mainLayout = new RelativeLayout(this);
 		m_mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-		if (ZLibrary.Instance().isUseGLView()) {
-			m_bookViewGL = new ZLGLWidget(this);
-			m_bookViewGL.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-			m_bookViewGL.setFocusable(true);
-			m_mainLayout.addView(m_bookViewGL);
-		} else {
-			m_bookView = new ZLViewWidget(this);
-			m_bookView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-			m_bookView.setFocusable(true);
-			//m_bookView.setScrollBarStyle();
-			//android:scrollbars="vertical"
-			//android:scrollbarAlwaysDrawVerticalTrack="true"
-			m_mainLayout.addView(m_bookView);
-		}
+		createBookView();
 
 		setContentView(m_mainLayout);
 
@@ -221,6 +208,38 @@ public final class SCReaderActivity extends Activity {
 		if (ZLibrary.Instance().supportsAllOrientations()) {
 			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
 			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
+		}
+	}
+	
+	public void createBookView()
+	{
+		if (ZLibrary.Instance().isUseGLView()) {
+			if (m_bookViewGL == null) {
+				m_bookViewGL = new ZLGLWidget(this);
+				m_bookViewGL.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+				m_bookViewGL.setFocusable(true);
+				m_mainLayout.addView(m_bookViewGL);
+			}
+			
+			if (m_bookView != null) {
+				m_mainLayout.removeView(m_bookView);
+				m_bookView = null;
+			}
+		} else {
+			if (m_bookView == null) {
+				m_bookView = new ZLViewWidget(this);
+				m_bookView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+				m_bookView.setFocusable(true);
+				//m_bookView.setScrollBarStyle();
+				//android:scrollbars="vertical"
+				//android:scrollbarAlwaysDrawVerticalTrack="true"
+				m_mainLayout.addView(m_bookView);
+			}
+			
+			if (m_bookViewGL != null) {
+				m_mainLayout.removeView(m_bookViewGL);
+				m_bookViewGL = null;
+			}
 		}
 	}
 
