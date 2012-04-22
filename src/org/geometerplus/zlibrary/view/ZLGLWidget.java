@@ -58,6 +58,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	private PointF mCurlPos = new PointF();
 	private PointF mCurlDir = new PointF();
 	
+	private boolean m_needRepaint = false;
 	private boolean mAnimate = false;
 	private PointF mAnimationSource = new PointF();
 	private PointF mAnimationTarget = new PointF();
@@ -145,9 +146,14 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		}
 	}
 
-	public void repaint() {
-		updateBitmaps();
-		requestRender();
+	public void repaint(boolean force) {
+		if (force) {
+			updateBitmaps();
+			requestRender();
+			m_needRepaint = false;
+		} else {
+			m_needRepaint = true;
+		}
 	}
 	
 	public void repaintStatusBar()
@@ -162,12 +168,16 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		if (view == null) {
 			return;
 		}
+		
+		if (mPageBitmapWidth == -1 || mPageBitmapHeight == -1) {
+			return;
+		}
 
 		// draw text
 		final ZLAndroidPaintContext context = new ZLAndroidPaintContext(
 			new Canvas(bitmap),
-			getWidth(),
-			getHeight(),
+			mPageBitmapWidth,
+			getMainAreaHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
 		view.paint(context, index);
@@ -181,7 +191,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 		final ZLAndroidPaintContext contextFooter = new ZLAndroidPaintContext(
 			new Canvas(bitmap),
-			getWidth(),
+			mPageBitmapWidth,
 			footer.getHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
@@ -425,13 +435,14 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 //			view.onScrollingFinished(ZLTextView.PageIndex.current);
 //		}
 
-		// 当大小改变的时候重新加载贴图
-		releaseBitmap();
-		mRenderer.removeCurlMesh(mPageLeft);
-		mRenderer.removeCurlMesh(mPageRight);
-		mRenderer.removeCurlMesh(mPageCurl);
-
-		repaint();
+		if (m_needRepaint) {
+			m_needRepaint = false;
+			
+			// 当大小改变的时候重新加载贴图
+			reset();
+			updateBitmaps();
+			requestRender();
+		}
 	}
 
 	@Override

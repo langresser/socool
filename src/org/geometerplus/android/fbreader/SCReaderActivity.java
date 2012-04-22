@@ -164,7 +164,7 @@ public final class SCReaderActivity extends Activity {
 			}
 		}.start();
 
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 0);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		if (fbReader.getPopupById(TextSearchPopup.ID) == null) {
@@ -244,16 +244,31 @@ public final class SCReaderActivity extends Activity {
 
  	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+ 		// 弹出菜单时不全屏
+ 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
+		if (!zlibrary.isKindleFire()) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+		}
 		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
+		
+		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
+		if (!zlibrary.isKindleFire()) {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
+		if (!zlibrary.isKindleFire()) {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -444,7 +459,7 @@ public final class SCReaderActivity extends Activity {
 					}
 				}
 				fbReader.clearTextCaches();
-				ZLibrary.Instance().repaintWidget();
+				ZLibrary.Instance().repaintWidget(false);
 				break;
 			}
 			case RESULT_RELOAD_BOOK:

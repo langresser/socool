@@ -25,6 +25,7 @@ import android.widget.*;
 import android.app.ListActivity;
 
 import org.geometerplus.zlibrary.application.ZLApplication;
+import org.geometerplus.zlibrary.application.ZLibrary;
 
 import org.socool.socoolreader.reader.R;
 
@@ -112,7 +113,8 @@ public class TOCActivity extends ListActivity {
 				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
 				fbreader.addInvisibleBookmark();
 				fbreader.BookTextView.gotoPosition(reference.ParagraphIndex, 0, 0);
-				fbreader.showBookTextView();
+				ZLibrary.Instance().resetWidget();
+				ZLibrary.Instance().repaintWidget();
 			}
 		}
 

@@ -173,8 +173,13 @@ public class ZLibrary {
 
 	public void repaintWidget()
 	{
+		repaintWidget(true);
+	}
+
+	public void repaintWidget(boolean force)
+	{
 		if (isUseGLView()) {
-			getWidgetGL().repaint();
+			getWidgetGL().repaint(force);
 		} else {
 			getWidget().repaint();
 		}
