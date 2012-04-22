@@ -23,6 +23,7 @@ import java.util.List;
 
 import android.content.Intent;
 
+import org.geometerplus.android.fbreader.BookShelfActivity;
 import org.geometerplus.android.fbreader.CancelActivity;
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -34,23 +35,26 @@ public class ShowCancelMenuAction extends FBAndroidAction {
 
 	@Override
 	protected void run(Object ... params) {
-		if (!Reader.jumpBack()) {
-			final List<FBReaderApp.CancelActionDescription> descriptionList =
-				Reader.getCancelActionsList();
-			if (descriptionList.size() == 1) {
-				Reader.closeWindow();
-			} else {
-				final Intent intent = new Intent();
-				intent.setClass(BaseActivity, CancelActivity.class);
-				intent.putExtra(CancelActivity.LIST_SIZE, descriptionList.size());
-				int index = 0;
-				for (FBReaderApp.CancelActionDescription description : descriptionList) {
-					intent.putExtra(CancelActivity.ITEM_TITLE + index, description.Title);
-					intent.putExtra(CancelActivity.ITEM_SUMMARY + index, description.Summary);
-					++index;
-				}
-				BaseActivity.startActivityForResult(intent, SCReaderActivity.REQUEST_CANCEL_MENU);
-			}
-		}
+//		if (!Reader.jumpBack()) {
+//			final List<FBReaderApp.CancelActionDescription> descriptionList =
+//				Reader.getCancelActionsList();
+//			if (descriptionList.size() == 1) {
+//				Reader.closeWindow();
+//			} else {
+//				final Intent intent = new Intent();
+//				intent.setClass(BaseActivity, CancelActivity.class);
+//				intent.putExtra(CancelActivity.LIST_SIZE, descriptionList.size());
+//				int index = 0;
+//				for (FBReaderApp.CancelActionDescription description : descriptionList) {
+//					intent.putExtra(CancelActivity.ITEM_TITLE + index, description.Title);
+//					intent.putExtra(CancelActivity.ITEM_SUMMARY + index, description.Summary);
+//					++index;
+//				}
+//				BaseActivity.startActivityForResult(intent, SCReaderActivity.REQUEST_CANCEL_MENU);
+//			}
+//		}
+		
+		BaseActivity.startActivity(new Intent(BaseActivity, BookShelfActivity.class));
+		
 	}
 }
