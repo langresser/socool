@@ -44,8 +44,6 @@ class BitmapManager {
 				myIndexes[i] = null;
 			}
 			System.gc();
-			System.gc();
-			System.gc();
 		}
 	}
 
@@ -62,10 +60,22 @@ class BitmapManager {
 				myBitmaps[iIndex] = Bitmap.createBitmap(myWidth, myHeight, Bitmap.Config.RGB_565);
 			} catch (OutOfMemoryError e) {
 				System.gc();
-				System.gc();
 				myBitmaps[iIndex] = Bitmap.createBitmap(myWidth, myHeight, Bitmap.Config.RGB_565);
 			}
 		}
+//		int iIndex = 0;
+//		switch (index) {
+//		case previous:
+//			iIndex = 0;
+//			break;
+//		case current:
+//			iIndex = 1;
+//			break;
+//		case next:
+//			iIndex = 2;
+//			break;
+//		}
+//		myBitmaps[iIndex] = Bitmap.createBitmap(myWidth, myHeight, Bitmap.Config.RGB_565);
 		
 		if (ZLibrary.Instance().isUseGLView()) {
 			ZLibrary.Instance().getWidgetGL().drawOnBitmap(myBitmaps[iIndex], index);

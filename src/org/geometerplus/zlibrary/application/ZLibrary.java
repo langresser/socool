@@ -165,7 +165,7 @@ public class ZLibrary {
 	public void repaintStatusBar()
 	{
 		if (isUseGLView()) {
-//			getWidgetGL().repaintStatusBar();
+			getWidgetGL().repaintStatusBar();
 		} else {
 			getWidget().repaint();
 		}

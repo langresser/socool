@@ -23,6 +23,7 @@ import java.util.*;
 import java.io.File;
 
 import android.graphics.*;
+import android.util.Log;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLAndroidImageData;
@@ -306,6 +307,9 @@ public final class ZLAndroidPaintContext extends ZLPaintContext {
 			}
 		}
 		if (!containsSoftHyphen) {
+//			// TODO delete it  wangjia
+//			String word = new String(string, offset, length);
+//			Log.e("caonima", word);
 			myCanvas.drawText(string, offset, length, x, y, myTextPaint);
 		} else {
 			final char[] corrected = new char[length];

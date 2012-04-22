@@ -281,8 +281,6 @@ public final class FBReaderApp extends ZLApplication {
 				processException(e);
 			}
 		}
-		ZLibrary.Instance().resetWidget();
-		ZLibrary.Instance().repaintWidget();
 	}
 
 	public boolean jumpBack() {
