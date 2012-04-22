@@ -27,6 +27,8 @@ import android.util.AttributeSet;
 
 import org.geometerplus.zlibrary.application.ZLApplication;
 import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
@@ -49,7 +51,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	private int mPageBitmapWidth = -1;
 	private int mPageBitmapHeight = -1;
 	
-	private final int SIZE = 5;
+	private final int SIZE = 3;
 	private final Bitmap[] myBitmaps = new Bitmap[SIZE];
 	private final ZLTextView.PageIndex[] myIndexes = new ZLTextView.PageIndex[SIZE];
 	
@@ -58,6 +60,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	private PointF mCurlPos = new PointF();
 	private PointF mCurlDir = new PointF();
 	
+	private boolean m_firstInit = true;
 	private boolean m_needRepaint = false;
 	private boolean mAnimate = false;
 	private PointF mAnimationSource = new PointF();
@@ -434,7 +437,8 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 //			myScreenIsTouched = false;
 //			view.onScrollingFinished(ZLTextView.PageIndex.current);
 //		}
-
+		
+		
 		if (m_needRepaint) {
 			m_needRepaint = false;
 			
@@ -453,6 +457,8 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		mPageLeft.resetTexture();
 		mPageRight.resetTexture();
 		mPageCurl.resetTexture();
+		
+		m_needRepaint = true;
 	}
 
 	public void startManualScrolling(int x, int y, ZLTextView.Direction direction) {
@@ -577,6 +583,8 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		mPageCurl = new CurlMesh(10);
 		mPageLeft.setFlipTexture(true);
 		mPageRight.setFlipTexture(false);
+		
+		mPageNextCache = new CurlMesh(10);
 	}
 
 	/**
@@ -748,6 +756,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		mRenderer.removeCurlMesh(mPageCurl);
 		mRenderer.removeCurlMesh(mPageRight);
 		mRenderer.removeCurlMesh(mPageLeft);
+		mRenderer.removeCurlMesh(mPageNextCache);
 		
 		ZLTextView.PageIndex leftPageIndex = ZLTextView.PageIndex.current;
 		ZLTextView.PageIndex rightPageIndex = ZLTextView.PageIndex.current;

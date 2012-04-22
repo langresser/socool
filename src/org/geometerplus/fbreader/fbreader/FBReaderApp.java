@@ -326,7 +326,6 @@ public final class FBReaderApp extends ZLApplication {
 			FootnoteView.gotoPosition(bookmark);
 			setView(FootnoteView);
 		}
-		ZLibrary.Instance().repaintWidget();
 	}
 
 	public void showBookTextView() {
