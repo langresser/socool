@@ -215,7 +215,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			footer.getHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
-		footer.paint(contextFooter, index);
+		footer.paint(contextFooter, index, false);
 	}
 
 	private void onDrawStatic(Canvas canvas) {

@@ -59,14 +59,13 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	private PointF mDragStartPos = new PointF();
 	private PointF mCurlPos = new PointF();
 	private PointF mCurlDir = new PointF();
-	
-	private boolean m_firstInit = true;
+
 	private boolean m_needRepaint = false;
 	private boolean mAnimate = false;
 	private PointF mAnimationSource = new PointF();
 	private PointF mAnimationTarget = new PointF();
 	private long mAnimationStartTime;
-	private long mAnimationDurationTime = 300;
+	private long mAnimationDurationTime = 500;
 	private int mAnimationTargetEvent;
 	
 	// Constants for mAnimationTargetEvent.
@@ -104,9 +103,24 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		System.gc();
 	}
 
-	Bitmap getBitmap(ZLTextView.PageIndex index) {
+	Bitmap getBitmap(ZLTextView.PageIndex index, boolean forceUpdateStatusBar) {
 		for (int i = 0; i < SIZE; ++i) {
 			if (index == myIndexes[i]) {
+//				if (forceUpdateStatusBar) {
+//					// draw footer
+//					final ZLTextView view = ZLApplication.Instance().getCurrentView();
+//					final ZLTextView.FooterArea footer = view.getFooterArea();
+//
+//					if (footer != null) {
+//						final ZLAndroidPaintContext contextFooter = new ZLAndroidPaintContext(
+//								new Canvas(myBitmaps[i]), mPageBitmapWidth, footer.getHeight(),
+//								view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0);
+//						footer.paint(contextFooter, index, true);
+//					}
+//				}
+				if (forceUpdateStatusBar) {
+					drawOnBitmap(myBitmaps[i], index);
+				}
 				return myBitmaps[i];
 			}
 		}
@@ -161,7 +175,53 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	
 	public void repaintStatusBar()
 	{
-		updateBitmaps();
+		if (mPageBitmapWidth <= 0 || mPageBitmapHeight <= 0) {
+			return;
+		}
+
+		// Remove meshes from renderer.		
+		ZLTextView.PageIndex leftPageIndex = ZLTextView.PageIndex.current;
+		ZLTextView.PageIndex rightPageIndex = ZLTextView.PageIndex.current;
+		ZLTextView.PageIndex curlPageIndex = ZLTextView.PageIndex.current;
+		
+		if (mCurlState == CURL_LEFT) {
+			curlPageIndex = ZLTextView.PageIndex.previous;
+			rightPageIndex = ZLTextView.PageIndex.current;
+		} else if (mCurlState == CURL_RIGHT) {
+			leftPageIndex = ZLTextView.PageIndex.previous;
+			curlPageIndex = ZLTextView.PageIndex.current;
+			rightPageIndex = ZLTextView.PageIndex.next;
+		} else if (mCurlState == CURL_NONE) {
+			leftPageIndex = ZLTextView.PageIndex.previous;
+			rightPageIndex = ZLTextView.PageIndex.current;
+		}
+		
+		// 右侧页面放当前页文字
+		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		
+		if (mCurlState == CURL_LEFT || mCurlState == CURL_NONE) {
+			if (view.canScroll(ZLTextView.PageIndex.next)) {
+				mPageNextCache.setBitmap(getBitmap(ZLTextView.PageIndex.next, true));
+			}
+		}
+		
+		if (view.canScroll(rightPageIndex)) {			
+			mPageRight.setBitmap(getBitmap(rightPageIndex, true));
+		}
+		
+
+		// 左侧页面放上一页（只有翻页的时候需要用到，这个页面并不参与显示）
+		if (view.canScroll(leftPageIndex)) {
+			mPageLeft.setBitmap(getBitmap(leftPageIndex, true));
+		}
+		
+		// 如果当前处于翻页动画状态，要更新翻卷页面
+		if (mCurlState == CURL_RIGHT) {
+			mPageCurl.setBitmap(getBitmap(curlPageIndex, true));
+		} else if (mCurlState == CURL_LEFT) {
+			mPageCurl.setBitmap(getBitmap(curlPageIndex, true));
+		}
+
 		requestRender();
 	}
 
@@ -198,7 +258,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			footer.getHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
-		footer.paint(contextFooter, index);
+		footer.paint(contextFooter, index, false);
 	}
 
 	@Override
@@ -368,7 +428,9 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 		long currentTime = System.currentTimeMillis();
 		// If animation is done.
-		if (currentTime >= mAnimationStartTime + mAnimationDurationTime) {
+		if (currentTime > mAnimationStartTime + mAnimationDurationTime + 25) {
+			final ZLTextView view = ZLApplication.Instance().getCurrentView();
+
 			if (mAnimationTargetEvent == SET_CURL_TO_RIGHT) {
 				// Switch curled page to right.
 				CurlMesh right = mPageCurl;
@@ -380,7 +442,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 				mPageCurl = curl;
 				mPageRight = right;
 				// If we were curling left page update current index.
-				final ZLTextView view = ZLApplication.Instance().getCurrentView();
 				if (mCurlState == CURL_RIGHT) {
 					// 还原
 					view.onScrollingFinished(ZLTextView.PageIndex.current);
@@ -402,7 +463,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 				mPageCurl = curl;
 				mPageLeft = left;
 				// If we were curling right page update current index.
-				final ZLTextView view = ZLApplication.Instance().getCurrentView();
 				if (mCurlState == CURL_RIGHT) {
 					// 下一页
 					shift(true);
@@ -413,9 +473,19 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 					view.onScrollingFinished(ZLTextView.PageIndex.current);
 				}
 			}
-			mCurlState = CURL_NONE;
+
 			mAnimate = false;
 			requestRender();
+			
+			// 动画执行完毕，更新cache页面
+			if (view.canScroll(ZLTextView.PageIndex.next)) {
+				mPageNextCache.setBitmap(getBitmap(ZLTextView.PageIndex.next, false));
+				mPageNextCache.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
+				mPageNextCache.setFlipTexture(false);
+				mPageNextCache.reset();
+			}
+			
+			mCurlState = CURL_NONE;
 		} else {
 			float x = mAnimationSource.x;
 			float y = mAnimationSource.y;
@@ -505,8 +575,60 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			updateCurlPos(point.x, point.y);
 		}
 	}
+	
+	// 点击（或其他按键操作）直接进行翻页
+	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, ZLTextView.Direction direction, int speed) {		
+		// 初始化翻页
+		if (pageIndex == ZLTextView.PageIndex.next) {
+			mDragStartPos.set(mPageBitmapWidth, mPageBitmapHeight / 2);
+			mRenderer.translate(mDragStartPos);
+			startCurl(CURL_RIGHT);
+		} else if (pageIndex == ZLTextView.PageIndex.previous) {
+			mDragStartPos.set(0, mPageBitmapHeight / 2);
+			mRenderer.translate(mDragStartPos);
+			startCurl(CURL_LEFT);
+		} else {
+			return;
+		}
+		
+		// We need page rects quite extensively so get them for later use.
+		RectF leftRect = mRenderer.getPageRect(CurlRenderer.PAGE_LEFT);
+		if (mCurlState == CURL_RIGHT) {
+			// Animation source is the point from where animation starts.
+			// Also it's handled in a way we actually simulate touch events
+			// meaning the output is exactly the same as if user drags the
+			// page to other side. While not producing the best looking
+			// result (which is easier done by altering curl position and/or
+			// direction directly), this is done in a hope it made code a
+			// bit more readable and easier to maintain.
+			mAnimationSource.set(mPageBitmapWidth, mPageBitmapHeight / 2);
+			mRenderer.translate(mAnimationSource);
+			mAnimationStartTime = System.currentTimeMillis();
 
-	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, int x, int y, ZLTextView.Direction direction, int speed) {
+			// Given the explanation, here we decide whether to simulate
+			// drag to left or right end.
+			mAnimationTarget.set(mDragStartPos);
+			mAnimationTarget.x = leftRect.left;
+			mAnimationTargetEvent = SET_CURL_TO_LEFT;
+			mAnimate = true;
+			requestRender();
+		} else if (mCurlState == CURL_LEFT) {
+			mAnimationSource.set(0, mPageBitmapHeight / 2);
+			mRenderer.translate(mAnimationSource);
+			mAnimationStartTime = System.currentTimeMillis();
+
+			// Given the explanation, here we decide whether to simulate
+			// drag to left or right end.
+			mAnimationTarget.set(mDragStartPos);
+			mAnimationTarget.x = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT).right;
+			mAnimationTargetEvent = SET_CURL_TO_RIGHT;
+			mAnimate = true;
+			requestRender();
+		}
+	}
+
+	// 拖动到一定位置进行翻页动画
+	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, int x, int y, ZLTextView.Direction direction, int speed) {		
 		// We need page rects quite extensively so get them for later use.
 		RectF rightRect = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT);
 		RectF leftRect = mRenderer.getPageRect(CurlRenderer.PAGE_LEFT);
@@ -558,10 +680,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			mAnimate = true;
 			requestRender();
 		}
-	}
-
-	public void startAnimatedScrolling(int x, int y, int speed) {
-		startAnimatedScrolling(null, x, y, null, speed);
 	}
 
 	private void init(Context ctx) {
@@ -681,12 +799,11 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 			// We are curling right page.
 			CurlMesh curl = mPageRight;
-			mPageRight = mPageCurl;
+			mPageRight = mPageNextCache;
+			mPageNextCache = mPageCurl;
 			mPageCurl = curl;
 
 			// If there is new/next available, set it to right page.
-			Bitmap bitmap = getBitmap(ZLTextView.PageIndex.next);
-			mPageRight.setBitmap(bitmap);
 			mPageRight.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
 			mPageRight.setFlipTexture(false);
 			mPageRight.reset();
@@ -729,7 +846,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			mRenderer.addCurlMesh(mPageRight);
 
 			// How dragging previous page happens depends on view mode.
-			Bitmap bitmap = getBitmap(ZLTextView.PageIndex.previous);
+			Bitmap bitmap = getBitmap(ZLTextView.PageIndex.previous, false);
 			mPageCurl.setBitmap(bitmap);
 			mPageCurl.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
 			mPageCurl.setFlipTexture(false);
@@ -756,7 +873,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		mRenderer.removeCurlMesh(mPageCurl);
 		mRenderer.removeCurlMesh(mPageRight);
 		mRenderer.removeCurlMesh(mPageLeft);
-		mRenderer.removeCurlMesh(mPageNextCache);
 		
 		ZLTextView.PageIndex leftPageIndex = ZLTextView.PageIndex.current;
 		ZLTextView.PageIndex rightPageIndex = ZLTextView.PageIndex.current;
@@ -776,8 +892,18 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		
 		// 右侧页面放当前页文字
 		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		
+		if (mCurlState == CURL_LEFT || mCurlState == CURL_NONE) {
+			if (view.canScroll(ZLTextView.PageIndex.next)) {
+				mPageNextCache.setBitmap(getBitmap(ZLTextView.PageIndex.next, false));
+				mPageNextCache.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
+				mPageNextCache.setFlipTexture(false);
+				mPageNextCache.reset();
+			}
+		}
+		
 		if (view.canScroll(rightPageIndex)) {
-			Bitmap bitmapRight = getBitmap(rightPageIndex);
+			Bitmap bitmapRight = getBitmap(rightPageIndex, false);
 			
 			mPageRight.setBitmap(bitmapRight);
 			mPageRight.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
@@ -788,7 +914,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 		// 左侧页面放上一页（只有翻页的时候需要用到，这个页面并不参与显示）
 		if (view.canScroll(leftPageIndex)) {
-			Bitmap bitmapLeft = getBitmap(leftPageIndex);
+			Bitmap bitmapLeft = getBitmap(leftPageIndex, false);
 			
 			mPageLeft.setBitmap(bitmapLeft);
 			mPageLeft.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_LEFT));
@@ -797,7 +923,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		
 		// 如果当前处于翻页动画状态，要更新翻卷页面
 		if (mCurlState == CURL_RIGHT) {
-			Bitmap bitmapCur = getBitmap(curlPageIndex);
+			Bitmap bitmapCur = getBitmap(curlPageIndex, false);
 
 			mPageCurl.setBitmap(bitmapCur);
 			mPageCurl.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT));
@@ -805,7 +931,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			mPageCurl.reset();
 			mRenderer.addCurlMesh(mPageCurl);
 		} else if (mCurlState == CURL_LEFT) {
-			Bitmap bitmapCur = getBitmap(curlPageIndex);
+			Bitmap bitmapCur = getBitmap(curlPageIndex, false);
 
 			mPageCurl.setBitmap(bitmapCur);
 			mPageCurl.setRect(mRenderer.getPageRect(CurlRenderer.PAGE_LEFT));

@@ -48,13 +48,12 @@ class TurnPageAction extends FBAction {
 			final int y = (Integer)params[1];
 			
 			if (ZLibrary.Instance().isUseGLView()) {
-//				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
-//						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
-//						x, y,
-//						preferences.HorizontalOption.getValue()
-//							? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
-//						preferences.AnimationSpeedOption.getValue()
-//					);
+				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+						preferences.HorizontalOption.getValue()
+							? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+						preferences.AnimationSpeedOption.getValue()
+					);
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
@@ -67,12 +66,12 @@ class TurnPageAction extends FBAction {
 			
 		} else {
 			if (ZLibrary.Instance().isUseGLView()) {
-//				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
-//					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
-//					preferences.HorizontalOption.getValue()
-//						? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
-//					preferences.AnimationSpeedOption.getValue()
-//				);
+				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+					myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,
+					preferences.HorizontalOption.getValue()
+						? FBTextView.Direction.rightToLeft : FBTextView.Direction.up,
+					preferences.AnimationSpeedOption.getValue()
+				);
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						myForward ? FBTextView.PageIndex.next : FBTextView.PageIndex.previous,

@@ -1827,7 +1827,7 @@ public abstract class ZLTextView {
 
 	abstract public interface FooterArea {
 		int getHeight();
-		void paint(ZLPaintContext context, PageIndex pageIndex);
+		void paint(ZLPaintContext context, PageIndex pageIndex, boolean update);
 	}
 
 	abstract public FooterArea getFooterArea();
@@ -1889,14 +1889,6 @@ public abstract class ZLTextView {
 	}
 
 	public boolean onFingerSingleTap(int x, int y) {
-		return false;
-	}
-
-	public boolean onFingerDoubleTap(int x, int y) {
-		return false;
-	}
-
-	public boolean isDoubleTapSupported() {
 		return false;
 	}
 

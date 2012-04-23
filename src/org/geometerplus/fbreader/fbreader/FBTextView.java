@@ -85,26 +85,8 @@ public final class FBTextView extends ZLTextView {
 		}
 
 		myReader.runAction(getZoneMap().getActionByCoordinates(
-			x, y, myContext.getWidth(), myContext.getHeight(),
-			isDoubleTapSupported() ? TapZoneMap.Tap.singleNotDoubleTap : TapZoneMap.Tap.singleTap
-		), x, y);
+			x, y, myContext.getWidth(), myContext.getHeight(), TapZoneMap.Tap.singleTap), x, y);
 
-		return true;
-	}
-
-	@Override
-	public boolean isDoubleTapSupported() {
-		return myReader.EnableDoubleTapOption.getValue();
-	}
-
-	@Override
-	public boolean onFingerDoubleTap(int x, int y) {
-		if (super.onFingerDoubleTap(x, y)) {
-			return true;
-		}
-		myReader.runAction(getZoneMap().getActionByCoordinates(
-			x, y, myContext.getWidth(), myContext.getHeight(), TapZoneMap.Tap.doubleTap
-		), x, y);
 		return true;
 	}
 
@@ -206,8 +188,8 @@ public final class FBTextView extends ZLTextView {
 
 		if (isFlickScrollingEnabled()) {
 			if (ZLibrary.Instance().isUseGLView()) {
-				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
-						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
+				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(null,
+						x, y, null, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
 					);
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
@@ -462,7 +444,7 @@ public final class FBTextView extends ZLTextView {
 			}
 		}
 
-		public synchronized void paint(ZLPaintContext context, PageIndex pageIndex) {
+		public synchronized void paint(ZLPaintContext context, PageIndex pageIndex, boolean update) {
 			final FBReaderApp reader = myReader;
 			if (reader == null) {
 				return;
@@ -470,6 +452,15 @@ public final class FBTextView extends ZLTextView {
 			final BookModel model = reader.Model;
 			if (model == null) {
 				return;
+			}
+			
+			if (update) {
+				final ZLFile wallpaper = getWallpaperFile();
+				if (wallpaper != null) {
+					context.clear(wallpaper, wallpaper instanceof ZLResourceFile);
+				} else {
+					context.clear(getBackgroundColor());
+				}
 			}
 
 			//final ZLColor bgColor = getBackgroundColor();
@@ -571,7 +562,7 @@ public final class FBTextView extends ZLTextView {
 		if (myReader.ScrollbarTypeOption.getValue() == SCROLLBAR_SHOW_AS_FOOTER) {
 			if (myFooter == null) {
 				myFooter = new Footer();
-				myReader.addTimerTask(myFooter.UpdateTask, 15000);
+				myReader.addTimerTask(myFooter.UpdateTask, 30000);
 			}
 		} else {
 			if (myFooter != null) {
