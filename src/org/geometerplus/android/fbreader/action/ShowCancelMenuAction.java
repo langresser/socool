@@ -35,26 +35,8 @@ public class ShowCancelMenuAction extends FBAndroidAction {
 
 	@Override
 	protected void run(Object ... params) {
-//		if (!Reader.jumpBack()) {
-//			final List<FBReaderApp.CancelActionDescription> descriptionList =
-//				Reader.getCancelActionsList();
-//			if (descriptionList.size() == 1) {
-//				Reader.closeWindow();
-//			} else {
-//				final Intent intent = new Intent();
-//				intent.setClass(BaseActivity, CancelActivity.class);
-//				intent.putExtra(CancelActivity.LIST_SIZE, descriptionList.size());
-//				int index = 0;
-//				for (FBReaderApp.CancelActionDescription description : descriptionList) {
-//					intent.putExtra(CancelActivity.ITEM_TITLE + index, description.Title);
-//					intent.putExtra(CancelActivity.ITEM_SUMMARY + index, description.Summary);
-//					++index;
-//				}
-//				BaseActivity.startActivityForResult(intent, SCReaderActivity.REQUEST_CANCEL_MENU);
-//			}
-//		}
-		
-		BaseActivity.startActivity(new Intent(BaseActivity, BookShelfActivity.class));
-		
+		Intent intent = new Intent(BaseActivity, BookShelfActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		BaseActivity.startActivity(intent);
 	}
 }

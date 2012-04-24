@@ -237,7 +237,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		}
 
 		// draw text
-		final ZLAndroidPaintContext context = new ZLAndroidPaintContext(
+		final ZLPaintContext context = new ZLPaintContext(
 			new Canvas(bitmap),
 			mPageBitmapWidth,
 			getMainAreaHeight(),
@@ -252,7 +252,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			return;
 		}
 
-		final ZLAndroidPaintContext contextFooter = new ZLAndroidPaintContext(
+		final ZLPaintContext contextFooter = new ZLPaintContext(
 			new Canvas(bitmap),
 			mPageBitmapWidth,
 			footer.getHeight(),

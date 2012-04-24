@@ -28,7 +28,7 @@ import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.text.view.style.*;
 import org.geometerplus.zlibrary.view.AndroidFontUtil;
-import org.geometerplus.zlibrary.view.ZLAndroidPaintContext;
+import org.geometerplus.zlibrary.view.ZLPaintContext;
 
 import org.geometerplus.zlibrary.application.ZLibrary;
 
@@ -96,10 +96,10 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		final Screen textScreen = createPreferenceScreen("text");
 
 		final Screen fontPropertiesScreen = textScreen.createPreferenceScreen("fontProperties");
-		fontPropertiesScreen.addOption(ZLAndroidPaintContext.AntiAliasOption, "antiAlias");
-		fontPropertiesScreen.addOption(ZLAndroidPaintContext.DeviceKerningOption, "deviceKerning");
-		fontPropertiesScreen.addOption(ZLAndroidPaintContext.DitheringOption, "dithering");
-		fontPropertiesScreen.addOption(ZLAndroidPaintContext.SubpixelOption, "subpixel");
+		fontPropertiesScreen.addOption(ZLPaintContext.AntiAliasOption, "antiAlias");
+		fontPropertiesScreen.addOption(ZLPaintContext.DeviceKerningOption, "deviceKerning");
+		fontPropertiesScreen.addOption(ZLPaintContext.DitheringOption, "dithering");
+		fontPropertiesScreen.addOption(ZLPaintContext.SubpixelOption, "subpixel");
 
 		final ZLTextStyleCollection collection = ZLTextStyleCollection.Instance();
 		final ZLTextBaseStyle baseStyle = collection.getBaseStyle();

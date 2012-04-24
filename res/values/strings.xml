@@ -2,4 +2,5 @@
 <resources>
 	<string name="empty_string"></string>
 	<string name="app_name">So Cool Reader</string>
+	<string name="real_exit_tip">Click back key again will exit SCReader</string>
 </resources>

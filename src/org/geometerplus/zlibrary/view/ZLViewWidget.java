@@ -194,7 +194,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			return;
 		}
 
-		final ZLAndroidPaintContext context = new ZLAndroidPaintContext(
+		final ZLPaintContext context = new ZLPaintContext(
 			new Canvas(bitmap),
 			getWidth(),
 			getMainAreaHeight(),
@@ -209,7 +209,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			return;
 		}
 
-		final ZLAndroidPaintContext contextFooter = new ZLAndroidPaintContext(
+		final ZLPaintContext contextFooter = new ZLPaintContext(
 			new Canvas(bitmap),
 			getWidth(),
 			footer.getHeight(),
