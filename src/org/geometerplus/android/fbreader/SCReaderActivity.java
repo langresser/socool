@@ -131,6 +131,8 @@ public final class SCReaderActivity extends Activity {
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
 	public ZLApplicationWindow myMainWindow;
+	
+	private String m_currentBookPath = null;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -241,12 +243,17 @@ public final class SCReaderActivity extends Activity {
 			}
 		}
 	}
+	
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+	}
 
  	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
  		// 弹出菜单时不全屏
- 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire()) {
+		if (!ZLibrary.Instance().isKindleFire()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 		return super.onPrepareOptionsMenu(menu);
@@ -256,8 +263,7 @@ public final class SCReaderActivity extends Activity {
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
 		
-		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire()) {
+		if (!ZLibrary.Instance().isKindleFire()) {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 	}

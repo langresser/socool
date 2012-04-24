@@ -36,7 +36,6 @@ public class ShowCancelMenuAction extends FBAndroidAction {
 	@Override
 	protected void run(Object ... params) {
 		Intent intent = new Intent(BaseActivity, BookShelfActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		BaseActivity.startActivity(intent);
 	}
 }

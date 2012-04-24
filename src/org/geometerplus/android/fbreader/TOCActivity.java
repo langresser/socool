@@ -59,6 +59,12 @@ public class TOCActivity extends ListActivity {
 		myAdapter.selectItem(treeToSelect);
 		mySelectedItem = treeToSelect;
 	}
+	
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+	}
 
 	private static final int PROCESS_TREE_ITEM_ID = 0;
 	private static final int READ_BOOK_ITEM_ID = 1;
