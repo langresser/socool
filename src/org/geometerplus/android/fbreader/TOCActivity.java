@@ -24,7 +24,6 @@ import android.view.*;
 import android.widget.*;
 import android.app.ListActivity;
 
-import org.geometerplus.zlibrary.application.ZLApplication;
 import org.geometerplus.zlibrary.application.ZLibrary;
 
 import org.socool.socoolreader.reader.R;
@@ -47,7 +46,7 @@ public class TOCActivity extends ListActivity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
+		final FBReaderApp fbreader = FBReaderApp.Instance();
 		final TOCTree root = fbreader.Model.TOCTree;
 		myAdapter = new TOCAdapter(root);
 		final ZLTextWordCursor cursor = fbreader.BookTextView.getStartCursor();
@@ -116,7 +115,7 @@ public class TOCActivity extends ListActivity {
 			final TOCTree.Reference reference = tree.getReference();
 			if (reference != null) {
 				finish();
-				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
+				final FBReaderApp fbreader = FBReaderApp.Instance();
 				fbreader.addInvisibleBookmark();
 				fbreader.BookTextView.gotoPosition(reference.ParagraphIndex, 0, 0);
 				ZLibrary.Instance().resetWidget();

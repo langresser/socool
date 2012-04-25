@@ -23,13 +23,11 @@ import android.app.Activity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import org.geometerplus.zlibrary.application.ZLApplication;
-
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-abstract class PopupPanel extends ZLApplication.PopupPanel {
+abstract class PopupPanel extends FBReaderApp.PopupPanel {
 	public ZLTextWordCursor StartPosition;
 
 	protected volatile PopupWindow myWindow;
@@ -70,14 +68,14 @@ abstract class PopupPanel extends ZLApplication.PopupPanel {
 		}
 	}
 
-	public static void removeAllWindows(ZLApplication application, Activity activity) {
-		for (ZLApplication.PopupPanel popup : application.popupPanels()) {
+	public static void removeAllWindows(Activity activity) {
+		for (FBReaderApp.PopupPanel popup : FBReaderApp.Instance().popupPanels()) {
 			((PopupPanel)popup).removeWindow(activity);
 		}
 	}
 
-	public static void restoreVisibilities(ZLApplication application) {
-		final PopupPanel popup = (PopupPanel)application.getActivePopup();
+	public static void restoreVisibilities() {
+		final PopupPanel popup = (PopupPanel)FBReaderApp.Instance().getActivePopup();
 		if (popup != null) {
 			popup.show_();
 		}

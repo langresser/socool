@@ -25,13 +25,10 @@ import android.view.*;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import org.geometerplus.zlibrary.application.ZLApplication;
-import org.geometerplus.zlibrary.application.ZLibrary;
-import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListener, CurlRenderer.Observer  {	
 	// Page meshes. Left and right meshes are 'static' while curl is used to
@@ -197,7 +194,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		}
 		
 		// 右侧页面放当前页文字
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		
 		if (mCurlState == CURL_LEFT || mCurlState == CURL_NONE) {
 			if (view.canScroll(ZLTextView.PageIndex.next)) {
@@ -226,7 +223,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	}
 
 	void drawOnBitmap(Bitmap bitmap, ZLTextView.PageIndex index) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 
 		if (view == null) {
 			return;
@@ -266,7 +263,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			onKeyDown(KeyEvent.KEYCODE_DPAD_CENTER, null);
 		} else {
-			ZLApplication.Instance().getCurrentView().onTrackballRotated((int)(10 * event.getX()), (int)(10 * event.getY()));
+			FBReaderApp.Instance().getCurrentView().onTrackballRotated((int)(10 * event.getX()), (int)(10 * event.getY()));
 		}
 		return true;
 	}
@@ -306,7 +303,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			return false;
 		}
 
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_UP:
 				if (myLongClickPerformed) {
@@ -360,7 +357,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	}
 
 	public boolean onLongClick(View v) {
-		return ZLApplication.Instance().getCurrentView().onFingerLongPress(myPressedX, myPressedY);
+		return FBReaderApp.Instance().getCurrentView().onFingerLongPress(myPressedX, myPressedY);
 	}
 
 	private int myKeyUnderTracking = -1;
@@ -371,10 +368,8 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			return super.onKeyDown(keyCode, event);
 		}
 
-		final ZLApplication application = ZLApplication.Instance();
-
-		if (application.hasActionForKey(keyCode, true) ||
-			application.hasActionForKey(keyCode, false)) {
+		if (FBReaderApp.Instance().hasActionForKey(keyCode, true) ||
+				FBReaderApp.Instance().hasActionForKey(keyCode, false)) {
 			if (myKeyUnderTracking != -1) {
 				if (myKeyUnderTracking == keyCode) {
 					return true;
@@ -382,12 +377,12 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 					myKeyUnderTracking = -1;
 				}
 			}
-			if (application.hasActionForKey(keyCode, true)) {
+			if (FBReaderApp.Instance().hasActionForKey(keyCode, true)) {
 				myKeyUnderTracking = keyCode;
 				myTrackingStartTime = System.currentTimeMillis();
 				return true;
 			} else {
-				return application.runActionByKey(keyCode, false);
+				return FBReaderApp.Instance().runActionByKey(keyCode, false);
 			}
 		} else {
 			return false;
@@ -399,20 +394,19 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 			if (myKeyUnderTracking == keyCode) {
 				final boolean longPress = System.currentTimeMillis() >
 					myTrackingStartTime + ViewConfiguration.getLongPressTimeout();
-				ZLApplication.Instance().runActionByKey(keyCode, longPress);
+					FBReaderApp.Instance().runActionByKey(keyCode, longPress);
 			}
 			myKeyUnderTracking = -1;
 			return true;
 		} else {
-			final ZLApplication application = ZLApplication.Instance();
 			return
-				application.hasActionForKey(keyCode, false) ||
-				application.hasActionForKey(keyCode, true);
+				FBReaderApp.Instance().hasActionForKey(keyCode, false) ||
+				FBReaderApp.Instance().hasActionForKey(keyCode, true);
 		}
 	}
 
 	private int getMainAreaHeight() {
-		final ZLTextView.FooterArea footer = ZLApplication.Instance().getCurrentView().getFooterArea();
+		final ZLTextView.FooterArea footer = FBReaderApp.Instance().getCurrentView().getFooterArea();
 		return footer != null ? getHeight() - footer.getHeight() : getHeight();
 	}
 
@@ -433,7 +427,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		long currentTime = System.currentTimeMillis();
 		// If animation is done.
 		if (currentTime > mAnimationStartTime + mAnimationDurationTime + 25) {
-			final ZLTextView view = ZLApplication.Instance().getCurrentView();
+			final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 
 			if (mAnimationTargetEvent == SET_CURL_TO_RIGHT) {
 				// Switch curled page to right.
@@ -453,7 +447,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 					// 上一页
 					shift(false);
 					view.onScrollingFinished(ZLTextView.PageIndex.previous);
-					ZLApplication.Instance().onRepaintFinished();
+					FBReaderApp.Instance().onRepaintFinished();
 				}
 			} else if (mAnimationTargetEvent == SET_CURL_TO_LEFT) {
 				// Switch curled page to left.
@@ -471,7 +465,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 					// 下一页
 					shift(true);
 					view.onScrollingFinished(ZLTextView.PageIndex.next);
-					ZLApplication.Instance().onRepaintFinished();
+					FBReaderApp.Instance().onRepaintFinished();
 				} else {
 					// 还原
 					view.onScrollingFinished(ZLTextView.PageIndex.current);
@@ -776,7 +770,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	 * Switches meshes and loads new bitmaps if available.
 	 */
 	private void startCurl(int page) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		ZLTextView.PageIndex pageIndex = ZLTextView.PageIndex.current;
 		if (page == CURL_LEFT) {
 			pageIndex =  ZLTextView.PageIndex.previous;
@@ -895,7 +889,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		}
 		
 		// 右侧页面放当前页文字
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		
 		if (mCurlState == CURL_LEFT || mCurlState == CURL_NONE) {
 			if (view.canScroll(ZLTextView.PageIndex.next)) {

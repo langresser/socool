@@ -24,10 +24,10 @@ import android.graphics.*;
 import android.view.*;
 import android.util.AttributeSet;
 
-import org.geometerplus.zlibrary.application.ZLApplication;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ZLViewWidget extends View implements View.OnLongClickListener {
 	private final Paint myPaint = new Paint();
@@ -61,7 +61,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		super.onSizeChanged(w, h, oldw, oldh);
 		getAnimationProvider().terminate();
 		if (myScreenIsTouched) {
-			final ZLTextView view = ZLApplication.Instance().getCurrentView();
+			final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 			myScreenIsTouched = false;
 			view.onScrollingFinished(ZLTextView.PageIndex.current);
 		}
@@ -81,14 +81,14 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			onDrawInScrolling(canvas);
 		} else {
 			onDrawStatic(canvas);
-			ZLApplication.Instance().onRepaintFinished();
+			FBReaderApp.Instance().onRepaintFinished();
 		}
 	}
 
 	private AnimationProvider myAnimationProvider;
 	private ZLTextView.Animation myAnimationType;
 	private AnimationProvider getAnimationProvider() {
-		final ZLTextView.Animation type = ZLApplication.Instance().getCurrentView().getAnimationType();
+		final ZLTextView.Animation type = FBReaderApp.Instance().getCurrentView().getAnimationType();
 		if (myAnimationProvider == null || myAnimationType != type) {
 			myAnimationType = type;
 			switch (type) {
@@ -107,7 +107,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	private void onDrawInScrolling(Canvas canvas) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 
 		final AnimationProvider animator = getAnimationProvider();
 		final AnimationProvider.Mode oldMode = animator.getMode();
@@ -124,7 +124,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 					final ZLTextView.PageIndex index = animator.getPageToScrollTo();
 					myBitmapManager.shift(index == ZLTextView.PageIndex.next);
 					view.onScrollingFinished(index);
-					ZLApplication.Instance().onRepaintFinished();
+					FBReaderApp.Instance().onRepaintFinished();
 					break;
 				}
 				case AnimatedScrollingBackward:
@@ -150,7 +150,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	public void scrollManuallyTo(int x, int y) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		final AnimationProvider animator = getAnimationProvider();
 		if (view.canScroll(animator.getPageToScrollTo(x, y))) {
 			animator.scrollTo(x, y);
@@ -159,7 +159,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, int x, int y, ZLTextView.Direction direction, int speed) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		if (pageIndex == ZLTextView.PageIndex.current || !view.canScroll(pageIndex)) {
 			return;
 		}
@@ -178,7 +178,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	public void startAnimatedScrolling(int x, int y, int speed) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		final AnimationProvider animator = getAnimationProvider();
 		if (!view.canScroll(animator.getPageToScrollTo(x, y))) {
 			animator.terminate();
@@ -189,7 +189,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	void drawOnBitmap(Bitmap bitmap, ZLTextView.PageIndex index) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		if (view == null) {
 			return;
 		}
@@ -228,7 +228,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			onKeyDown(KeyEvent.KEYCODE_DPAD_CENTER, null);
 		} else {
-			ZLApplication.Instance().getCurrentView().onTrackballRotated((int)(10 * event.getX()), (int)(10 * event.getY()));
+			FBReaderApp.Instance().getCurrentView().onTrackballRotated((int)(10 * event.getX()), (int)(10 * event.getY()));
 		}
 		return true;
 	}
@@ -261,7 +261,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		int x = (int)event.getX();
 		int y = (int)event.getY();
 
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_UP:
 				if (myLongClickPerformed) {
@@ -316,7 +316,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	public boolean onLongClick(View v) {
-		final ZLTextView view = ZLApplication.Instance().getCurrentView();
+		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		return view.onFingerLongPress(myPressedX, myPressedY);
 	}
 
@@ -328,7 +328,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			return super.onKeyDown(keyCode, event);
 		}
 
-		final ZLApplication application = ZLApplication.Instance();
+		final FBReaderApp application = FBReaderApp.Instance();
 
 		if (application.hasActionForKey(keyCode, true) ||
 			application.hasActionForKey(keyCode, false)) {
@@ -356,12 +356,12 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			if (myKeyUnderTracking == keyCode) {
 				final boolean longPress = System.currentTimeMillis() >
 					myTrackingStartTime + ViewConfiguration.getLongPressTimeout();
-				ZLApplication.Instance().runActionByKey(keyCode, longPress);
+				FBReaderApp.Instance().runActionByKey(keyCode, longPress);
 			}
 			myKeyUnderTracking = -1;
 			return true;
 		} else {
-			final ZLApplication application = ZLApplication.Instance();
+			final FBReaderApp application = FBReaderApp.Instance();
 			return
 				application.hasActionForKey(keyCode, false) ||
 				application.hasActionForKey(keyCode, true);
@@ -369,7 +369,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	private int getMainAreaHeight() {
-		final ZLTextView.FooterArea footer = ZLApplication.Instance().getCurrentView().getFooterArea();
+		final ZLTextView.FooterArea footer = FBReaderApp.Instance().getCurrentView().getFooterArea();
 		return footer != null ? getHeight() - footer.getHeight() : getHeight();
 	}
 }

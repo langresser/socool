@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.error.ErrorKeys;
 import org.geometerplus.zlibrary.resources.ZLResource;
@@ -37,22 +38,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class ZLApplicationWindow {
-	public ZLApplicationWindow(ZLApplication application) {
-		myApplication = application;
-		myApplication.setWindow(this);
+	public ZLApplicationWindow() {
+		FBReaderApp.Instance().setWindow(this);
 	}
 
-	public ZLApplication getApplication() {
-		return myApplication;
-	}
-	
-	private ZLApplication myApplication;
 	private final HashMap<MenuItem,String> myMenuItemMap = new HashMap<MenuItem,String>();
 
 	private final MenuItem.OnMenuItemClickListener myMenuListener =
 		new MenuItem.OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				getApplication().runAction(myMenuItemMap.get(item));
+				FBReaderApp.Instance().runAction(myMenuItemMap.get(item));
 				return true;
 			}
 		};
@@ -76,10 +71,9 @@ public class ZLApplicationWindow {
 	public void refresh() {
 		for (Map.Entry<MenuItem,String> entry : myMenuItemMap.entrySet()) {
 			final String actionId = entry.getValue();
-			final ZLApplication application = getApplication();
 			final MenuItem menuItem = entry.getKey();
-			menuItem.setVisible(application.isActionVisible(actionId) && application.isActionEnabled(actionId));
-			switch (application.isActionChecked(actionId)) {
+			menuItem.setVisible(FBReaderApp.Instance().isActionVisible(actionId) && FBReaderApp.Instance().isActionEnabled(actionId));
+			switch (FBReaderApp.Instance().isActionChecked(actionId)) {
 				case B3_TRUE:
 					menuItem.setCheckable(true);
 					menuItem.setChecked(true);
@@ -105,7 +99,7 @@ public class ZLApplicationWindow {
 		}
 	}
 
-	protected void processException(Exception exception) {
+	public void processException(Exception exception) {
 		exception.printStackTrace();
 
 		final Activity activity = 
@@ -151,7 +145,7 @@ public class ZLApplicationWindow {
 	}
 
 	private int myBatteryLevel;
-	protected int getBatteryLevel() {
+	public int getBatteryLevel() {
 		return myBatteryLevel;
 	}
 	public void setBatteryLevel(int percent) {

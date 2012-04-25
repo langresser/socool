@@ -27,7 +27,6 @@ import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
-import org.geometerplus.zlibrary.text.view.ZLTextView.PageIndex;
 import org.geometerplus.zlibrary.util.ZLColor;
 import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
@@ -40,9 +39,8 @@ import org.geometerplus.fbreader.bookmodel.TOCTree;
 public final class FBTextView extends ZLTextView {
 	private FBReaderApp myReader;
 
-	FBTextView(FBReaderApp reader) {
-		super(reader);
-		myReader = reader;
+	FBTextView() {
+		super();
 	}
 
 	public void setModel(ZLTextModel model) {

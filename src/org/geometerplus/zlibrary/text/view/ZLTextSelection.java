@@ -19,6 +19,7 @@
 
 package org.geometerplus.zlibrary.text.view;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.application.ZLibrary;
 
 class ZLTextSelection implements ZLTextAbstractHighlighting {
@@ -270,7 +271,7 @@ class ZLTextSelection implements ZLTextAbstractHighlighting {
 		Scroller(boolean forward, int x, int y) {
 			myScrollForward = forward;
 			setXY(x, y);
-			myView.Application.addTimerTask(this, 400);
+			FBReaderApp.Instance().addTimerTask(this, 400);
 		}
 
 		boolean scrollsForward() {
@@ -291,7 +292,7 @@ class ZLTextSelection implements ZLTextAbstractHighlighting {
 		}
 
 		private void stop() {
-			myView.Application.removeTimerTask(this);
+			FBReaderApp.Instance().removeTimerTask(this);
 		}
 	}
 }

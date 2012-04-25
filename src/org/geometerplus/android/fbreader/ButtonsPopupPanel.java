@@ -56,17 +56,17 @@ abstract class ButtonsPopupPanel extends PopupPanel implements View.OnClickListe
 	@Override
 	protected void update() {
 		for (ActionButton button : myButtons) {
-			button.setEnabled(Application.isActionEnabled(button.ActionId));
+			button.setEnabled(FBReaderApp.Instance().isActionEnabled(button.ActionId));
 		}
 	}
 
 	public void onClick(View view) {
 		final ActionButton button = (ActionButton)view;
-		Application.runAction(button.ActionId);
+		FBReaderApp.Instance().runAction(button.ActionId);
 		if (button.IsCloseButton) {
 			storePosition();
 			StartPosition = null;
-			Application.hideActivePopup();
+			FBReaderApp.Instance().hideActivePopup();
 		}
 	}
 }

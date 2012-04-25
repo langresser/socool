@@ -31,7 +31,6 @@ import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
-import org.geometerplus.zlibrary.application.ZLApplication;
 import org.geometerplus.zlibrary.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
@@ -157,12 +156,12 @@ public final class SCReaderActivity extends Activity {
 				new SQLiteBooksDatabase(this, "READER");
 			}
 
-			myMainWindow = new ZLApplicationWindow(new FBReaderApp());
+			myMainWindow = new ZLApplicationWindow();
 		}
 
 		new Thread() {
 			public void run() {
-				ZLApplication.Instance().openFile(fileFromIntent(getIntent()), getPostponedInitAction());
+				FBReaderApp.Instance().openFile(fileFromIntent(getIntent()), getPostponedInitAction());
 			}
 		}.start();
 
@@ -286,7 +285,7 @@ public final class SCReaderActivity extends Activity {
 			super.onNewIntent(intent);
 			final String action = intent.getAction();
 			if (Intent.ACTION_VIEW.equals(action) || "android.fbreader.action.VIEW".equals(action)) {
-				ZLApplication.Instance().openFile(fileFromIntent(intent), null);
+				FBReaderApp.Instance().openFile(fileFromIntent(intent), null);
 			}
 		} else if (Intent.ACTION_VIEW.equals(intent.getAction())
 					&& data != null && "fbreader-action".equals(data.getScheme())) {
@@ -319,7 +318,7 @@ public final class SCReaderActivity extends Activity {
 			super.onNewIntent(intent);
 			final String action = intent.getAction();
 			if (Intent.ACTION_VIEW.equals(action) || "android.fbreader.action.VIEW".equals(action)) {
-				ZLApplication.Instance().openFile(fileFromIntent(intent), null);
+				FBReaderApp.Instance().openFile(fileFromIntent(intent), null);
 			}
 		}
 	}
@@ -332,11 +331,9 @@ public final class SCReaderActivity extends Activity {
 
 		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
 		SetOrientationAction.setOrientation(this, zlibrary.OrientationOption.getValue());
-
-		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		((PopupPanel)fbReader.getPopupById(TextSearchPopup.ID)).setPanelInfo(this, m_mainLayout);
-		((PopupPanel)fbReader.getPopupById(NavigationPopup.ID)).setPanelInfo(this, m_mainLayout);
-		((PopupPanel)fbReader.getPopupById(SelectionPopup.ID)).setPanelInfo(this, m_mainLayout);
+		((PopupPanel)FBReaderApp.Instance().getPopupById(TextSearchPopup.ID)).setPanelInfo(this, m_mainLayout);
+		((PopupPanel)FBReaderApp.Instance().getPopupById(NavigationPopup.ID)).setPanelInfo(this, m_mainLayout);
+		((PopupPanel)FBReaderApp.Instance().getPopupById(SelectionPopup.ID)).setPanelInfo(this, m_mainLayout);
 	}
 
 	private void initPluginActions() {
@@ -392,7 +389,7 @@ public final class SCReaderActivity extends Activity {
 		super.onResume();
 		switchWakeLock(
 			ZLibrary.Instance().BatteryLevelToTurnScreenOffOption.getValue() <
-			ZLApplication.Instance().getBatteryLevel()
+			FBReaderApp.Instance().getBatteryLevel()
 		);
 		myStartTimer = true;
 		final int brightnessLevel = ZLibrary.Instance().ScreenBrightnessLevelOption.getValue();
@@ -406,12 +403,12 @@ public final class SCReaderActivity extends Activity {
 			sendBroadcast(new Intent(getApplicationContext(), KillerCallback.class));
 		} catch (Throwable t) {
 		}
-		PopupPanel.restoreVisibilities(FBReaderApp.Instance());
+		PopupPanel.restoreVisibilities();
 	}
 
 	@Override
 	public void onStop() {
-		PopupPanel.removeAllWindows(FBReaderApp.Instance(), this);
+		PopupPanel.removeAllWindows(this);
 		super.onStop();
 	}
 
@@ -590,7 +587,7 @@ public final class SCReaderActivity extends Activity {
 			}
 		}
 		if (myStartTimer) {
-			ZLApplication.Instance().startTimer();
+			FBReaderApp.Instance().startTimer();
 			myStartTimer = false;
 		}
 	}
@@ -615,15 +612,15 @@ public final class SCReaderActivity extends Activity {
 	@Override
 	public void onPause() {
 		unregisterReceiver(myBatteryInfoReceiver);
-		ZLApplication.Instance().stopTimer();
+		FBReaderApp.Instance().stopTimer();
 		switchWakeLock(false);
-		ZLApplication.Instance().onWindowClosing();
+		FBReaderApp.Instance().onWindowClosing();
 		super.onPause();
 	}
 
 	@Override
 	public void onLowMemory() {
-		ZLApplication.Instance().onWindowClosing();
+		FBReaderApp.Instance().onWindowClosing();
 		super.onLowMemory();
 	}
 

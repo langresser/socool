@@ -3,7 +3,7 @@ package org.geometerplus.android.fbreader;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.geometerplus.zlibrary.application.ZLApplication;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.socool.socoolreader.reader.R;
 
@@ -58,8 +58,9 @@ public class BookShelfActivity extends Activity {
     	}
     };
     
-    public void onStart() {
-		super.onStart();
+    @Override
+    public void onResume() {
+		super.onResume();
 		
 		m_realExit = false;
     }
@@ -81,8 +82,8 @@ public class BookShelfActivity extends Activity {
 //    		    } , 5000);	// 5√Î÷”∫Ûª÷∏¥±Í÷æ
     			return true;
     		} else {
-    			if (ZLApplication.Instance() != null) {
-    				ZLApplication.Instance().closeWindow();
+    			if (FBReaderApp.Instance() != null) {
+    				FBReaderApp.Instance().closeWindow();
     			}
     			
             	finish();

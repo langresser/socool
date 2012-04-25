@@ -23,6 +23,7 @@ import java.util.*;
 
 import android.view.KeyEvent;
 import org.geometerplus.fbreader.fbreader.ActionCode;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.Paths;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
@@ -74,8 +75,8 @@ public final class ZLKeyBindings {
 		final ZLBooleanOption invertVolumeKeysOption =
 			new ZLBooleanOption("Scrolling", "InvertVolumeKeys", false);
 		if (!volumeKeysOption.getValue()) {
-			bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ZLApplication.NoAction);
-			bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ZLApplication.NoAction);
+			bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, FBReaderApp.NoAction);
+			bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, FBReaderApp.NoAction);
 		} else if (invertVolumeKeysOption.getValue()) {
 			bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
 			bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
@@ -94,7 +95,7 @@ public final class ZLKeyBindings {
 		final TreeMap<Integer,ZLStringOption> map = longPress ? myLongPressActionMap : myActionMap;
 		ZLStringOption option = map.get(key);
 		if (option == null) {
-			option = createOption(key, longPress, ZLApplication.NoAction);
+			option = createOption(key, longPress, FBReaderApp.NoAction);
 			map.put(key, option);
 		}
 		return option;

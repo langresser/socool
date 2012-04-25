@@ -21,7 +21,6 @@ package org.geometerplus.zlibrary.text.view;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.application.ZLApplication;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
@@ -64,12 +63,10 @@ public abstract class ZLTextView {
 
 	private ZLTextSelection mySelection;
 	private ZLTextHighlighting myHighlighting;
-	
-	public final ZLApplication Application;
+
 	protected ZLPaintContext myContext = null;
 
-	public ZLTextView(ZLApplication application) {
-		Application = application;
+	public ZLTextView() {
 		resetTextStyle();
 		mySelection = new ZLTextSelection(this);
 		myHighlighting = new ZLTextHighlighting();

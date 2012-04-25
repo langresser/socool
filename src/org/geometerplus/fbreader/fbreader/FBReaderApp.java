@@ -21,7 +21,6 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.application.*;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
@@ -33,6 +32,7 @@ import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.util.ZLBoolean3;
 import org.geometerplus.zlibrary.util.ZLColor;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
@@ -40,7 +40,7 @@ import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.library.*;
 
-public final class FBReaderApp extends ZLApplication {
+public final class FBReaderApp {
 	public final ZLBooleanOption AllowScreenBrightnessAdjustmentOption =
 		new ZLBooleanOption("LookNFeel", "AllowScreenBrightnessAdjustment", true);
 	public final ZLStringOption TextSearchPatternOption =
@@ -120,8 +120,19 @@ public final class FBReaderApp extends ZLApplication {
 
 	private ZLTextPosition myJumpEndPosition;
 	private Date myJumpTimeStamp;
+	
+	private static FBReaderApp ourInstance;
+
+	public static final String NoAction = "none";
+
+	private volatile ZLApplicationWindow myWindow;
+	private volatile ZLTextView myView;
+
+	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 
 	public FBReaderApp() {
+		ourInstance = this;
+
 		addAction(ActionCode.INCREASE_FONT, new ChangeFontSizeAction(this, +2));
 		addAction(ActionCode.DECREASE_FONT, new ChangeFontSizeAction(this, -2));
 
@@ -144,8 +155,8 @@ public final class FBReaderApp extends ZLApplication {
 
 		addAction(ActionCode.EXIT, new ExitAction(this));
 
-		BookTextView = new FBTextView(this);
-		FootnoteView = new FBTextView(this);
+		BookTextView = new FBTextView();
+		FootnoteView = new FBTextView();
 
 		setView(BookTextView);
 	}
@@ -353,7 +364,6 @@ public final class FBReaderApp extends ZLApplication {
 		return null;
 	}
 
-	@Override
 	public void openFile(ZLFile file, Runnable postAction) {
 		openBook(createBookForFile(file), null, postAction);
 	}
@@ -531,5 +541,243 @@ public final class FBReaderApp extends ZLApplication {
 			treeToSelect = tree;
 		}
 		return treeToSelect;
+	}
+	
+	public static FBReaderApp Instance() {
+		return ourInstance;
+	}
+
+	protected final void setView(ZLTextView view) {
+		if (view != null) {
+			myView = view;
+			ZLibrary.Instance().resetWidget();
+			ZLibrary.Instance().repaintWidget();
+			onViewChanged();
+		}
+	}
+
+	public final ZLTextView getCurrentView() {
+		return myView;
+	}
+
+	public final void setWindow(ZLApplicationWindow window) {
+		myWindow = window;
+	}
+
+	protected void setTitle(String title) {
+		if (myWindow != null) {
+			myWindow.setTitle(title);
+		}
+	}
+
+	protected void runWithMessage(String key, Runnable runnable, Runnable postAction) {
+		if (myWindow != null) {
+			myWindow.runWithMessage(key, runnable, postAction);
+		}
+	}
+
+	protected void processException(Exception e) {
+		if (myWindow != null) {
+			myWindow.processException(e);
+		}
+	}
+
+	public final void onRepaintFinished() {
+		if (myWindow != null) {
+			myWindow.refresh();
+		}
+		for (PopupPanel popup : popupPanels()) {
+			popup.update();
+		}
+	}
+
+	public final void onViewChanged() {
+		hideActivePopup();
+	}
+
+	public final void hideActivePopup() {
+		if (myActivePopup != null) {
+			myActivePopup.hide_();
+			myActivePopup = null;
+		}
+	}
+
+	public final void showPopup(String id) {
+		hideActivePopup();
+		myActivePopup = myPopups.get(id);
+		if (myActivePopup != null) {
+			myActivePopup.show_();
+		}
+	}
+
+	public final void addAction(String actionId, ZLAction action) {
+		myIdToActionMap.put(actionId, action);
+	}
+
+	public final void removeAction(String actionId) {
+		myIdToActionMap.remove(actionId);
+	}
+
+	public final boolean isActionVisible(String actionId) {
+		final ZLAction action = myIdToActionMap.get(actionId);
+		return action != null && action.isVisible();
+	}
+
+	public final boolean isActionEnabled(String actionId) {
+		final ZLAction action = myIdToActionMap.get(actionId);
+		return action != null && action.isEnabled();
+	}
+
+	public final ZLBoolean3 isActionChecked(String actionId) {
+		final ZLAction action = myIdToActionMap.get(actionId);
+		return action != null ? action.isChecked() : ZLBoolean3.B3_UNDEFINED;
+	}
+
+	public final void runAction(String actionId, Object ... params) {
+		final ZLAction action = myIdToActionMap.get(actionId);
+		if (action != null) {
+			action.checkAndRun(params);
+		}
+	}
+
+	public final boolean hasActionForKey(int key, boolean longPress) {
+		final String actionId = keyBindings().getBinding(key, longPress);
+		return actionId != null && !NoAction.equals(actionId);	
+	}
+
+	public final boolean runActionByKey(int key, boolean longPress) {
+		final String actionId = keyBindings().getBinding(key, longPress);
+		if (actionId != null) {
+			final ZLAction action = myIdToActionMap.get(actionId);
+			return action != null && action.checkAndRun();
+		}
+		return false;
+	}
+
+	public boolean closeWindow() {
+		onWindowClosing();
+		if (myWindow != null) {
+			myWindow.close();
+		}
+		return true;
+	}
+
+	//Action
+	static abstract public class ZLAction {
+		public boolean isVisible() {
+			return true;
+		}
+
+		public boolean isEnabled() {
+			return isVisible();
+		}
+
+		public ZLBoolean3 isChecked() {
+			return ZLBoolean3.B3_UNDEFINED;
+		}
+
+		public final boolean checkAndRun(Object ... params) {
+			if (isEnabled()) {
+				run(params);
+				return true;
+			}
+			return false;
+		}
+
+		abstract protected void run(Object ... params);
+	}
+
+	public static abstract class PopupPanel {
+		protected final FBReaderApp Application;
+
+		protected PopupPanel(FBReaderApp application) {
+			application.myPopups.put(getId(), this);
+			Application = application;
+		}
+
+		abstract public String getId();
+		abstract protected void update();
+		abstract protected void hide_();
+		abstract protected void show_();
+	}
+
+	private final HashMap<String,PopupPanel> myPopups = new HashMap<String,PopupPanel>();
+	private PopupPanel myActivePopup;
+	public final Collection<PopupPanel> popupPanels() {
+		return myPopups.values();
+	}
+	public final PopupPanel getActivePopup() {
+		return myActivePopup;
+	}
+	public final PopupPanel getPopupById(String id) {
+		return myPopups.get(id);
+	}
+
+	public int getBatteryLevel() {
+		return (myWindow != null) ? myWindow.getBatteryLevel() : 0;
+	}
+
+	private volatile Timer myTimer;
+	private final HashMap<Runnable,Long> myTimerTaskPeriods = new HashMap<Runnable,Long>();
+	private final HashMap<Runnable,TimerTask> myTimerTasks = new HashMap<Runnable,TimerTask>();
+	private static class MyTimerTask extends TimerTask {
+		private final Runnable myRunnable;
+
+		MyTimerTask(Runnable runnable) {
+			myRunnable = runnable;
+		}
+
+		public void run() {
+			myRunnable.run();
+		}
+	}
+
+	private void addTimerTaskInternal(Runnable runnable, long periodMilliseconds) {
+		final TimerTask task = new MyTimerTask(runnable);
+		myTimer.schedule(task, periodMilliseconds / 2, periodMilliseconds);
+		myTimerTasks.put(runnable, task);
+	}
+
+	private final Object myTimerLock = new Object();
+	public final void startTimer() {
+		synchronized (myTimerLock) {
+			if (myTimer == null) {
+				myTimer = new Timer();
+				for (Map.Entry<Runnable,Long> entry : myTimerTaskPeriods.entrySet()) {
+					addTimerTaskInternal(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+	}
+
+	public final void stopTimer() {
+		synchronized (myTimerLock) {
+			if (myTimer != null) {
+				myTimer.cancel();
+				myTimer = null;
+				myTimerTasks.clear();
+			}
+		}
+	}
+
+	public final void addTimerTask(Runnable runnable, long periodMilliseconds) {
+		synchronized (myTimerLock) {
+			removeTimerTask(runnable);
+			myTimerTaskPeriods.put(runnable, periodMilliseconds);
+			if (myTimer != null) {
+				addTimerTaskInternal(runnable, periodMilliseconds);
+			}
+		}
+	}	
+
+	public final void removeTimerTask(Runnable runnable) {
+		synchronized (myTimerLock) {
+			TimerTask task = myTimerTasks.get(runnable);
+			if (task != null) {
+				task.cancel();
+				myTimerTasks.remove(runnable);
+			}
+			myTimerTaskPeriods.remove(runnable);
+		}
 	}
 }
