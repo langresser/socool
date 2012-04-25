@@ -84,7 +84,7 @@ public final class FBReaderApp {
 	}
 
 	public final ZLIntegerRangeOption ScrollbarTypeOption =
-		new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 3, FBTextView.SCROLLBAR_SHOW_AS_FOOTER);
+		new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 3, ZLTextView.SCROLLBAR_SHOW_AS_FOOTER);
 	public final ZLIntegerRangeOption FooterHeightOption =
 		new ZLIntegerRangeOption("Options", "FooterHeight", 8, 20, 9);
 	public final ZLBooleanOption FooterShowTOCMarksOption =
@@ -113,8 +113,8 @@ public final class FBReaderApp {
 
 	private final ZLKeyBindings myBindings = new ZLKeyBindings("Keys");
 
-	public final FBTextView BookTextView;
-	public final FBTextView FootnoteView;
+	public final ZLTextView BookTextView;
+	public final ZLTextView FootnoteView;
 
 	public volatile BookModel Model;
 
@@ -145,18 +145,18 @@ public final class FBReaderApp {
 		addAction(ActionCode.TURN_PAGE_FORWARD, new TurnPageAction(this, true));
 		addAction(ActionCode.TURN_PAGE_BACK, new TurnPageAction(this, false));
 
-		addAction(ActionCode.MOVE_CURSOR_UP, new MoveCursorAction(this, FBTextView.Direction.up));
-		addAction(ActionCode.MOVE_CURSOR_DOWN, new MoveCursorAction(this, FBTextView.Direction.down));
-		addAction(ActionCode.MOVE_CURSOR_LEFT, new MoveCursorAction(this, FBTextView.Direction.rightToLeft));
-		addAction(ActionCode.MOVE_CURSOR_RIGHT, new MoveCursorAction(this, FBTextView.Direction.leftToRight));
+		addAction(ActionCode.MOVE_CURSOR_UP, new MoveCursorAction(this, ZLTextView.Direction.up));
+		addAction(ActionCode.MOVE_CURSOR_DOWN, new MoveCursorAction(this, ZLTextView.Direction.down));
+		addAction(ActionCode.MOVE_CURSOR_LEFT, new MoveCursorAction(this, ZLTextView.Direction.rightToLeft));
+		addAction(ActionCode.MOVE_CURSOR_RIGHT, new MoveCursorAction(this, ZLTextView.Direction.leftToRight));
 
 		addAction(ActionCode.SWITCH_TO_DAY_PROFILE, new SwitchProfileAction(this, ColorProfile.DAY));
 		addAction(ActionCode.SWITCH_TO_NIGHT_PROFILE, new SwitchProfileAction(this, ColorProfile.NIGHT));
 
 		addAction(ActionCode.EXIT, new ExitAction(this));
 
-		BookTextView = new FBTextView();
-		FootnoteView = new FBTextView();
+		BookTextView = new ZLTextView();
+		FootnoteView = new ZLTextView();
 
 		setView(BookTextView);
 	}
@@ -219,9 +219,6 @@ public final class FBReaderApp {
 		return myBindings;
 	}
 
-	public FBTextView getTextView() {
-		return (FBTextView)getCurrentView();
-	}
 
 	public void tryOpenFootnote(String id) {
 		if (Model != null) {
@@ -230,7 +227,7 @@ public final class FBReaderApp {
 			BookModel.Label label = Model.getLabel(id);
 			if (label != null) {
 				if (label.ModelId == null) {
-					if (getTextView() == BookTextView) {
+					if (getCurrentView() == BookTextView) {
 						addInvisibleBookmark();
 						myJumpEndPosition = new ZLTextFixedPosition(label.ParagraphIndex, 0, 0);
 						myJumpTimeStamp = new Date();
@@ -296,7 +293,7 @@ public final class FBReaderApp {
 
 	public boolean jumpBack() {
 		try {
-			if (getTextView() != BookTextView) {
+			if (getCurrentView() != BookTextView) {
 				showBookTextView();
 				return true;
 			}
@@ -485,10 +482,10 @@ public final class FBReaderApp {
 	}
 
 	public void addInvisibleBookmark(ZLTextWordCursor cursor) {
-		if (cursor != null && Model != null && Model.Book != null && getTextView() == BookTextView) {
+		if (cursor != null && Model != null && Model.Book != null && getCurrentView() == BookTextView) {
 			updateInvisibleBookmarksList(new Bookmark(
 				Model.Book,
-				getTextView().getModel().getId(),
+				getCurrentView().getModel().getId(),
 				cursor,
 				6,
 				false
@@ -497,13 +494,13 @@ public final class FBReaderApp {
 	}
 
 	public void addInvisibleBookmark() {
-		if (Model.Book != null && getTextView() == BookTextView) {
+		if (Model.Book != null && getCurrentView() == BookTextView) {
 			updateInvisibleBookmarksList(addBookmark(6, false));
 		}
 	}
 
 	public Bookmark addBookmark(int maxLength, boolean visible) {
-		final FBTextView view = getTextView();
+		final ZLTextView view = getCurrentView();
 		final ZLTextWordCursor cursor = view.getStartCursor();
 
 		if (cursor.isNull()) {

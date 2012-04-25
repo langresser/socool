@@ -21,10 +21,10 @@ package org.geometerplus.fbreader.fbreader;
 
 import org.geometerplus.zlibrary.text.view.*;
 
-class TextBuildTraverser extends ZLTextTraverser {
+public class TextBuildTraverser extends ZLTextTraverser {
 	protected final StringBuilder myBuffer = new StringBuilder();
 
-	TextBuildTraverser(ZLTextView view) {
+	public TextBuildTraverser(ZLTextView view) {
 		super(view);
 	}
 

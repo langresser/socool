@@ -29,7 +29,7 @@ public class SelectionShowPanelAction extends FBAndroidAction {
 
 	@Override
 	public boolean isEnabled() {
-		return !Reader.getTextView().isSelectionEmpty();
+		return !Reader.getCurrentView().isSelectionEmpty();
 	}
 
 	@Override

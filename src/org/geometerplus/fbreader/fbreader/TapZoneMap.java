@@ -42,7 +42,7 @@ public class TapZoneMap {
 		myHorizontalSize = h;
 	}
 
-	TapZoneMap(String name) {
+	public TapZoneMap(String name) {
 		final ZLFile mapFile = ZLFile.createFileByPath(
 			"default/tapzones/" + name.toLowerCase() + ".xml"
 		);

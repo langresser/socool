@@ -26,6 +26,6 @@ class ClearFindResultsAction extends FBAction {
 
 	@Override
 	protected void run(Object ... params) {
-		Reader.getTextView().clearFindResults();
+		Reader.getCurrentView().clearFindResults();
 	}
 }

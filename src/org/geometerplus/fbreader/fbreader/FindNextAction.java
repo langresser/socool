@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.fbreader;
 
+import org.geometerplus.zlibrary.text.view.ZLTextView;
+
 class FindNextAction extends FBAction {
 	FindNextAction(FBReaderApp fbreader) {
 		super(fbreader);
@@ -26,12 +28,12 @@ class FindNextAction extends FBAction {
 
 	@Override
 	public boolean isEnabled() {
-		FBTextView view = Reader.getTextView();
+		ZLTextView view = Reader.getCurrentView();
 		return (view != null) && view.canFindNext();
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		Reader.getTextView().findNext();
+		Reader.getCurrentView().findNext();
 	}
 }

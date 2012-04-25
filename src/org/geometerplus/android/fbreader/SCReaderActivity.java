@@ -297,7 +297,7 @@ public final class SCReaderActivity extends Activity {
 					final TextSearchPopup popup = (TextSearchPopup)fbReader.getPopupById(TextSearchPopup.ID);
 					popup.initPosition();
 					fbReader.TextSearchPatternOption.setValue(pattern);
-					if (fbReader.getTextView().search(pattern, true, false, false, false) != 0) {
+					if (fbReader.getCurrentView().search(pattern, true, false, false, false) != 0) {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								fbReader.showPopup(popup.getId());
@@ -432,7 +432,7 @@ public final class SCReaderActivity extends Activity {
 
 	public void showSelectionPanel() {
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		final ZLTextView view = fbReader.getTextView();
+		final ZLTextView view = fbReader.getCurrentView();
 		((SelectionPopup)fbReader.getPopupById(SelectionPopup.ID))
 			.move(view.getSelectionStartY(), view.getSelectionEndY());
 		fbReader.showPopup(SelectionPopup.ID);

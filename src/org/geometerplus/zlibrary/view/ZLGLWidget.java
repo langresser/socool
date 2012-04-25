@@ -243,7 +243,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		view.paint(context, index);
 
 		// draw footer
-		final ZLTextView.FooterArea footer = view.getFooterArea();
+		final ZLTextView.Footer footer = view.getFooterArea();
 
 		if (footer == null) {
 			return;
@@ -406,7 +406,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	}
 
 	private int getMainAreaHeight() {
-		final ZLTextView.FooterArea footer = FBReaderApp.Instance().getCurrentView().getFooterArea();
+		final ZLTextView.Footer footer = FBReaderApp.Instance().getCurrentView().getFooterArea();
 		return footer != null ? getHeight() - footer.getHeight() : getHeight();
 	}
 

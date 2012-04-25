@@ -83,13 +83,13 @@ abstract class PopupPanel extends FBReaderApp.PopupPanel {
 
 	public final void initPosition() {
 		if (StartPosition == null) {
-			StartPosition = new ZLTextWordCursor(getReader().getTextView().getStartCursor());
+			StartPosition = new ZLTextWordCursor(getReader().getCurrentView().getStartCursor());
 		}
 	}
 
 	public final void storePosition() {
 		if (StartPosition != null &&
-			!StartPosition.equals(getReader().getTextView().getStartCursor())) {
+			!StartPosition.equals(getReader().getCurrentView().getStartCursor())) {
 			getReader().addInvisibleBookmark(StartPosition);
 		}
 	}

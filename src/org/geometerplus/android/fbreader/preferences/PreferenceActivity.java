@@ -26,6 +26,7 @@ import org.geometerplus.zlibrary.application.ZLKeyBindings;
 
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.view.style.*;
 import org.geometerplus.zlibrary.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
@@ -304,7 +305,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			protected void onDialogClosed(boolean result) {
 				super.onDialogClosed(result);
 				footerPreferences.setEnabled(
-					findIndexOfValue(getValue()) == FBTextView.SCROLLBAR_SHOW_AS_FOOTER
+					findIndexOfValue(getValue()) == ZLTextView.SCROLLBAR_SHOW_AS_FOOTER
 				);
 			}
 		});
@@ -324,7 +325,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			fbReader.FooterFontOption, false
 		)));
 		footerPreferences.setEnabled(
-			fbReader.ScrollbarTypeOption.getValue() == FBTextView.SCROLLBAR_SHOW_AS_FOOTER
+			fbReader.ScrollbarTypeOption.getValue() == ZLTextView.SCROLLBAR_SHOW_AS_FOOTER
 		);
 
 		/*

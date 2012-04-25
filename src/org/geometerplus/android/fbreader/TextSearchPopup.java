@@ -40,7 +40,7 @@ final class TextSearchPopup extends ButtonsPopupPanel {
 
 	@Override
 	protected void hide_() {
-		getReader().getTextView().clearFindResults();
+		getReader().getCurrentView().clearFindResults();
 		super.hide_();
 	}
 

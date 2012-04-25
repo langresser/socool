@@ -26,6 +26,6 @@ public class SelectionClearAction extends FBAction {
 
 	@Override
 	protected void run(Object ... params) {
-		Reader.getTextView().clearSelection();
+		Reader.getCurrentView().clearSelection();
 	}
 }

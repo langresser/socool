@@ -88,7 +88,7 @@ final class NavigationPopup extends PopupPanel {
 
 		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			private void gotoPage(int page) {
-				final ZLTextView view = getReader().getTextView();
+				final ZLTextView view = getReader().getCurrentView();
 				if (page == 1) {
 					view.gotoHome();
 				} else {
@@ -122,7 +122,7 @@ final class NavigationPopup extends PopupPanel {
 			public void onClick(View v) {
 				final ZLTextWordCursor position = StartPosition;
 				if (v == btnCancel && position != null) {
-					getReader().getTextView().gotoPosition(position);
+					getReader().getCurrentView().gotoPosition(position);
 				} else if (v == btnOk) {
 					storePosition();
 				}
@@ -145,7 +145,7 @@ final class NavigationPopup extends PopupPanel {
 		final SeekBar slider = (SeekBar)panel.findViewById(R.id.book_position_slider);
 		final TextView text = (TextView)panel.findViewById(R.id.book_position_text);
 
-		final ZLTextView textView = getReader().getTextView();
+		final ZLTextView textView = getReader().getCurrentView();
 		final ZLTextView.PagePosition pagePosition = textView.pagePosition();
 
 		if (slider.getMax() != pagePosition.Total - 1 || slider.getProgress() != pagePosition.Current - 1) {

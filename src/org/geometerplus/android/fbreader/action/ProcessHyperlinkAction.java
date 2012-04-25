@@ -45,19 +45,19 @@ public class ProcessHyperlinkAction extends FBAndroidAction {
 
 	@Override
 	public boolean isEnabled() {
-		return Reader.getTextView().getSelectedRegion() != null;
+		return Reader.getCurrentView().getSelectedRegion() != null;
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		final ZLTextRegion region = Reader.getTextView().getSelectedRegion();
+		final ZLTextRegion region = Reader.getCurrentView().getSelectedRegion();
 		if (region == null) {
 			return;
 		}
 
 		final ZLTextRegion.Soul soul = region.getSoul();
 		if (soul instanceof ZLTextHyperlinkRegionSoul) {
-			Reader.getTextView().hideSelectedRegionBorder();
+			Reader.getCurrentView().hideSelectedRegionBorder();
 			ZLibrary.Instance().repaintWidget();
 			final ZLTextHyperlink hyperlink = ((ZLTextHyperlinkRegionSoul)soul).Hyperlink;
 			switch (hyperlink.Type) {
@@ -70,7 +70,7 @@ public class ProcessHyperlinkAction extends FBAndroidAction {
 					break;
 			}
 		} else if (soul instanceof ZLTextImageRegionSoul) {
-			Reader.getTextView().hideSelectedRegionBorder();
+			Reader.getCurrentView().hideSelectedRegionBorder();
 			ZLibrary.Instance().repaintWidget();
 			final String uriString = ((ZLTextImageRegionSoul)soul).ImageElement.URI;
 			if (uriString != null) {

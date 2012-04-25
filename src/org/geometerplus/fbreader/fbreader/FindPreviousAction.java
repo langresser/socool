@@ -26,11 +26,11 @@ class FindPreviousAction extends FBAction {
 
 	@Override
 	public boolean isEnabled() {
-		return Reader.getTextView().canFindPrevious();
+		return Reader.getCurrentView().canFindPrevious();
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		Reader.getTextView().findPrevious();
+		Reader.getCurrentView().findPrevious();
 	}
 }

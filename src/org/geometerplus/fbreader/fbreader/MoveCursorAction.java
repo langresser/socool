@@ -21,19 +21,20 @@ package org.geometerplus.fbreader.fbreader;
 
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextRegion;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.view.ZLTextWordRegionSoul;
 
-class MoveCursorAction extends FBAction {
-	private final FBTextView.Direction myDirection;
+public class MoveCursorAction extends FBAction {
+	private final ZLTextView.Direction myDirection;
 
-	MoveCursorAction(FBReaderApp fbreader, FBTextView.Direction direction) {
+	public MoveCursorAction(FBReaderApp fbreader, ZLTextView.Direction direction) {
 		super(fbreader);
 		myDirection = direction;
 	}
 
 	@Override
 	public void run(Object ... params) {
-		final FBTextView fbView = Reader.getTextView();
+		final ZLTextView fbView = Reader.getCurrentView();
 		ZLTextRegion region = fbView.getSelectedRegion();
 		final ZLTextRegion.Filter filter =
 			(region != null && region.getSoul() instanceof ZLTextWordRegionSoul)
@@ -45,10 +46,10 @@ class MoveCursorAction extends FBAction {
 		} else {
 			switch (myDirection) {
 				case down:
-					fbView.scrollPage(true, FBTextView.ScrollingMode.SCROLL_LINES, 1);
+					fbView.scrollPage(true, ZLTextView.ScrollingMode.SCROLL_LINES, 1);
 					break;
 				case up:
-					fbView.scrollPage(false, FBTextView.ScrollingMode.SCROLL_LINES, 1);
+					fbView.scrollPage(false, ZLTextView.ScrollingMode.SCROLL_LINES, 1);
 					break;
 			}
 		}

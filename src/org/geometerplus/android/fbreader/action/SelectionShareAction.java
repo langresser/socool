@@ -33,9 +33,9 @@ public class SelectionShareAction extends FBAndroidAction {
 
 	@Override
     protected void run(Object ... params) {
-		final String text = Reader.getTextView().getSelectedText();
+		final String text = Reader.getCurrentView().getSelectedText();
 		final String title = Reader.Model.Book.getTitle();
-		Reader.getTextView().clearSelection();
+		Reader.getCurrentView().clearSelection();
 
 		final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
 		intent.setType("text/plain");
