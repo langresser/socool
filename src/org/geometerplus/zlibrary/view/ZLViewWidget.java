@@ -324,6 +324,10 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	private long myTrackingStartTime;
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			return super.onKeyDown(keyCode, event);
+		}
+
 		final ZLApplication application = ZLApplication.Instance();
 
 		if (application.hasActionForKey(keyCode, true) ||
