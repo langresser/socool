@@ -691,16 +691,6 @@
 				</node>
 			</node>
 		</node>
-		<node name="OptionsDialog">
-			<node name="tab">
-				<node name="Language" value="Lingua">
-					<node name="autoDetect" value="Rileva automaticamente Lingua e Codifica"/>
-					<node name="defaultLanguage" value="Lingua predefinita"/>
-					<node name="defaultEncodingSet" value="Impostazione di codifica predefinita"/>
-					<node name="defaultEncoding" value="Codifica predefinita"/>
-				</node>
-			</node>
-		</node>
 		<node name="deleteBookBox">
 			<node name="message" value="Il file del libro verrà rimosso definitivamente. Sei sicuro?"/>
 		</node>
@@ -752,7 +742,7 @@
 			<node name="catalogSummary" value="Sommario" />
 			<node name="catalogTitleExample" value="Esempio: Catalogo Progetto Gutenberg" />
 			<node name="catalogUrlExample" value="Esempio: http://m.gutenberg.org/" />
-			<node name="catalogSummaryExample" value="Eesempio: Libri di pubblico dominio" />
+			<node name="catalogSummaryExample" value="Esempio: Libri di pubblico dominio" />
 			<node name="titleIsEmpty" value="Il campo Titolo non può essere lasciato vuoto" />
 			<node name="urlIsEmpty" value="Il campo URL non può essere lasciato vuoto" />
 			<node name="invalidUrl" value="URL non valida" />

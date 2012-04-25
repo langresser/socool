@@ -690,16 +690,6 @@
 				</node>
 			</node>
 		</node>
-		<node name="OptionsDialog">
-			<node name="tab">
-				<node name="Language" value="Мова">
-					<node name="autoDetect" value="Автоматично визначати мову та кодування"/>
-					<node name="defaultLanguage" value="Мова за замовчуванням"/>
-					<node name="defaultEncodingSet" value="Набір кодувань за замовчуванням"/>
-					<node name="defaultEncoding" value="Кодування за замовчуванням"/>
-				</node>
-			</node>
-		</node>
 		<node name="deleteBookBox">
 			<node name="message" value="Файл книги буде видалено необоротно. Продовжити?"/>
 		</node>
