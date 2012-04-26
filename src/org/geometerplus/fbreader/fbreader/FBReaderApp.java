@@ -270,6 +270,8 @@ public final class FBReaderApp {
 				BookTextView.gotoPosition(book.getStoredPosition());
 				if (bookmark == null) {
 					setView(BookTextView);
+					ZLibrary.Instance().resetWidget();
+					ZLibrary.Instance().repaintWidget(true);
 				} else {
 					gotoBookmark(bookmark);
 				}
@@ -547,8 +549,6 @@ public final class FBReaderApp {
 	protected final void setView(ZLTextView view) {
 		if (view != null) {
 			myView = view;
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
 			onViewChanged();
 		}
 	}

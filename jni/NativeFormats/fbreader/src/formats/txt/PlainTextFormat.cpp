@@ -24,6 +24,7 @@
 //#include <ZLOptionsDialog.h>
 //#include <ZLOptionEntry.h>
 #include <ZLFile.h>
+#include <ZLLogger.h>
 
 #include "PlainTextFormat.h"
 
@@ -36,46 +37,12 @@ const std::string OPTION_EmptyLinesBeforeNewSection = "EmptyLinesBeforeNewSectio
 const std::string OPTION_CreateContentsTable = "CreateContentsTable";
 
 PlainTextFormat::PlainTextFormat(const ZLFile &file) :
-//	InitializedOption(FBCategoryKey::BOOKS, file.path(), OPTION_Initialized, false),
-//	BreakTypeOption(FBCategoryKey::BOOKS, file.path(), OPTION_BreakType, 1),
-//	IgnoredIndentOption(FBCategoryKey::BOOKS, file.path(), OPTION_IgnoredIndent, 1, 100, 1),
-//	EmptyLinesBeforeNewSectionOption(FBCategoryKey::BOOKS, file.path(), OPTION_EmptyLinesBeforeNewSection, 1, 100, 1),
-//	CreateContentsTableOption(FBCategoryKey::BOOKS, file.path(), OPTION_CreateContentsTable, false) {
 	myInitialized(false),
-	myBreakType(1),
+	myBreakType(BREAK_PARAGRAPH_AT_NEW_LINE),
 	myIgnoredIndent(1),
 	myEmptyLinesBeforeNewSection(1),
 	myCreateContentsTable(false) {
 }
-
-/*PlainTextInfoPage::PlainTextInfoPage(ZLOptionsDialog &dialog, const ZLFile &file, const ZLResourceKey &key, bool showContentsEntry) : myFormat(file) {
-	if (!myFormat.initialized()) {
-		PlainTextFormatDetector detector;
-		shared_ptr<ZLInputStream> stream = file.inputStream();
-		if (!stream.isNull()) {
-			detector.detect(*stream, myFormat);
-		}
-	}
-
-	ZLDialogContent &tab = dialog.createTab(key);
-
-	BreakTypeOptionEntry *breakEntry = new BreakTypeOptionEntry(*this, myFormat.BreakTypeOption);
-	myIgnoredIndentEntry = new ZLSimpleSpinOptionEntry(myFormat.IgnoredIndentOption, 1);
-	tab.addOption(ZLResourceKey("breakType"), breakEntry);
-	tab.addOption(ZLResourceKey("ignoreIndent"), myIgnoredIndentEntry);
-	breakEntry->onValueSelected(breakEntry->initialIndex());
-
-	if (showContentsEntry) {
-		CreateContentsTableOptionEntry *contentsTableEntry = new CreateContentsTableOptionEntry(*this, myFormat.CreateContentsTableOption);
-		myEmptyLinesBeforeNewSectionEntry = new ZLSimpleSpinOptionEntry(myFormat.EmptyLinesBeforeNewSectionOption, 1);
-		tab.addOption(ZLResourceKey("buildTOC"), contentsTableEntry);
-		tab.addOption(ZLResourceKey("emptyLines"), myEmptyLinesBeforeNewSectionEntry);
-		contentsTableEntry->onStateChanged(contentsTableEntry->initialState());
-	}
-}*/
-
-/*PlainTextInfoPage::~PlainTextInfoPage() {
-}*/
 
 const int BUFFER_SIZE = 4096;
 
@@ -162,6 +129,8 @@ void PlainTextFormatDetector::detect(ZLInputStream &stream, PlainTextFormat &for
 	{
 		int breakType = 0;
 		breakType |= PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE;
+// TODO 测试下是否会有问题。默认情况下\n认定为换行
+		breakType |= PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE;
 		if (stringsWithLengthLessThan81Counter < 0.3 * nonEmptyLineCounter) {
 			breakType |= PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE;
 		} else {
@@ -199,60 +168,3 @@ void PlainTextFormatDetector::detect(ZLInputStream &stream, PlainTextFormat &for
 
 	format.myInitialized = (true);
 }
-
-/*BreakTypeOptionEntry::BreakTypeOptionEntry(PlainTextInfoPage &page, ZLIntegerOption &breakTypeOption) : myPage(page), myBreakTypeOption(breakTypeOption) {
-}
-
-BreakTypeOptionEntry::~BreakTypeOptionEntry() {
-}
-
-static std::vector<std::string> BREAK_TYPE_VALUES_VECTOR;
-
-int BreakTypeOptionEntry::initialIndex() const {
-	switch (myBreakTypeOption.value()) {
-		case PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE:
-			return 0;
-		case PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE:
-			return 1;
-		case PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE | PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT:
-		default:
-			return 2;
-	}
-}
-
-const std::string &BreakTypeOptionEntry::initialValue() const {
-	return values()[initialIndex()];
-}
-
-const std::vector<std::string> &BreakTypeOptionEntry::values() const {
-	if (BREAK_TYPE_VALUES_VECTOR.empty()) {
-		BREAK_TYPE_VALUES_VECTOR.push_back("New Line");
-		BREAK_TYPE_VALUES_VECTOR.push_back("Empty Line");
-		BREAK_TYPE_VALUES_VECTOR.push_back("Line With Indent");
-	}
-	return BREAK_TYPE_VALUES_VECTOR;
-}
-
-void BreakTypeOptionEntry::onAccept(const std::string &value) {
-	if (value == values()[0]) {
-		myBreakTypeOption.setValue(PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE);
-	} else if (value == values()[1]) {
-		myBreakTypeOption.setValue(PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE);
-	} else if (value == values()[2]) {
-		myBreakTypeOption.setValue(PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE | PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT);
-	}
-}
-
-void BreakTypeOptionEntry::onValueSelected(int index) {
-	myPage.myIgnoredIndentEntry->setVisible(index == 2);
-}*/
-
-/*CreateContentsTableOptionEntry::CreateContentsTableOptionEntry(PlainTextInfoPage &page, ZLBooleanOption &option) : ZLSimpleBooleanOptionEntry(option), myPage(page) {
-}
-
-CreateContentsTableOptionEntry::~CreateContentsTableOptionEntry() {
-}
-
-void CreateContentsTableOptionEntry::onStateChanged(bool state) {
-	myPage.myEmptyLinesBeforeNewSectionEntry->setVisible(state);
-}*/

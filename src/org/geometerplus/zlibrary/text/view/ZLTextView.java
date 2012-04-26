@@ -296,7 +296,7 @@ public class ZLTextView {
 		ZLibrary.Instance().repaintWidget();
 		
 		if (getCountOfSelectedWords() > 0) {
-			myReader.runAction(ActionCode.SELECTION_SHOW_PANEL);
+			FBReaderApp.Instance().runAction(ActionCode.SELECTION_SHOW_PANEL);
 		}
 	}
 
@@ -1917,8 +1917,6 @@ public class ZLTextView {
 		none, shift, curl, curl3d
 	}
 
-	private FBReaderApp myReader;
-
 	private int myStartY;
 	private boolean myIsBrightnessAdjustmentInProgress;
 	private int myStartBrightness;
@@ -1943,11 +1941,11 @@ public class ZLTextView {
 			selectRegion(region);
 			ZLibrary.Instance().resetWidget();
 			ZLibrary.Instance().repaintWidget();
-			myReader.runAction(ActionCode.PROCESS_HYPERLINK);
+			FBReaderApp.Instance().runAction(ActionCode.PROCESS_HYPERLINK);
 			return true;
 		}
 
-		myReader.runAction(getZoneMap().getActionByCoordinates(
+		FBReaderApp.Instance().runAction(getZoneMap().getActionByCoordinates(
 			x, y, myContext.getWidth(), myContext.getHeight(), TapZoneMap.Tap.singleTap), x, y);
 
 		return true;
@@ -1956,12 +1954,12 @@ public class ZLTextView {
 	public boolean onFingerPress(int x, int y) {
 		final ZLTextSelectionCursor cursor = findSelectionCursor(x, y, MAX_SELECTION_DISTANCE);
 		if (cursor != ZLTextSelectionCursor.None) {
-			myReader.runAction(ActionCode.SELECTION_HIDE_PANEL);
+			FBReaderApp.Instance().runAction(ActionCode.SELECTION_HIDE_PANEL);
 			moveSelectionCursorTo(cursor, x, y);
 			return true;
 		}
 
-		if (myReader.AllowScreenBrightnessAdjustmentOption.getValue() && x < myContext.getWidth() / 10) {
+		if (FBReaderApp.Instance().AllowScreenBrightnessAdjustmentOption.getValue() && x < myContext.getWidth() / 10) {
 			myIsBrightnessAdjustmentInProgress = true;
 			myStartY = y;
 			myStartBrightness = ZLibrary.Instance().getScreenBrightness();
@@ -2060,9 +2058,9 @@ public class ZLTextView {
 			final ZLTextRegion.Soul soul = region.getSoul();
 			boolean doSelectRegion = false;
 			if (soul instanceof ZLTextWordRegionSoul) {
-				switch (myReader.WordTappingActionOption.getValue()) {
+				switch (FBReaderApp.Instance().WordTappingActionOption.getValue()) {
 					case startSelecting:
-						myReader.runAction(ActionCode.SELECTION_HIDE_PANEL);
+						FBReaderApp.Instance().runAction(ActionCode.SELECTION_HIDE_PANEL);
 						initSelection(x, y);
 						final ZLTextSelectionCursor cursor = findSelectionCursor(x, y);
 						if (cursor != ZLTextSelectionCursor.None) {
@@ -2076,7 +2074,7 @@ public class ZLTextView {
 				}
 			} else if (soul instanceof ZLTextImageRegionSoul) {
 				doSelectRegion =
-					myReader.ImageTappingActionOption.getValue() !=
+						FBReaderApp.Instance().ImageTappingActionOption.getValue() !=
 					FBReaderApp.ImageTappingAction.doNothing;
 			} else if (soul instanceof ZLTextHyperlinkRegionSoul) {
 				doSelectRegion = true;
@@ -2105,7 +2103,7 @@ public class ZLTextView {
 			ZLTextRegion.Soul soul = region.getSoul();
 			if (soul instanceof ZLTextHyperlinkRegionSoul ||
 				soul instanceof ZLTextWordRegionSoul) {
-				if (myReader.WordTappingActionOption.getValue() !=
+				if (FBReaderApp.Instance().WordTappingActionOption.getValue() !=
 					FBReaderApp.WordTappingAction.doNothing) {
 					region = findRegion(x, y, MAX_SELECTION_DISTANCE, ZLTextRegion.AnyRegionFilter);
 					if (region != null) {
@@ -2137,16 +2135,16 @@ public class ZLTextView {
 			boolean doRunAction = false;
 			if (soul instanceof ZLTextWordRegionSoul) {
 				doRunAction =
-					myReader.WordTappingActionOption.getValue() ==
+						FBReaderApp.Instance().WordTappingActionOption.getValue() ==
 					FBReaderApp.WordTappingAction.openDictionary;
 			} else if (soul instanceof ZLTextImageRegionSoul) {
 				doRunAction =
-					myReader.ImageTappingActionOption.getValue() ==
+						FBReaderApp.Instance().ImageTappingActionOption.getValue() ==
 					FBReaderApp.ImageTappingAction.openImageView;
 			}
 
 			if (doRunAction) {
-				myReader.runAction(ActionCode.PROCESS_HYPERLINK);
+				FBReaderApp.Instance().runAction(ActionCode.PROCESS_HYPERLINK);
 				return true;
 			}
 		}
@@ -2163,28 +2161,28 @@ public class ZLTextView {
 			(diffY > 0 ? Direction.down : Direction.up) :
 			(diffX > 0 ? Direction.leftToRight : Direction.rightToLeft);
 
-		new MoveCursorAction(myReader, direction).run();
+		new MoveCursorAction(FBReaderApp.Instance(), direction).run();
 		return true;
 	}
 
 	public int getLeftMargin() {
-		return myReader.LeftMarginOption.getValue();
+		return FBReaderApp.Instance().LeftMarginOption.getValue();
 	}
 
 	public int getRightMargin() {
-		return myReader.RightMarginOption.getValue();
+		return FBReaderApp.Instance().RightMarginOption.getValue();
 	}
 	
 	public int getTopMargin() {
-		return myReader.TopMarginOption.getValue();
+		return FBReaderApp.Instance().TopMarginOption.getValue();
 	}
 
 	public int getBottomMargin() {
-		return myReader.BottomMarginOption.getValue();
+		return FBReaderApp.Instance().BottomMarginOption.getValue();
 	}
 
 	public ZLFile getWallpaperFile() {
-		final String filePath = myReader.getColorProfile().WallpaperOption.getValue();
+		final String filePath = FBReaderApp.Instance().getColorProfile().WallpaperOption.getValue();
 		if ("".equals(filePath)) {
 			return null;
 		}
@@ -2197,25 +2195,25 @@ public class ZLTextView {
 	}
 
 	public ZLColor getBackgroundColor() {
-		return myReader.getColorProfile().BackgroundOption.getValue();
+		return FBReaderApp.Instance().getColorProfile().BackgroundOption.getValue();
 	}
 
 	public ZLColor getSelectedBackgroundColor() {
-		return myReader.getColorProfile().SelectionBackgroundOption.getValue();
+		return FBReaderApp.Instance().getColorProfile().SelectionBackgroundOption.getValue();
 	}
 
 	public ZLColor getSelectedForegroundColor() {
-		return myReader.getColorProfile().SelectionForegroundOption.getValue();
+		return FBReaderApp.Instance().getColorProfile().SelectionForegroundOption.getValue();
 	}
 
 	public ZLColor getTextColor(ZLTextHyperlink hyperlink) {
-		final ColorProfile profile = myReader.getColorProfile();
+		final ColorProfile profile = FBReaderApp.Instance().getColorProfile();
 		switch (hyperlink.Type) {
 			default:
 			case FBHyperlinkType.NONE:
 				return profile.RegularTextOption.getValue();
 			case FBHyperlinkType.INTERNAL:
-				return myReader.Model.Book.isHyperlinkVisited(hyperlink.Id)
+				return FBReaderApp.Instance().Model.Book.isHyperlinkVisited(hyperlink.Id)
 					? profile.VisitedHyperlinkTextOption.getValue()
 					: profile.HyperlinkTextOption.getValue();
 			case FBHyperlinkType.EXTERNAL:
@@ -2224,7 +2222,7 @@ public class ZLTextView {
 	}
 
 	public ZLColor getHighlightingColor() {
-		return myReader.getColorProfile().HighlightingOption.getValue();
+		return FBReaderApp.Instance().getColorProfile().HighlightingOption.getValue();
 	}
 
 	public class Footer {
@@ -2237,7 +2235,7 @@ public class ZLTextView {
 		private ArrayList<TOCTree> myTOCMarks;
 
 		public int getHeight() {
-			return myReader.FooterHeightOption.getValue();
+			return FBReaderApp.Instance().FooterHeightOption.getValue();
 		}
 
 		public synchronized void resetTOCMarks() {
@@ -2274,11 +2272,7 @@ public class ZLTextView {
 		}
 
 		public synchronized void paint(ZLPaintContext context, PageIndex pageIndex, boolean update) {
-			final FBReaderApp reader = myReader;
-			if (reader == null) {
-				return;
-			}
-			final BookModel model = reader.Model;
+			final BookModel model = FBReaderApp.Instance().Model;
 			if (model == null) {
 				return;
 			}
@@ -2295,7 +2289,7 @@ public class ZLTextView {
 			//final ZLColor bgColor = getBackgroundColor();
 			// TODO: separate color option for footer color
 			final ZLColor fgColor = getTextColor(ZLTextHyperlink.NO_LINK);
-			final ZLColor fillColor = reader.getColorProfile().FooterFillOption.getValue();
+			final ZLColor fillColor = FBReaderApp.Instance().getColorProfile().FooterFillOption.getValue();
 
 			final int left = getLeftMargin();
 			final int right = context.getWidth() - getRightMargin();
@@ -2313,7 +2307,7 @@ public class ZLTextView {
 			}
 
 			context.setFont(
-				reader.FooterFontOption.getValue(),
+					FBReaderApp.Instance().FooterFontOption.getValue(),
 				height <= 10 ? height + 3 : height + 1,
 				height > 10, false, false, false
 			);
@@ -2323,17 +2317,17 @@ public class ZLTextView {
 			float percent = (float)pageNumber / totalPageNumber;
 
 			final StringBuilder info = new StringBuilder();
-			if (reader.FooterShowProgressOption.getValue()) {
+			if (FBReaderApp.Instance().FooterShowProgressOption.getValue()) {
 				info.append(String.format("%.2f%%", percent * 100));
 			}
-			if (reader.FooterShowBatteryOption.getValue()) {
+			if (FBReaderApp.Instance().FooterShowBatteryOption.getValue()) {
 				if (info.length() > 0) {
 					info.append(" ");
 				}
-				info.append(reader.getBatteryLevel());
+				info.append(FBReaderApp.Instance().getBatteryLevel());
 				info.append("%");
 			}
-			if (reader.FooterShowClockOption.getValue()) {
+			if (FBReaderApp.Instance().FooterShowClockOption.getValue()) {
 				if (info.length() > 0) {
 					info.append(" ");
 				}
@@ -2364,7 +2358,7 @@ public class ZLTextView {
 			context.setFillColor(fillColor);
 			context.fillRectangle(left + 1, offsetY + height - 2 * lineWidth, gaugeInternalRight, offsetY + lineWidth + 1);
 
-			if (reader.FooterShowTOCMarksOption.getValue()) {
+			if (FBReaderApp.Instance().FooterShowTOCMarksOption.getValue()) {
 				if (myTOCMarks == null) {
 					updateTOCMarks(model);
 				}
@@ -2386,14 +2380,14 @@ public class ZLTextView {
 
 	private Footer myFooter;
 	public Footer getFooterArea() {
-		if (myReader.ScrollbarTypeOption.getValue() == SCROLLBAR_SHOW_AS_FOOTER) {
+		if (FBReaderApp.Instance().ScrollbarTypeOption.getValue() == SCROLLBAR_SHOW_AS_FOOTER) {
 			if (myFooter == null) {
 				myFooter = new Footer();
-				myReader.addTimerTask(myFooter.UpdateTask, 30000);
+				FBReaderApp.Instance().addTimerTask(myFooter.UpdateTask, 30000);
 			}
 		} else {
 			if (myFooter != null) {
-				myReader.removeTimerTask(myFooter.UpdateTask);
+				FBReaderApp.Instance().removeTimerTask(myFooter.UpdateTask);
 				myFooter = null;
 			}
 		}
@@ -2419,7 +2413,7 @@ public class ZLTextView {
 	public static final int SCROLLBAR_SHOW_AS_FOOTER = 3;
 
 	public int scrollbarType() {
-		return myReader.ScrollbarTypeOption.getValue();
+		return FBReaderApp.Instance().ScrollbarTypeOption.getValue();
 	}
 
 	public Animation getAnimationType() {

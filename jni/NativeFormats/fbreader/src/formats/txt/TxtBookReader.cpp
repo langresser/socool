@@ -18,7 +18,7 @@
  */
 
 #include <cctype>
-
+#include <ZLLogger.h>
 #include "TxtBookReader.h"
 #include "../../bookmodel/BookModel.h"
 
@@ -104,6 +104,7 @@ bool TxtBookReader::newLineHandler() {
 		internalEndParagraph();
 		beginParagraph();
 	}
+
 	return true;
 }
 

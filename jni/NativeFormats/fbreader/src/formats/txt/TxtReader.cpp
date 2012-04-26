@@ -157,6 +157,7 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 				if (parBegin != i) {
 					str.erase();
 					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
+//					LOGD(str.c_str());
 					characterDataHandler(str);
 				}
 				// 跳过'\n'(\r\n的情况)
