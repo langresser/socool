@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader.library;
+package org.geometerplus.android.fbreader;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -48,7 +48,6 @@ import org.socool.socoolreader.reader.R;
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.network.HtmlUtil;
 
-import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.preferences.EditBookInfoActivity;
 
 public class BookInfoActivity extends Activity {
@@ -73,8 +72,8 @@ public class BookInfoActivity extends Activity {
 		myDontReloadBook = getIntent().getBooleanExtra(FROM_READING_MODE_KEY, false);
 		myFile = ZLFile.createFileByPath(path);
 
-		if (SQLiteBooksDatabase.Instance() == null) {
-			new SQLiteBooksDatabase(this, "LIBRARY");
+		if (BooksDatabase.Instance() == null) {
+			new BooksDatabase(this, "LIBRARY");
 		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

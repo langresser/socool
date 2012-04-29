@@ -49,17 +49,15 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.fbreader.ScrollingPreferences;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
+import org.geometerplus.fbreader.library.BooksDatabase;
 import org.geometerplus.android.fbreader.tips.TipsManager;
 
 import org.geometerplus.android.fbreader.action.*;
-import org.geometerplus.android.fbreader.library.SQLiteBooksDatabase;
-import org.geometerplus.android.fbreader.library.KillerCallback;
 import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
 
 import android.app.Activity;
-import org.geometerplus.android.fbreader.FBReaderApplication;
 
 public final class SCReaderActivity extends Activity {
 	private static final String REQUESTED_ORIENTATION_KEY = "org.geometerplus.zlibrary.ui.android.library.androidActiviy.RequestedOrientation";
@@ -152,8 +150,8 @@ public final class SCReaderActivity extends Activity {
 		setContentView(m_mainLayout);
 
 		if (myMainWindow == null) {
-			if (SQLiteBooksDatabase.Instance() == null) {
-				new SQLiteBooksDatabase(this, "READER");
+			if (BooksDatabase.Instance() == null) {
+				new BooksDatabase(this, "READER");
 			}
 
 			myMainWindow = new ZLApplicationWindow();
@@ -399,10 +397,6 @@ public final class SCReaderActivity extends Activity {
 			setScreenBrightnessAuto();
 		}
 		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-		try {
-			sendBroadcast(new Intent(getApplicationContext(), KillerCallback.class));
-		} catch (Throwable t) {
-		}
 		PopupPanel.restoreVisibilities();
 	}
 
@@ -477,9 +471,6 @@ public final class SCReaderActivity extends Activity {
 			case REQUEST_PREFERENCES:
 			case REQUEST_BOOK_INFO:
 				onPreferencesUpdate(resultCode);
-				break;
-			case REQUEST_CANCEL_MENU:
-				((FBReaderApp)FBReaderApp.Instance()).runCancelAction(resultCode - 1);
 				break;
 		}
 	}

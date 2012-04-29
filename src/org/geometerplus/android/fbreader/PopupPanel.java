@@ -90,7 +90,6 @@ abstract class PopupPanel extends FBReaderApp.PopupPanel {
 	public final void storePosition() {
 		if (StartPosition != null &&
 			!StartPosition.equals(getReader().getCurrentView().getStartCursor())) {
-			getReader().addInvisibleBookmark(StartPosition);
 		}
 	}
 

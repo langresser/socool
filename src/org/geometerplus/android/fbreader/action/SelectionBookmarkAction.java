@@ -38,14 +38,16 @@ public class SelectionBookmarkAction extends FBAndroidAction {
 		final ZLTextView fbview = Reader.getCurrentView();
 		final String text = fbview.getSelectedText();
 
-		new Bookmark(
+		// 创建新书摘
+		// TODO add comment
+		Bookmark bookmark = new Bookmark(
 			Reader.Model.Book,
-			fbview.getModel().getId(),
-			fbview.getSelectionStartPosition(), 
-			text,
-			true
-		).save();
-        fbview.clearSelection();
+			fbview.getModel().getId(), text,
+			fbview.getStartCursor(), fbview.getSelectionStartPosition(),
+			fbview.getSelectionEndPosition(), null);
+		bookmark.save();
+		fbview.addBookmarkHighlight(bookmark);
+		fbview.clearSelection();
 
 		UIUtil.showMessageText(
 			BaseActivity,

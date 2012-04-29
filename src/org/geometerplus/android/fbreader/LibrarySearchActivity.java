@@ -17,19 +17,30 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader.library;
+package org.geometerplus.android.fbreader;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Intent;
-import android.os.Process;
+import android.os.Bundle;
 
-public class KillerCallback extends BroadcastReceiver {
+import org.geometerplus.zlibrary.options.ZLStringOption;
+
+import org.geometerplus.fbreader.library.Library;
+
+public class LibrarySearchActivity extends Activity {
 	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (LibraryActivity.ourToBeKilled) {
-			System.err.println("kill");
-			Process.killProcess(Process.myPid());
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+
+		final Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			final String pattern = intent.getStringExtra(SearchManager.QUERY);
+			if (pattern != null && pattern.length() > 0) {
+				LibraryActivity.BookSearchPatternOption.setValue(pattern);
+				Library.Instance().startBookSearch(pattern);
+			}
 		}
+		finish();
 	}
 }

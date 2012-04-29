@@ -116,7 +116,6 @@ public class TOCActivity extends ListActivity {
 			if (reference != null) {
 				finish();
 				final FBReaderApp fbreader = FBReaderApp.Instance();
-				fbreader.addInvisibleBookmark();
 				fbreader.BookTextView.gotoPosition(reference.ParagraphIndex, 0, 0);
 				ZLibrary.Instance().resetWidget();
 				ZLibrary.Instance().repaintWidget();

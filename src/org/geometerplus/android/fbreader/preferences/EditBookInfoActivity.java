@@ -32,12 +32,12 @@ import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
 import org.geometerplus.fbreader.library.Book;
+import org.geometerplus.fbreader.library.BooksDatabase;
 import org.geometerplus.fbreader.formats.FormatPlugin;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;
 
+import org.geometerplus.android.fbreader.BookInfoActivity;
 import org.geometerplus.android.fbreader.SCReaderActivity;
-import org.geometerplus.android.fbreader.library.BookInfoActivity;
-import org.geometerplus.android.fbreader.library.SQLiteBooksDatabase;
 
 class BookTitlePreference extends ZLStringPreference {
 	private final Book myBook;
@@ -155,8 +155,8 @@ public class EditBookInfoActivity extends ZLPreferenceActivity {
 
 	@Override
 	protected void init(Intent intent) {
-		if (SQLiteBooksDatabase.Instance() == null) {
-			new SQLiteBooksDatabase(this, "LIBRARY");
+		if (BooksDatabase.Instance() == null) {
+			new BooksDatabase(this, "LIBRARY");
 		}
 
 		final String path = intent.getStringExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY);

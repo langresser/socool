@@ -114,13 +114,9 @@ public final class FBReaderApp {
 	private final ZLKeyBindings myBindings = new ZLKeyBindings("Keys");
 
 	public final ZLTextView BookTextView;
-	public final ZLTextView FootnoteView;
 
 	public volatile BookModel Model;
 
-	private ZLTextPosition myJumpEndPosition;
-	private Date myJumpTimeStamp;
-	
 	private static FBReaderApp ourInstance;
 
 	public static final String NoAction = "none";
@@ -156,7 +152,6 @@ public final class FBReaderApp {
 		addAction(ActionCode.EXIT, new ExitAction(this));
 
 		BookTextView = new ZLTextView();
-		FootnoteView = new ZLTextView();
 
 		setView(BookTextView);
 	}
@@ -222,22 +217,13 @@ public final class FBReaderApp {
 
 	public void tryOpenFootnote(String id) {
 		if (Model != null) {
-			myJumpEndPosition = null;
-			myJumpTimeStamp = null;
 			BookModel.Label label = Model.getLabel(id);
 			if (label != null) {
 				if (label.ModelId == null) {
 					if (getCurrentView() == BookTextView) {
-						addInvisibleBookmark();
-						myJumpEndPosition = new ZLTextFixedPosition(label.ParagraphIndex, 0, 0);
-						myJumpTimeStamp = new Date();
 					}
 					BookTextView.gotoPosition(label.ParagraphIndex, 0, 0);
 					setView(BookTextView);
-				} else {
-					FootnoteView.setModel(Model.getFootnoteModel(label.ModelId));
-					setView(FootnoteView);
-					FootnoteView.gotoPosition(label.ParagraphIndex, 0, 0);
 				}
 				ZLibrary.Instance().resetWidget();
 			}
@@ -246,7 +232,6 @@ public final class FBReaderApp {
 
 	public void clearTextCaches() {
 		BookTextView.clearCaches();
-		FootnoteView.clearCaches();
 	}
 
 	synchronized void openBookInternal(Book book, Bookmark bookmark) {
@@ -257,7 +242,6 @@ public final class FBReaderApp {
 				Model.Book.storePosition(BookTextView.getStartCursor());
 			}
 			BookTextView.setModel(null);
-			FootnoteView.setModel(null);
 			clearTextCaches();
 
 			Model = null;
@@ -293,48 +277,11 @@ public final class FBReaderApp {
 		}
 	}
 
-	public boolean jumpBack() {
-		try {
-			if (getCurrentView() != BookTextView) {
-				showBookTextView();
-				return true;
-			}
-
-			if (myJumpEndPosition == null || myJumpTimeStamp == null) {
-				return false;
-			}
-			// more than 2 minutes ago
-			if (myJumpTimeStamp.getTime() + 2 * 60 * 1000 < new Date().getTime()) {
-				return false;
-			}
-			if (!myJumpEndPosition.equals(BookTextView.getStartCursor())) {
-				return false;
-			}
-
-			final List<Bookmark> bookmarks = Library.Instance().invisibleBookmarks(Model.Book);
-			if (bookmarks.isEmpty()) {
-				return false;
-			}
-			final Bookmark b = bookmarks.get(0);
-			b.delete();
-			gotoBookmark(b);
-			return true;
-		} finally {
-			myJumpEndPosition = null;
-			myJumpTimeStamp = null;
-		}
-	}
-
 	public void gotoBookmark(Bookmark bookmark) {
 		final String modelId = bookmark.ModelId;
 		if (modelId == null) {
-			addInvisibleBookmark();
-			BookTextView.gotoPosition(bookmark);
+			BookTextView.gotoPosition(bookmark.m_posCurrentPage);
 			setView(BookTextView);
-		} else {
-			FootnoteView.setModel(Model.getFootnoteModel(modelId));
-			FootnoteView.gotoPosition(bookmark);
-			setView(FootnoteView);
 		}
 	}
 
@@ -373,134 +320,6 @@ public final class FBReaderApp {
 		}
 	}
 
-	static enum CancelActionType {
-		library,
-		networkLibrary,
-		previousBook,
-		returnTo,
-		close
-	}
-
-	public static class CancelActionDescription {
-		final CancelActionType Type;
-		public final String Title;
-		public final String Summary;
-
-		CancelActionDescription(CancelActionType type, String summary) {
-			final ZLResource resource = ZLResource.resource("cancelMenu");
-			Type = type;
-			Title = resource.getResource(type.toString()).getValue();
-			Summary = summary;
-		}
-	}
-
-	private static class BookmarkDescription extends CancelActionDescription {
-		final Bookmark Bookmark;
-		
-		BookmarkDescription(Bookmark b) {
-			super(CancelActionType.returnTo, b.getText());
-			Bookmark = b;
-		}
-	}
-
-	private final ArrayList<CancelActionDescription> myCancelActionsList =
-		new ArrayList<CancelActionDescription>();
-
-	public List<CancelActionDescription> getCancelActionsList() {
-		myCancelActionsList.clear();
-		if (ShowLibraryInCancelMenuOption.getValue()) {
-			myCancelActionsList.add(new CancelActionDescription(
-				CancelActionType.library, null
-			));
-		}
-		if (ShowNetworkLibraryInCancelMenuOption.getValue()) {
-			myCancelActionsList.add(new CancelActionDescription(
-				CancelActionType.networkLibrary, null
-			));
-		}
-		if (ShowPreviousBookInCancelMenuOption.getValue()) {
-			final Book previousBook = Library.Instance().getPreviousBook();
-			if (previousBook != null) {
-				myCancelActionsList.add(new CancelActionDescription(
-					CancelActionType.previousBook, previousBook.getTitle()
-				));
-			}
-		}
-		if (ShowPositionsInCancelMenuOption.getValue()) {
-			if (Model != null && Model.Book != null) {
-				for (Bookmark bookmark : Library.Instance().invisibleBookmarks(Model.Book)) {
-					myCancelActionsList.add(new BookmarkDescription(bookmark));
-				}
-			}
-		}
-		myCancelActionsList.add(new CancelActionDescription(
-			CancelActionType.close, null
-		));
-		return myCancelActionsList;
-	}
-
-	public void runCancelAction(int index) {
-		if (index < 0 || index >= myCancelActionsList.size()) {
-			return;
-		}
-
-		final CancelActionDescription description = myCancelActionsList.get(index);
-		switch (description.Type) {
-			case library:
-				runAction(ActionCode.SHOW_LIBRARY);
-				break;
-			case networkLibrary:
-				runAction(ActionCode.SHOW_NETWORK_LIBRARY);
-				break;
-			case previousBook:
-				openBook(Library.Instance().getPreviousBook(), null, null);
-				break;
-			case returnTo:
-			{
-				final Bookmark b = ((BookmarkDescription)description).Bookmark;
-				b.delete();
-				gotoBookmark(b);
-				break;
-			}
-			case close:
-				closeWindow();
-				break;
-		}
-	}
-
-	private synchronized void updateInvisibleBookmarksList(Bookmark b) {
-		if (Model != null && Model.Book != null && b != null) {
-			for (Bookmark bm : Library.Instance().invisibleBookmarks(Model.Book)) {
-				if (b.equals(bm)) {
-					bm.delete();
-				}
-			}
-			b.save();
-			final List<Bookmark> bookmarks = Library.Instance().invisibleBookmarks(Model.Book);
-			for (int i = 3; i < bookmarks.size(); ++i) {
-				bookmarks.get(i).delete();
-			}
-		}
-	}
-
-	public void addInvisibleBookmark(ZLTextWordCursor cursor) {
-		if (cursor != null && Model != null && Model.Book != null && getCurrentView() == BookTextView) {
-			updateInvisibleBookmarksList(new Bookmark(
-				Model.Book,
-				getCurrentView().getModel().getId(),
-				cursor,
-				6,
-				false
-			));
-		}
-	}
-
-	public void addInvisibleBookmark() {
-		if (Model.Book != null && getCurrentView() == BookTextView) {
-			updateInvisibleBookmarksList(addBookmark(6, false));
-		}
-	}
-
 	public Bookmark addBookmark(int maxLength, boolean visible) {
 		final ZLTextView view = getCurrentView();
 		final ZLTextWordCursor cursor = view.getStartCursor();
@@ -509,13 +328,7 @@ public final class FBReaderApp {
 			return null;
 		}
 
-		return new Bookmark(
-			Model.Book,
-			view.getModel().getId(),
-			cursor,
-			maxLength,
-			visible
-		);
+		return new Bookmark(Model.Book, view.getModel().getId(), cursor, maxLength);
 	}
 
 	public TOCTree getCurrentTOCElement() {

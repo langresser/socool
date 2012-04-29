@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader.library;
+package org.geometerplus.android.fbreader;
 
 import android.app.AlertDialog;
 import android.content.*;
@@ -36,7 +36,6 @@ import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.library.*;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
-import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
 
 public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItemClickListener, View.OnCreateContextMenuListener, Library.ChangeListener {
@@ -53,9 +52,9 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		myDatabase = SQLiteBooksDatabase.Instance();
+		myDatabase = BooksDatabase.Instance();
 		if (myDatabase == null) {
-			myDatabase = new SQLiteBooksDatabase(this, "LIBRARY");
+			myDatabase = new BooksDatabase(this, "LIBRARY");
 		}
 		if (myLibrary == null) {
 			myLibrary = Library.Instance();

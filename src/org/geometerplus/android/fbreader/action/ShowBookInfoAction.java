@@ -23,8 +23,8 @@ import android.content.Intent;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
+import org.geometerplus.android.fbreader.BookInfoActivity;
 import org.geometerplus.android.fbreader.SCReaderActivity;
-import org.geometerplus.android.fbreader.library.BookInfoActivity;
 
 public class ShowBookInfoAction extends FBAndroidAction {
 	public ShowBookInfoAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {

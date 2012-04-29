@@ -23,64 +23,91 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.text.view.*;
 
-public final class Bookmark extends ZLTextFixedPosition {
+
+public final class Bookmark {
 	public final static int CREATION = 0;
 	public final static int MODIFICATION = 1;
 	public final static int ACCESS = 2;
 	public final static int LATEST = 3;
-
+	
+	public final static int BOOKMARK_TYPE_BOOKMARK = 0;
+	public final static int BOOKMARK_TYPE_COMMENT = 1;
+	
 	private long myId;
 	private final long myBookId;
 	private final String myBookTitle;
-	private String myText;
-	private final Date myCreationDate;
-	private Date myModificationDate;
-	private Date myAccessDate;
-	private int myAccessCount;
-	private Date myLatestDate;
+	public String myText;
 
 	public final String ModelId;
-	public final boolean IsVisible;
+	
+	public int m_bookmarkType = BOOKMARK_TYPE_BOOKMARK;
+	public String m_bookmarkComment = null;
+
+	public Date myModificationDate = null;
+	public ZLTextFixedPosition m_posCurrentPage = null;	// 书签或者书摘在哪一页
+	public ZLTextFixedPosition m_posBegin = null;			// 书摘开始字符
+	public ZLTextFixedPosition m_posEnd = null;			// 书摘结束字符
 
 	private boolean myIsChanged;
-
-	Bookmark(long id, long bookId, String bookTitle, String text, Date creationDate, Date modificationDate, Date accessDate, int accessCount, String modelId, int paragraphIndex, int elementIndex, int charIndex, boolean isVisible) {
-		super(paragraphIndex, elementIndex, charIndex);
-
+	
+	// 通过数据库载入
+	Bookmark(long id, long bookId, String bookTitle, String text, String modelId, Date date,
+			ZLTextPosition page, ZLTextPosition begin, ZLTextPosition end, String comment) {
 		myId = id;
 		myBookId = bookId;
 		myBookTitle = bookTitle;
 		myText = text;
-		myCreationDate = creationDate;
-		myModificationDate = modificationDate;
-		myLatestDate = (modificationDate != null) ? modificationDate : creationDate;
-		if (accessDate != null) {
-			myAccessDate = accessDate;
-			if (myLatestDate.compareTo(accessDate) < 0) {
-				myLatestDate = accessDate;
-			}
-		}
-		myAccessCount = accessCount;
 		ModelId = modelId;
-		IsVisible = isVisible;
 		myIsChanged = false;
+		
+		m_posCurrentPage = new ZLTextFixedPosition(page);
+
+		if (begin == null && end == null) {
+			m_posBegin = null;
+			m_posEnd = null;
+			m_bookmarkComment = null;
+
+			m_bookmarkType = BOOKMARK_TYPE_BOOKMARK;
+		} else {
+			m_posBegin = new ZLTextFixedPosition(begin);
+			m_posEnd = new ZLTextFixedPosition(end);
+			m_bookmarkComment = comment;
+
+			m_bookmarkType = BOOKMARK_TYPE_COMMENT;
+		}
 	}
 
-	public Bookmark(Book book, String modelId, ZLTextWordCursor cursor, int maxLength, boolean isVisible) {
-		this(book, modelId, cursor, createBookmarkText(cursor, maxLength), isVisible);
+	// 新创建书签
+	public Bookmark(Book book, String modelId, ZLTextWordCursor cursor, int maxLength) {
+		this(book, modelId, createBookmarkText(cursor, maxLength), cursor, null, null, null);
 	}
 
-	public Bookmark(Book book, String modelId, ZLTextPosition position, String text, boolean isVisible) {
-		super(position);
-
+	// 代码中创建书签或书摘，如果没有指定选中文字的话，为书签
+	public Bookmark(Book book, String modelId, String text,
+			ZLTextPosition page, ZLTextPosition begin, ZLTextPosition end, String comment) {
 		myId = -1;
 		myBookId = book.getId();
 		myBookTitle = book.getTitle();
 		myText = text;
-		myCreationDate = new Date();
+		myModificationDate = new Date();
 		ModelId = modelId;
-		IsVisible = isVisible;
 		myIsChanged = true;
+		
+		m_posCurrentPage = new ZLTextFixedPosition(page);
+		
+		if (begin == null && end == null) {
+			m_posBegin = null;
+			m_posEnd = null;
+			m_bookmarkComment = null;
+
+			m_bookmarkType = BOOKMARK_TYPE_BOOKMARK;
+		} else {
+			m_posBegin = new ZLTextFixedPosition(begin);
+			m_posEnd = new ZLTextFixedPosition(end);
+			m_bookmarkComment = comment;
+
+			m_bookmarkType = BOOKMARK_TYPE_COMMENT;
+		}
 	}
 
 	public long getId() {
@@ -99,37 +126,19 @@ public final class Bookmark extends ZLTextFixedPosition {
 		return myBookTitle;
 	}
 
-	public Date getTime(int timeStamp) {
-		switch (timeStamp) {
-			default:
-			case CREATION:
-				return myCreationDate;
-			case MODIFICATION:
-				return myModificationDate;
-			case ACCESS:
-				return myAccessDate;
-			case LATEST:
-				return myLatestDate;
-		}
-	}
-
-	public int getAccessCount() {
-		return myAccessCount;
+	public Date getTime() {
+		return myModificationDate;
 	}
 
 	public void setText(String text) {
 		if (!text.equals(myText)) {
 			myText = text;
 			myModificationDate = new Date();
-			myLatestDate = myModificationDate;
 			myIsChanged = true;
 		}
 	}
 
 	public void onOpen() {
-		myAccessDate = new Date();
-		++myAccessCount;
-		myLatestDate = myAccessDate;
 		myIsChanged = true;
 	}
 
@@ -143,12 +152,6 @@ public final class Bookmark extends ZLTextFixedPosition {
 	public void delete() {
 		if (myId != -1) {
 			BooksDatabase.Instance().deleteBookmark(this);
-		}
-	}
-
-	public static class ByTimeComparator implements Comparator<Bookmark> {
-		public int compare(Bookmark bm0, Bookmark bm1) {
-			return bm1.getTime(LATEST).compareTo(bm0.getTime(LATEST));
 		}
 	}
 

@@ -32,6 +32,9 @@ import org.geometerplus.fbreader.fbreader.ScrollingPreferences;
 import org.geometerplus.fbreader.fbreader.TapZoneMap;
 import org.geometerplus.fbreader.fbreader.TextBuildTraverser;
 import org.geometerplus.fbreader.fbreader.WordCountTraverser;
+import org.geometerplus.fbreader.library.Bookmark;
+import org.geometerplus.fbreader.library.BooksDatabase;
+import org.geometerplus.fbreader.library.Library;
 import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
@@ -46,6 +49,9 @@ import org.geometerplus.zlibrary.view.ZLPaintContext;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
 
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
+import org.socool.socoolreader.reader.R;
+
+import android.view.View;
 
 
 public class ZLTextView {
@@ -78,14 +84,13 @@ public class ZLTextView {
 	private boolean myHighlightSelectedRegion = true;
 
 	private ZLTextSelection mySelection;
-	private ZLTextHighlighting myHighlighting;
 
 	protected ZLPaintContext myContext = null;
+	ArrayList<ZLTextHighlighting> m_bookMarkHighlighting;
 
 	public ZLTextView() {
-		resetTextStyle();
 		mySelection = new ZLTextSelection(this);
-		myHighlighting = new ZLTextHighlighting();
+		m_bookMarkHighlighting = new ArrayList<ZLTextHighlighting>();
 	}
 
 	public synchronized void setModel(ZLTextModel model) {
@@ -96,16 +101,54 @@ public class ZLTextView {
 		myPreviousPage.reset();
 		myNextPage.reset();
 		if (myModel != null) {
+			resetTextStyle();
 			final int paragraphsNumber = myModel.getParagraphsNumber();
 			if (paragraphsNumber > 0) {
 				myCurrentPage.moveStartCursor(ZLTextParagraphCursor.cursor(myModel, 0));
 			}
+			
+			loadBookMark();
 		}
+
 		ZLibrary.Instance().resetWidget();
 		
 		if (myFooter != null) {
 			myFooter.resetTOCMarks();
 		}
+	}
+	
+	private void loadBookMark()
+	{
+		m_bookMarkHighlighting.clear();
+//		Collections.sort(m_allBooksBookmarks, new Bookmark.ByTimeComparator());
+
+		if (FBReaderApp.Instance().Model != null) {
+			final long bookId = FBReaderApp.Instance().Model.Book.getId();
+			List<Bookmark> bookmarks = BooksDatabase.Instance().loadBookmarks(bookId);
+			for (Bookmark bookmark : bookmarks) {
+				addBookmarkHighlight(bookmark);
+			}
+		}
+	}
+	
+	public void addBookmarkHighlight(Bookmark bookmark)
+	{		
+		if (bookmark.m_posBegin == null || bookmark.m_posEnd == null) {
+			return;
+		}
+
+		ZLTextHighlighting highlighting = new ZLTextHighlighting();
+		ZLTextFixedPosition begin = new ZLTextFixedPosition(
+				bookmark.m_posBegin.getParagraphIndex(),
+				bookmark.m_posBegin.getElementIndex(),
+				bookmark.m_posBegin.getCharIndex());
+		ZLTextFixedPosition end = new ZLTextFixedPosition(
+				bookmark.m_posEnd.getParagraphIndex(), 
+				bookmark.m_posEnd.getElementIndex(), 
+				bookmark.m_posEnd.getCharIndex());
+
+		highlighting.setup(begin, end);
+		m_bookMarkHighlighting.add(highlighting);
 	}
 
 	public ZLTextModel getModel() {
@@ -266,19 +309,6 @@ public class ZLTextView {
 				}
 				break;
 			}
-		}
-	}
-
-	public void highlight(ZLTextPosition start, ZLTextPosition end) {
-		myHighlighting.setup(start, end);
-		ZLibrary.Instance().resetWidget();
-		ZLibrary.Instance().repaintWidget();
-	}
-
-	public void clearHighlighting() {
-		if (myHighlighting.clear()) {
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
 		}
 	}
 
@@ -466,11 +496,11 @@ public class ZLTextView {
 		if (selectedElementRegion != null && myHighlightSelectedRegion) {
 			selectedElementRegion.draw(context);
 		}
-
+		
 		drawSelectionCursor(context, getSelectionCursorPoint(page, ZLTextSelectionCursor.Left));
 		drawSelectionCursor(context, getSelectionCursorPoint(page, ZLTextSelectionCursor.Right));
 	}
-
+	
 	private ZLTextPage getPage(PageIndex pageIndex) {
 		switch (pageIndex) {
 			default:
@@ -790,7 +820,11 @@ public class ZLTextView {
 		}
 
 		drawBackgroung(mySelection, getSelectedBackgroundColor(), page, info, from, to, y);
-		drawBackgroung(myHighlighting, getHighlightingColor(), page, info, from, to, y);
+		for (ZLTextHighlighting highlighting : m_bookMarkHighlighting) {
+			drawBackgroung(highlighting, getSelectedBackgroundColor(), page, info, from, to, y);
+		}
+
+//		drawBackgroung(myHighlighting, getHighlightingColor(), page, info, from, to, y);
 
 		final ZLTextParagraphCursor paragraph = info.ParagraphCursor;
 		int index = from;

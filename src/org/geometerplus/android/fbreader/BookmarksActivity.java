@@ -29,6 +29,8 @@ import android.content.*;
 
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.socool.socoolreader.reader.R;
@@ -77,12 +79,11 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 		final TabHost host = getTabHost();
 		LayoutInflater.from(this).inflate(R.layout.bookmarks, host.getTabContentView(), true);
 
-		AllBooksBookmarks = Library.Instance().allBookmarks();
-		Collections.sort(AllBooksBookmarks, new Bookmark.ByTimeComparator());
-		final FBReaderApp fbreader = (FBReaderApp)FBReaderApp.Instance();
+		AllBooksBookmarks = BooksDatabase.Instance().loadAllBookmarks();
+//		Collections.sort(AllBooksBookmarks, new Bookmark.ByTimeComparator());
 
-		if (fbreader.Model != null) {
-			final long bookId = fbreader.Model.Book.getId();
+		if (FBReaderApp.Instance().Model != null) {
+			final long bookId = FBReaderApp.Instance().Model.Book.getId();
 			for (Bookmark bookmark : AllBooksBookmarks) {
 				if (bookmark.getBookId() == bookId) {
 					myThisBookBookmarks.add(bookmark);
@@ -209,7 +210,14 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 
 	private void addBookmark() {
 		final FBReaderApp fbreader = (FBReaderApp)FBReaderApp.Instance();
-		final Bookmark bookmark = fbreader.addBookmark(20, true);
+		final ZLTextView view = fbreader.getCurrentView();
+		final ZLTextWordCursor cursor = view.getStartCursor();
+
+		if (cursor.isNull()) {
+			return;
+		}
+
+		final Bookmark bookmark = new Bookmark(fbreader.Model.Book, view.getModel().getId(), cursor, 20);
 		if (bookmark != null) {
 			myThisBookBookmarks.add(0, bookmark);
 			AllBooksBookmarks.add(0, bookmark);
