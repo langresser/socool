@@ -282,6 +282,8 @@ public final class FBReaderApp {
 		if (modelId == null) {
 			BookTextView.gotoPosition(bookmark.m_posCurrentPage);
 			setView(BookTextView);
+			ZLibrary.Instance().resetWidget();
+			ZLibrary.Instance().repaintWidget(true);
 		}
 	}
 
