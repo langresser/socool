@@ -820,9 +820,9 @@ public class ZLTextView {
 		}
 
 		drawBackgroung(mySelection, getSelectedBackgroundColor(), page, info, from, to, y);
-		for (ZLTextHighlighting highlighting : m_bookMarkHighlighting) {
-			drawBackgroung(highlighting, getSelectedBackgroundColor(), page, info, from, to, y);
-		}
+//		for (ZLTextHighlighting highlighting : m_bookMarkHighlighting) {
+//			drawBackgroung(highlighting, getSelectedBackgroundColor(), page, info, from, to, y);
+//		}
 
 //		drawBackgroung(myHighlighting, getHighlightingColor(), page, info, from, to, y);
 
@@ -1939,13 +1939,7 @@ public class ZLTextView {
 		}
 	};
 	public static enum Direction {
-		leftToRight(true), rightToLeft(true), up(false), down(false);
-
-		public final boolean IsHorizontal;
-
-		Direction(boolean isHorizontal) {
-			IsHorizontal = isHorizontal;
-		}
+		leftToRight, rightToLeft, up, down;
 	};
 	public static enum Animation {
 		none, shift, curl, curl3d
@@ -1959,9 +1953,7 @@ public class ZLTextView {
 	private TapZoneMap myZoneMap;
 
 	private TapZoneMap getZoneMap() {
-		final String id =
-			ScrollingPreferences.Instance().HorizontalOption.getValue()
-				? "right_to_left" : "up";
+		final String id = "up";// 统一使用翻页的操作模式
 		if (!id.equals(myZoneMapId)) {
 			myZoneMap = new TapZoneMap(id);
 			myZoneMapId = id;
@@ -2016,14 +2008,12 @@ public class ZLTextView {
 		if (!isFlickScrollingEnabled()) {
 			return;
 		}
-
-		final boolean horizontal = ScrollingPreferences.Instance().HorizontalOption.getValue();
-		final Direction direction = horizontal ? Direction.rightToLeft : Direction.up;
 		
 		if (ZLibrary.Instance().isUseGLView()) {
-			ZLibrary.Instance().getWidgetGL().startManualScrolling(x, y, direction);
+			// 3d翻页仅有左右模式
+			ZLibrary.Instance().getWidgetGL().startManualScrolling(x, y);
 		} else {
-			ZLibrary.Instance().getWidget().startManualScrolling(x, y, direction);
+			ZLibrary.Instance().getWidget().startManualScrolling(x, y);
 		}
 	}
 

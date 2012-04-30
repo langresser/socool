@@ -26,56 +26,96 @@ import android.graphics.*;
 
 class NoneAnimationProvider extends AnimationProvider {
 	private final Paint myPaint = new Paint();
-
-	NoneAnimationProvider(BitmapManager bitmapManager) {
-		super(bitmapManager);
-	}
+	private float mySpeedFactor;
 
 	@Override
 	protected void drawInternal(Canvas canvas) {
-		canvas.drawBitmap(getBitmapFrom(), 0, 0, myPaint);
-	}
-
-	@Override
-	void doStep() {
-		if (getMode().Auto) {
-			terminate();
+		myPaint.setColor(Color.rgb(127, 127, 127));
+		final int dY = myEndY - myStartY;
+		canvas.drawBitmap(getBitmapTo(), 0, dY > 0 ? dY - myHeight : dY + myHeight, myPaint);
+		canvas.drawBitmap(getBitmapFrom(), 0, dY, myPaint);
+		if (dY > 0 && dY < myHeight) {
+			canvas.drawLine(0, dY, myWidth + 1, dY, myPaint);
+		} else if (dY < 0 && dY > -myHeight) {
+			canvas.drawLine(0, dY + myHeight, myWidth + 1, dY + myHeight, myPaint);
 		}
 	}
 
 	@Override
 	protected void setupAnimatedScrollingStart(Integer x, Integer y) {
-		if (myDirection.IsHorizontal) {
-			myStartX = mySpeed < 0 ? myWidth : 0;
-			myEndX = myWidth - myStartX;
-			myEndY = myStartY = 0;
-		} else {
-			myEndX = myStartX = 0;
-			myStartY = mySpeed < 0 ? myHeight : 0;
-			myEndY = myHeight - myStartY;
-		}
+		myEndX = myStartX = 0;
+		myStartY = mySpeed < 0 ? myHeight : 0;
+		myEndY = myHeight - myStartY;
 	}
 
 	@Override
-	protected void startAnimatedScrollingInternal(int speed) {
+	protected void startAnimatedScrollingInternal(int speed, boolean animationByClick) {
+		// 点击进行翻页不要动画，手指拖动可以产生动画
+		if (!animationByClick) {
+			mySpeedFactor = (float)Math.pow(1.5, 0.25 * speed);
+			doStep();
+		}
 	}
 
 	@Override
 	ZLTextView.PageIndex getPageToScrollTo(int x, int y) {
-		if (myDirection == null) {
-			return ZLTextView.PageIndex.current;
+		return myStartY < y ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
+	}
+
+	@Override
+	void doStep() {
+		// 无动画效果
+//		if (getMode().Auto) {
+//			terminate();
+//			return;
+//		}
+
+		// 滚动动画
+		if (!getMode().Auto) {
+			return;
 		}
 
-		switch (myDirection) {
-			case rightToLeft:
-				return myStartX < x ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
-			case leftToRight:
-				return myStartX < x ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous;
-			case up:
-				return myStartY < y ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
-			case down:
-				return myStartY < y ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous;
+		myEndY += (int)mySpeed;
+
+		final int bound;
+		if (getMode() == Mode.AnimatedScrollingForward) {
+			bound = myHeight;
+		} else {
+			bound = 0;
 		}
-		return ZLTextView.PageIndex.current;
+		if (mySpeed > 0) {
+			if (getScrollingShift() >= bound) {
+				myEndY = myStartY + bound;
+				terminate();
+				return;
+			}
+		} else {
+			if (getScrollingShift() <= -bound) {
+				myEndY = myStartY - bound;
+				terminate();
+				return;
+			}
+		}
+		mySpeed *= mySpeedFactor;
+	}
+	
+	protected int getScrollingShift() {
+		return myEndY - myStartY;
+	}
+	
+	int getScrolledPercent() {
+		final int full = myHeight;
+		final int shift = Math.abs(getScrollingShift());
+		return 100 * shift / full;
+	}
+	
+	int getDiff(int x, int y)
+	{
+		return y - myStartY;
+	}
+	
+	int getMinDiff()
+	{
+		return (myHeight > myWidth ? myHeight / 4 : myHeight / 3);
 	}
 }

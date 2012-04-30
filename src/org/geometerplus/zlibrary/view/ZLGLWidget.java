@@ -514,7 +514,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		m_needRepaint = true;
 	}
 
-	public void startManualScrolling(int x, int y, ZLTextView.Direction direction) {
+	public void startManualScrolling(int x, int y) {
 		// We need page rects quite extensively so get them for later use.
 		RectF rightRect = mRenderer.getPageRect(CurlRenderer.PAGE_RIGHT);
 
@@ -560,7 +560,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	}
 	
 	// 点击（或其他按键操作）直接进行翻页
-	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, ZLTextView.Direction direction, int speed) {		
+	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, int speed) {		
 		// 初始化翻页
 		if (pageIndex == ZLTextView.PageIndex.next) {
 			mDragStartPos.set(mPageBitmapWidth, mPageBitmapHeight / 2);

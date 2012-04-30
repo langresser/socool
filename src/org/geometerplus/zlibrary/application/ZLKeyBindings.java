@@ -72,17 +72,11 @@ public final class ZLKeyBindings {
 
 		final ZLBooleanOption volumeKeysOption =
 			new ZLBooleanOption("Scrolling", "VolumeKeys", true);
-		final ZLBooleanOption invertVolumeKeysOption =
-			new ZLBooleanOption("Scrolling", "InvertVolumeKeys", false);
 		if (!volumeKeysOption.getValue()) {
 			bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, FBReaderApp.NoAction);
 			bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, FBReaderApp.NoAction);
-		} else if (invertVolumeKeysOption.getValue()) {
-			bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
-			bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
 		}
 		volumeKeysOption.setValue(true);
-		invertVolumeKeysOption.setValue(false);
 		// end of migration code
 	}
 

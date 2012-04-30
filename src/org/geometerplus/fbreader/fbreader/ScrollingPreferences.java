@@ -42,8 +42,6 @@ public class ScrollingPreferences {
 	public final ZLIntegerRangeOption AnimationSpeedOption =
 		new ZLIntegerRangeOption("Scrolling", "AnimationSpeed", 1, 10, 4);
 
-	public final ZLBooleanOption HorizontalOption =
-		new ZLBooleanOption("Scrolling", "Horizontal", true);
 	public static enum TapZonesScheme {
 		left_to_right, right_to_left, up, down, custom
 	}

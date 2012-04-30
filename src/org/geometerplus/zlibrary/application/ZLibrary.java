@@ -109,6 +109,11 @@ public class ZLibrary {
 	public boolean isUseGLView() {
 		return ScrollingPreferences.Instance().AnimationOption.getValue() == ZLTextView.Animation.curl3d;
 	}
+	
+	// 卷轴模式 还是翻页模式 无动画效果时是垂直滚动
+	public boolean isScrollMode() {
+		return ScrollingPreferences.Instance().AnimationOption.getValue() == ZLTextView.Animation.none;
+	}
 
 	public boolean isKindleFire() {
 		if (myIsKindleFire == null) {

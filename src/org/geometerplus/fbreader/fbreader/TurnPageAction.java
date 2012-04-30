@@ -51,17 +51,11 @@ class TurnPageAction extends FBAction {
 			if (ZLibrary.Instance().isUseGLView()) {
 				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
 						myForward ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous,
-						preferences.HorizontalOption.getValue()
-							? ZLTextView.Direction.rightToLeft : ZLTextView.Direction.up,
-						preferences.AnimationSpeedOption.getValue()
-					);
+						preferences.AnimationSpeedOption.getValue());
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						myForward ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous,
-						x, y,
-						preferences.HorizontalOption.getValue()
-							? ZLTextView.Direction.rightToLeft : ZLTextView.Direction.up,
-						preferences.AnimationSpeedOption.getValue()
+						x, y, preferences.AnimationSpeedOption.getValue()
 					);
 			}
 			
@@ -69,17 +63,12 @@ class TurnPageAction extends FBAction {
 			if (ZLibrary.Instance().isUseGLView()) {
 				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
 					myForward ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous,
-					preferences.HorizontalOption.getValue()
-						? ZLTextView.Direction.rightToLeft : ZLTextView.Direction.up,
 					preferences.AnimationSpeedOption.getValue()
 				);
 			} else {
 				ZLibrary.Instance().getWidget().startAnimatedScrolling(
 						myForward ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous,
-								-1, -1,
-						preferences.HorizontalOption.getValue()
-							? ZLTextView.Direction.rightToLeft : ZLTextView.Direction.up,
-						preferences.AnimationSpeedOption.getValue()
+								-1, -1,	preferences.AnimationSpeedOption.getValue()
 					);
 			}
 		}

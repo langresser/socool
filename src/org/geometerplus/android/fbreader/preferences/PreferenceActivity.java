@@ -26,7 +26,6 @@ import org.geometerplus.zlibrary.application.ZLKeyBindings;
 
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.view.style.*;
 import org.geometerplus.zlibrary.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
@@ -36,7 +35,6 @@ import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.fbreader.fbreader.*;
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
-import org.geometerplus.android.fbreader.tips.TipsManager;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.DictionaryUtil;
@@ -86,14 +84,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			appearanceScreen.Resource,
 			"dontTurnScreenOff"
 		));
-		/*
-		appearanceScreen.addPreference(new ZLBooleanPreference(
-			this,
-			androidLibrary.DontTurnScreenOffDuringChargingOption,
-			appearanceScreen.Resource,
-			"dontTurnScreenOffDuringCharging"
-		));
-		*/
+
 		final Screen textScreen = createPreferenceScreen("text");
 
 		final Screen fontPropertiesScreen = textScreen.createPreferenceScreen("fontProperties");
@@ -265,9 +256,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			colorsScreen.addOption(profile.BackgroundOption, "backgroundColor")
 		);
 		bgPreferences.setEnabled("".equals(profile.WallpaperOption.getValue()));
-		/*
-		colorsScreen.addOption(profile.SelectionBackgroundOption, "selectionBackground");
-		*/
+
 		colorsScreen.addOption(profile.HighlightingOption, "highlighting");
 		colorsScreen.addOption(profile.RegularTextOption, "text");
 		colorsScreen.addOption(profile.HyperlinkTextOption, "hyperlink");
@@ -295,54 +284,17 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		));
 
 		final Screen statusLineScreen = createPreferenceScreen("scrollBar");
-
-		final String[] scrollBarTypes = {"hide", "show", "showAsProgress", "showAsFooter"};
-		statusLineScreen.addPreference(new ZLChoicePreference(
-			this, statusLineScreen.Resource, "scrollbarType",
-			fbReader.ScrollbarTypeOption, scrollBarTypes
-		) {
-			@Override
-			protected void onDialogClosed(boolean result) {
-				super.onDialogClosed(result);
-				footerPreferences.setEnabled(
-					findIndexOfValue(getValue()) == ZLTextView.SCROLLBAR_SHOW_AS_FOOTER
-				);
-			}
-		});
-
 		footerPreferences.add(statusLineScreen.addPreference(new ZLIntegerRangePreference(
 			this, statusLineScreen.Resource.getResource("footerHeight"),
 			fbReader.FooterHeightOption
 		)));
-		footerPreferences.add(statusLineScreen.addOption(profile.FooterFillOption, "footerColor"));
 		footerPreferences.add(statusLineScreen.addOption(fbReader.FooterShowTOCMarksOption, "tocMarks"));
-
-		footerPreferences.add(statusLineScreen.addOption(fbReader.FooterShowClockOption, "showClock"));
-		footerPreferences.add(statusLineScreen.addOption(fbReader.FooterShowBatteryOption, "showBattery"));
-		footerPreferences.add(statusLineScreen.addOption(fbReader.FooterShowProgressOption, "showProgress"));
 		footerPreferences.add(statusLineScreen.addPreference(new FontOption(
 			this, statusLineScreen.Resource, "font",
 			fbReader.FooterFontOption, false
 		)));
-		footerPreferences.setEnabled(
-			fbReader.ScrollbarTypeOption.getValue() == ZLTextView.SCROLLBAR_SHOW_AS_FOOTER
-		);
-
-		/*
-		final Screen colorProfileScreen = createPreferenceScreen("colorProfile");
-		final ZLResource resource = colorProfileScreen.Resource;
-		colorProfileScreen.setSummary(ColorProfilePreference.createTitle(resource, fbreader.getColorProfileName()));
-		for (String key : ColorProfile.names()) {
-			colorProfileScreen.addPreference(new ColorProfilePreference(
-				this, fbreader, colorProfileScreen, key, ColorProfilePreference.createTitle(resource, key)
-			));
-		}
-		*/
 
 		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
-
-		//final Screen tapZonesScreen = createPreferenceScreen("tapZones");
-		//tapZonesScreen.addOption(scrollingPreferences.TapZonesSchemeOption, "tapZonesScheme");
 
 		final ZLKeyBindings keyBindings = fbReader.keyBindings();
 
@@ -352,8 +304,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 
 		final ZLPreferenceSet volumeKeysPreferences = new ZLPreferenceSet();
 		scrollingScreen.addPreference(new ZLCheckBoxPreference(
-			this, scrollingScreen.Resource, "volumeKeys"
-		) {
+			this, scrollingScreen.Resource, "volumeKeys") {
 			{
 				setChecked(fbReader.hasActionForKey(KeyEvent.KEYCODE_VOLUME_UP, false));
 			}
@@ -371,27 +322,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 				volumeKeysPreferences.setEnabled(isChecked());
 			}
 		});
-		volumeKeysPreferences.add(scrollingScreen.addPreference(new ZLCheckBoxPreference(
-			this, scrollingScreen.Resource, "invertVolumeKeys"
-		) {
-			{
-				setChecked(ActionCode.VOLUME_KEY_SCROLL_FORWARD.equals(
-					keyBindings.getBinding(KeyEvent.KEYCODE_VOLUME_UP, false)
-				));
-			}
-
-			@Override
-			protected void onClick() {
-				super.onClick();
-				if (isChecked()) {
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
-				} else {
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
-				}
-			}
-		}));
 		volumeKeysPreferences.setEnabled(fbReader.hasActionForKey(KeyEvent.KEYCODE_VOLUME_UP, false));
 
 		scrollingScreen.addOption(scrollingPreferences.AnimationOption, "animation");
@@ -401,7 +331,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			"animationSpeed",
 			scrollingPreferences.AnimationSpeedOption
 		));
-		scrollingScreen.addOption(scrollingPreferences.HorizontalOption, "horizontal");
 
 		final Screen dictionaryScreen = createPreferenceScreen("dictionary");
 		dictionaryScreen.addPreference(new DictionaryPreference(
@@ -429,36 +358,5 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		final Screen imagesScreen = createPreferenceScreen("images");
 		imagesScreen.addOption(fbReader.ImageTappingActionOption, "tappingAction");
 		imagesScreen.addOption(fbReader.ImageViewBackgroundOption, "backgroundColor");
-
-		final Screen cancelMenuScreen = createPreferenceScreen("cancelMenu");
-		cancelMenuScreen.addOption(fbReader.ShowLibraryInCancelMenuOption, "library");
-		cancelMenuScreen.addOption(fbReader.ShowNetworkLibraryInCancelMenuOption, "networkLibrary");
-		cancelMenuScreen.addOption(fbReader.ShowPreviousBookInCancelMenuOption, "previousBook");
-		cancelMenuScreen.addOption(fbReader.ShowPositionsInCancelMenuOption, "positions");
-		final String[] backKeyActions =
-			{ ActionCode.EXIT, ActionCode.SHOW_CANCEL_MENU };
-		cancelMenuScreen.addPreference(new ZLStringChoicePreference(
-			this, cancelMenuScreen.Resource, "backKeyAction",
-			keyBindings.getOption(KeyEvent.KEYCODE_BACK, false), backKeyActions
-		));
-		final String[] backKeyLongPressActions =
-			{ ActionCode.EXIT, ActionCode.SHOW_CANCEL_MENU, FBReaderApp.NoAction };
-		cancelMenuScreen.addPreference(new ZLStringChoicePreference(
-			this, cancelMenuScreen.Resource, "backKeyLongPressAction",
-			keyBindings.getOption(KeyEvent.KEYCODE_BACK, true), backKeyLongPressActions
-		));
-
-		final Screen tipsScreen = createPreferenceScreen("tips");
-		tipsScreen.addOption(TipsManager.Instance().ShowTipsOption, "showTips");
-
-		final Screen aboutScreen = createPreferenceScreen("about");
-		aboutScreen.addPreference(new InfoPreference(
-			this,
-			aboutScreen.Resource.getResource("version").getValue(),
-			androidLibrary.getFullVersionName()
-		));
-		aboutScreen.addPreference(new UrlPreference(this, aboutScreen.Resource, "site"));
-		aboutScreen.addPreference(new UrlPreference(this, aboutScreen.Resource, "email"));
-		aboutScreen.addPreference(new UrlPreference(this, aboutScreen.Resource, "twitter"));
 	}
 }

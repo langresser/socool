@@ -41,21 +41,15 @@ abstract class AnimationProvider {
 		}
 	}
 	private Mode myMode = Mode.NoScrolling;
-	
-	private final BitmapManager myBitmapManager;
+
 	protected int myStartX;
 	protected int myStartY;
 	protected int myEndX;
 	protected int myEndY;
-	protected ZLTextView.Direction myDirection;
 	protected float mySpeed;
 
 	protected int myWidth;
 	protected int myHeight;
-
-	protected AnimationProvider(BitmapManager bitmapManager) {
-		myBitmapManager = bitmapManager;
-	}
 
 	Mode getMode() {
 		return myMode;
@@ -81,6 +75,9 @@ abstract class AnimationProvider {
 			myEndY = y;
 		}
 	}
+	
+	abstract int getDiff(int x, int y);
+	abstract int getMinDiff();
 
 	void startAnimatedScrolling(int x, int y, int speed) {
 		if (myMode != Mode.ManualScrolling) {
@@ -91,11 +88,9 @@ abstract class AnimationProvider {
 			return;
 		}
 
-		final int diff = myDirection.IsHorizontal ? x - myStartX : y - myStartY;
+		final int diff = getDiff(x, y);
 		final int dpi = ZLibrary.Instance().getDisplayDPI();
-		final int minDiff = myDirection.IsHorizontal ?
-			(myWidth > myHeight ? myWidth / 4 : myWidth / 3) :
-			(myHeight > myWidth ? myHeight / 4 : myHeight / 3);
+		final int minDiff = getMinDiff();
 		boolean forward = Math.abs(diff) > Math.min(minDiff, dpi / 2);
 
 		myMode = forward ? Mode.AnimatedScrollingForward : Mode.AnimatedScrollingBackward;
@@ -127,18 +122,9 @@ abstract class AnimationProvider {
 			forward = !forward;
 		}
 
-		switch (myDirection) {
-			case up:
-			case rightToLeft:
-				mySpeed = forward ? -velocity : velocity;
-				break;
-			case leftToRight:
-			case down:
-				mySpeed = forward ? velocity : -velocity;
-				break;
-		}
+		mySpeed = forward ? -velocity : velocity;
 
-		startAnimatedScrollingInternal(speed);
+		startAnimatedScrollingInternal(speed, false);
 	}
 
 	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, Integer x, Integer y, int speed) {
@@ -148,45 +134,28 @@ abstract class AnimationProvider {
 
 		terminate();
 		myMode = Mode.AnimatedScrollingForward;
+		mySpeed = pageIndex == ZLTextView.PageIndex.next ? -15 : 15;
 
-		switch (myDirection) {
-			case up:
-			case rightToLeft:
-				mySpeed = pageIndex == ZLTextView.PageIndex.next ? -15 : 15;
-				break;
-			case leftToRight:
-			case down:
-				mySpeed = pageIndex == ZLTextView.PageIndex.next ? 15 : -15;
-				break;
-		}
 		setupAnimatedScrollingStart(x, y);
-		startAnimatedScrollingInternal(speed);
+		startAnimatedScrollingInternal(speed, true);
 	}
 
-	protected abstract void startAnimatedScrollingInternal(int speed);
+	protected abstract void startAnimatedScrollingInternal(int speed, boolean animationByClick);
 	protected abstract void setupAnimatedScrollingStart(Integer x, Integer y);
 
 	boolean inProgress() {
 		return myMode != Mode.NoScrolling;
 	}
 
-	protected int getScrollingShift() {
-		return myDirection.IsHorizontal ? myEndX - myStartX : myEndY - myStartY;
-	}
+	protected abstract int getScrollingShift();
 
-	final void setup(ZLTextView.Direction direction, int width, int height) {
-		myDirection = direction;
+	final void setup(int width, int height) {
 		myWidth = width;
 		myHeight = height;
 	}
 
 	abstract void doStep();
-
-	int getScrolledPercent() {
-		final int full = myDirection.IsHorizontal ? myWidth : myHeight;
-		final int shift = Math.abs(getScrollingShift());
-		return 100 * shift / full;
-	}
+	abstract int getScrolledPercent();
 
 	static class DrawInfo {
 		final int X, Y;
@@ -203,7 +172,8 @@ abstract class AnimationProvider {
 	final private List<DrawInfo> myDrawInfos = new LinkedList<DrawInfo>();
 
 	final void draw(Canvas canvas) {
-		myBitmapManager.setSize(myWidth, myHeight);
+		final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+		widget.setBitmapSize(myWidth, myHeight);
 		final long start = System.currentTimeMillis();
 		drawInternal(canvas);
 		myDrawInfos.add(new DrawInfo(myEndX, myEndY, start, System.currentTimeMillis()));
@@ -221,10 +191,12 @@ abstract class AnimationProvider {
 	}
 
 	protected Bitmap getBitmapFrom() {
-		return myBitmapManager.getBitmap(ZLTextView.PageIndex.current);
+		final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+		return widget.getBitmap(ZLTextView.PageIndex.current);
 	}
 
 	protected Bitmap getBitmapTo() {
-		return myBitmapManager.getBitmap(getPageToScrollTo());
+		final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+		return widget.getBitmap(getPageToScrollTo());
 	}
 }

@@ -37,8 +37,8 @@ class CurlAnimationProvider extends AnimationProvider {
 
 	private float mySpeedFactor = 1;
 
-	CurlAnimationProvider(BitmapManager bitmapManager) {
-		super(bitmapManager);
+	CurlAnimationProvider() {
+		super();
 
 		myBackPaint.setAntiAlias(true);
 		myBackPaint.setAlpha(0x40);
@@ -84,27 +84,14 @@ class CurlAnimationProvider extends AnimationProvider {
 		final int oppositeX = Math.abs(myWidth - cornerX);
 		final int oppositeY = Math.abs(myHeight - cornerY);
 		final int x, y;
-		if (myDirection.IsHorizontal) {
-			x = myEndX;
-			if (getMode().Auto) {
-				y = myEndY;
-			} else {
-				if (cornerY == 0) {
-					y = Math.max(1, Math.min(myHeight / 2, myEndY));
-				} else {
-					y = Math.max(myHeight / 2, Math.min(myHeight - 1, myEndY));
-				}
-			}
-		} else {
+		x = myEndX;
+		if (getMode().Auto) {
 			y = myEndY;
-			if (getMode().Auto) {
-				x = myEndX;
+		} else {
+			if (cornerY == 0) {
+				y = Math.max(1, Math.min(myHeight / 2, myEndY));
 			} else {
-				if (cornerX == 0) {
-					x = Math.max(1, Math.min(myWidth / 2, myEndX));
-				} else {
-					x = Math.max(myWidth / 2, Math.min(myWidth - 1, myEndX));
-				}
+				y = Math.max(myHeight / 2, Math.min(myHeight - 1, myEndY));
 			}
 		}
 		final int dX = Math.max(1, Math.abs(x - cornerX));
@@ -207,25 +194,11 @@ class CurlAnimationProvider extends AnimationProvider {
 
 	@Override
 	ZLTextView.PageIndex getPageToScrollTo(int x, int y) {
-		if (myDirection == null) {
-			return ZLTextView.PageIndex.current;
-		}
-
-		switch (myDirection) {
-			case leftToRight:
-				return myStartX < myWidth / 2 ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous;
-			case rightToLeft:
-				return myStartX < myWidth / 2 ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
-			case up:
-				return myStartY < myHeight / 2 ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
-			case down:
-				return myStartY < myHeight / 2 ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous;
-		}
-		return ZLTextView.PageIndex.current;
+		return myStartX < myWidth / 2 ? ZLTextView.PageIndex.previous : ZLTextView.PageIndex.next;
 	}
 
 	@Override
-	protected void startAnimatedScrollingInternal(int speed) {
+	protected void startAnimatedScrollingInternal(int speed, boolean animationByClick) {
 		mySpeedFactor = (float)Math.pow(2.0, 0.25 * speed);
 		mySpeed *= 1.5;
 		doStep();
@@ -234,23 +207,14 @@ class CurlAnimationProvider extends AnimationProvider {
 	@Override
 	protected void setupAnimatedScrollingStart(Integer x, Integer y) {
 		if (x == null || y == null) {
-			if (myDirection.IsHorizontal) {
-				x = mySpeed < 0 ? myWidth - 3 : 3;
-				y = 1;
-			} else {
-				x = 1;
-				y = mySpeed < 0 ? myHeight  - 3 : 3;
-			}
+			x = mySpeed < 0 ? myWidth - 3 : 3;
+			y = 1;
 		} else {
 			final int cornerX = x > myWidth / 2 ? myWidth : 0;
 			final int cornerY = y > myHeight / 2 ? myHeight : 0;
 			int deltaX = Math.min(Math.abs(x - cornerX), myWidth / 5);
 			int deltaY = Math.min(Math.abs(y - cornerY), myHeight / 5);
-			if (myDirection.IsHorizontal) {
-				deltaY = Math.min(deltaY, deltaX / 3);
-			} else {
-				deltaX = Math.min(deltaX, deltaY / 3);
-			}
+			deltaY = Math.min(deltaY, deltaX / 3);
 			x = Math.abs(cornerX - deltaX);
 			y = Math.abs(cornerY - deltaY);
 		}
@@ -325,5 +289,25 @@ class CurlAnimationProvider extends AnimationProvider {
 				terminate();
 			}
 		}
+	}
+	
+	protected int getScrollingShift() {
+		return myEndX - myStartX;
+	}
+	
+	int getScrolledPercent() {
+		final int full = myWidth;
+		final int shift = Math.abs(getScrollingShift());
+		return 100 * shift / full;
+	}
+	
+	int getDiff(int x, int y)
+	{
+		return x - myStartX;
+	}
+	
+	int getMinDiff()
+	{
+		return (myWidth > myHeight ? myWidth / 4 : myWidth / 3);
 	}
 }

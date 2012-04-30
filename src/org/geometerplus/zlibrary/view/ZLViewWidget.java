@@ -24,6 +24,7 @@ import android.graphics.*;
 import android.view.*;
 import android.util.AttributeSet;
 
+import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
@@ -32,7 +33,6 @@ import org.geometerplus.fbreader.fbreader.ScrollingPreferences;
 
 public class ZLViewWidget extends View implements View.OnLongClickListener {
 	private final Paint myPaint = new Paint();
-	private final BitmapManager myBitmapManager = new BitmapManager();
 
 	public ZLViewWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -55,6 +55,76 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		setFocusableInTouchMode(true);
 		setDrawingCacheEnabled(false);
 		setOnLongClickListener(this);
+	}
+	
+	private final int SIZE = 2;
+	private final Bitmap[] myBitmaps = new Bitmap[SIZE];
+	private final ZLTextView.PageIndex[] myIndexes = new ZLTextView.PageIndex[SIZE];
+
+	private int myWidth;
+	private int myHeight;
+
+	void setBitmapSize(int w, int h) {
+		if (myWidth != w || myHeight != h) {
+			myWidth = w;
+			myHeight = h;
+			for (int i = 0; i < SIZE; ++i) {
+				myBitmaps[i] = null;
+				myIndexes[i] = null;
+			}
+			System.gc();
+		}
+	}
+
+	Bitmap getBitmap(ZLTextView.PageIndex index) {
+		for (int i = 0; i < SIZE; ++i) {
+			if (index == myIndexes[i]) {
+				return myBitmaps[i];
+			}
+		}
+		final int iIndex = getInternalIndex(index);
+		myIndexes[iIndex] = index;
+		if (myBitmaps[iIndex] == null) {
+			try {
+				myBitmaps[iIndex] = Bitmap.createBitmap(myWidth, myHeight, Bitmap.Config.RGB_565);
+			} catch (OutOfMemoryError e) {
+				System.gc();
+				myBitmaps[iIndex] = Bitmap.createBitmap(myWidth, myHeight, Bitmap.Config.RGB_565);
+			}
+		}
+		
+		drawOnBitmap(myBitmaps[iIndex], index);
+
+		return myBitmaps[iIndex];
+	}
+
+	private int getInternalIndex(ZLTextView.PageIndex index) {
+		for (int i = 0; i < SIZE; ++i) {
+			if (myIndexes[i] == null) {
+				return i;
+			}
+		}
+		for (int i = 0; i < SIZE; ++i) {
+			if (myIndexes[i] != ZLTextView.PageIndex.current) {
+				return i;
+			}
+		}
+		throw new RuntimeException("That's impossible");
+	}
+
+	public void reset() {
+		for (int i = 0; i < SIZE; ++i) {
+			myIndexes[i] = null;
+		}
+	}
+
+	void shift(boolean forward) {
+		for (int i = 0; i < SIZE; ++i) {
+			if (myIndexes[i] == null) {
+				continue;
+			}
+			myIndexes[i] = forward ? myIndexes[i].getPrevious() : myIndexes[i].getNext();
+		}
 	}
 
 	@Override
@@ -94,13 +164,13 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			myAnimationType = type;
 			switch (type) {
 				case none:
-					myAnimationProvider = new NoneAnimationProvider(myBitmapManager);
+					myAnimationProvider = new NoneAnimationProvider();
 					break;
 				case curl:
-					myAnimationProvider = new CurlAnimationProvider(myBitmapManager);
+					myAnimationProvider = new CurlAnimationProvider();
 					break;
 				case shift:
-					myAnimationProvider = new ShiftAnimationProvider(myBitmapManager);
+					myAnimationProvider = new ShiftAnimationProvider();
 					break;
 			}
 		}
@@ -123,7 +193,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 				case AnimatedScrollingForward:
 				{
 					final ZLTextView.PageIndex index = animator.getPageToScrollTo();
-					myBitmapManager.shift(index == ZLTextView.PageIndex.next);
+					shift(index == ZLTextView.PageIndex.next);
 					view.onScrollingFinished(index);
 					FBReaderApp.Instance().onRepaintFinished();
 					break;
@@ -136,17 +206,13 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		}
 	}
 
-	public void reset() {
-		myBitmapManager.reset();
-	}
-
 	public void repaint() {
 		postInvalidate();
 	}
 
-	public void startManualScrolling(int x, int y, ZLTextView.Direction direction) {
+	public void startManualScrolling(int x, int y) {
 		final AnimationProvider animator = getAnimationProvider();
-		animator.setup(direction, getWidth(), getMainAreaHeight());
+		animator.setup(getWidth(), getMainAreaHeight());
 		animator.startManualScrolling(x, y);
 	}
 
@@ -159,13 +225,13 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		}
 	}
 
-	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, int x, int y, ZLTextView.Direction direction, int speed) {
+	public void startAnimatedScrolling(ZLTextView.PageIndex pageIndex, int x, int y, int speed) {
 		final ZLTextView view = FBReaderApp.Instance().getCurrentView();
 		if (pageIndex == ZLTextView.PageIndex.current || !view.canScroll(pageIndex)) {
 			return;
 		}
 		final AnimationProvider animator = getAnimationProvider();
-		animator.setup(direction, getWidth(), getMainAreaHeight());
+		animator.setup(getWidth(), getMainAreaHeight());
 		
 		if (x == -1 && y == -1) {
 			animator.startAnimatedScrolling(pageIndex, null, null, speed);
@@ -220,8 +286,8 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	}
 
 	private void onDrawStatic(Canvas canvas) {
-		myBitmapManager.setSize(getWidth(), getMainAreaHeight());
-		canvas.drawBitmap(myBitmapManager.getBitmap(ZLTextView.PageIndex.current), 0, 0, myPaint);
+		setBitmapSize(getWidth(), getMainAreaHeight());
+		canvas.drawBitmap(getBitmap(ZLTextView.PageIndex.current), 0, 0, myPaint);
 	}
 
 	@Override
