@@ -28,6 +28,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.fbreader.ScrollingPreferences;
 
 public class ZLViewWidget extends View implements View.OnLongClickListener {
 	private final Paint myPaint = new Paint();
@@ -88,7 +89,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 	private AnimationProvider myAnimationProvider;
 	private ZLTextView.Animation myAnimationType;
 	private AnimationProvider getAnimationProvider() {
-		final ZLTextView.Animation type = FBReaderApp.Instance().getCurrentView().getAnimationType();
+		final ZLTextView.Animation type = ScrollingPreferences.Instance().AnimationOption.getValue();
 		if (myAnimationProvider == null || myAnimationType != type) {
 			myAnimationType = type;
 			switch (type) {

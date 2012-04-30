@@ -103,18 +103,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 	Bitmap getBitmap(ZLTextView.PageIndex index, boolean forceUpdateStatusBar) {
 		for (int i = 0; i < SIZE; ++i) {
 			if (index == myIndexes[i]) {
-//				if (forceUpdateStatusBar) {
-//					// draw footer
-//					final ZLTextView view = ZLApplication.Instance().getCurrentView();
-//					final ZLTextView.FooterArea footer = view.getFooterArea();
-//
-//					if (footer != null) {
-//						final ZLAndroidPaintContext contextFooter = new ZLAndroidPaintContext(
-//								new Canvas(myBitmaps[i]), mPageBitmapWidth, footer.getHeight(),
-//								view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0);
-//						footer.paint(contextFooter, index, true);
-//					}
-//				}
 				if (forceUpdateStatusBar) {
 					drawOnBitmap(myBitmaps[i], index);
 				}
@@ -234,12 +222,8 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 		}
 
 		// draw text
-		final ZLPaintContext context = new ZLPaintContext(
-			new Canvas(bitmap),
-			mPageBitmapWidth,
-			getMainAreaHeight(),
-			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
-		);
+		final ZLPaintContext context = new ZLPaintContext(new Canvas(bitmap),
+			mPageBitmapWidth, getMainAreaHeight(), 0);
 		view.paint(context, index);
 
 		// draw footer
@@ -251,9 +235,7 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 		final ZLPaintContext contextFooter = new ZLPaintContext(
 			new Canvas(bitmap),
-			mPageBitmapWidth,
-			footer.getHeight(),
-			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
+			mPageBitmapWidth, footer.getHeight(), 0
 		);
 		footer.paint(contextFooter, index, false);
 	}

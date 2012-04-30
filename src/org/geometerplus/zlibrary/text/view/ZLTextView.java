@@ -2449,8 +2449,4 @@ public class ZLTextView {
 	public int scrollbarType() {
 		return FBReaderApp.Instance().ScrollbarTypeOption.getValue();
 	}
-
-	public Animation getAnimationType() {
-		return ScrollingPreferences.Instance().AnimationOption.getValue();
-	}
 }
