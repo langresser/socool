@@ -20,7 +20,7 @@
 package org.geometerplus.fbreader.library;
 
 public class FavoritesTree extends FirstLevelTree {
-	FavoritesTree(RootTree root, String id) {
+	public FavoritesTree(RootTree root, String id) {
 		super(root, id);
 	}
 

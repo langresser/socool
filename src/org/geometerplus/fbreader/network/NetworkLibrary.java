@@ -22,7 +22,6 @@ package org.geometerplus.fbreader.network;
 import java.util.*;
 import java.lang.ref.WeakReference;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.options.ZLStringOption;
@@ -32,6 +31,7 @@ import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 import org.geometerplus.zlibrary.util.ZLNetworkUtil;
 
 import org.geometerplus.fbreader.FBTree;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.network.tree.*;
 import org.geometerplus.fbreader.network.opds.OPDSLinkReader;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
@@ -103,7 +103,7 @@ public class NetworkLibrary {
 	private ZLStringOption activeLanguageCodesOption() {
  		if (myActiveLanguageCodesOption == null) {
 			final TreeSet<String> defaultCodes = new TreeSet<String>(new ZLLanguageUtil.CodeComparator());
-			defaultCodes.addAll(ZLibrary.Instance().defaultLanguageCodes());
+			defaultCodes.addAll(FBReaderApp.Instance().defaultLanguageCodes());
 			myActiveLanguageCodesOption =
 				new ZLStringOption(
 					"Options",
@@ -120,7 +120,7 @@ public class NetworkLibrary {
 
 	public void setActiveLanguageCodes(Collection<String> codes) {
 		final TreeSet<String> allCodes = new TreeSet<String>(new ZLLanguageUtil.CodeComparator());
-		allCodes.addAll(ZLibrary.Instance().defaultLanguageCodes());
+		allCodes.addAll(FBReaderApp.Instance().defaultLanguageCodes());
 		allCodes.removeAll(languageCodes());
 		allCodes.addAll(codes);
 		activeLanguageCodesOption().setValue(commaSeparatedString(allCodes));

@@ -34,7 +34,6 @@ JavaClass AndroidUtil::Class_java_util_List("java/util/List");
 JavaClass AndroidUtil::Class_java_util_Locale("java/util/Locale");
 JavaClass AndroidUtil::Class_java_io_InputStream("java/io/InputStream");
 
-JavaClass AndroidUtil::Class_ZLibrary("org/geometerplus/zlibrary/application/ZLibrary");
 JavaClass AndroidUtil::Class_ZLFile("org/geometerplus/zlibrary/filesystem/ZLFile");
 JavaClass AndroidUtil::Class_ZLFileImage("org/geometerplus/zlibrary/image/ZLFileImage");
 JavaClass AndroidUtil::Class_ZLTextModel("org/geometerplus/zlibrary/text/model/ZLTextModel");
@@ -62,9 +61,6 @@ shared_ptr<StringMethod> AndroidUtil::Method_java_util_Locale_getLanguage;
 shared_ptr<VoidMethod> AndroidUtil::Method_java_io_InputStream_close;
 shared_ptr<IntMethod> AndroidUtil::Method_java_io_InputStream_read;
 shared_ptr<LongMethod> AndroidUtil::Method_java_io_InputStream_skip;
-
-shared_ptr<StaticObjectMethod> AndroidUtil::StaticMethod_ZLibrary_Instance;
-shared_ptr<StringMethod> AndroidUtil::Method_ZLibrary_getVersionName;
 
 shared_ptr<StaticObjectMethod> AndroidUtil::StaticMethod_NativeFormatPlugin_create;
 shared_ptr<StringMethod> AndroidUtil::Method_NativeFormatPlugin_supportedFileType;
@@ -138,9 +134,6 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	Method_java_io_InputStream_close = new VoidMethod(Class_java_io_InputStream, "close", "()");
 	Method_java_io_InputStream_read = new IntMethod(Class_java_io_InputStream, "read", "([BII)");
 	Method_java_io_InputStream_skip = new LongMethod(Class_java_io_InputStream, "skip", "(J)");
-
-	StaticMethod_ZLibrary_Instance = new StaticObjectMethod(Class_ZLibrary, "Instance", Class_ZLibrary, "()");
-	Method_ZLibrary_getVersionName = new StringMethod(Class_ZLibrary, "getVersionName", "()");
 
 	StaticMethod_NativeFormatPlugin_create = new StaticObjectMethod(Class_NativeFormatPlugin, "create", Class_NativeFormatPlugin, "(Ljava/lang/String;)");
 	Method_NativeFormatPlugin_supportedFileType = new StringMethod(Class_NativeFormatPlugin, "supportedFileType", "()");

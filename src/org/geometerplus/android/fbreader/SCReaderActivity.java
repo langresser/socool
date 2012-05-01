@@ -32,7 +32,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
 import org.geometerplus.zlibrary.application.ZLApplicationWindow;
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
@@ -141,7 +140,7 @@ public final class SCReaderActivity extends Activity {
 
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
-		ZLibrary.Instance().setActivity(this);
+		FBReaderApp.Instance().setActivity(this);
 		
 		m_mainLayout = new RelativeLayout(this);
 		m_mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
@@ -151,7 +150,7 @@ public final class SCReaderActivity extends Activity {
 
 		if (myMainWindow == null) {
 			if (BooksDatabase.Instance() == null) {
-				new BooksDatabase(this, "READER");
+				new BooksDatabase(this);
 			}
 
 			myMainWindow = new ZLApplicationWindow();
@@ -199,19 +198,19 @@ public final class SCReaderActivity extends Activity {
 
 		fbReader.addAction(ActionCode.SHOW_CANCEL_MENU, new ShowCancelMenuAction(this, fbReader));
 
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_SYSTEM));
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_SENSOR));
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_PORTRAIT));
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_LANDSCAPE));
-		if (ZLibrary.Instance().supportsAllOrientations()) {
-			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
-			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new SetOrientationAction(this, fbReader, ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_SYSTEM));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_SENSOR));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_PORTRAIT));
+		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE));
+		if (FBReaderApp.Instance().supportsAllOrientations()) {
+			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
+			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
 		}
 	}
 	
 	public void createBookView()
 	{
-		if (ZLibrary.Instance().isUseGLView()) {
+		if (FBReaderApp.Instance().isUseGLView()) {
 			if (m_bookViewGL == null) {
 				m_bookViewGL = new ZLGLWidget(this);
 				m_bookViewGL.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
@@ -250,7 +249,7 @@ public final class SCReaderActivity extends Activity {
  	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
  		// 弹出菜单时不全屏
-		if (!ZLibrary.Instance().isKindleFire()) {
+		if (!FBReaderApp.Instance().isKindleFire()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 		return super.onPrepareOptionsMenu(menu);
@@ -260,15 +259,14 @@ public final class SCReaderActivity extends Activity {
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
 		
-		if (!ZLibrary.Instance().isKindleFire()) {
+		if (!FBReaderApp.Instance().isKindleFire()) {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		if (!zlibrary.isKindleFire()) {
+		if (!FBReaderApp.Instance().isKindleFire()) {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 
@@ -327,8 +325,7 @@ public final class SCReaderActivity extends Activity {
 
 		initPluginActions();
 
-		final ZLibrary zlibrary = (ZLibrary)ZLibrary.Instance();
-		SetOrientationAction.setOrientation(this, zlibrary.OrientationOption.getValue());
+		SetOrientationAction.setOrientation(this, FBReaderApp.Instance().OrientationOption.getValue());
 		((PopupPanel)FBReaderApp.Instance().getPopupById(TextSearchPopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(NavigationPopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(SelectionPopup.ID)).setPanelInfo(this, m_mainLayout);
@@ -386,11 +383,11 @@ public final class SCReaderActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		switchWakeLock(
-			ZLibrary.Instance().BatteryLevelToTurnScreenOffOption.getValue() <
+			FBReaderApp.Instance().BatteryLevelToTurnScreenOffOption.getValue() <
 			FBReaderApp.Instance().getBatteryLevel()
 		);
 		myStartTimer = true;
-		final int brightnessLevel = ZLibrary.Instance().ScreenBrightnessLevelOption.getValue();
+		final int brightnessLevel = FBReaderApp.Instance().ScreenBrightnessLevelOption.getValue();
 		if (brightnessLevel != 0) {
 			setScreenBrightness(brightnessLevel);
 		} else {
@@ -456,7 +453,7 @@ public final class SCReaderActivity extends Activity {
 					}
 				}
 				fbReader.clearTextCaches();
-				ZLibrary.Instance().repaintWidget(false);
+				FBReaderApp.Instance().repaintWidget(false);
 				break;
 			}
 			case RESULT_RELOAD_BOOK:
@@ -513,7 +510,7 @@ public final class SCReaderActivity extends Activity {
 		addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_SENSOR);
 		addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT);
 		addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE);
-		if (ZLibrary.Instance().supportsAllOrientations()) {
+		if (FBReaderApp.Instance().supportsAllOrientations()) {
 			addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT);
 			addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 		}
@@ -553,7 +550,7 @@ public final class SCReaderActivity extends Activity {
 		final WindowManager.LayoutParams attrs = getWindow().getAttributes();
 		attrs.screenBrightness = percent / 100.0f;
 		getWindow().setAttributes(attrs);
-		ZLibrary.Instance().ScreenBrightnessLevelOption.setValue(percent);
+		FBReaderApp.Instance().ScreenBrightnessLevelOption.setValue(percent);
 	}
 
 	final public int getScreenBrightness() {
@@ -617,7 +614,7 @@ public final class SCReaderActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (ZLibrary.Instance().isUseGLView()) {
+		if (FBReaderApp.Instance().isUseGLView()) {
 			return ((m_bookViewGL != null) && m_bookViewGL.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
 		} else {
 			return ((m_bookView != null) && m_bookView.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
@@ -626,7 +623,7 @@ public final class SCReaderActivity extends Activity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (ZLibrary.Instance().isUseGLView()) {
+		if (FBReaderApp.Instance().isUseGLView()) {
 			return ((m_bookViewGL != null) && m_bookViewGL.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
 		} else {
 			return ((m_bookView != null) && m_bookView.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
@@ -638,7 +635,7 @@ public final class SCReaderActivity extends Activity {
 			final int level = intent.getIntExtra("level", 100);
 			myMainWindow.setBatteryLevel(level);
 			switchWakeLock(
-				ZLibrary.Instance().BatteryLevelToTurnScreenOffOption.getValue() < level
+				FBReaderApp.Instance().BatteryLevelToTurnScreenOffOption.getValue() < level
 			);
 		}
 	};

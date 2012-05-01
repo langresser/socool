@@ -73,7 +73,7 @@ public class BookInfoActivity extends Activity {
 		myFile = ZLFile.createFileByPath(path);
 
 		if (BooksDatabase.Instance() == null) {
-			new BooksDatabase(this, "LIBRARY");
+			new BooksDatabase(this);
 		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

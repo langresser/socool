@@ -26,7 +26,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
@@ -94,8 +93,8 @@ final class NavigationPopup extends PopupPanel {
 				} else {
 					view.gotoPage(page);
 				}
-				ZLibrary.Instance().resetWidget();
-				ZLibrary.Instance().repaintWidget();
+				FBReaderApp.Instance().resetWidget();
+				FBReaderApp.Instance().repaintWidget();
 			}
 
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -128,8 +127,8 @@ final class NavigationPopup extends PopupPanel {
 				}
 				StartPosition = null;
 				Application.hideActivePopup();
-				ZLibrary.Instance().resetWidget();
-				ZLibrary.Instance().repaintWidget();
+				FBReaderApp.Instance().resetWidget();
+				FBReaderApp.Instance().repaintWidget();
 			}
 		};
 		btnOk.setOnClickListener(listener);

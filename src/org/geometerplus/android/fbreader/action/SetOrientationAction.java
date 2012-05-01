@@ -22,7 +22,6 @@ package org.geometerplus.android.fbreader.action;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
@@ -31,15 +30,15 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 public class SetOrientationAction extends FBAndroidAction {
 	public static void setOrientation(Activity activity, String optionValue) {
 		int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-		if (ZLibrary.SCREEN_ORIENTATION_SENSOR.equals(optionValue)) {
+		if (FBReaderApp.SCREEN_ORIENTATION_SENSOR.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
-		} else if (ZLibrary.SCREEN_ORIENTATION_PORTRAIT.equals(optionValue)) {
+		} else if (FBReaderApp.SCREEN_ORIENTATION_PORTRAIT.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-		} else if (ZLibrary.SCREEN_ORIENTATION_LANDSCAPE.equals(optionValue)) {
+		} else if (FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-		} else if (ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT.equals(optionValue)) {
+		} else if (FBReaderApp.SCREEN_ORIENTATION_REVERSE_PORTRAIT.equals(optionValue)) {
 			orientation = 9;
-		} else if (ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE.equals(optionValue)) {
+		} else if (FBReaderApp.SCREEN_ORIENTATION_REVERSE_LANDSCAPE.equals(optionValue)) {
 			orientation = 8;
 		}
 		activity.setRequestedOrientation(orientation);
@@ -54,14 +53,14 @@ public class SetOrientationAction extends FBAndroidAction {
 
 	@Override
 	public ZLBoolean3 isChecked() {
-		return myOptionValue.equals(ZLibrary.Instance().OrientationOption.getValue())
+		return myOptionValue.equals(FBReaderApp.Instance().OrientationOption.getValue())
 			? ZLBoolean3.B3_TRUE : ZLBoolean3.B3_FALSE;
 	}
 
 	@Override
 	protected void run(Object ... params) {
 		setOrientation(BaseActivity, myOptionValue);
-		ZLibrary.Instance().OrientationOption.setValue(myOptionValue);
+		FBReaderApp.Instance().OrientationOption.setValue(myOptionValue);
 		Reader.onRepaintFinished();
 	}
 }

@@ -22,7 +22,8 @@ package org.geometerplus.zlibrary.util;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
-import org.geometerplus.zlibrary.application.ZLibrary;;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+
 
 public class ZLNetworkUtil {
 
@@ -121,6 +122,6 @@ public class ZLNetworkUtil {
 	}
 
 	public static String getUserAgent() {
-		return "SCReaderActivity/" + ZLibrary.Instance().getVersionName() + "(java)";
+		return "SCReaderActivity/" + FBReaderApp.Instance().getVersionName() + "(java)";
 	}
 }

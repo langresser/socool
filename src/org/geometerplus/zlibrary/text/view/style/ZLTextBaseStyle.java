@@ -19,8 +19,8 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.options.*;
-import org.geometerplus.zlibrary.application.ZLibrary;
 
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
@@ -55,7 +55,7 @@ public class ZLTextBaseStyle extends ZLTextStyle {
 	public ZLTextBaseStyle(String fontFamily, int fontSize) {
 		super(null, ZLTextHyperlink.NO_LINK);
 		FontFamilyOption = new ZLStringOption(GROUP, "Base:fontFamily", fontFamily);
-		fontSize = fontSize * ZLibrary.Instance().getDisplayDPI() / 320 * 2;
+		fontSize = fontSize * FBReaderApp.Instance().getDisplayDPI() / 320 * 2;
 		FontSizeOption = new ZLIntegerRangeOption(GROUP, "Base:fontSize", 5, 72, fontSize);
 	}
 	

@@ -34,8 +34,6 @@ import org.geometerplus.fbreader.fbreader.TextBuildTraverser;
 import org.geometerplus.fbreader.fbreader.WordCountTraverser;
 import org.geometerplus.fbreader.library.Bookmark;
 import org.geometerplus.fbreader.library.BooksDatabase;
-import org.geometerplus.fbreader.library.Library;
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
@@ -110,7 +108,7 @@ public class ZLTextView {
 			loadBookMark();
 		}
 
-		ZLibrary.Instance().resetWidget();
+		FBReaderApp.Instance().resetWidget();
 		
 		if (myFooter != null) {
 			myFooter.resetTOCMarks();
@@ -202,8 +200,8 @@ public class ZLTextView {
 			if (myCurrentPage.StartCursor.isNull()) {
 				preparePaintInfo(myCurrentPage);
 			}
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
+			FBReaderApp.Instance().resetWidget();
+			FBReaderApp.Instance().repaintWidget();
 		}
 	}
 
@@ -227,8 +225,8 @@ public class ZLTextView {
 					(backward ? myModel.getLastMark() : myModel.getFirstMark()) :
 					(backward ? myModel.getPreviousMark(mark) : myModel.getNextMark(mark)));
 			}
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
+			FBReaderApp.Instance().resetWidget();
+			FBReaderApp.Instance().repaintWidget();
 		}
 		return count;
 	}
@@ -261,8 +259,8 @@ public class ZLTextView {
 		if (!findResultsAreEmpty()) {
 			myModel.removeAllMarks();
 			rebuildPaintInfo();
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
+			FBReaderApp.Instance().resetWidget();
+			FBReaderApp.Instance().repaintWidget();
 		}
 	}
 
@@ -291,7 +289,7 @@ public class ZLTextView {
 					myNextPage.reset();
 					myNextPage.StartCursor.setCursor(myCurrentPage.EndCursor);
 					myNextPage.PaintState = PaintStateEnum.START_IS_KNOWN;
-					ZLibrary.Instance().resetWidget();
+					FBReaderApp.Instance().resetWidget();
 				}
 				break;
 			}
@@ -316,14 +314,14 @@ public class ZLTextView {
 		y -= ZLTextSelectionCursor.getHeight() / 2 + ZLTextSelectionCursor.getAccent() / 2;
 		mySelection.setCursorInMovement(cursor, x, y);
 		mySelection.expandTo(x, y);
-		ZLibrary.Instance().resetWidget();
-		ZLibrary.Instance().repaintWidget();
+		FBReaderApp.Instance().resetWidget();
+		FBReaderApp.Instance().repaintWidget();
 	}
 
 	protected void releaseSelectionCursor() {
 		mySelection.stop();
-		ZLibrary.Instance().resetWidget();
-		ZLibrary.Instance().repaintWidget();
+		FBReaderApp.Instance().resetWidget();
+		FBReaderApp.Instance().repaintWidget();
 		
 		if (getCountOfSelectedWords() > 0) {
 			FBReaderApp.Instance().runAction(ActionCode.SELECTION_SHOW_PANEL);
@@ -1241,7 +1239,7 @@ public class ZLTextView {
 
 	public final synchronized void gotoPosition(int paragraphIndex, int wordIndex, int charIndex) {
 		if (myModel != null && myModel.getParagraphsNumber() > 0) {
-			ZLibrary.Instance().resetWidget();
+			FBReaderApp.Instance().resetWidget();
 			myCurrentPage.moveStartCursor(paragraphIndex, wordIndex, charIndex);
 			myPreviousPage.reset();
 			myNextPage.reset();
@@ -1407,7 +1405,7 @@ public class ZLTextView {
 
 	public void clearCaches() {
 		rebuildPaintInfo();
-		ZLibrary.Instance().resetWidget();
+		FBReaderApp.Instance().resetWidget();
 		myCharWidth = -1;
 	}
 
@@ -1517,7 +1515,7 @@ public class ZLTextView {
 
 	public void hideSelectedRegionBorder() {
 		myHighlightSelectedRegion = false;
-		ZLibrary.Instance().resetWidget();
+		FBReaderApp.Instance().resetWidget();
 	}
 
 	private ZLTextRegion getSelectedRegion(ZLTextPage page) {
@@ -1549,15 +1547,15 @@ public class ZLTextView {
 		if (!mySelection.start(x, y)) {
 			return false;
 		}
-		ZLibrary.Instance().resetWidget();
-		ZLibrary.Instance().repaintWidget();
+		FBReaderApp.Instance().resetWidget();
+		FBReaderApp.Instance().repaintWidget();
 		return true;
 	}
 
 	public void clearSelection() {
 		if (mySelection.clear()) {
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
+			FBReaderApp.Instance().resetWidget();
+			FBReaderApp.Instance().repaintWidget();
 		}
 	}
 
@@ -1965,8 +1963,8 @@ public class ZLTextView {
 		final ZLTextRegion region = findRegion(x, y, MAX_SELECTION_DISTANCE, ZLTextRegion.HyperlinkFilter);
 		if (region != null) {
 			selectRegion(region);
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
+			FBReaderApp.Instance().resetWidget();
+			FBReaderApp.Instance().repaintWidget();
 			FBReaderApp.Instance().runAction(ActionCode.PROCESS_HYPERLINK);
 			return true;
 		}
@@ -1988,7 +1986,7 @@ public class ZLTextView {
 		if (FBReaderApp.Instance().AllowScreenBrightnessAdjustmentOption.getValue() && x < myContext.getWidth() / 10) {
 			myIsBrightnessAdjustmentInProgress = true;
 			myStartY = y;
-			myStartBrightness = ZLibrary.Instance().getScreenBrightness();
+			myStartBrightness = FBReaderApp.Instance().getScreenBrightness();
 			return true;
 		}
 
@@ -2009,11 +2007,11 @@ public class ZLTextView {
 			return;
 		}
 		
-		if (ZLibrary.Instance().isUseGLView()) {
+		if (FBReaderApp.Instance().isUseGLView()) {
 			// 3d翻页仅有左右模式
-			ZLibrary.Instance().getWidgetGL().startManualScrolling(x, y);
+			FBReaderApp.Instance().getWidgetGL().startManualScrolling(x, y);
 		} else {
-			ZLibrary.Instance().getWidget().startManualScrolling(x, y);
+			FBReaderApp.Instance().getWidget().startManualScrolling(x, y);
 		}
 	}
 
@@ -2031,16 +2029,16 @@ public class ZLTextView {
 					startManualScrolling(x, y);
 				} else {
 					final int delta = (myStartBrightness + 30) * (myStartY - y) / myContext.getHeight();
-					ZLibrary.Instance().setScreenBrightness(myStartBrightness + delta);
+					FBReaderApp.Instance().setScreenBrightness(myStartBrightness + delta);
 					return true;
 				}
 			}
 
 			if (isFlickScrollingEnabled()) {
-				if (ZLibrary.Instance().isUseGLView()) {
-					ZLibrary.Instance().getWidgetGL().scrollManuallyTo(x, y);
+				if (FBReaderApp.Instance().isUseGLView()) {
+					FBReaderApp.Instance().getWidgetGL().scrollManuallyTo(x, y);
 				} else {
-					ZLibrary.Instance().getWidget().scrollManuallyTo(x, y);
+					FBReaderApp.Instance().getWidget().scrollManuallyTo(x, y);
 				}
 			}
 		}
@@ -2060,12 +2058,12 @@ public class ZLTextView {
 		}
 
 		if (isFlickScrollingEnabled()) {
-			if (ZLibrary.Instance().isUseGLView()) {
-				ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(null,
+			if (FBReaderApp.Instance().isUseGLView()) {
+				FBReaderApp.Instance().getWidgetGL().startAnimatedScrolling(null,
 						x, y, null, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
 					);
 			} else {
-				ZLibrary.Instance().getWidget().startAnimatedScrolling(
+				FBReaderApp.Instance().getWidget().startAnimatedScrolling(
 						x, y, ScrollingPreferences.Instance().AnimationSpeedOption.getValue()
 					);
 			}
@@ -2106,8 +2104,8 @@ public class ZLTextView {
         
 			if (doSelectRegion) {
 				selectRegion(region);
-				ZLibrary.Instance().resetWidget();
-				ZLibrary.Instance().repaintWidget();
+				FBReaderApp.Instance().resetWidget();
+				FBReaderApp.Instance().repaintWidget();
 				return true;
 			}
 		}
@@ -2135,8 +2133,8 @@ public class ZLTextView {
 						if (soul instanceof ZLTextHyperlinkRegionSoul
 							 || soul instanceof ZLTextWordRegionSoul) {
 							selectRegion(region);
-							ZLibrary.Instance().resetWidget();
-							ZLibrary.Instance().repaintWidget();
+							FBReaderApp.Instance().resetWidget();
+							FBReaderApp.Instance().repaintWidget();
 						}
 					}
 				}
@@ -2252,7 +2250,7 @@ public class ZLTextView {
 	public class Footer {
 		private Runnable UpdateTask = new Runnable() {
 			public void run() {
-				ZLibrary.Instance().repaintStatusBar();
+				FBReaderApp.Instance().repaintStatusBar();
 			}
 		};
 
@@ -2322,11 +2320,11 @@ public class ZLTextView {
 			final int delta = height <= 10 ? 0 : 1;
 			int offsetY = 0;
 			
-			if (ZLibrary.Instance().isUseGLView()) {
-				final ZLGLWidget widget = ZLibrary.Instance().getWidgetGL();
+			if (FBReaderApp.Instance().isUseGLView()) {
+				final ZLGLWidget widget = FBReaderApp.Instance().getWidgetGL();
 				offsetY = widget.getHeight() - getHeight() * 2;
 			} else {
-				final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+				final ZLViewWidget widget = FBReaderApp.Instance().getWidget();
 				offsetY = widget.getHeight() - getHeight() * 2;
 			}
 
@@ -2355,7 +2353,7 @@ public class ZLTextView {
 				if (info.length() > 0) {
 					info.append(" ");
 				}
-				info.append(ZLibrary.Instance().getCurrentTimeString());
+				info.append(FBReaderApp.Instance().getCurrentTimeString());
 			}
 			final String infoString = info.toString();
 

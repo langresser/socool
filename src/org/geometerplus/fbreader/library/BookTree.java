@@ -26,18 +26,18 @@ public class BookTree extends LibraryTree {
 	public final Book Book;
 	private final boolean myShowAuthors;
 
-	BookTree(Book book, boolean showAuthors) {
+	public BookTree(Book book, boolean showAuthors) {
 		Book = book;
 		myShowAuthors = showAuthors;
 	}
 
-	BookTree(LibraryTree parent, Book book, boolean showAuthors) {
+	public BookTree(LibraryTree parent, Book book, boolean showAuthors) {
 		super(parent);
 		Book = book;
 		myShowAuthors = showAuthors;
 	}
 
-	BookTree(LibraryTree parent, Book book, boolean showAuthors, int position) {
+	public BookTree(LibraryTree parent, Book book, boolean showAuthors, int position) {
 		super(parent, position);
 		Book = book;
 		myShowAuthors = showAuthors;

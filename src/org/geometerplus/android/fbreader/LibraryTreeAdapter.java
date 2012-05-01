@@ -27,10 +27,15 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.fbreader.library.*;
 
 import org.geometerplus.android.fbreader.tree.TreeAdapter;
 import org.geometerplus.android.fbreader.covers.CoverManager;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.library.AuthorTree;
+import org.geometerplus.fbreader.library.FileTree;
+import org.geometerplus.fbreader.library.FirstLevelTree;
+import org.geometerplus.fbreader.library.LibraryTree;
+import org.geometerplus.fbreader.library.TagTree;
 
 class LibraryTreeAdapter extends TreeAdapter {
 	private CoverManager myCoverManager;
@@ -77,19 +82,19 @@ class LibraryTreeAdapter extends TreeAdapter {
 			return R.drawable.ic_list_library_book;
 		} else if (tree instanceof FirstLevelTree) {
 			final String id = tree.getUniqueKey().Id;
-			if (Library.ROOT_FAVORITES.equals(id)) {
+			if (FBReaderApp.ROOT_FAVORITES.equals(id)) {
 				return R.drawable.ic_list_library_favorites;
-			} else if (Library.ROOT_RECENT.equals(id)) {
+			} else if (FBReaderApp.ROOT_RECENT.equals(id)) {
 				return R.drawable.ic_list_library_recent;
-			} else if (Library.ROOT_BY_AUTHOR.equals(id)) {
+			} else if (FBReaderApp.ROOT_BY_AUTHOR.equals(id)) {
 				return R.drawable.ic_list_library_authors;
-			} else if (Library.ROOT_BY_TITLE.equals(id)) {
+			} else if (FBReaderApp.ROOT_BY_TITLE.equals(id)) {
 				return R.drawable.ic_list_library_books;
-			} else if (Library.ROOT_BY_TAG.equals(id)) {
+			} else if (FBReaderApp.ROOT_BY_TAG.equals(id)) {
 				return R.drawable.ic_list_library_tags;
-			} else if (Library.ROOT_FILE_TREE.equals(id)) {
+			} else if (FBReaderApp.ROOT_FILE_TREE.equals(id)) {
 				return R.drawable.ic_list_library_folder;
-			} else if (Library.ROOT_FOUND.equals(id)) {
+			} else if (FBReaderApp.ROOT_FOUND.equals(id)) {
 				return R.drawable.ic_list_library_search;
 			}
 		} else if (tree instanceof FileTree) {

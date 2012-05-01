@@ -96,5 +96,5 @@ void FB2Reader::namespaceListChangedHandler() {
 }
 
 void FB2Reader::collectExternalEntities(std::map<std::string,std::string> &entityMap) {
-	entityMap["FBReaderVersion"] = ZLibrary::Version();
+//	entityMap["FBReaderVersion"] = ZLibrary::Version();
 }

@@ -24,7 +24,7 @@ import java.util.*;
 import android.graphics.*;
 import android.util.FloatMath;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 abstract class AnimationProvider {
@@ -89,7 +89,7 @@ abstract class AnimationProvider {
 		}
 
 		final int diff = getDiff(x, y);
-		final int dpi = ZLibrary.Instance().getDisplayDPI();
+		final int dpi = FBReaderApp.Instance().getDisplayDPI();
 		final int minDiff = getMinDiff();
 		boolean forward = Math.abs(diff) > Math.min(minDiff, dpi / 2);
 
@@ -172,7 +172,7 @@ abstract class AnimationProvider {
 	final private List<DrawInfo> myDrawInfos = new LinkedList<DrawInfo>();
 
 	final void draw(Canvas canvas) {
-		final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+		final ZLViewWidget widget = FBReaderApp.Instance().getWidget();
 		widget.setBitmapSize(myWidth, myHeight);
 		final long start = System.currentTimeMillis();
 		drawInternal(canvas);
@@ -191,12 +191,12 @@ abstract class AnimationProvider {
 	}
 
 	protected Bitmap getBitmapFrom() {
-		final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+		final ZLViewWidget widget = FBReaderApp.Instance().getWidget();
 		return widget.getBitmap(ZLTextView.PageIndex.current);
 	}
 
 	protected Bitmap getBitmapTo() {
-		final ZLViewWidget widget = ZLibrary.Instance().getWidget();
+		final ZLViewWidget widget = FBReaderApp.Instance().getWidget();
 		return widget.getBitmap(getPageToScrollTo());
 	}
 }

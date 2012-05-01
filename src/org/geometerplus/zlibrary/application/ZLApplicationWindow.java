@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.error.ErrorKeys;
 import org.geometerplus.zlibrary.resources.ZLResource;
 
@@ -90,8 +89,7 @@ public class ZLApplicationWindow {
 	}
 
 	public void runWithMessage(String key, Runnable action, Runnable postAction) {
-		final Activity activity = 
-			((ZLibrary)ZLibrary.Instance()).getActivity();
+		final Activity activity = FBReaderApp.Instance().getActivity();
 		if (activity != null) {
 			UIUtil.runWithMessage(activity, key, action, postAction, false);
 		} else {
@@ -102,8 +100,7 @@ public class ZLApplicationWindow {
 	public void processException(Exception exception) {
 		exception.printStackTrace();
 
-		final Activity activity = 
-			((ZLibrary)ZLibrary.Instance()).getActivity();
+		final Activity activity = FBReaderApp.Instance().getActivity();
 		final Intent intent = new Intent(
 			"android.fbreader.action.ERROR",
 			new Uri.Builder().scheme(exception.getClass().getSimpleName()).build()
@@ -129,8 +126,7 @@ public class ZLApplicationWindow {
 	}
 
 	public void setTitle(final String title) {
-		final Activity activity = 
-			((ZLibrary)ZLibrary.Instance()).getActivity();
+		final Activity activity = FBReaderApp.Instance().getActivity();
 		if (activity != null) {
 			activity.runOnUiThread(new Runnable() {
 				public void run() {
@@ -141,7 +137,7 @@ public class ZLApplicationWindow {
 	}
 
 	public void close() {
-		(ZLibrary.Instance()).finish();
+		FBReaderApp.Instance().finish();
 	}
 
 	private int myBatteryLevel;

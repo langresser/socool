@@ -24,7 +24,6 @@ import android.app.Application;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.application.ZLApplicationWindow;
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.misc.ZLSQLiteConfig;
 
@@ -34,7 +33,6 @@ public class FBReaderApplication extends Application {
 		super.onCreate();
 		new ZLSQLiteConfig(this);
 		new ZLAndroidImageManager();
-		new ZLibrary(this);
-		new FBReaderApp();
+		new FBReaderApp(this);
 	}
 }

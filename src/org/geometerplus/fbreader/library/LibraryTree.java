@@ -48,7 +48,7 @@ public abstract class LibraryTree extends FBTree {
 		return true;
 	}
 
-	TagTree getTagSubTree(Tag tag) {
+	public TagTree getTagSubTree(Tag tag) {
 		final TagTree temp = new TagTree(tag);
 		int position = Collections.binarySearch(subTrees(), temp);
 		if (position >= 0) {
@@ -58,7 +58,7 @@ public abstract class LibraryTree extends FBTree {
 		}
 	}
 
-	TitleTree getTitleSubTree(String title) {
+	public TitleTree getTitleSubTree(String title) {
 		final TitleTree temp = new TitleTree(title);
 		int position = Collections.binarySearch(subTrees(), temp);
 		if (position >= 0) {
@@ -68,7 +68,7 @@ public abstract class LibraryTree extends FBTree {
 		}
 	}
 
-	AuthorTree getAuthorSubTree(Author author) {
+	public AuthorTree getAuthorSubTree(Author author) {
 		final AuthorTree temp = new AuthorTree(author);
 		int position = Collections.binarySearch(subTrees(), temp);
 		if (position >= 0) {
@@ -78,7 +78,7 @@ public abstract class LibraryTree extends FBTree {
 		}
 	}
 
-	BookTree getBookSubTree(Book book, boolean showAuthors) {
+	public BookTree getBookSubTree(Book book, boolean showAuthors) {
 		final BookTree temp = new BookTree(book, showAuthors);
 		int position = Collections.binarySearch(subTrees(), temp);
 		if (position >= 0) {
@@ -88,7 +88,7 @@ public abstract class LibraryTree extends FBTree {
 		}
 	}
 
-	SeriesTree getSeriesSubTree(String series) {
+	public SeriesTree getSeriesSubTree(String series) {
 		final SeriesTree temp = new SeriesTree(series);
 		int position = Collections.binarySearch(subTrees(), temp);
 		if (position >= 0) {

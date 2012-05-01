@@ -24,7 +24,6 @@ import android.graphics.*;
 import android.view.*;
 import android.util.AttributeSet;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;

@@ -24,9 +24,9 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 
-import org.geometerplus.fbreader.library.Library;
 
 public class LibrarySearchActivity extends Activity {
 	@Override
@@ -38,7 +38,7 @@ public class LibrarySearchActivity extends Activity {
 			final String pattern = intent.getStringExtra(SearchManager.QUERY);
 			if (pattern != null && pattern.length() > 0) {
 				LibraryActivity.BookSearchPatternOption.setValue(pattern);
-				Library.Instance().startBookSearch(pattern);
+				FBReaderApp.Instance().startBookSearch(pattern);
 			}
 		}
 		finish();

@@ -131,7 +131,7 @@ public class Book {
 		myIsSaved = true;
 	}
 
-	Book(ZLFile file) throws BookReadingException {
+	public Book(ZLFile file) throws BookReadingException {
 		myId = -1;
 		final FormatPlugin plugin = getPlugin(file);
 		File = plugin.realBookFile(file);
@@ -168,7 +168,7 @@ public class Book {
 		return getPlugin(File);
 	}
 
-	void readMetaInfo() throws BookReadingException {
+	public void readMetaInfo() throws BookReadingException {
 		readMetaInfo(getPlugin());
 	}
 
@@ -362,7 +362,7 @@ public class Book {
 		addTag(Tag.getTag(null, tagName));
 	}
 
-	boolean matches(String pattern) {
+	public boolean matches(String pattern) {
 		if (myTitle != null && ZLMiscUtil.matchesIgnoreCase(myTitle, pattern)) {
 			return true;
 		}

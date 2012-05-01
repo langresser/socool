@@ -43,7 +43,7 @@ public final class SeriesTree extends LibraryTree {
 		return "@SeriesTree " + getName();
 	}
 
-	BookTree getBookInSeriesSubTree(Book book) {
+	public BookTree getBookInSeriesSubTree(Book book) {
 		final BookInSeriesTree temp = new BookInSeriesTree(book);
 		int position = Collections.binarySearch(subTrees(), temp);
 		if (position >= 0) {

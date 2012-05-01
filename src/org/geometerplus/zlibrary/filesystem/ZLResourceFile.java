@@ -19,15 +19,16 @@
 
 package org.geometerplus.zlibrary.filesystem;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+
 
 public abstract class ZLResourceFile extends ZLFile {
 	public static ZLResourceFile createResourceFile(String path) {
-		return ZLibrary.Instance().createResourceFile(path);
+		return FBReaderApp.Instance().createResourceFile(path);
 	}
 
 	static ZLResourceFile createResourceFile(ZLResourceFile parent, String name) {
-		return ZLibrary.Instance().createResourceFile(parent, name);
+		return FBReaderApp.Instance().createResourceFile(parent, name);
 	}
 
 	private final String myPath;

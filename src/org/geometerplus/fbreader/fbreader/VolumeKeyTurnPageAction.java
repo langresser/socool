@@ -1,6 +1,5 @@
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 class VolumeKeyTurnPageAction extends FBAction {
@@ -14,13 +13,13 @@ class VolumeKeyTurnPageAction extends FBAction {
 	@Override
 	protected void run(Object ... params) {
 		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
-		if (ZLibrary.Instance().isUseGLView()) {
-			ZLibrary.Instance().getWidgetGL().startAnimatedScrolling(
+		if (FBReaderApp.Instance().isUseGLView()) {
+			FBReaderApp.Instance().getWidgetGL().startAnimatedScrolling(
 				myForward ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous,
 				preferences.AnimationSpeedOption.getValue()
 			);
 		} else {
-			ZLibrary.Instance().getWidget().startAnimatedScrolling(
+			FBReaderApp.Instance().getWidget().startAnimatedScrolling(
 					myForward ? ZLTextView.PageIndex.next : ZLTextView.PageIndex.previous,
 							-1, -1, preferences.AnimationSpeedOption.getValue()
 				);

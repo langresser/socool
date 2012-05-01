@@ -19,8 +19,8 @@
 
 package org.geometerplus.fbreader.library;
 
-class RootTree extends LibraryTree {
-	RootTree() {
+public class RootTree extends LibraryTree {
+	public RootTree() {
 	}
 
 	@Override

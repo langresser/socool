@@ -19,7 +19,6 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
@@ -37,6 +36,6 @@ class ChangeFontSizeAction extends FBAction {
 			ZLTextStyleCollection.Instance().getBaseStyle().FontSizeOption;
 		option.setValue(option.getValue() + myDelta);
 		Reader.clearTextCaches();
-		ZLibrary.Instance().repaintWidget();
+		FBReaderApp.Instance().repaintWidget();
 	}
 }

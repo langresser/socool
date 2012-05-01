@@ -19,7 +19,8 @@
 
 package org.geometerplus.zlibrary.text.view;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+
 
 public enum ZLTextSelectionCursor {
 	None,
@@ -32,7 +33,7 @@ public enum ZLTextSelectionCursor {
 
 	private static void init() {
 		if (ourHeight == 0) {
-			final int dpi = ZLibrary.Instance().getDisplayDPI();
+			final int dpi = FBReaderApp.Instance().getDisplayDPI();
 			ourAccent = dpi / 12;
 			ourWidth = dpi / 6;
 			ourHeight = dpi / 4;

@@ -19,7 +19,6 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextRegion;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.view.ZLTextWordRegionSoul;
@@ -54,7 +53,7 @@ public class MoveCursorAction extends FBAction {
 			}
 		}
 
-		ZLibrary.Instance().resetWidget();
-		ZLibrary.Instance().repaintWidget();
+		FBReaderApp.Instance().resetWidget();
+		FBReaderApp.Instance().repaintWidget();
 	}
 }

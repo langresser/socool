@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.xml.*;
 import org.geometerplus.zlibrary.text.model.ZLTextAlignmentType;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
@@ -55,7 +55,7 @@ public class ZLTextStyleCollection {
 	}
 
 	private static class TextStyleReader extends ZLXMLReaderAdapter {
-		private final int myDpi = ZLibrary.Instance().getDisplayDPI();
+		private final int myDpi = FBReaderApp.Instance().getDisplayDPI();
 		private ZLTextStyleCollection myCollection;
 
 		public boolean dontCacheAttributeValues() {

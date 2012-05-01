@@ -33,18 +33,20 @@ import org.geometerplus.zlibrary.resources.ZLResource;
 import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.fbreader.FBTree;
-import org.geometerplus.fbreader.library.*;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.library.Book;
+import org.geometerplus.fbreader.library.BooksDatabase;
+import org.geometerplus.fbreader.library.FileTree;
+import org.geometerplus.fbreader.library.LibraryTree;
+import org.geometerplus.fbreader.library.LibraryUtil;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
 
-public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItemClickListener, View.OnCreateContextMenuListener, Library.ChangeListener {
+public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItemClickListener, View.OnCreateContextMenuListener, FBReaderApp.ChangeListener {
 	static volatile boolean ourToBeKilled = false;
 
 	public static final String SELECTED_BOOK_PATH_KEY = "SelectedBookPath";
-
-	private BooksDatabase myDatabase;
-	private Library myLibrary;
 
 	private Book mySelectedBook;
 
@@ -52,15 +54,12 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		myDatabase = BooksDatabase.Instance();
-		if (myDatabase == null) {
-			myDatabase = new BooksDatabase(this, "LIBRARY");
-		}
-		if (myLibrary == null) {
-			myLibrary = Library.Instance();
-			myLibrary.addChangeListener(this);
-			myLibrary.startBuild();
-		}
+		if (BooksDatabase.Instance() == null) {
+        	new BooksDatabase(this);
+        }
+		
+		FBReaderApp.Instance().addChangeListener(this);
+		FBReaderApp.Instance().startBuild();
 
 		final String selectedBookPath = getIntent().getStringExtra(SELECTED_BOOK_PATH_KEY);
 		mySelectedBook = null;
@@ -81,7 +80,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 
 	@Override
 	protected FBTree getTreeByKey(FBTree.Key key) {
-		return key != null ? myLibrary.getLibraryTree(key) : myLibrary.getRootTree();
+		return key != null ? FBReaderApp.Instance().getLibraryTree(key) : FBReaderApp.Instance().getRootTree();
 	}
 
 	@Override
@@ -92,8 +91,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 
 	@Override
 	protected void onDestroy() {
-		myLibrary.removeChangeListener(this);
-		myLibrary = null;
+		FBReaderApp.Instance().removeChangeListener(this);
 		super.onDestroy();
 	}
 
@@ -132,7 +130,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 		if (requestCode == BOOK_INFO_REQUEST && intent != null) {
 			final String path = intent.getStringExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY);
 			final Book book = Book.getByFile(ZLFile.createFileByPath(path));
-			myLibrary.refreshBookInfo(book);
+			FBReaderApp.Instance().refreshBookInfo(book);
 			getListView().invalidateViews();
 		} else {
 			super.onActivityResult(requestCode, returnCode, intent);
@@ -146,7 +144,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 		new ZLStringOption("BookSearch", "Pattern", "");
 
 	private void openSearchResults() {
-		final FBTree tree = myLibrary.getRootTree().getSubTree(Library.ROOT_FOUND);
+		final FBTree tree = FBReaderApp.Instance().getRootTree().getSubTree(FBReaderApp.ROOT_FOUND);
 		if (tree != null) {
 			openTree(tree);
 		}
@@ -185,12 +183,12 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 		if (book.File.getPhysicalFile() != null) {
 			menu.add(0, SHARE_BOOK_ITEM_ID, 0, resource.getResource("shareBook").getValue());
 		}
-		if (myLibrary.isBookInFavorites(book)) {
+		if (FBReaderApp.Instance().isBookInFavorites(book)) {
 			menu.add(0, REMOVE_FROM_FAVORITES_ITEM_ID, 0, resource.getResource("removeFromFavorites").getValue());
 		} else {
 			menu.add(0, ADD_TO_FAVORITES_ITEM_ID, 0, resource.getResource("addToFavorites").getValue());
 		}
-		if (myLibrary.canRemoveBookFile(book)) {
+		if (FBReaderApp.Instance().canRemoveBookFile(book)) {
 			menu.add(0, DELETE_BOOK_ITEM_ID, 0, resource.getResource("deleteBook").getValue());
 		}
 	}
@@ -217,10 +215,10 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 				UIUtil.shareBook(this, book);
 				return true;
 			case ADD_TO_FAVORITES_ITEM_ID:
-				myLibrary.addBookToFavorites(book);
+				FBReaderApp.Instance().addBookToFavorites(book);
 				return true;
 			case REMOVE_FROM_FAVORITES_ITEM_ID:
-				myLibrary.removeBookFromFavorites(book);
+				FBReaderApp.Instance().removeBookFromFavorites(book);
 				getListView().invalidateViews();
 				return true;
 			case DELETE_BOOK_ITEM_ID:
@@ -292,13 +290,13 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 			.setTitle(book.getTitle())
 			.setMessage(boxResource.getResource("message").getValue())
 			.setIcon(0)
-			.setPositiveButton(buttonResource.getResource("yes").getValue(), new BookDeleter(book, Library.REMOVE_FROM_DISK))
+			.setPositiveButton(buttonResource.getResource("yes").getValue(), new BookDeleter(book, FBReaderApp.REMOVE_FROM_DISK))
 			.setNegativeButton(buttonResource.getResource("no").getValue(), null)
 			.create().show();
 	}
 
 	private void deleteBook(Book book, int mode) {
-		myLibrary.removeBook(book, mode);
+		FBReaderApp.Instance().removeBook(book, mode);
 
 		if (getCurrentTree() instanceof FileTree) {
 			getListAdapter().remove(new FileTree((FileTree)getCurrentTree(), book.File));
@@ -316,7 +314,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 						getListAdapter().replaceAll(getCurrentTree().subTrees());
 						break;
 					case StatusChanged:
-						setProgressBarIndeterminateVisibility(!myLibrary.isUpToDate());
+						setProgressBarIndeterminateVisibility(!FBReaderApp.Instance().isUpToDate());
 						break;
 					case Found:
 						openSearchResults();

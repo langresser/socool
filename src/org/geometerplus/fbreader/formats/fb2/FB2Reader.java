@@ -22,7 +22,6 @@ package org.geometerplus.fbreader.formats.fb2;
 import java.util.*;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.text.model.ZLTextParagraph;
@@ -34,6 +33,7 @@ import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 import org.geometerplus.fbreader.bookmodel.*;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public final class FB2Reader extends ZLXMLReaderAdapter {
 	private final BookReader myBookReader;
@@ -426,7 +426,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 	}
 
 	public void collectExternalEntities(HashMap<String,char[]> entityMap) {
-		entityMap.put("FBReaderVersion", ZLibrary.Instance().getVersionName().toCharArray());
+		entityMap.put("FBReaderVersion", FBReaderApp.Instance().getVersionName().toCharArray());
 	}
 
 	public List<String> externalDTDs() {

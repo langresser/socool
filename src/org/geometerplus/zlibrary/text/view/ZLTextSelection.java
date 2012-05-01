@@ -20,7 +20,6 @@
 package org.geometerplus.zlibrary.text.view;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.application.ZLibrary;
 
 class ZLTextSelection implements ZLTextAbstractHighlighting {
 	static class Point {
@@ -167,13 +166,13 @@ class ZLTextSelection implements ZLTextAbstractHighlighting {
 		if (myCursorInMovement == ZLTextSelectionCursor.Right) {
 			if (hasAPartAfterPage(myView.myCurrentPage)) {
 				myView.scrollPage(true, ZLTextView.ScrollingMode.SCROLL_LINES, 1);
-				ZLibrary.Instance().resetWidget();
+				FBReaderApp.Instance().resetWidget();
 				myView.preparePaintInfo();
 			}
 		} else {
 			if (hasAPartBeforePage(myView.myCurrentPage)) {
 				myView.scrollPage(false, ZLTextView.ScrollingMode.SCROLL_LINES, 1);
-				ZLibrary.Instance().resetWidget();
+				FBReaderApp.Instance().resetWidget();
 				myView.preparePaintInfo();
 			}
 		}
@@ -287,8 +286,8 @@ class ZLTextSelection implements ZLTextAbstractHighlighting {
 			myView.scrollPage(myScrollForward, ZLTextView.ScrollingMode.SCROLL_LINES, 1);
 			myView.preparePaintInfo();
 			expandTo(myX, myY);
-			ZLibrary.Instance().resetWidget();
-			ZLibrary.Instance().repaintWidget();
+			FBReaderApp.Instance().resetWidget();
+			FBReaderApp.Instance().repaintWidget();
 		}
 
 		private void stop() {

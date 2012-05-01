@@ -31,7 +31,7 @@ public class FirstLevelTree extends LibraryTree {
 		myResource = LibraryUtil.resource().getResource(myId);
 	}
 
-	FirstLevelTree(RootTree root, String id) {
+	public FirstLevelTree(RootTree root, String id) {
 		super(root);
 		myId = id;
 		myResource = LibraryUtil.resource().getResource(myId);

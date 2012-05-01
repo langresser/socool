@@ -30,8 +30,6 @@ import org.geometerplus.zlibrary.text.view.style.*;
 import org.geometerplus.zlibrary.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
-
 import org.geometerplus.fbreader.fbreader.*;
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
@@ -49,7 +47,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		setResult(SCReaderActivity.RESULT_REPAINT);
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		final ZLibrary androidLibrary = (ZLibrary)ZLibrary.Instance();
 		final ColorProfile profile = fbReader.getColorProfile();
 
 		final Screen directoriesScreen = createPreferenceScreen("directories");
@@ -62,7 +59,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		final Screen appearanceScreen = createPreferenceScreen("appearance");
 		appearanceScreen.addPreference(new ZLStringChoicePreference(
 			this, appearanceScreen.Resource, "screenOrientation",
-			androidLibrary.OrientationOption, androidLibrary.allOrientations()
+			fbReader.OrientationOption, fbReader.allOrientations()
 		));
 		appearanceScreen.addPreference(new ZLBooleanPreference(
 			this,
@@ -70,17 +67,17 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			appearanceScreen.Resource,
 			"allowScreenBrightnessAdjustment"
 		) {
-			private final int myLevel = androidLibrary.ScreenBrightnessLevelOption.getValue();
+			private final int myLevel = fbReader.ScreenBrightnessLevelOption.getValue();
 
 			@Override
 			protected void onClick() {
 				super.onClick();
-				androidLibrary.ScreenBrightnessLevelOption.setValue(isChecked() ? myLevel : 0);
+				fbReader.ScreenBrightnessLevelOption.setValue(isChecked() ? myLevel : 0);
 			}
 		});
 		appearanceScreen.addPreference(new BatteryLevelToTurnScreenOffPreference(
 			this,
-			androidLibrary.BatteryLevelToTurnScreenOffOption,
+			fbReader.BatteryLevelToTurnScreenOffOption,
 			appearanceScreen.Resource,
 			"dontTurnScreenOff"
 		));

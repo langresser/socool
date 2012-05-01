@@ -35,7 +35,6 @@ import org.geometerplus.zlibrary.text.view.ZLTextWord;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
-import org.geometerplus.zlibrary.application.ZLibrary;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
