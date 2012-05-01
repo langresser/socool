@@ -26,19 +26,15 @@ import android.graphics.*;
 
 class NoneAnimationProvider extends AnimationProvider {
 	private final Paint myPaint = new Paint();
-	private float mySpeedFactor;
+//	private float mySpeedFactor;
 
 	@Override
 	protected void drawInternal(Canvas canvas) {
-		myPaint.setColor(Color.rgb(127, 127, 127));
-		final int dY = myEndY - myStartY;
-		canvas.drawBitmap(getBitmapTo(), 0, dY > 0 ? dY - myHeight : dY + myHeight, myPaint);
-		canvas.drawBitmap(getBitmapFrom(), 0, dY, myPaint);
-		if (dY > 0 && dY < myHeight) {
-			canvas.drawLine(0, dY, myWidth + 1, dY, myPaint);
-		} else if (dY < 0 && dY > -myHeight) {
-			canvas.drawLine(0, dY + myHeight, myWidth + 1, dY + myHeight, myPaint);
-		}
+//		myPaint.setColor(Color.rgb(127, 127, 127));
+//		final int dY = myEndY - myStartY;
+//		canvas.drawBitmap(getBitmapTo(), 0, dY > 0 ? dY - myHeight : dY + myHeight, myPaint);
+//		canvas.drawBitmap(getBitmapFrom(), 0, dY, myPaint);
+		canvas.drawBitmap(getBitmapFrom(), 0, 0, myPaint);
 	}
 
 	@Override
@@ -51,10 +47,10 @@ class NoneAnimationProvider extends AnimationProvider {
 	@Override
 	protected void startAnimatedScrollingInternal(int speed, boolean animationByClick) {
 		// 点击进行翻页不要动画，手指拖动可以产生动画
-		if (!animationByClick) {
-			mySpeedFactor = (float)Math.pow(1.5, 0.25 * speed);
-			doStep();
-		}
+//		if (!animationByClick) {
+//			mySpeedFactor = (float)Math.pow(1.5, 0.25 * speed);
+//			doStep();
+//		}
 	}
 
 	@Override
@@ -65,38 +61,38 @@ class NoneAnimationProvider extends AnimationProvider {
 	@Override
 	void doStep() {
 		// 无动画效果
-//		if (getMode().Auto) {
-//			terminate();
-//			return;
-//		}
+		if (getMode().Auto) {
+			terminate();
+			return;
+		}
 
 		// 滚动动画
 		if (!getMode().Auto) {
 			return;
 		}
 
-		myEndY += (int)mySpeed;
-
-		final int bound;
-		if (getMode() == Mode.AnimatedScrollingForward) {
-			bound = myHeight;
-		} else {
-			bound = 0;
-		}
-		if (mySpeed > 0) {
-			if (getScrollingShift() >= bound) {
-				myEndY = myStartY + bound;
-				terminate();
-				return;
-			}
-		} else {
-			if (getScrollingShift() <= -bound) {
-				myEndY = myStartY - bound;
-				terminate();
-				return;
-			}
-		}
-		mySpeed *= mySpeedFactor;
+//		myEndY += (int)mySpeed;
+//
+//		final int bound;
+//		if (getMode() == Mode.AnimatedScrollingForward) {
+//			bound = myHeight;
+//		} else {
+//			bound = 0;
+//		}
+//		if (mySpeed > 0) {
+//			if (getScrollingShift() >= bound) {
+//				myEndY = myStartY + bound;
+//				terminate();
+//				return;
+//			}
+//		} else {
+//			if (getScrollingShift() <= -bound) {
+//				myEndY = myStartY - bound;
+//				terminate();
+//				return;
+//			}
+//		}
+//		mySpeed *= mySpeedFactor;
 	}
 	
 	protected int getScrollingShift() {

@@ -83,11 +83,6 @@ class ShiftAnimationProvider extends AnimationProvider {
 		final int dX = myEndX - myStartX;
 		canvas.drawBitmap(getBitmapTo(), dX > 0 ? dX - myWidth : dX + myWidth, 0, myPaint);
 		canvas.drawBitmap(getBitmapFrom(), dX, 0, myPaint);
-		if (dX > 0 && dX < myWidth) {
-			canvas.drawLine(dX, 0, dX, myHeight + 1, myPaint);
-		} else if (dX < 0 && dX > -myWidth) {
-			canvas.drawLine(dX + myWidth, 0, dX + myWidth, myHeight + 1, myPaint);
-		}
 	}
 	
 	protected int getScrollingShift() {
