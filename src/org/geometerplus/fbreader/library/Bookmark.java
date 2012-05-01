@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.library;
 
 import java.util.*;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.text.view.*;
 
 
@@ -144,14 +145,14 @@ public final class Bookmark {
 
 	public void save() {
 		if (myIsChanged) {
-			myId = BooksDatabase.Instance().saveBookmark(this);
+			myId = FBReaderApp.Instance().getDatabase().saveBookmark(this);
 			myIsChanged = false;
 		}
 	}
 
 	public void delete() {
 		if (myId != -1) {
-			BooksDatabase.Instance().deleteBookmark(this);
+			FBReaderApp.Instance().getDatabase().deleteBookmark(this);
 		}
 	}
 

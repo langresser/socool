@@ -149,10 +149,6 @@ public final class SCReaderActivity extends Activity {
 		setContentView(m_mainLayout);
 
 		if (myMainWindow == null) {
-			if (BooksDatabase.Instance() == null) {
-				new BooksDatabase(this);
-			}
-
 			myMainWindow = new ZLApplicationWindow();
 		}
 

@@ -39,13 +39,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 public class BooksDatabase {
-	private static BooksDatabase ourInstance;
 	private final SQLiteDatabase myDatabase;
-
-
-	public static BooksDatabase Instance() {
-		return ourInstance;
-	}
 
 	protected Book createBook(long id, long fileId, String title, String encoding, String language) {
 		final FileInfoSet infos = new FileInfoSet(fileId);
@@ -69,9 +63,8 @@ public class BooksDatabase {
 	}
 
 	public BooksDatabase(Context context) {
-		ourInstance = this;
 		myDatabase = context.openOrCreateDatabase("books.db", Context.MODE_PRIVATE, null);
-		migrate(context);
+		updateDatabase();
 	}
 
 	public void executeAsATransaction(Runnable actions) {
@@ -93,28 +86,25 @@ public class BooksDatabase {
 		}
 	}
 
-	private void migrate(Context context) {
+	private void updateDatabase() {
 		final int version = myDatabase.getVersion();
 		final int currentVersion = 1;
 		if (version >= currentVersion) {
 			return;
 		}
-		UIUtil.wait((version == 0) ? "creatingBooksDatabase" : "updatingBooksDatabase", new Runnable() {
-			public void run() {
-				myDatabase.beginTransaction();
 
-				switch (version) {
-					case 0:
-						createTables();
-						break;
-				}
-				myDatabase.setTransactionSuccessful();
-				myDatabase.endTransaction();
+		myDatabase.beginTransaction();
 
-				myDatabase.execSQL("VACUUM");
-				myDatabase.setVersion(currentVersion);
-			}
-		}, context);
+		switch (version) {
+			case 0:
+				createTables();
+				break;
+		}
+		myDatabase.setTransactionSuccessful();
+		myDatabase.endTransaction();
+
+		myDatabase.execSQL("VACUUM");
+		myDatabase.setVersion(currentVersion);
 	}
 
 	protected Book loadBook(long bookId) {

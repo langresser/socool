@@ -122,7 +122,7 @@ public class ZLTextView {
 
 		if (FBReaderApp.Instance().Model != null) {
 			final long bookId = FBReaderApp.Instance().Model.Book.getId();
-			List<Bookmark> bookmarks = BooksDatabase.Instance().loadBookmarks(bookId);
+			List<Bookmark> bookmarks = FBReaderApp.Instance().getDatabase().loadBookmarks(bookId);
 			for (Bookmark bookmark : bookmarks) {
 				addBookmarkHighlight(bookmark);
 			}

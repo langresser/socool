@@ -146,10 +146,14 @@ public final class FBReaderApp {
 	private volatile ZLTextView myView;
 
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
+	
+	private BooksDatabase m_booksDatabase;
 
 	public FBReaderApp(Application application) {
 		ourInstance = this;
 		myApplication = application;
+		
+		m_booksDatabase = new BooksDatabase(application);
 		
 		new FavoritesTree(myRootTree, ROOT_FAVORITES);
 		new FirstLevelTree(myRootTree, ROOT_RECENT);
@@ -186,6 +190,11 @@ public final class FBReaderApp {
 		BookTextView = new ZLTextView();
 
 		setView(BookTextView);
+	}
+	
+	public BooksDatabase getDatabase()
+	{
+		return m_booksDatabase;
 	}
 
 	public void openBook(Book book, final Bookmark bookmark, final Runnable postAction) {
@@ -1268,7 +1277,7 @@ public final class FBReaderApp {
 	private void build() {
 		// Step 0: get database books marked as "existing"
 		final FileInfoSet fileInfos = new FileInfoSet();
-		final Map<Long,Book> savedBooksByFileId = BooksDatabase.Instance().loadBooks(fileInfos, true);
+		final Map<Long,Book> savedBooksByFileId = m_booksDatabase.loadBooks(fileInfos, true);
 		final Map<Long,Book> savedBooksByBookId = new HashMap<Long,Book>();
 		for (Book b : savedBooksByFileId.values()) {
 			savedBooksByBookId.put(b.getId(), b);
@@ -1287,7 +1296,7 @@ public final class FBReaderApp {
 			myDoGroupTitlesByFirstLetter = savedBooksByFileId.values().size() > letterSet.size() * 5 / 4;
 		}
 
-		for (long id : BooksDatabase.Instance().loadRecentBookIds()) {
+		for (long id : m_booksDatabase.loadRecentBookIds()) {
 			Book book = savedBooksByBookId.get(id);
 			if (book == null) {
 				book = Book.getById(id);
@@ -1300,7 +1309,7 @@ public final class FBReaderApp {
 			}
 		}
 
-		for (long id : BooksDatabase.Instance().loadFavoritesIds()) {
+		for (long id : FBReaderApp.Instance().getDatabase().loadFavoritesIds()) {
 			Book book = savedBooksByBookId.get(id);
 			if (book == null) {
 				book = Book.getById(id);
@@ -1355,7 +1364,7 @@ public final class FBReaderApp {
 
 		// Step 3: collect books from physical files; add new, update already added,
 		//         unmark orphaned as existing again, collect newly added
-		final Map<Long,Book> orphanedBooksByFileId = BooksDatabase.Instance().loadBooks(fileInfos, false);
+		final Map<Long,Book> orphanedBooksByFileId = FBReaderApp.Instance().getDatabase().loadBooks(fileInfos, false);
 		final Set<Book> newBooks = new HashSet<Book>();
 
 		final List<ZLPhysicalFile> physicalFilesList = collectPhysicalFiles();
@@ -1386,7 +1395,7 @@ public final class FBReaderApp {
 		// Step 5: save changes into database
 		fileInfos.save();
 
-		BooksDatabase.Instance().executeAsATransaction(new Runnable() {
+		FBReaderApp.Instance().getDatabase().executeAsATransaction(new Runnable() {
 			public void run() {
 				for (Book book : newBooks) {
 					book.save();
@@ -1423,12 +1432,12 @@ public final class FBReaderApp {
 	}
 
 	public Book getRecentBook() {
-		List<Long> recentIds = BooksDatabase.Instance().loadRecentBookIds();
+		List<Long> recentIds = m_booksDatabase.loadRecentBookIds();
 		return recentIds.size() > 0 ? Book.getById(recentIds.get(0)) : null;
 	}
 
 	public Book getPreviousBook() {
-		List<Long> recentIds = BooksDatabase.Instance().loadRecentBookIds();
+		List<Long> recentIds = m_booksDatabase.loadRecentBookIds();
 		return recentIds.size() > 1 ? Book.getById(recentIds.get(1)) : null;
 	}
 
@@ -1487,14 +1496,14 @@ public final class FBReaderApp {
 	}
 
 	public void addBookToRecentList(Book book) {
-		final List<Long> ids = BooksDatabase.Instance().loadRecentBookIds();
+		final List<Long> ids = m_booksDatabase.loadRecentBookIds();
 		final Long bookId = book.getId();
 		ids.remove(bookId);
 		ids.add(0, bookId);
 		if (ids.size() > 12) {
 			ids.remove(12);
 		}
-		BooksDatabase.Instance().saveRecentBookIds(ids);
+		m_booksDatabase.saveRecentBookIds(ids);
 	}
 
 	public boolean isBookInFavorites(Book book) {
@@ -1516,12 +1525,12 @@ public final class FBReaderApp {
 		}
 		final LibraryTree rootFavorites = getFirstLevelTree(ROOT_FAVORITES);
 		rootFavorites.getBookSubTree(book, true);
-		BooksDatabase.Instance().addToFavorites(book.getId());
+		m_booksDatabase.addToFavorites(book.getId());
 	}
 
 	public void removeBookFromFavorites(Book book) {
 		if (getFirstLevelTree(ROOT_FAVORITES).removeBook(book, false)) {
-			BooksDatabase.Instance().removeFromFavorites(book.getId());
+			m_booksDatabase.removeFromFavorites(book.getId());
 			fireModelChangedEvent(ChangeListener.Code.BookRemoved);
 		}
 	}
@@ -1546,14 +1555,14 @@ public final class FBReaderApp {
 		}
 		myBooks.remove(book);
 		if (getFirstLevelTree(ROOT_RECENT).removeBook(book, false)) {
-			final List<Long> ids = BooksDatabase.Instance().loadRecentBookIds();
+			final List<Long> ids = m_booksDatabase.loadRecentBookIds();
 			ids.remove(book.getId());
-			BooksDatabase.Instance().saveRecentBookIds(ids);
+			m_booksDatabase.saveRecentBookIds(ids);
 		}
 		getFirstLevelTree(ROOT_FAVORITES).removeBook(book, false);
 		myRootTree.removeBook(book, true);
 
-		BooksDatabase.Instance().deleteFromBookList(book.getId());
+		m_booksDatabase.deleteFromBookList(book.getId());
 		if ((removeMode & REMOVE_FROM_DISK) != 0) {
 			book.File.getPhysicalFile().delete();
 		}

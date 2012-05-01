@@ -72,10 +72,6 @@ public class BookInfoActivity extends Activity {
 		myDontReloadBook = getIntent().getBooleanExtra(FROM_READING_MODE_KEY, false);
 		myFile = ZLFile.createFileByPath(path);
 
-		if (BooksDatabase.Instance() == null) {
-			new BooksDatabase(this);
-		}
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
 

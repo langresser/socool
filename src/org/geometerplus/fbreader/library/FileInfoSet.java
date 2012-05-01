@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.library;
 
 import java.util.*;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
@@ -63,15 +64,15 @@ public final class FileInfoSet {
 	private final LinkedHashSet<FileInfo> myInfosToRemove = new LinkedHashSet<FileInfo>();
 
 	public FileInfoSet() {
-		load(BooksDatabase.Instance().loadFileInfos());
+		load(FBReaderApp.Instance().getDatabase().loadFileInfos());
 	}
 
 	public FileInfoSet(ZLFile file) {
-		load(BooksDatabase.Instance().loadFileInfos(file));
+		load(FBReaderApp.Instance().getDatabase().loadFileInfos(file));
 	}
 
 	FileInfoSet(long fileId) {
-		load(BooksDatabase.Instance().loadFileInfos(fileId));
+		load(FBReaderApp.Instance().getDatabase().loadFileInfos(fileId));
 	}
 
 	private void load(Collection<FileInfo> infos) {
@@ -82,7 +83,7 @@ public final class FileInfoSet {
 	}
 
 	public void save() {
-		final BooksDatabase database = BooksDatabase.Instance();
+		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
 		database.executeAsATransaction(new Runnable() {
 			public void run() {
 				for (FileInfo info : myInfosToRemove) {

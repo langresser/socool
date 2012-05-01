@@ -79,7 +79,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 		final TabHost host = getTabHost();
 		LayoutInflater.from(this).inflate(R.layout.bookmarks, host.getTabContentView(), true);
 
-		AllBooksBookmarks = BooksDatabase.Instance().loadAllBookmarks();
+		AllBooksBookmarks = FBReaderApp.Instance().getDatabase().loadAllBookmarks();
 //		Collections.sort(AllBooksBookmarks, new Bookmark.ByTimeComparator());
 
 		if (FBReaderApp.Instance().Model != null) {

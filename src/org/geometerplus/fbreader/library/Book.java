@@ -34,6 +34,7 @@ import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.text.view.ZLTextPosition;
 import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.formats.*;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;
 
@@ -41,7 +42,7 @@ import org.geometerplus.fbreader.Paths;
 
 public class Book {
 	public static Book getById(long bookId) {
-		final Book book = BooksDatabase.Instance().loadBook(bookId);
+		final Book book = FBReaderApp.Instance().getDatabase().loadBook(bookId);
 		if (book == null) {
 			return null;
 		}
@@ -82,7 +83,7 @@ public class Book {
 
 		final FileInfoSet fileInfos = new FileInfoSet(bookFile);
 
-		Book book = BooksDatabase.Instance().loadBookByFile(fileInfos.getId(bookFile), bookFile);
+		Book book = FBReaderApp.Instance().getDatabase().loadBookByFile(fileInfos.getId(bookFile), bookFile);
 		if (book != null) {
 			book.loadLists();
 		}
@@ -148,7 +149,7 @@ public class Book {
 	}
 
 	public void reloadInfoFromDatabase() {
-		final BooksDatabase database = BooksDatabase.Instance();
+		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
 		database.reloadBook(this);
 		myAuthors = database.loadAuthors(myId);
 		myTags = database.loadTags(myId);
@@ -197,7 +198,7 @@ public class Book {
 	}
 
 	private void loadLists() {
-		final BooksDatabase database = BooksDatabase.Instance();
+		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
 		myAuthors = database.loadAuthors(myId);
 		myTags = database.loadTags(myId);
 		mySeriesInfo = database.loadSeriesInfo(myId);
@@ -393,7 +394,7 @@ public class Book {
 		if (myIsSaved) {
 			return false;
 		}
-		final BooksDatabase database = BooksDatabase.Instance();
+		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
 		database.executeAsATransaction(new Runnable() {
 			public void run() {
 				if (myId >= 0) {
@@ -422,12 +423,12 @@ public class Book {
 	}
 
 	public ZLTextPosition getStoredPosition() {
-		return BooksDatabase.Instance().getStoredPosition(myId);
+		return FBReaderApp.Instance().getDatabase().getStoredPosition(myId);
 	}
 
 	public void storePosition(ZLTextPosition position) {
 		if (myId != -1) {
-			BooksDatabase.Instance().storePosition(myId, position);
+			FBReaderApp.Instance().getDatabase().storePosition(myId, position);
 		}
 	}
 
@@ -436,7 +437,7 @@ public class Book {
 		if (myVisitedHyperlinks == null) {
 			myVisitedHyperlinks = new TreeSet<String>();
 			if (myId != -1) {
-				myVisitedHyperlinks.addAll(BooksDatabase.Instance().loadVisitedHyperlinks(myId));
+				myVisitedHyperlinks.addAll(FBReaderApp.Instance().getDatabase().loadVisitedHyperlinks(myId));
 			}
 		}
 	}
@@ -451,7 +452,7 @@ public class Book {
 		if (!myVisitedHyperlinks.contains(linkId)) {
 			myVisitedHyperlinks.add(linkId);
 			if (myId != -1) {
-				BooksDatabase.Instance().addVisitedHyperlink(myId, linkId);
+				FBReaderApp.Instance().getDatabase().addVisitedHyperlink(myId, linkId);
 			}
 		}
 	}
@@ -459,14 +460,14 @@ public class Book {
 	private void storeAllVisitedHyperinks() {
 		if (myId != -1 && myVisitedHyperlinks != null) {
 			for (String linkId : myVisitedHyperlinks) {
-				BooksDatabase.Instance().addVisitedHyperlink(myId, linkId);
+				FBReaderApp.Instance().getDatabase().addVisitedHyperlink(myId, linkId);
 			}
 		}
 	}
 
 	public void insertIntoBookList() {
 		if (myId != -1) {
-			BooksDatabase.Instance().insertIntoBookList(myId);
+			FBReaderApp.Instance().getDatabase().insertIntoBookList(myId);
 		}
 	}
 

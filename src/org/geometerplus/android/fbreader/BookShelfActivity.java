@@ -55,10 +55,6 @@ public class BookShelfActivity extends Activity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 0);
         
         setContentView(R.layout.book_shelf_layout);
-        
-        if (BooksDatabase.Instance() == null) {
-        	new BooksDatabase(this);
-        }
 		
         FBReaderApp.Instance().addChangeListener(this);
         FBReaderApp.Instance().startBuild();

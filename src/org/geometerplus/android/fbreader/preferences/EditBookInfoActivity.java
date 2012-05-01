@@ -155,10 +155,6 @@ public class EditBookInfoActivity extends ZLPreferenceActivity {
 
 	@Override
 	protected void init(Intent intent) {
-		if (BooksDatabase.Instance() == null) {
-			new BooksDatabase(this);
-		}
-
 		final String path = intent.getStringExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY);
 		final ZLFile file = ZLFile.createFileByPath(path);
 		myBook = Book.getByFile(file);

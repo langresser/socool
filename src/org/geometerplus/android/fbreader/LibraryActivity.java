@@ -53,10 +53,6 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
-		if (BooksDatabase.Instance() == null) {
-        	new BooksDatabase(this);
-        }
 		
 		FBReaderApp.Instance().addChangeListener(this);
 		FBReaderApp.Instance().startBuild();
