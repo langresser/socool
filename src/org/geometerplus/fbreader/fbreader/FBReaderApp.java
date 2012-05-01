@@ -52,7 +52,10 @@ import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
+import org.geometerplus.fbreader.filetype.FileType;
+import org.geometerplus.fbreader.filetype.FileTypeCollection;
 import org.geometerplus.fbreader.library.*;
+import org.socool.socoolreader.reader.R;
 
 import android.app.Activity;
 import android.app.Application;
@@ -1662,5 +1665,62 @@ public final class FBReaderApp {
 		if ((removeMode & REMOVE_FROM_DISK) != 0) {
 			book.File.getPhysicalFile().delete();
 		}
+	}
+	
+	public boolean hasCustomCover(ZLFile file)
+	{
+		final String lName = file.getShortName().toLowerCase();
+		if (lName.endsWith(".fb2") || lName.endsWith(".fb2.zip")) {
+			// fb2
+			return true;
+		}
+		
+		if (lName.endsWith(".epub") || lName.endsWith(".oebzip") || lName.endsWith(".opf")) {
+			// epub
+			return true;
+		}
+		
+		if (lName.endsWith(".html") || lName.endsWith(".htm")) {
+			// html
+			return false;
+		}
+		
+		if (lName.endsWith(".rtf")) {
+			// rtf
+			return false;
+		}
+
+		if (lName.endsWith(".txt")) {
+			// txt
+			return false;
+		}
+		
+		return false;
+	}
+
+	public int getCoverResourceId(ZLFile file)
+	{
+		final String lName = file.getShortName().toLowerCase();
+		if (lName.endsWith(".fb2") || lName.endsWith(".fb2.zip")) {
+			// fb2
+		}
+		
+		if (lName.endsWith(".epub") || lName.endsWith(".oebzip") || lName.endsWith(".opf")) {
+			// epub
+		}
+		
+		if (lName.endsWith(".html") || lName.endsWith(".htm")) {
+			// html
+		}
+		
+		if (lName.endsWith(".rtf")) {
+			// rtf
+		}
+
+		if (lName.endsWith(".txt")) {
+			// txt
+		}
+		
+		return R.drawable.ic_list_library_book;
 	}
 }

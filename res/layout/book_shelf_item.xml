@@ -33,14 +33,13 @@
             android:layout_width="wrap_content"  
             android:layout_height="wrap_content"  
             android:layout_weight="1"  
-            android:gravity="center_horizontal" >  
+            android:gravity="center_horizontal" >
   
-            <ImageButton  
+            <ImageView  
                 android:id="@+id/button_1"  
                 android:layout_width="80dip"  
                 android:layout_height="110dip"  
-                android:layout_marginTop="24dip"  
-                android:background="@drawable/default_cover" />  
+                android:layout_marginTop="24dip" />  
         </LinearLayout>  
   
         <LinearLayout  
@@ -49,12 +48,11 @@
             android:layout_weight="1"  
             android:gravity="center_horizontal" >  
   
-            <ImageButton  
+            <ImageView  
                 android:id="@+id/button_2"  
                 android:layout_width="80dip"  
                 android:layout_height="110dip"  
-                android:layout_marginTop="24dip"  
-                android:background="@drawable/default_cover" />  
+                android:layout_marginTop="24dip" />  
         </LinearLayout>  
   
         <LinearLayout  
@@ -63,12 +61,11 @@
             android:layout_weight="1"  
             android:gravity="center_horizontal" >
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/button_3"
                 android:layout_width="80dip"
                 android:layout_height="110dip"
-                android:layout_marginTop="24dip"
-                android:background="@drawable/default_cover" />
+                android:layout_marginTop="24dip" />
   
         </LinearLayout>  
     </LinearLayout>  

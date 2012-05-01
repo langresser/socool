@@ -290,7 +290,10 @@ public class BookShelfActivity extends Activity
     {
     	public void onClick(View view)
     	{
+    	int index = (Integer) view.getTag();
+    	Book book = m_bookList.get(index);
 		 startActivity(new Intent(getApplicationContext(), SCReaderActivity.class)
+		 			.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.File.getPath())
     				.setAction(Intent.ACTION_VIEW));
 //		 finish();
     	}
@@ -354,30 +357,34 @@ public class BookShelfActivity extends Activity
             View layout = LayoutInflater.from(getApplicationContext()).inflate(  
                        R.layout.book_shelf_item, null);
             
-            ImageButton book1 = (ImageButton)layout.findViewById(R.id.button_1);
+            ImageView book1 = (ImageView)layout.findViewById(R.id.button_1);
             updateBookButton(book1, position * 3 + 0);
-            ImageButton book2 = (ImageButton)layout.findViewById(R.id.button_2);
+            ImageView book2 = (ImageView)layout.findViewById(R.id.button_2);
             updateBookButton(book2, position * 3 + 1);
-            ImageButton book3 = (ImageButton)layout.findViewById(R.id.button_3);
+            ImageView book3 = (ImageView)layout.findViewById(R.id.button_3);
             updateBookButton(book3, position * 3 + 2);
              
             return layout;  
         }
         
-        void updateBookButton(ImageButton button, int index)
+        void updateBookButton(ImageView button, int index)
         {
         	button.setTag(index);
         	button.setOnClickListener(clickListener);
         	
-        	if (true || index >= m_bookList.size()) {
+        	if (index >= m_bookList.size()) {
+        		// 先清空原button书籍
+            	button.setVisibility(View.GONE);
+        		button.setImageDrawable(null);
         		return;
         	}
 
         	Book book = m_bookList.get(index);
         	
-          	// 先清空原button书籍
-        	button.setVisibility(View.GONE);
-    		button.setImageDrawable(null);
+        	if (!FBReaderApp.Instance().hasCustomCover(book.File)) {
+        		button.setImageResource(FBReaderApp.Instance().getCoverResourceId(book.File));
+        		return;
+        	}
 
     		final ZLImage image = book.getCover();
 
@@ -397,7 +404,10 @@ public class BookShelfActivity extends Activity
     			return;
     		}
 
-    		final Bitmap coverBitmap = data.getBitmap(50, 80);
+    		button.measure(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    		int width = button.getWidth();
+    		int height = button.getHeight();
+    		final Bitmap coverBitmap = data.getBitmap(width, height);
     		if (coverBitmap == null) {
     			return;
     		}
