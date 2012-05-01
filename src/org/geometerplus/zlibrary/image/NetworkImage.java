@@ -17,16 +17,13 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.fbreader.network;
+package org.geometerplus.zlibrary.image;
 
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.image.ZLFileImage;
-import org.geometerplus.zlibrary.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.network.ZLNetworkManager;
 import org.geometerplus.zlibrary.util.MimeType;

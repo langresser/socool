@@ -21,7 +21,6 @@ package org.geometerplus.zlibrary.image;
 
 import java.io.*;
 
-import org.geometerplus.zlibrary.util.*;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.util.Base64InputStream;
 import org.geometerplus.zlibrary.util.HexInputStream;

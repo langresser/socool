@@ -22,6 +22,7 @@ package org.geometerplus.fbreader.network;
 import java.util.*;
 import java.lang.ref.WeakReference;
 
+import org.geometerplus.zlibrary.image.NetworkImage;
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.options.ZLStringOption;
