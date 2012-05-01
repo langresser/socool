@@ -1504,6 +1504,16 @@ public final class FBReaderApp {
 			ids.remove(12);
 		}
 		m_booksDatabase.saveRecentBookIds(ids);
+		
+		// ¸üÐÂÊÓÍ¼
+		getFirstLevelTree(ROOT_RECENT).clear();
+		for (long id : m_booksDatabase.loadRecentBookIds()) {
+			Book book1 = Book.getById(id);
+			if (book1 == null || !book1.File.exists()) {
+				continue;
+			}
+			new BookTree(getFirstLevelTree(ROOT_RECENT), book1, true);
+		}
 	}
 
 	public boolean isBookInFavorites(Book book) {
