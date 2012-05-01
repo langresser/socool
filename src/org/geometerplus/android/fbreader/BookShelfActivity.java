@@ -1,12 +1,20 @@
 package org.geometerplus.android.fbreader;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.library.BooksDatabase;
+import org.geometerplus.fbreader.library.FileInfoSet;
 import org.geometerplus.fbreader.library.LibraryUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImageData;
+import org.geometerplus.zlibrary.image.ZLImageManager;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.resources.ZLResource;
 import org.socool.socoolreader.reader.R;
@@ -15,7 +23,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;  
+import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;  
@@ -28,6 +38,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;  
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;  
 import android.widget.Toast;
   
@@ -45,6 +57,8 @@ public class BookShelfActivity extends Activity
     static volatile boolean ourToBeKilled = false;
 
 	public static final String SELECTED_BOOK_PATH_KEY = "SelectedBookPath";
+	
+	private ArrayList<Book> m_bookList;
   
     @Override  
     public void onCreate(Bundle savedInstanceState) {  
@@ -58,11 +72,18 @@ public class BookShelfActivity extends Activity
 		
         FBReaderApp.Instance().addChangeListener(this);
         FBReaderApp.Instance().startBuild();
+        
+        final FileInfoSet fileInfos = new FileInfoSet();
+        final Map<Long,Book> books = FBReaderApp.Instance().getDatabase().loadBooks(fileInfos);
+        m_bookList = new ArrayList<Book>();
+        
+        for (Book book : books.values()) {
+        	m_bookList.add(book);
+        }
   
         shelf_list = (ListView) findViewById(R.id.shelf_list);  
           
         ShelfAdapter adapter = new ShelfAdapter();  
-        adapter.m_rootActivity = this;
         shelf_list.setAdapter(adapter);
     }
 
@@ -312,38 +333,80 @@ public class BookShelfActivity extends Activity
 	}
  
     public class ShelfAdapter extends BaseAdapter {
-    	public BookShelfActivity m_rootActivity;
-
         @Override  
-        public int getCount() {  
-            return size.length;  
+        public int getCount() {
+        	int shelf = (int)Math.ceil((double)m_bookList.size() / (double)3);
+            return Math.max(shelf, 4);  
         }  
   
-        @Override  
-        public Object getItem(int position) {  
-            return size[position];  
+        @Override
+        public Object getItem(int position) {
+            return null;  
         }  
   
         @Override  
         public long getItemId(int position) {  
-            return position;  
-        }  
+            return position;
+        }
   
         @Override  
         public View getView(int position, View convertView, ViewGroup parent) {  
             View layout = LayoutInflater.from(getApplicationContext()).inflate(  
-                       R.layout.book_shelf_item, null);  
+                       R.layout.book_shelf_item, null);
             
-            Button book1 = (Button)layout.findViewById(R.id.button_1);
-            Button book2 = (Button)layout.findViewById(R.id.button_2);
-            Button book3 = (Button)layout.findViewById(R.id.button_3);
-            
-            book1.setOnClickListener(m_rootActivity.clickListener);
-            book2.setOnClickListener(m_rootActivity.clickListener);
-            book3.setOnClickListener(m_rootActivity.clickListener);
-            
+            ImageButton book1 = (ImageButton)layout.findViewById(R.id.button_1);
+            updateBookButton(book1, position * 3 + 0);
+            ImageButton book2 = (ImageButton)layout.findViewById(R.id.button_2);
+            updateBookButton(book2, position * 3 + 1);
+            ImageButton book3 = (ImageButton)layout.findViewById(R.id.button_3);
+            updateBookButton(book3, position * 3 + 2);
+             
             return layout;  
         }
+        
+        void updateBookButton(ImageButton button, int index)
+        {
+        	button.setTag(index);
+        	button.setOnClickListener(clickListener);
+        	
+        	if (true || index >= m_bookList.size()) {
+        		return;
+        	}
+
+        	Book book = m_bookList.get(index);
+        	
+          	// 先清空原button书籍
+        	button.setVisibility(View.GONE);
+    		button.setImageDrawable(null);
+
+    		final ZLImage image = book.getCover();
+
+    		if (image == null) {
+    			return;
+    		}
+
+    		if (image instanceof ZLLoadableImage) {
+    			final ZLLoadableImage loadableImage = (ZLLoadableImage)image;
+    			if (!loadableImage.isSynchronized()) {
+    				loadableImage.synchronize();
+    			}
+    		}
+    		final ZLImageData data = ZLImageManager.Instance().getImageData(image);
+    		
+    		if (data == null) {
+    			return;
+    		}
+
+    		final Bitmap coverBitmap = data.getBitmap(50, 80);
+    		if (coverBitmap == null) {
+    			return;
+    		}
+
+    		button.setVisibility(View.VISIBLE);
+    		button.setImageBitmap(coverBitmap);
+        }
     }
+    
+    
 }  
 

@@ -25,7 +25,6 @@ import java.util.*;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImageData;
 import org.geometerplus.zlibrary.util.ZLColor;
-import org.geometerplus.zlibrary.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.util.ZLAndroidColorUtil;
 
@@ -461,13 +460,13 @@ public class ZLPaintContext {
 	}
 
 	public Size imageSize(ZLImageData imageData, Size maxSize, ScalingType scaling) {
-		final Bitmap bitmap = ((ZLAndroidImageData)imageData).getBitmap(maxSize, scaling);
+		final Bitmap bitmap = imageData.getBitmap(maxSize, scaling);
 		return (bitmap != null && !bitmap.isRecycled())
 			? new Size(bitmap.getWidth(), bitmap.getHeight()) : null;
 	}
 
 	public void drawImage(int x, int y, ZLImageData imageData, Size maxSize, ScalingType scaling) {
-		final Bitmap bitmap = ((ZLAndroidImageData)imageData).getBitmap(maxSize, scaling);
+		final Bitmap bitmap = imageData.getBitmap(maxSize, scaling);
 		if (bitmap != null && !bitmap.isRecycled()) {
 			myCanvas.drawBitmap(bitmap, x, y - bitmap.getHeight(), myFillPaint);
 		}

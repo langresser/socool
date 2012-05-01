@@ -35,7 +35,7 @@
             android:layout_weight="1"  
             android:gravity="center_horizontal" >  
   
-            <Button  
+            <ImageButton  
                 android:id="@+id/button_1"  
                 android:layout_width="80dip"  
                 android:layout_height="110dip"  
@@ -49,7 +49,7 @@
             android:layout_weight="1"  
             android:gravity="center_horizontal" >  
   
-            <Button  
+            <ImageButton  
                 android:id="@+id/button_2"  
                 android:layout_width="80dip"  
                 android:layout_height="110dip"  
@@ -63,7 +63,7 @@
             android:layout_weight="1"  
             android:gravity="center_horizontal" >
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_3"
                 android:layout_width="80dip"
                 android:layout_height="110dip"

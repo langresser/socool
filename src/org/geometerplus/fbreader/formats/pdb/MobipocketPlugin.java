@@ -26,7 +26,7 @@ import org.geometerplus.zlibrary.encodings.JavaEncodingCollection;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLFileImage;
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.image.ZLImageProxy;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.util.ZLLanguageUtil;
@@ -136,7 +136,7 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 
 	@Override
 	public ZLImage readCover(final ZLFile file) {
-		return new ZLImageProxy() {
+		return new ZLLoadableImage(MimeType.IMAGE_AUTO) {
 			@Override
 			public String getId() {
 				return file.getPath();

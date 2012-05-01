@@ -31,10 +31,6 @@ public abstract class LibraryUtil {
 		return ZLResource.resource("library");
 	}
 
-	public static ZLImage getCover(Book book) {
-		return book != null ? book.getCover() : null;
-	}
-
 	public static String getAnnotation(Book book) {
 		try {
 			return book.getPlugin().readAnnotation(book.File);

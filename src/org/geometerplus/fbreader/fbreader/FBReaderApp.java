@@ -1277,7 +1277,7 @@ public final class FBReaderApp {
 	private void build() {
 		// Step 0: get database books marked as "existing"
 		final FileInfoSet fileInfos = new FileInfoSet();
-		final Map<Long,Book> savedBooksByFileId = m_booksDatabase.loadBooks(fileInfos, true);
+		final Map<Long,Book> savedBooksByFileId = m_booksDatabase.loadBooks(fileInfos);
 		final Map<Long,Book> savedBooksByBookId = new HashMap<Long,Book>();
 		for (Book b : savedBooksByFileId.values()) {
 			savedBooksByBookId.put(b.getId(), b);
@@ -1362,21 +1362,21 @@ public final class FBReaderApp {
 		}
 		fireModelChangedEvent(ChangeListener.Code.BookAdded);
 
-		// Step 3: collect books from physical files; add new, update already added,
+		// TODO Step 3: collect books from physical files; add new, update already added,
 		//         unmark orphaned as existing again, collect newly added
-		final Map<Long,Book> orphanedBooksByFileId = FBReaderApp.Instance().getDatabase().loadBooks(fileInfos, false);
-		final Set<Book> newBooks = new HashSet<Book>();
-
-		final List<ZLPhysicalFile> physicalFilesList = collectPhysicalFiles();
-		for (ZLPhysicalFile file : physicalFilesList) {
-			collectBooks(
-				file, fileInfos,
-				savedBooksByFileId, orphanedBooksByFileId,
-				newBooks,
-				!fileInfos.check(file, true)
-			);
-			file.setCached(false);
-		}
+//		final Map<Long,Book> orphanedBooksByFileId = FBReaderApp.Instance().getDatabase().loadBooks(fileInfos);
+//		final Set<Book> newBooks = new HashSet<Book>();
+//
+//		final List<ZLPhysicalFile> physicalFilesList = collectPhysicalFiles();
+//		for (ZLPhysicalFile file : physicalFilesList) {
+//			collectBooks(
+//				file, fileInfos,
+//				savedBooksByFileId, orphanedBooksByFileId,
+//				newBooks,
+//				!fileInfos.check(file, true)
+//			);
+//			file.setCached(false);
+//		}
 		
 		// Step 4: add help file
 		try {
@@ -1395,13 +1395,13 @@ public final class FBReaderApp {
 		// Step 5: save changes into database
 		fileInfos.save();
 
-		FBReaderApp.Instance().getDatabase().executeAsATransaction(new Runnable() {
-			public void run() {
-				for (Book book : newBooks) {
-					book.save();
-				}
-			}
-		});
+//		FBReaderApp.Instance().getDatabase().executeAsATransaction(new Runnable() {
+//			public void run() {
+//				for (Book book : newBooks) {
+//					book.save();
+//				}
+//			}
+//		});
 	}
 
 	private volatile boolean myBuildStarted = false;

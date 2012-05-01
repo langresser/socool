@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLFileImage;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
+import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.network.ZLNetworkManager;
 import org.geometerplus.zlibrary.util.MimeType;
@@ -159,6 +160,11 @@ public final class NetworkImage extends ZLLoadableImage {
 	@Override
 	public void synchronizeFast() {
 		synchronizeInternal(true);
+	}
+	
+	public ZLSingleImage getRealImage()
+	{
+		return null;
 	}
 
 	private final void synchronizeInternal(boolean doFast) {

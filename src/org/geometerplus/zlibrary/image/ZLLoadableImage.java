@@ -19,10 +19,13 @@
 
 package org.geometerplus.zlibrary.image;
 
+import java.io.InputStream;
+
 import org.geometerplus.zlibrary.util.MimeType;
 
 public abstract class ZLLoadableImage extends ZLSingleImage {
 	private volatile boolean myIsSynchronized;
+	private ZLSingleImage myImage;
 
 	public ZLLoadableImage(MimeType mimeType) {
 		super(mimeType);
@@ -40,13 +43,29 @@ public abstract class ZLLoadableImage extends ZLSingleImage {
 		ZLImageManager.Instance().startImageLoading(this, postSynchronizationAction);
 	}
 
+	public String getURI() {
+		final ZLImage image = getRealImage();
+		return image != null ? image.getURI() : "image proxy";
+	}
+
+	public InputStream inputStream() {
+		return myImage != null ? myImage.inputStream() : null;
+	}
+
+	public synchronized void synchronize() {
+		myImage = getRealImage();
+		setSynchronized();
+	}
+
+	public void synchronizeFast() {
+		setSynchronized();
+	}
+
 	public static interface SourceType {
 		int DISK = 0;
 		int NETWORK = 1;
 	};
 	public abstract int sourceType();
-
-	public abstract void synchronize();
-	public abstract void synchronizeFast();
 	public abstract String getId();
+	public abstract ZLSingleImage getRealImage();
 }

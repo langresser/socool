@@ -36,9 +36,9 @@ import android.widget.*;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
-import org.geometerplus.zlibrary.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImageData;
+import org.geometerplus.zlibrary.image.ZLImageManager;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.util.ZLLanguageUtil;
@@ -172,6 +172,10 @@ public class BookInfoActivity extends Activity {
 	}
 
 	private void setupCover(Book book) {
+		if (book == null) {
+			return;
+		}
+
 		final ImageView coverView = (ImageView)findViewById(R.id.book_cover);
 
 		final DisplayMetrics metrics = new DisplayMetrics();
@@ -183,7 +187,7 @@ public class BookInfoActivity extends Activity {
 		coverView.setVisibility(View.GONE);
 		coverView.setImageDrawable(null);
 
-		final ZLImage image = LibraryUtil.getCover(book);
+		final ZLImage image = book.getCover();
 
 		if (image == null) {
 			return;
@@ -195,8 +199,7 @@ public class BookInfoActivity extends Activity {
 				loadableImage.synchronize();
 			}
 		}
-		final ZLAndroidImageData data =
-			((ZLAndroidImageManager)ZLAndroidImageManager.Instance()).getImageData(image);
+		final ZLImageData data = ZLImageManager.Instance().getImageData(image);
 		if (data == null) {
 			return;
 		}

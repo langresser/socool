@@ -20,14 +20,16 @@
 package org.geometerplus.fbreader.formats.oeb;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.image.ZLImageProxy;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.image.ZLSingleImage;
+import org.geometerplus.zlibrary.util.MimeType;
 
 class OEBCoverReader {
-	private static class OEBCoverImage extends ZLImageProxy {
+	private static class OEBCoverImage extends ZLLoadableImage {
 		private final ZLFile myFile;
 
 		OEBCoverImage(ZLFile file) {
+			super(MimeType.IMAGE_AUTO);
 			myFile = file;
 		}
 
@@ -47,7 +49,7 @@ class OEBCoverReader {
 		}
 	}
 
-	public ZLImageProxy readCover(ZLFile file) {
+	public ZLLoadableImage readCover(ZLFile file) {
 		return new OEBCoverImage(file);
 	}
 }

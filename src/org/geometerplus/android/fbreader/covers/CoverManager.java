@@ -28,9 +28,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import org.geometerplus.zlibrary.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImageData;
+import org.geometerplus.zlibrary.image.ZLImageManager;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
 
 
@@ -72,8 +72,8 @@ public class CoverManager {
 	}
 
 	Bitmap getBitmap(ZLImage image) {
-		final ZLAndroidImageManager mgr = (ZLAndroidImageManager)ZLAndroidImageManager.Instance();
-		final ZLAndroidImageData data = mgr.getImageData(image);
+		final ZLImageManager mgr = ZLImageManager.Instance();
+		final ZLImageData data = mgr.getImageData(image);
 		if (data == null) {
 			return null;
 		}

@@ -28,7 +28,6 @@ import android.util.FloatMath;
 import android.view.*;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.image.ZLFileImage;
 import org.geometerplus.zlibrary.image.ZLImageData;
 import org.geometerplus.zlibrary.image.ZLImageManager;
@@ -73,7 +72,7 @@ public class ImageViewActivity extends Activity {
 			}
 			try {
 				final ZLImageData imageData = ZLImageManager.Instance().getImageData(image);
-				myBitmap = ((ZLAndroidImageData)imageData).getFullSizeBitmap();
+				myBitmap = imageData.getFullSizeBitmap();
 			} catch (Exception e) {
 				// TODO: error message (?)
 				e.printStackTrace();

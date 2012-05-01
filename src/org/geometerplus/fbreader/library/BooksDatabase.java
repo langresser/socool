@@ -166,7 +166,7 @@ public class BooksDatabase {
 		cursor.close();
 	}
 
-	public Map<Long,Book> loadBooks(FileInfoSet infos, boolean existing) {
+	public Map<Long,Book> loadBooks(FileInfoSet infos) {
 		Cursor cursor = myDatabase.rawQuery(
 			"SELECT book_id,file_id,title,encoding,language FROM Books" , null
 		);
@@ -175,9 +175,8 @@ public class BooksDatabase {
 		while (cursor.moveToNext()) {
 			final long id = cursor.getLong(0);
 			final long fileId = cursor.getLong(1);
-			final Book book = createBook(
-				id, infos.getFile(fileId), cursor.getString(2), cursor.getString(3), cursor.getString(4)
-			);
+			final Book book = createBook(id, infos.getFile(fileId),
+					cursor.getString(2), cursor.getString(3), cursor.getString(4));
 			if (book != null) {
 				booksById.put(id, book);
 				booksByFileId.put(fileId, book);

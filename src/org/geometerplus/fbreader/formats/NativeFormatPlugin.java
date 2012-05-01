@@ -23,7 +23,7 @@ import org.geometerplus.zlibrary.encodings.EncodingCollection;
 import org.geometerplus.zlibrary.encodings.JavaEncodingCollection;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.image.ZLImageProxy;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.fbreader.bookmodel.BookModel;
@@ -67,7 +67,7 @@ public class NativeFormatPlugin extends FormatPlugin {
 
 	@Override
 	public ZLImage readCover(final ZLFile file) {
-		return new ZLImageProxy() {
+		return new ZLLoadableImage(MimeType.IMAGE_AUTO) {
 			@Override
 			public int sourceType() {
 				return SourceType.DISK;

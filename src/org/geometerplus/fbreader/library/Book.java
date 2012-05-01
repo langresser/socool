@@ -506,7 +506,7 @@ public class Book {
 		}
 	}
 
-	synchronized ZLImage getCover() {
+	public synchronized ZLImage getCover() {
 		if (myCover == NULL_IMAGE) {
 			return null;
 		} else if (myCover != null) {

@@ -34,7 +34,6 @@ import android.widget.RelativeLayout;
 import org.geometerplus.zlibrary.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
 
 import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;

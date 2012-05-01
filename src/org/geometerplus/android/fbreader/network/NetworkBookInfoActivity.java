@@ -34,9 +34,9 @@ import android.widget.*;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.zlibrary.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImageData;
+import org.geometerplus.zlibrary.image.ZLImageManager;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.network.SQLiteCookieDatabase;
 import org.geometerplus.zlibrary.network.ZLNetworkException;
@@ -315,14 +315,14 @@ public class NetworkBookInfoActivity extends Activity implements NetworkLibrary.
 		Bitmap coverBitmap = null;
 		final ZLImage cover = NetworkTree.createCover(myBook);
 		if (cover != null) {
-			ZLAndroidImageData data = null;
-			final ZLAndroidImageManager mgr = (ZLAndroidImageManager)ZLAndroidImageManager.Instance();
+			ZLImageData data = null;
+			final ZLImageManager mgr = ZLImageManager.Instance();
 			if (cover instanceof ZLLoadableImage) {
 				final ZLLoadableImage img = (ZLLoadableImage)cover;
 				img.startSynchronization(new Runnable() {
 					public void run() {
 						img.synchronizeFast();
-						final ZLAndroidImageData data = mgr.getImageData(img);
+						final ZLImageData data = mgr.getImageData(img);
 						if (data != null) {
 							final Bitmap coverBitmap = data.getBitmap(maxWidth, maxHeight);
 							if (coverBitmap != null) {

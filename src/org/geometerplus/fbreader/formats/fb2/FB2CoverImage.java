@@ -20,17 +20,18 @@
 package org.geometerplus.fbreader.formats.fb2;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.image.ZLImageProxy;
+import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
-class FB2CoverImage extends ZLImageProxy {
+class FB2CoverImage extends ZLLoadableImage {
 	private final ZLFile myFile;
 
 	FB2CoverImage(ZLFile file) {
+		super(MimeType.IMAGE_AUTO);
 		myFile = file;
 	}
 
