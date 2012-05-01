@@ -22,7 +22,6 @@ package org.geometerplus.android.fbreader.preferences;
 import android.content.Intent;
 import android.view.KeyEvent;
 
-import org.geometerplus.zlibrary.application.ZLKeyBindings;
 
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;

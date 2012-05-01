@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 import android.app.SearchManager;
@@ -31,7 +30,6 @@ import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
-import org.geometerplus.zlibrary.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
@@ -44,10 +42,8 @@ import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.fbreader.ScrollingPreferences;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
-import org.geometerplus.fbreader.library.BooksDatabase;
 import org.geometerplus.android.fbreader.tips.TipsManager;
 
 import org.geometerplus.android.fbreader.action.*;
@@ -125,7 +121,6 @@ public final class SCReaderActivity extends Activity {
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
-	public ZLApplicationWindow myMainWindow;
 	
 	private String m_currentBookPath = null;
 
@@ -146,10 +141,6 @@ public final class SCReaderActivity extends Activity {
 		createBookView();
 
 		setContentView(m_mainLayout);
-
-		if (myMainWindow == null) {
-			myMainWindow = new ZLApplicationWindow();
-		}
 
 		new Thread() {
 			public void run() {
@@ -472,19 +463,19 @@ public final class SCReaderActivity extends Activity {
 	}
 
 	private Menu addSubMenu(Menu menu, String id) {
-		return myMainWindow.addSubMenu(menu, id);
+		return FBReaderApp.Instance().addSubMenu(menu, id);
 	}
 
 	private void addMenuItem(Menu menu, String actionId, String name) {
-		myMainWindow.addMenuItem(menu, actionId, null, name);
+		FBReaderApp.Instance().addMenuItem(menu, actionId, null, name);
 	}
 
 	private void addMenuItem(Menu menu, String actionId, int iconId) {
-		myMainWindow.addMenuItem(menu, actionId, iconId, null);
+		FBReaderApp.Instance().addMenuItem(menu, actionId, iconId, null);
 	}
 
 	private void addMenuItem(Menu menu, String actionId) {
-		myMainWindow.addMenuItem(menu, actionId, null, null);
+		FBReaderApp.Instance().addMenuItem(menu, actionId, null, null);
 	}
 
 	@Override
@@ -525,7 +516,7 @@ public final class SCReaderActivity extends Activity {
 			}
 		}
 
-		myMainWindow.refresh();
+		FBReaderApp.Instance().refresh();
 
 		return true;
 	}
@@ -628,7 +619,7 @@ public final class SCReaderActivity extends Activity {
 	BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			final int level = intent.getIntExtra("level", 100);
-			myMainWindow.setBatteryLevel(level);
+			FBReaderApp.Instance().setBatteryLevel(level);
 			switchWakeLock(
 				FBReaderApp.Instance().BatteryLevelToTurnScreenOffOption.getValue() < level
 			);

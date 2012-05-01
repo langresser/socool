@@ -22,7 +22,12 @@ package org.geometerplus.zlibrary.image;
 import java.util.HashMap;
 
 public final class ZLImageMap extends HashMap<String,ZLImage> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ZLImage getImage(String id) {
-		return (ZLImage)super.get(id);
+		return super.get(id);
 	}
 }

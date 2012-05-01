@@ -17,13 +17,11 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.application;
+package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
 
 import android.view.KeyEvent;
-import org.geometerplus.fbreader.fbreader.ActionCode;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.Paths;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
