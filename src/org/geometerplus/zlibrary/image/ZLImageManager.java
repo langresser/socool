@@ -100,16 +100,10 @@ public class ZLImageManager {
 	private final ImageSynchronizedHandler myImageSynchronizedHandler = new ImageSynchronizedHandler();
 
 	public ZLImageData getImageData(ZLImage image) {
-		if (image instanceof ZLSingleImage) {
-			final ZLSingleImage singleImage = (ZLSingleImage)image;
-			if (MimeType.IMAGE_PALM.equals(singleImage.mimeType())) {
-				return null;
-			}
-			return new ZLImageData(singleImage);
-		} else {
-			//TODO
+		if (MimeType.IMAGE_PALM.equals(image.mimeType())) {
 			return null;
 		}
+		return new ZLImageData(image);
 	}
 
 	protected final static class PalmImageHeader {

@@ -24,7 +24,6 @@ import org.geometerplus.zlibrary.encodings.JavaEncodingCollection;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;
@@ -79,10 +78,10 @@ public class NativeFormatPlugin extends FormatPlugin {
 			}
 
 			@Override
-			public ZLSingleImage getRealImage() {
+			public ZLImage getRealImage() {
 				final ZLImage[] box = new ZLImage[1];
 				readCoverInternal(file, box);
-				return (ZLSingleImage)box[0];
+				return box[0];
 			}
 		};
 	}

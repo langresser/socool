@@ -159,7 +159,7 @@ public final class NetworkImage extends ZLLoadableImage {
 		synchronizeInternal(true);
 	}
 	
-	public ZLSingleImage getRealImage()
+	public ZLImage getRealImage()
 	{
 		return null;
 	}

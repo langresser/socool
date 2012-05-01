@@ -19,6 +19,26 @@
 
 package org.geometerplus.zlibrary.image;
 
-public interface ZLImage {
-	String getURI();
+import java.io.InputStream;
+
+import org.geometerplus.zlibrary.util.MimeType;
+
+public abstract class ZLImage {
+	private final MimeType myMimeType;
+
+	public ZLImage()
+	{
+		myMimeType = MimeType.IMAGE_AUTO;
+	}
+
+	public ZLImage(final MimeType mimeType) {
+		myMimeType = mimeType;
+	}
+
+	public abstract InputStream inputStream();
+	public abstract String getURI();
+
+	public final MimeType mimeType() {
+		return myMimeType;
+	}
 }

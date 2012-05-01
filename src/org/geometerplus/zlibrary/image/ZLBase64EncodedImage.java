@@ -23,7 +23,7 @@ import java.io.*;
 
 import org.geometerplus.zlibrary.util.MimeType;
 
-public abstract class ZLBase64EncodedImage extends ZLSingleImage {
+public abstract class ZLBase64EncodedImage extends ZLImage {
 	private boolean myIsDecoded;
 
 	protected ZLBase64EncodedImage(MimeType mimeType) {

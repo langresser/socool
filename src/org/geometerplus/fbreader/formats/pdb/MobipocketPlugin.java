@@ -27,7 +27,6 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLFileImage;
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
@@ -148,13 +147,13 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 			}
 
 			@Override
-			public ZLSingleImage getRealImage() {
+			public ZLImage getRealImage() {
 				return readCoverInternal(file);
 			}
 		};
 	}
 
-	private ZLSingleImage readCoverInternal(ZLFile file) {
+	private ZLImage readCoverInternal(ZLFile file) {
 		InputStream stream = null;
 		try {
 			stream = file.getInputStream();

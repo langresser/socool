@@ -20,8 +20,8 @@
 package org.geometerplus.fbreader.formats.oeb;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.util.MimeType;
 
 class OEBCoverReader {
@@ -34,7 +34,7 @@ class OEBCoverReader {
 		}
 
 		@Override
-		public ZLSingleImage getRealImage() {
+		public ZLImage getRealImage() {
 			return new OEBCoverBackgroundReader().readCover(myFile);
 		}
 

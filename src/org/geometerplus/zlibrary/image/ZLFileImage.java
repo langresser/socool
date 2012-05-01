@@ -27,7 +27,7 @@ import org.geometerplus.zlibrary.util.HexInputStream;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.util.SliceInputStream;
 
-public class ZLFileImage extends ZLSingleImage {
+public class ZLFileImage extends ZLImage {
 	public static final String SCHEME = "imagefile";
 
 	public static final String ENCODING_NONE = "";

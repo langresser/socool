@@ -20,8 +20,8 @@
 package org.geometerplus.fbreader.formats.fb2;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.image.ZLSingleImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
@@ -36,7 +36,7 @@ class FB2CoverImage extends ZLLoadableImage {
 	}
 
 	@Override
-	public ZLSingleImage getRealImage() {
+	public ZLImage getRealImage() {
 		return new BackgroundReader().readCover(myFile);
 	}
 

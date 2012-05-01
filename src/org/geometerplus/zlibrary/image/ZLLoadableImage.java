@@ -23,9 +23,9 @@ import java.io.InputStream;
 
 import org.geometerplus.zlibrary.util.MimeType;
 
-public abstract class ZLLoadableImage extends ZLSingleImage {
+public abstract class ZLLoadableImage extends ZLImage {
 	private volatile boolean myIsSynchronized;
-	private ZLSingleImage myImage;
+	private ZLImage myImage;
 
 	public ZLLoadableImage(MimeType mimeType) {
 		super(mimeType);
@@ -67,5 +67,5 @@ public abstract class ZLLoadableImage extends ZLSingleImage {
 	};
 	public abstract int sourceType();
 	public abstract String getId();
-	public abstract ZLSingleImage getRealImage();
+	public abstract ZLImage getRealImage();
 }

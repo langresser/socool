@@ -35,9 +35,9 @@ public class ZLImageData {
 	private ZLPaintContext.Size myLastRequestedSize = null;
 	private ZLPaintContext.ScalingType myLastRequestedScaling = ZLPaintContext.ScalingType.OriginalSize;
 
-	private final ZLSingleImage myImage;
+	private final ZLImage myImage;
 
-	ZLImageData(ZLSingleImage image) {
+	ZLImageData(ZLImage image) {
 		myImage = image;
 	}
 
