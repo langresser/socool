@@ -17,8 +17,8 @@ import org.socool.socoolreader.reader.R;
 
 class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
     private static final String[] PROJECTION_IDS_AND_TITLE = new String[] {
-            BooksStore.Book._ID, BooksStore.Book.INTERNAL_ID, BooksStore.Book.TITLE,
-            BooksStore.Book.SORT_TITLE
+            BooksStore.Book._ID, "BooksStore.Book.INTERNAL_ID", "BooksStore.Book.TITLE",
+            "BooksStore.Book.SORT_TITLE"
     };
 
     private final LayoutInflater mInflater;
@@ -34,25 +34,21 @@ class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
     BooksAdapter(ShelvesActivity activity) {
         super(activity, activity.managedQuery(BooksStore.Book.CONTENT_URI,
                 PROJECTION_IDS_AND_TITLE,
-                null, null, BooksStore.Book.DEFAULT_SORT_ORDER), true);
+                null, null, "BooksStore.Book.DEFAULT_SORT_ORDER"), true);
 
         final Cursor c = getCursor();
 
         mActivity = activity;
         mInflater = LayoutInflater.from(activity);
-        mTitleIndex = c.getColumnIndexOrThrow(BooksStore.Book.TITLE);
-        mSortTitleIndex = c.getColumnIndexOrThrow(BooksStore.Book.SORT_TITLE);
-        mInternalIdIndex = c.getColumnIndexOrThrow(BooksStore.Book.INTERNAL_ID);
+        mTitleIndex = 0;//c.getColumnIndexOrThrow(BooksStore.Book.TITLE);
+        mSortTitleIndex = 0;//c.getColumnIndexOrThrow(BooksStore.Book.SORT_TITLE);
+        mInternalIdIndex = 0;//c.getColumnIndexOrThrow(BooksStore.Book.INTERNAL_ID);
 
         mDefaultCoverBitmap = BitmapFactory.decodeResource(activity.getResources(),
                 R.drawable.unknown_cover);
         mDefaultCover = new FastBitmapDrawable(mDefaultCoverBitmap);
 
         final StringBuilder selection = new StringBuilder();
-        selection.append(BooksStore.Book.TITLE);
-        selection.append(" LIKE ? OR ");
-        selection.append(BooksStore.Book.AUTHORS);
-        selection.append(" LIKE ?");
         mSelection = selection.toString();
 
         setFilterQueryProvider(this);
@@ -113,7 +109,7 @@ class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
     public Cursor runQuery(CharSequence constraint) {
         if (constraint == null || constraint.length() == 0) {
             return mActivity.managedQuery(BooksStore.Book.CONTENT_URI, PROJECTION_IDS_AND_TITLE,
-                    null, null, BooksStore.Book.DEFAULT_SORT_ORDER);
+                    null, null, "BooksStore.Book.DEFAULT_SORT_ORDER");
         }
 
         final StringBuilder buffer = new StringBuilder();
@@ -123,6 +119,6 @@ class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
         final String[] arguments2 = mArguments2;
         arguments2[0] = arguments2[1] = pattern;
         return mActivity.managedQuery(BooksStore.Book.CONTENT_URI, PROJECTION_IDS_AND_TITLE,
-                mSelection, arguments2, BooksStore.Book.DEFAULT_SORT_ORDER);
+                mSelection, arguments2, "BooksStore.Book.DEFAULT_SORT_ORDER");
     }
 }

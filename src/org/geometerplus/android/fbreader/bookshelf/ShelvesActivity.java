@@ -478,34 +478,28 @@ public class ShelvesActivity extends Activity {
         public Integer doInBackground(Void... params) {
             int imported = 0;
 
-            try {
-                if (mBooks == null) mBooks = ImportUtilities.loadItems();
+            final List<String> list = mBooks;
+			final BooksStore booksStore = BookStoreFactory.get(ShelvesActivity.this);
+			final int count = list.size();
+			final ContentResolver resolver = mResolver;
+			final AtomicInteger importCount = mImportCount;
 
-                final List<String> list = mBooks;
-                final BooksStore booksStore = BookStoreFactory.get(ShelvesActivity.this);
-                final int count = list.size();
-                final ContentResolver resolver = mResolver;
-                final AtomicInteger importCount = mImportCount;
-
-                for (int i = importCount.get(); i < count; i++) {
-                    publishProgress(i, count);
-                    if (isCancelled()) return null;
-                    final String id = list.get(i);
-                    if (!BooksManager.bookExists(mResolver, id)) {
-                        if (isCancelled()) return null;
-                        BooksStore.Book book = BooksManager.loadAndAddBook(resolver, id, booksStore);
-                        if (book != null) {
-                            if (Config.LOGD) {
-                                android.util.Log.d(LOG_TAG, book.toString());
-                            }
-                            imported++;
-                        }
-                    }
-                    importCount.incrementAndGet();
-                }
-            } catch (IOException e) {
-                return null;
-            }
+			for (int i = importCount.get(); i < count; i++) {
+			    publishProgress(i, count);
+			    if (isCancelled()) return null;
+			    final String id = list.get(i);
+			    if (!BooksManager.bookExists(mResolver, id)) {
+			        if (isCancelled()) return null;
+			        BooksStore.Book book = BooksManager.loadAndAddBook(resolver, id, booksStore);
+			        if (book != null) {
+			            if (Config.LOGD) {
+			                android.util.Log.d(LOG_TAG, book.toString());
+			            }
+			            imported++;
+			        }
+			    }
+			    importCount.incrementAndGet();
+			}
 
             return imported;
         }

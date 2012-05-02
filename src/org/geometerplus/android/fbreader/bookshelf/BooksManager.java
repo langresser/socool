@@ -1,5 +1,12 @@
 package org.geometerplus.android.fbreader.bookshelf;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.geometerplus.fbreader.Paths;
+
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,28 +21,6 @@ public class BooksManager {
 
     private static String[] sArguments1 = new String[1];
     private static String[] sArguments3 = new String[3];
-
-    private static final String[] PROJECTION_ID_IID = new String[] {
-            BooksStore.Book._ID, BooksStore.Book.INTERNAL_ID
-    };
-    private static final String[] PROJECTION_ID = new String[] { BooksStore.Book._ID };
-
-    static {
-        StringBuilder selection = new StringBuilder();
-        selection.append(BooksStore.Book.INTERNAL_ID);
-        selection.append("=?");
-        sBookIdSelection = selection.toString();
-
-        selection = new StringBuilder();
-        selection.append(sBookIdSelection);
-        selection.append(" OR ");
-        selection.append(BooksStore.Book.EAN);
-        selection.append("=? OR ");
-        selection.append(BooksStore.Book.ISBN);
-        selection.append("=?");
-        sBookSelection = selection.toString();
-    }
-
     private BooksManager() {
     }
     
@@ -46,13 +31,6 @@ public class BooksManager {
         try {
             final String[] arguments3 = sArguments3;
             arguments3[0] = arguments3[1] = arguments3[2] = id;
-            c = contentResolver.query(BooksStore.Book.CONTENT_URI, PROJECTION_ID_IID,
-                    sBookSelection, arguments3, null);
-            if (c.getCount() > 0) {
-                if (c.moveToFirst()) {
-                    internalId = c.getString(c.getColumnIndexOrThrow(BooksStore.Book.INTERNAL_ID));
-                }
-            }
         } finally {
             if (c != null) c.close();
         }
@@ -61,19 +39,8 @@ public class BooksManager {
     }
 
     public static boolean bookExists(ContentResolver contentResolver, String id) {
-        boolean exists;
+        boolean exists = true;
         Cursor c = null;
-
-        try {
-            final String[] arguments3 = sArguments3;
-            arguments3[0] = arguments3[1] = arguments3[2] = id;
-            c = contentResolver.query(BooksStore.Book.CONTENT_URI, PROJECTION_ID, sBookSelection,
-                    arguments3, null);
-            exists = c.getCount() > 0;
-        } finally {
-            if (c != null) c.close();
-        }
-
         return exists;
     }
 
@@ -85,12 +52,26 @@ public class BooksManager {
             Bitmap bitmap = book.loadCover(BooksStore.ImageSize.TINY);
             if (bitmap != null) {
                 bitmap = ImageUtilities.createBookCover(bitmap, BOOK_COVER_WIDTH, BOOK_COVER_HEIGHT);
-                ImportUtilities.addBookCoverToCache(book, bitmap);
-            }
+                
+                // 创建缓存文件夹 TODO 初始化的时候创建
+                File cacheDirectory = new File(Paths.coverCacheDirectory());
+                if (!cacheDirectory.exists()) {
+                    cacheDirectory.mkdirs();
+                }
 
-            final Uri uri = resolver.insert(BooksStore.Book.CONTENT_URI, book.getContentValues());
-            if (uri != null) {
-                return book;
+                File coverFile = new File(cacheDirectory, book.getInternalId());
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(coverFile);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                } catch (FileNotFoundException e) {
+                    return null;
+                } finally {
+                	try {
+                		out.close();
+                    } catch (IOException e) {
+                    }
+                }
             }
         }
 

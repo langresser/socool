@@ -39,6 +39,10 @@ public abstract class Paths {
 	public static ZLStringOption WallpapersDirectoryOption() {
 		return new ZLStringOption("Files", "WallpapersDirectory", cardDirectory() + "/Wallpapers");
 	}
+	
+	public static String coverCacheDirectory() {
+		return cacheDirectory() + "/cover";
+	}
 
 	public static String cacheDirectory() {
 		return BooksDirectoryOption().getValue() + "/.SocoolReader";

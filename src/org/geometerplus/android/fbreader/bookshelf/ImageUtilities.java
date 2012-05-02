@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.LinearGradient;
+import android.graphics.Path;
 import android.graphics.Shader;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -30,6 +31,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.Header;
 import org.apache.http.client.methods.HttpGet;
+import org.geometerplus.fbreader.Paths;
 
 public class ImageUtilities {
     private static final String LOG_TAG = "ImageUtilities";
@@ -109,7 +111,7 @@ public class ImageUtilities {
      * @param id The id of the drawable to delete from the cache
      */
     public static void deleteCachedCover(String id) {
-        new File(ImportUtilities.getCacheDirectory(), id).delete();
+        new File(Paths.coverCacheDirectory(), id).delete();
         sArtCache.remove(id);
     }
 
@@ -243,7 +245,7 @@ public class ImageUtilities {
     }
 
     private static Bitmap loadCover(String id) {
-        final File file = new File(ImportUtilities.getCacheDirectory(), id);
+        final File file = new File(Paths.coverCacheDirectory(), id);
         if (file.exists()) {
             InputStream stream = null;
             try {
