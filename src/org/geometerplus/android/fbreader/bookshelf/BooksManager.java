@@ -80,7 +80,7 @@ public class BooksManager {
     public static BooksStore.Book loadAndAddBook(ContentResolver resolver, String id,
             BooksStore booksStore) {
 
-        final BooksStore.Book book = booksStore.findBook(id);
+        final BooksStore.Book book = null;//booksStore.findBook(id);
         if (book != null) {
             Bitmap bitmap = book.loadCover(BooksStore.ImageSize.TINY);
             if (bitmap != null) {

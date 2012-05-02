@@ -61,8 +61,6 @@ public class ShelvesActivity extends Activity {
     private ImportTask mImportTask;
     private AddTask mAddTask;
 
-    private BooksUpdater mBooksUpdater;
-
     private final Handler mScrollHandler = new ScrollHandler();
     private int mScrollState = ShelvesScrollManager.SCROLL_STATE_IDLE;
     private boolean mPendingCoversUpdate;
@@ -92,8 +90,6 @@ public class ShelvesActivity extends Activity {
 
         setContentView(R.layout.screen_shelves);
         getWindow().setBackgroundDrawable(null);
-
-        mBooksUpdater = new BooksUpdater(this);
 
         setupViews();
         handleSearchQuery(getIntent());
@@ -137,7 +133,6 @@ public class ShelvesActivity extends Activity {
             final Intent viewIntent = new Intent(Intent.ACTION_VIEW, intent.getData());
             startActivity(viewIntent);
         } else if (ACTION_IMPORT.equals(action)) {
-            onImport();
         }
     }
 
@@ -164,7 +159,6 @@ public class ShelvesActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mBooksUpdater.start();
         if (mSavedState != null) restoreLocalState(mSavedState);
     }
 
@@ -195,9 +189,6 @@ public class ShelvesActivity extends Activity {
     }
 
     private void stopBooksUpdater() {
-        final BooksUpdater booksUpdater = mBooksUpdater;
-        booksUpdater.clear();
-        booksUpdater.stop();
     }
 
     @Override
@@ -309,41 +300,6 @@ public class ShelvesActivity extends Activity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         return super.onContextItemSelected(item);
-    }
-
-    private void onView(String bookId) {
-    }
-
-    private void onBuy(BooksStore.Book book) {
-        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(book.getDetailsUrl()));
-        startActivity(intent);
-    }
-
-    private void onDelete(String bookId) {
-        if (BooksManager.deleteBook(getContentResolver(), bookId)) {
-//            UIUtilities.showToast(this, R.string.success_book_deleted);
-        }
-    }
-
-    private void startScan(int code) {
-    }
-
-    private void onAddSearch() {
-    }
-
-    private void onAdd() {
-        startScan(REQUEST_SCAN_FOR_ADD);
-    }
-
-    private void onCheck() {
-        startScan(REQUEST_SCAN_FOR_CHECK);
-    }
-
-    private void onImport() {
-        if (mImportTask == null || mImportTask.getStatus() == ImportTask.Status.FINISHED) {
-            mImportTask = (ImportTask) new ImportTask().execute();
-        } else {
-        }
     }
 
     private void onCancelAdd() {
@@ -601,18 +557,6 @@ public class ShelvesActivity extends Activity {
                 mScrollHandler.removeMessages(MESSAGE_UPDATE_BOOK_COVERS);
             }
 
-            if (scrollState == SCROLL_STATE_IDLE) {
-                mScrollHandler.removeCallbacks(mShowPopup);
-
-                final BooksUpdater booksUpdater = mBooksUpdater;
-                final int count = view.getChildCount();
-                for (int i = 0; i < count; i++) {
-                    booksUpdater.offer(((BookViewHolder) view.getChildAt(i).getTag()).bookId);
-                }
-            } else {
-                mBooksUpdater.clear();
-            }
-
             mScrollState = scrollState;
         }
 
@@ -707,7 +651,7 @@ public class ShelvesActivity extends Activity {
 
     private class BookViewer implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            onView(((BookViewHolder) view.getTag()).bookId);
+//            onView(((BookViewHolder) view.getTag()).bookId);
         }
     }
 }
