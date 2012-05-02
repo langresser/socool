@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.geometerplus.android.fbreader.bookshelf.ShelvesView
+        android:id="@+id/grid_shelves"
+
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        
+        android:cacheColorHint="#00000000"
+        android:listSelector="@android:color/transparent"
+
+        android:numColumns="auto_fit"
+        android:columnWidth="160dip"/>
+
+    <ViewStub
+        android:id="@+id/stub_add"
+        android:inflatedId="@+id/panel_add"
+
+        android:layout="@layout/progress_overlay"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top" />
+
+    <ViewStub
+        android:id="@+id/stub_import"
+        android:inflatedId="@+id/panel_import"
+
+        android:layout="@layout/progress_overlay"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+</merge>

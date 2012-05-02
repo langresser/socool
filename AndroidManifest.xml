@@ -29,6 +29,8 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="org.geometerplus.android.fbreader.BookShelfActivity">
+		</activity>
+		<activity android:name="org.geometerplus.android.fbreader.bookshelf.ShelvesActivity">
 		    <intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
