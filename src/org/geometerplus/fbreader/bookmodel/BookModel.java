@@ -19,8 +19,11 @@
 
 package org.geometerplus.fbreader.bookmodel;
 
+import java.util.HashMap;
 import java.util.List;
 
+import org.geometerplus.zlibrary.image.ZLImage;
+import org.geometerplus.zlibrary.image.ZLImageMap;
 import org.geometerplus.zlibrary.text.model.*;
 
 import org.geometerplus.fbreader.library.Book;
@@ -130,7 +133,6 @@ public abstract class BookModel {
 
 	public abstract ZLTextModel getTextModel();
 	public abstract ZLTextModel getFootnoteModel(String id);
-	protected abstract Label getLabelInternal(String id);
 
 	public interface LabelResolver {
 		List<String> getCandidates(String id);
@@ -153,5 +155,41 @@ public abstract class BookModel {
 			}
 		}
 		return label;
+	}
+	
+	
+	
+	protected CachedCharStorageBase myInternalHyperlinks;
+	protected final ZLImageMap myImageMap = new ZLImageMap();
+	protected final HashMap<String,ZLTextModel> myFootnotes = new HashMap<String,ZLTextModel>();
+
+	protected Label getLabelInternal(String id) {
+		final int len = id.length();
+		final int size = myInternalHyperlinks.size();
+
+		for (int i = 0; i < size; ++i) {
+			final char[] block = myInternalHyperlinks.block(i);
+			for (int offset = 0; offset < block.length; ) {
+				final int labelLength = (int)block[offset++];
+				if (labelLength == 0) {
+					break;
+				}
+				final int idLength = (int)block[offset + labelLength];
+				if ((labelLength != len) || !id.equals(new String(block, offset, labelLength))) {
+					offset += labelLength + idLength + 3;
+					continue;
+				}
+				offset += labelLength + 1;
+				final String modelId = (idLength > 0) ? new String(block, offset, idLength) : null;
+				offset += idLength;
+				final int paragraphNumber = (int)block[offset] + (((int)block[offset + 1]) << 16);
+				return new Label(modelId, paragraphNumber);
+			}
+		}
+		return null;
+	}
+
+	public void addImage(String id, ZLImage image) {
+		myImageMap.put(id, image);
 	}
 }

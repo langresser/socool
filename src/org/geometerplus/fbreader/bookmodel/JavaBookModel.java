@@ -24,7 +24,7 @@ import org.geometerplus.zlibrary.text.model.*;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.Paths;
 
-public class JavaBookModel extends BookModelImpl {
+public class JavaBookModel extends BookModel {
 	public final ZLTextModel BookTextModel;
 
 	JavaBookModel(Book book) {
