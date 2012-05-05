@@ -19,10 +19,9 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
+import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.ZLTextStyle;
 import org.geometerplus.zlibrary.text.view.ZLTextHyperlink;
-import org.geometerplus.zlibrary.text.model.ZLTextAlignmentType;
-
 public class ZLTextFullDecoratedStyle extends ZLTextPartialDecoratedStyle {
 	private final ZLTextFullStyleDecoration myFullDecoration;
 	
@@ -43,7 +42,7 @@ public class ZLTextFullDecoratedStyle extends ZLTextPartialDecoratedStyle {
 
 	@Override
 	public int getFirstLineIndentDelta() {
-		return (getAlignment() == ZLTextAlignmentType.ALIGN_CENTER) ? 0 : Base.getFirstLineIndentDelta() + myFullDecoration.FirstLineIndentDeltaOption.getValue();
+		return (getAlignment() == ZLTextModel.ALIGN_CENTER) ? 0 : Base.getFirstLineIndentDelta() + myFullDecoration.FirstLineIndentDeltaOption.getValue();
 	}
 	
 	@Override
@@ -65,6 +64,6 @@ public class ZLTextFullDecoratedStyle extends ZLTextPartialDecoratedStyle {
 	@Override
 	public byte getAlignment() {
 		byte value = (byte)myFullDecoration.AlignmentOption.getValue();
-		return (value == ZLTextAlignmentType.ALIGN_UNDEFINED) ? Base.getAlignment() : value;
+		return (value == ZLTextModel.ALIGN_UNDEFINED) ? Base.getAlignment() : value;
 	}
 }

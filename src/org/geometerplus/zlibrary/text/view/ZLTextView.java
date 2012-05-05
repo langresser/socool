@@ -1127,19 +1127,19 @@ public class ZLTextView {
 		int x = getLeftMargin() + info.LeftIndent;
 		final int maxWidth = getTextAreaWidth();
 		switch (getTextStyle().getAlignment()) {
-			case ZLTextAlignmentType.ALIGN_RIGHT:
+			case ZLTextModel.ALIGN_RIGHT:
 				x += maxWidth - getTextStyle().getRightIndent() - info.Width;
 				break;
-			case ZLTextAlignmentType.ALIGN_CENTER:
+			case ZLTextModel.ALIGN_CENTER:
 				x += (maxWidth - getTextStyle().getRightIndent() - info.Width) / 2;
 				break;
-			case ZLTextAlignmentType.ALIGN_JUSTIFY:
+			case ZLTextModel.ALIGN_JUSTIFY:
 				if (!endOfParagraph && (paragraphCursor.getElement(info.EndElementIndex) != ZLTextElement.AfterParagraph)) {
 					fullCorrection = maxWidth - getTextStyle().getRightIndent() - info.Width;
 				}
 				break;
-			case ZLTextAlignmentType.ALIGN_LEFT:
-			case ZLTextAlignmentType.ALIGN_UNDEFINED:
+			case ZLTextModel.ALIGN_LEFT:
+			case ZLTextModel.ALIGN_UNDEFINED:
 				break;
 		}
 

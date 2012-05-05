@@ -29,6 +29,13 @@ import org.geometerplus.zlibrary.util.ZLSearchPattern;
 import org.geometerplus.zlibrary.util.ZLSearchUtil;
 
 public class ZLTextModel {
+	public static final byte ALIGN_UNDEFINED = 0;
+	public static final byte ALIGN_LEFT = 1;
+	public static final byte ALIGN_RIGHT = 2;
+	public static final byte ALIGN_CENTER = 3;
+	public static final byte ALIGN_JUSTIFY = 4;
+	public static final byte ALIGN_LINESTART = 5; // left for LTR languages and right for RTL
+
 	private final String myId;
 	private final String myLanguage;
 
