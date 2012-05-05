@@ -21,7 +21,7 @@ package org.geometerplus.zlibrary.text.view;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class ZLTextSelection implements ZLTextAbstractHighlighting {
+class ZLTextSelection {
 	static class Point {
 		int X;
 		int Y;

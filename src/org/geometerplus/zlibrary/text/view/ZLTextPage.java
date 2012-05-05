@@ -25,7 +25,7 @@ final class ZLTextPage {
 	final ZLTextWordCursor StartCursor = new ZLTextWordCursor();
 	final ZLTextWordCursor EndCursor = new ZLTextWordCursor();
 	final ArrayList<ZLTextLineInfo> LineInfos = new ArrayList<ZLTextLineInfo>();
-	int PaintState = PaintStateEnum.NOTHING_TO_PAINT;
+	int PaintState = ZLTextView.NOTHING_TO_PAINT;
 
 	final ZLTextElementAreaVector TextElementMap = new ZLTextElementAreaVector();
 
@@ -36,14 +36,14 @@ final class ZLTextPage {
 		StartCursor.reset();
 		EndCursor.reset();
 		LineInfos.clear();
-		PaintState = PaintStateEnum.NOTHING_TO_PAINT;
+		PaintState = ZLTextView.NOTHING_TO_PAINT;
 	}
 
 	void moveStartCursor(ZLTextParagraphCursor cursor) {
 		StartCursor.setCursor(cursor);
 		EndCursor.reset();
 		LineInfos.clear();
-		PaintState = PaintStateEnum.START_IS_KNOWN;
+		PaintState = ZLTextView.START_IS_KNOWN;
 	}
 
 	void moveStartCursor(int paragraphIndex, int wordIndex, int charIndex) {
@@ -54,7 +54,7 @@ final class ZLTextPage {
 		StartCursor.moveTo(wordIndex, charIndex);
 		EndCursor.reset();
 		LineInfos.clear();
-		PaintState = PaintStateEnum.START_IS_KNOWN;
+		PaintState = ZLTextView.START_IS_KNOWN;
 	}
 
 	void moveEndCursor(int paragraphIndex, int wordIndex, int charIndex) {
@@ -70,7 +70,7 @@ final class ZLTextPage {
 		}
 		StartCursor.reset();
 		LineInfos.clear();
-		PaintState = PaintStateEnum.END_IS_KNOWN;
+		PaintState = ZLTextView.END_IS_KNOWN;
 	}
 
 	boolean isEmptyPage() {

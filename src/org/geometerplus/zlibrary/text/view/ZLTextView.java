@@ -52,6 +52,14 @@ import android.view.View;
 
 
 public class ZLTextView {
+	// paint state
+	public static final int NOTHING_TO_PAINT = 0;
+	public static final int READY = 1;
+	public static final int START_IS_KNOWN = 2;
+	public static final int END_IS_KNOWN = 3;
+	public static final int TO_SCROLL_FORWARD = 4;
+	public static final int TO_SCROLL_BACKWARD = 5;
+
 	public static final int MAX_SELECTION_DISTANCE = 10;
 
 	public interface ScrollingMode {
@@ -278,16 +286,16 @@ public class ZLTextView {
 				myCurrentPage = myPreviousPage;
 				myPreviousPage = swap;
 				myPreviousPage.reset();
-				if (myCurrentPage.PaintState == PaintStateEnum.NOTHING_TO_PAINT) {
+				if (myCurrentPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myNextPage);
 					myCurrentPage.EndCursor.setCursor(myNextPage.StartCursor);
-					myCurrentPage.PaintState = PaintStateEnum.END_IS_KNOWN;
+					myCurrentPage.PaintState = END_IS_KNOWN;
 				} else if (!myCurrentPage.EndCursor.isNull() &&
 						   !myNextPage.StartCursor.isNull() &&
 						   !myCurrentPage.EndCursor.samePositionAs(myNextPage.StartCursor)) {
 					myNextPage.reset();
 					myNextPage.StartCursor.setCursor(myCurrentPage.EndCursor);
-					myNextPage.PaintState = PaintStateEnum.START_IS_KNOWN;
+					myNextPage.PaintState = START_IS_KNOWN;
 					FBReaderApp.Instance().resetWidget();
 				}
 				break;
@@ -299,10 +307,10 @@ public class ZLTextView {
 				myCurrentPage = myNextPage;
 				myNextPage = swap;
 				myNextPage.reset();
-				if (myCurrentPage.PaintState == PaintStateEnum.NOTHING_TO_PAINT) {
+				if (myCurrentPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myPreviousPage);
 					myCurrentPage.StartCursor.setCursor(myPreviousPage.EndCursor);
-					myCurrentPage.PaintState = PaintStateEnum.START_IS_KNOWN;
+					myCurrentPage.PaintState = START_IS_KNOWN;
 				}
 				break;
 			}
@@ -448,18 +456,18 @@ public class ZLTextView {
 				break;
 			case previous:
 				page = myPreviousPage;
-				if (myPreviousPage.PaintState == PaintStateEnum.NOTHING_TO_PAINT) {
+				if (myPreviousPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myCurrentPage);
 					myPreviousPage.EndCursor.setCursor(myCurrentPage.StartCursor);
-					myPreviousPage.PaintState = PaintStateEnum.END_IS_KNOWN;
+					myPreviousPage.PaintState = END_IS_KNOWN;
 				}
 				break;
 			case next:
 				page = myNextPage;
-				if (myNextPage.PaintState == PaintStateEnum.NOTHING_TO_PAINT) {
+				if (myNextPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myCurrentPage);
 					myNextPage.StartCursor.setCursor(myCurrentPage.EndCursor);
-					myNextPage.PaintState = PaintStateEnum.START_IS_KNOWN;
+					myNextPage.PaintState = START_IS_KNOWN;
 				}
 		}
 
@@ -774,9 +782,8 @@ public class ZLTextView {
 		preparePaintInfo();
 	}
 
-	private void drawBackgroung(
-		ZLTextAbstractHighlighting highligting, ZLColor color,
-		ZLTextPage page, ZLTextLineInfo info, int from, int to, int y
+	private void drawBackgroung(ZLTextSelection highligting, ZLColor color,
+							ZLTextPage page, ZLTextLineInfo info, int from, int to, int y
 	) {
 		if (myContext == null) {
 			return;
@@ -1223,8 +1230,8 @@ public class ZLTextView {
 		preparePaintInfo(myCurrentPage);
 		myPreviousPage.reset();
 		myNextPage.reset();
-		if (myCurrentPage.PaintState == PaintStateEnum.READY) {
-			myCurrentPage.PaintState = forward ? PaintStateEnum.TO_SCROLL_FORWARD : PaintStateEnum.TO_SCROLL_BACKWARD;
+		if (myCurrentPage.PaintState == READY) {
+			myCurrentPage.PaintState = forward ? TO_SCROLL_FORWARD : TO_SCROLL_BACKWARD;
 			myScrollingMode = scrollingMode;
 			myOverlappingValue = value;
 		}
@@ -1273,29 +1280,29 @@ public class ZLTextView {
 		if (newWidth != page.OldWidth || newHeight != page.OldHeight) {
 			page.OldWidth = newWidth;
 			page.OldHeight = newHeight;
-			if (page.PaintState != PaintStateEnum.NOTHING_TO_PAINT) {
+			if (page.PaintState != NOTHING_TO_PAINT) {
 				page.LineInfos.clear();
 				if (page == myPreviousPage) {
 					if (!page.EndCursor.isNull()) {
 						page.StartCursor.reset();
-						page.PaintState = PaintStateEnum.END_IS_KNOWN;
+						page.PaintState = END_IS_KNOWN;
 					} else if (!page.StartCursor.isNull()) {
 						page.EndCursor.reset();
-						page.PaintState = PaintStateEnum.START_IS_KNOWN;
+						page.PaintState = START_IS_KNOWN;
 					}
 				} else {
 					if (!page.StartCursor.isNull()) {
 						page.EndCursor.reset();
-						page.PaintState = PaintStateEnum.START_IS_KNOWN;
+						page.PaintState = START_IS_KNOWN;
 					} else if (!page.EndCursor.isNull()) {
 						page.StartCursor.reset();
-						page.PaintState = PaintStateEnum.END_IS_KNOWN;
+						page.PaintState = END_IS_KNOWN;
 					}
 				}
 			}
 		}
 
-		if (page.PaintState == PaintStateEnum.NOTHING_TO_PAINT || page.PaintState == PaintStateEnum.READY) {
+		if (page.PaintState == NOTHING_TO_PAINT || page.PaintState == READY) {
 			return;
 		}
 
@@ -1307,7 +1314,7 @@ public class ZLTextView {
 		switch (page.PaintState) {
 			default:
 				break;
-			case PaintStateEnum.TO_SCROLL_FORWARD:
+			case TO_SCROLL_FORWARD:
 				if (!page.EndCursor.getParagraphCursor().isLast() || !page.EndCursor.isEndOfParagraph()) {
 					final ZLTextWordCursor startCursor = new ZLTextWordCursor();
 					switch (myScrollingMode) {
@@ -1345,7 +1352,7 @@ public class ZLTextView {
 					buildInfos(page, page.StartCursor, page.EndCursor);
 				}
 				break;
-			case PaintStateEnum.TO_SCROLL_BACKWARD:
+			case TO_SCROLL_BACKWARD:
 				if (!page.StartCursor.getParagraphCursor().isFirst() || !page.StartCursor.isStartOfParagraph()) {
 					switch (myScrollingMode) {
 						case ScrollingMode.NO_OVERLAPPING:
@@ -1384,15 +1391,15 @@ public class ZLTextView {
 					}
 				}
 				break;
-			case PaintStateEnum.START_IS_KNOWN:
+			case START_IS_KNOWN:
 				buildInfos(page, page.StartCursor, page.EndCursor);
 				break;
-			case PaintStateEnum.END_IS_KNOWN:
+			case END_IS_KNOWN:
 				page.StartCursor.setCursor(findStart(page.EndCursor, SizeUnit.PIXEL_UNIT, getTextAreaHeight()));
 				buildInfos(page, page.StartCursor, page.EndCursor);
 				break;
 		}
-		page.PaintState = PaintStateEnum.READY;
+		page.PaintState = READY;
 		// TODO: cache?
 		myLineInfoCache.clear();
 
@@ -1413,16 +1420,16 @@ public class ZLTextView {
 		myNextPage.reset();
 		ZLTextParagraphCursorCache.clear();
 
-		if (myCurrentPage.PaintState != PaintStateEnum.NOTHING_TO_PAINT) {
+		if (myCurrentPage.PaintState != NOTHING_TO_PAINT) {
 			myCurrentPage.LineInfos.clear();
 			if (!myCurrentPage.StartCursor.isNull()) {
 				myCurrentPage.StartCursor.rebuild();
 				myCurrentPage.EndCursor.reset();
-				myCurrentPage.PaintState = PaintStateEnum.START_IS_KNOWN;
+				myCurrentPage.PaintState = START_IS_KNOWN;
 			} else if (!myCurrentPage.EndCursor.isNull()) {
 				myCurrentPage.EndCursor.rebuild();
 				myCurrentPage.StartCursor.reset();
-				myCurrentPage.PaintState = PaintStateEnum.END_IS_KNOWN;
+				myCurrentPage.PaintState = END_IS_KNOWN;
 			}
 		}
 
