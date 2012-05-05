@@ -27,6 +27,11 @@ import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.zip.ZipException;
 
 public final class BookReadingException extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static void throwForFile(String resourceId, ZLFile file) throws BookReadingException {
 		throw new BookReadingException(resourceId, file);
 	}

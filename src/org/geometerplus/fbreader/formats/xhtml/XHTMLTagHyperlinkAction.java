@@ -56,9 +56,9 @@ class XHTMLTagHyperlinkAction extends XHTMLTagAction {
 			String link = href;
 			final byte hyperlinkType;
 			if (isReference(link)) {
-				hyperlinkType = FBTextKind.EXTERNAL_HYPERLINK;
+				hyperlinkType = BookModel.EXTERNAL_HYPERLINK;
 			} else {
-				hyperlinkType = FBTextKind.INTERNAL_HYPERLINK;
+				hyperlinkType = BookModel.INTERNAL_HYPERLINK;
 				final int index = href.indexOf('#');
 				if (index == 0) {
 					link =
@@ -77,7 +77,7 @@ class XHTMLTagHyperlinkAction extends XHTMLTagAction {
 			myHyperlinkStack[myHyperlinkStackSize++] = hyperlinkType;
 			modelReader.addHyperlinkControl(hyperlinkType, link);
 		} else {
-			myHyperlinkStack[myHyperlinkStackSize++] = FBTextKind.REGULAR;
+			myHyperlinkStack[myHyperlinkStackSize++] = BookModel.REGULAR;
 		}
 		final String name = xmlattributes.getValue("name");
 		if (name != null) {
@@ -87,7 +87,7 @@ class XHTMLTagHyperlinkAction extends XHTMLTagAction {
 
 	protected void doAtEnd(XHTMLReader reader) {
 		byte kind = myHyperlinkStack[--myHyperlinkStackSize];
-		if (kind != FBTextKind.REGULAR) {
+		if (kind != BookModel.REGULAR) {
 			reader.getModelReader().addControl(kind, false);
 		}
 	}

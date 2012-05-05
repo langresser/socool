@@ -59,34 +59,34 @@ public class XHTMLReader extends ZLXMLReaderAdapter {
 		//addAction("style", new XHTMLTagAction());
 
 		addAction("p", new XHTMLTagParagraphAction());
-		addAction("h1", new XHTMLTagParagraphWithControlAction(FBTextKind.H1));
-		addAction("h2", new XHTMLTagParagraphWithControlAction(FBTextKind.H2));
-		addAction("h3", new XHTMLTagParagraphWithControlAction(FBTextKind.H3));
-		addAction("h4", new XHTMLTagParagraphWithControlAction(FBTextKind.H4));
-		addAction("h5", new XHTMLTagParagraphWithControlAction(FBTextKind.H5));
-		addAction("h6", new XHTMLTagParagraphWithControlAction(FBTextKind.H6));
+		addAction("h1", new XHTMLTagParagraphWithControlAction(BookModel.H1));
+		addAction("h2", new XHTMLTagParagraphWithControlAction(BookModel.H2));
+		addAction("h3", new XHTMLTagParagraphWithControlAction(BookModel.H3));
+		addAction("h4", new XHTMLTagParagraphWithControlAction(BookModel.H4));
+		addAction("h5", new XHTMLTagParagraphWithControlAction(BookModel.H5));
+		addAction("h6", new XHTMLTagParagraphWithControlAction(BookModel.H6));
 
 		//addAction("ol", new XHTMLTagAction());
 		//addAction("ul", new XHTMLTagAction());
 		//addAction("dl", new XHTMLTagAction());
 		addAction("li", new XHTMLTagItemAction());
 
-		addAction("strong", new XHTMLTagControlAction(FBTextKind.STRONG));
-		addAction("b", new XHTMLTagControlAction(FBTextKind.BOLD));
-		addAction("em", new XHTMLTagControlAction(FBTextKind.EMPHASIS));
-		addAction("i", new XHTMLTagControlAction(FBTextKind.ITALIC));
-		final XHTMLTagAction codeControlAction = new XHTMLTagControlAction(FBTextKind.CODE);
+		addAction("strong", new XHTMLTagControlAction(BookModel.STRONG));
+		addAction("b", new XHTMLTagControlAction(BookModel.BOLD));
+		addAction("em", new XHTMLTagControlAction(BookModel.EMPHASIS));
+		addAction("i", new XHTMLTagControlAction(BookModel.ITALIC));
+		final XHTMLTagAction codeControlAction = new XHTMLTagControlAction(BookModel.CODE);
 		addAction("code", codeControlAction);
 		addAction("tt", codeControlAction);
 		addAction("kbd", codeControlAction);
 		addAction("var", codeControlAction);
 		addAction("samp", codeControlAction);
-		addAction("cite", new XHTMLTagControlAction(FBTextKind.CITE));
-		addAction("sub", new XHTMLTagControlAction(FBTextKind.SUB));
-		addAction("sup", new XHTMLTagControlAction(FBTextKind.SUP));
-		addAction("dd", new XHTMLTagControlAction(FBTextKind.DEFINITION_DESCRIPTION));
-		addAction("dfn", new XHTMLTagControlAction(FBTextKind.DEFINITION));
-		addAction("strike", new XHTMLTagControlAction(FBTextKind.STRIKETHROUGH));
+		addAction("cite", new XHTMLTagControlAction(BookModel.CITE));
+		addAction("sub", new XHTMLTagControlAction(BookModel.SUB));
+		addAction("sup", new XHTMLTagControlAction(BookModel.SUP));
+		addAction("dd", new XHTMLTagControlAction(BookModel.DEFINITION_DESCRIPTION));
+		addAction("dfn", new XHTMLTagControlAction(BookModel.DEFINITION));
+		addAction("strike", new XHTMLTagControlAction(BookModel.STRIKETHROUGH));
 
 		addAction("a", new XHTMLTagHyperlinkAction());
 
@@ -223,10 +223,10 @@ public class XHTMLReader extends ZLXMLReaderAdapter {
 		if (myPreformatted) {
 			final char first = data[start]; 
 			if ((first == '\r') || (first == '\n')) {
-				myModelReader.addControl(FBTextKind.CODE, false);
+				myModelReader.addControl(BookModel.CODE, false);
 				myModelReader.endParagraph();
 				myModelReader.beginParagraph();
-				myModelReader.addControl(FBTextKind.CODE, true);
+				myModelReader.addControl(BookModel.CODE, true);
 			}
 			int spaceCounter = 0;
 cycle:

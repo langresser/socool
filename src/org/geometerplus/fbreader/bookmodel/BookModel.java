@@ -29,6 +29,65 @@ import org.geometerplus.fbreader.formats.FormatPlugin;
 import android.os.Debug;
 
 public abstract class BookModel {
+	public final static byte NONE = 0;
+	public final static byte INTERNAL = 1;
+	public final static byte EXTERNAL = 2;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public final static byte REGULAR = 0;
+	public final static byte TITLE = 1;
+	public final static byte SECTION_TITLE = 2;
+	public final static byte POEM_TITLE = 3;
+	public final static byte SUBTITLE = 4;
+	public final static byte ANNOTATION = 5;
+	public final static byte EPIGRAPH = 6;
+	public final static byte STANZA = 7;
+	public final static byte VERSE = 8;
+	public final static byte PREFORMATTED = 9;
+	public final static byte IMAGE = 10;
+	//byte END_OF_SECTION = 11;
+	public final static byte CITE = 12;
+	public final static byte AUTHOR = 13;
+	public final static byte DATE = 14;
+	public final static byte INTERNAL_HYPERLINK = 15;
+	public final static byte FOOTNOTE = 16;
+	public final static byte EMPHASIS = 17;
+	public final static byte STRONG = 18;
+	public final static byte SUB = 19;
+	public final static byte SUP = 20;
+	public final static byte CODE = 21;
+	public final static byte STRIKETHROUGH = 22;
+	//byte CONTENTS_TABLE_ENTRY = 23;
+	//byte LIBRARY_AUTHOR_ENTRY = 24;
+	//byte LIBRARY_BOOK_ENTRY = 25;
+	//byte LIBRARY_ENTRY = 25;
+	//byte RECENT_BOOK_LIST = 26;
+	public final static byte ITALIC = 27;
+	public final static byte BOLD = 28;
+	public final static byte DEFINITION = 29;
+	public final static byte DEFINITION_DESCRIPTION = 30;
+	public final static byte H1 = 31;
+	public final static byte H2 = 32;
+	public final static byte H3 = 33;
+	public final static byte H4 = 34;
+	public final static byte H5 = 35;
+	public final static byte H6 = 36;
+	public final static byte EXTERNAL_HYPERLINK = 37;
+	//byte BOOK_HYPERLINK = 38;
+	
+	
+	
+	
+	
+
 	public static BookModel createModel(Book book) throws BookReadingException {
 		final FormatPlugin plugin = book.getPlugin();
 

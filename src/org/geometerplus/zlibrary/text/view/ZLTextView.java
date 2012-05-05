@@ -22,7 +22,6 @@ package org.geometerplus.zlibrary.text.view;
 import java.util.*;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.ColorProfile;
@@ -2232,13 +2231,13 @@ public class ZLTextView {
 		final ColorProfile profile = FBReaderApp.Instance().getColorProfile();
 		switch (hyperlink.Type) {
 			default:
-			case FBHyperlinkType.NONE:
+			case BookModel.NONE:
 				return profile.RegularTextOption.getValue();
-			case FBHyperlinkType.INTERNAL:
+			case BookModel.INTERNAL:
 				return FBReaderApp.Instance().Model.Book.isHyperlinkVisited(hyperlink.Id)
 					? profile.VisitedHyperlinkTextOption.getValue()
 					: profile.HyperlinkTextOption.getValue();
-			case FBHyperlinkType.EXTERNAL:
+			case BookModel.EXTERNAL:
 				return profile.HyperlinkTextOption.getValue();
 		}
 	}

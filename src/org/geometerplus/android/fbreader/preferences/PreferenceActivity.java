@@ -29,9 +29,9 @@ import org.geometerplus.zlibrary.text.view.style.*;
 import org.geometerplus.zlibrary.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
 
+import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.*;
 import org.geometerplus.fbreader.Paths;
-import org.geometerplus.fbreader.bookmodel.FBTextKind;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.DictionaryUtil;
@@ -123,34 +123,34 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		final Screen moreStylesScreen = textScreen.createPreferenceScreen("more");
 
 		byte styles[] = {
-			FBTextKind.REGULAR,
-			FBTextKind.TITLE,
-			FBTextKind.SECTION_TITLE,
-			FBTextKind.SUBTITLE,
-			FBTextKind.H1,
-			FBTextKind.H2,
-			FBTextKind.H3,
-			FBTextKind.H4,
-			FBTextKind.H5,
-			FBTextKind.H6,
-			FBTextKind.ANNOTATION,
-			FBTextKind.EPIGRAPH,
-			FBTextKind.AUTHOR,
-			FBTextKind.POEM_TITLE,
-			FBTextKind.STANZA,
-			FBTextKind.VERSE,
-			FBTextKind.CITE,
-			FBTextKind.INTERNAL_HYPERLINK,
-			FBTextKind.EXTERNAL_HYPERLINK,
-			FBTextKind.FOOTNOTE,
-			FBTextKind.ITALIC,
-			FBTextKind.EMPHASIS,
-			FBTextKind.BOLD,
-			FBTextKind.STRONG,
-			FBTextKind.DEFINITION,
-			FBTextKind.DEFINITION_DESCRIPTION,
-			FBTextKind.PREFORMATTED,
-			FBTextKind.CODE
+			BookModel.REGULAR,
+			BookModel.TITLE,
+			BookModel.SECTION_TITLE,
+			BookModel.SUBTITLE,
+			BookModel.H1,
+			BookModel.H2,
+			BookModel.H3,
+			BookModel.H4,
+			BookModel.H5,
+			BookModel.H6,
+			BookModel.ANNOTATION,
+			BookModel.EPIGRAPH,
+			BookModel.AUTHOR,
+			BookModel.POEM_TITLE,
+			BookModel.STANZA,
+			BookModel.VERSE,
+			BookModel.CITE,
+			BookModel.INTERNAL_HYPERLINK,
+			BookModel.EXTERNAL_HYPERLINK,
+			BookModel.FOOTNOTE,
+			BookModel.ITALIC,
+			BookModel.EMPHASIS,
+			BookModel.BOLD,
+			BookModel.STRONG,
+			BookModel.DEFINITION,
+			BookModel.DEFINITION_DESCRIPTION,
+			BookModel.PREFORMATTED,
+			BookModel.CODE
 		};
 		for (int i = 0; i < styles.length; ++i) {
 			final ZLTextStyleDecoration decoration = collection.getDecoration(styles[i]);

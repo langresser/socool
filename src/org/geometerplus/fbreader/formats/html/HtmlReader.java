@@ -25,7 +25,6 @@ import java.nio.charset.*;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReader;
-import org.geometerplus.fbreader.bookmodel.FBTextKind;
 import org.geometerplus.zlibrary.text.model.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
@@ -38,23 +37,23 @@ import org.geometerplus.fbreader.formats.xhtml.XHTMLReader;
 public class HtmlReader extends BookReader implements ZLHtmlReader {
 	private final byte[] myStyleTable = new byte[HtmlTag.TAG_NUMBER];
 	{
-		myStyleTable[HtmlTag.H1] = FBTextKind.H1;
-		myStyleTable[HtmlTag.H2] = FBTextKind.H2;
-		myStyleTable[HtmlTag.H3] = FBTextKind.H3;
-		myStyleTable[HtmlTag.H4] = FBTextKind.H4;
-		myStyleTable[HtmlTag.H5] = FBTextKind.H5;
-		myStyleTable[HtmlTag.H6] = FBTextKind.H6;
-		myStyleTable[HtmlTag.B] = FBTextKind.BOLD;
-		myStyleTable[HtmlTag.SUB] = FBTextKind.SUB;
-		myStyleTable[HtmlTag.SUP] = FBTextKind.SUP;
-		myStyleTable[HtmlTag.S] = FBTextKind.STRIKETHROUGH;
-		myStyleTable[HtmlTag.PRE] = FBTextKind.PREFORMATTED;
-		myStyleTable[HtmlTag.EM] = FBTextKind.EMPHASIS;
-		myStyleTable[HtmlTag.DFN] = FBTextKind.DEFINITION;
-		myStyleTable[HtmlTag.CITE] = FBTextKind.CITE;
-		myStyleTable[HtmlTag.CODE] = FBTextKind.CODE;
-		myStyleTable[HtmlTag.STRONG] = FBTextKind.STRONG;
-		myStyleTable[HtmlTag.I] = FBTextKind.ITALIC;
+		myStyleTable[HtmlTag.H1] = BookModel.H1;
+		myStyleTable[HtmlTag.H2] = BookModel.H2;
+		myStyleTable[HtmlTag.H3] = BookModel.H3;
+		myStyleTable[HtmlTag.H4] = BookModel.H4;
+		myStyleTable[HtmlTag.H5] = BookModel.H5;
+		myStyleTable[HtmlTag.H6] = BookModel.H6;
+		myStyleTable[HtmlTag.B] = BookModel.BOLD;
+		myStyleTable[HtmlTag.SUB] = BookModel.SUB;
+		myStyleTable[HtmlTag.SUP] = BookModel.SUP;
+		myStyleTable[HtmlTag.S] = BookModel.STRIKETHROUGH;
+		myStyleTable[HtmlTag.PRE] = BookModel.PREFORMATTED;
+		myStyleTable[HtmlTag.EM] = BookModel.EMPHASIS;
+		myStyleTable[HtmlTag.DFN] = BookModel.DEFINITION;
+		myStyleTable[HtmlTag.CITE] = BookModel.CITE;
+		myStyleTable[HtmlTag.CODE] = BookModel.CODE;
+		myStyleTable[HtmlTag.STRONG] = BookModel.STRONG;
+		myStyleTable[HtmlTag.I] = BookModel.ITALIC;
 	}
 
 	protected final CharsetDecoder myAttributeDecoder;
@@ -242,7 +241,7 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 
 			case HtmlTag.BODY:
 				setMainTextModel();
-				pushKind(FBTextKind.REGULAR);
+				pushKind(BookModel.REGULAR);
 				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				break;
 
@@ -259,13 +258,13 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 				String ref = attributes.getStringValue(myHrefAttribute, myAttributeDecoder);
 				if ((ref != null) && (ref.length() != 0)) {
 					if (ref.charAt(0) == '#') {
-						myHyperlinkType = FBTextKind.FOOTNOTE;
+						myHyperlinkType = BookModel.FOOTNOTE;
 						ref = ref.substring(1);
 					} else if (ref.charAt(0) == '&') {
-						myHyperlinkType = FBTextKind.INTERNAL_HYPERLINK;
+						myHyperlinkType = BookModel.INTERNAL_HYPERLINK;
 						ref = ref.substring(1);
 					} else {
-						myHyperlinkType = FBTextKind.EXTERNAL_HYPERLINK;
+						myHyperlinkType = BookModel.EXTERNAL_HYPERLINK;
 					}
 					addHyperlinkControl(myHyperlinkType, ref);
 					myControls[myControlsNumber] = myHyperlinkType;

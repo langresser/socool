@@ -89,7 +89,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 		}
 
 		myModelReader.setMainTextModel();
-		myModelReader.pushKind(FBTextKind.REGULAR);
+		myModelReader.pushKind(BookModel.REGULAR);
 
 		int count = 0;
 		for (String name : myHtmlFileNames) {

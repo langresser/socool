@@ -276,8 +276,8 @@ public class BookReader {
 	}
 
 	private static byte hyperlinkType(byte kind) {
-		return (kind == FBTextKind.EXTERNAL_HYPERLINK) ?
-			FBHyperlinkType.EXTERNAL : FBHyperlinkType.INTERNAL;
+		return (kind == BookModel.EXTERNAL_HYPERLINK) ?
+				BookModel.EXTERNAL : BookModel.INTERNAL;
 	}
 
 	public final void addHyperlinkControl(byte kind, String label) {
@@ -404,9 +404,9 @@ public class BookReader {
 				textModel.addImage(ref, vOffset, isCover);
 			} else {
 				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				textModel.addControl(FBTextKind.IMAGE, true);
+				textModel.addControl(BookModel.IMAGE, true);
 				textModel.addImage(ref, vOffset, isCover);
-				textModel.addControl(FBTextKind.IMAGE, false);
+				textModel.addControl(BookModel.IMAGE, false);
 				endParagraph();
 			}
 		}

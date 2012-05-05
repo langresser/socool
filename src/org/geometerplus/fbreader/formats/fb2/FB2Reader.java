@@ -117,22 +117,22 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				myBookReader.endParagraph();
 				break;
 			case FB2Tag.SUB:
-				myBookReader.addControl(FBTextKind.SUB, false);
+				myBookReader.addControl(BookModel.SUB, false);
 				break;
 			case FB2Tag.SUP:
-				myBookReader.addControl(FBTextKind.SUP, false);
+				myBookReader.addControl(BookModel.SUP, false);
 				break;
 			case FB2Tag.CODE:
-				myBookReader.addControl(FBTextKind.CODE, false);
+				myBookReader.addControl(BookModel.CODE, false);
 				break;
 			case FB2Tag.EMPHASIS:
-				myBookReader.addControl(FBTextKind.EMPHASIS, false);
+				myBookReader.addControl(BookModel.EMPHASIS, false);
 				break;
 			case FB2Tag.STRONG:
-				myBookReader.addControl(FBTextKind.STRONG, false);
+				myBookReader.addControl(BookModel.STRONG, false);
 				break;
 			case FB2Tag.STRIKETHROUGH:
-				myBookReader.addControl(FBTextKind.STRIKETHROUGH, false);
+				myBookReader.addControl(BookModel.STRIKETHROUGH, false);
 				break;
 
 			case FB2Tag.V:
@@ -252,40 +252,40 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				break;
 
 			case FB2Tag.SUB:
-				myBookReader.addControl(FBTextKind.SUB, true);
+				myBookReader.addControl(BookModel.SUB, true);
 				break;
 			case FB2Tag.SUP:
-				myBookReader.addControl(FBTextKind.SUP, true);
+				myBookReader.addControl(BookModel.SUP, true);
 				break;
 			case FB2Tag.CODE:
-				myBookReader.addControl(FBTextKind.CODE, true);
+				myBookReader.addControl(BookModel.CODE, true);
 				break;
 			case FB2Tag.EMPHASIS:
-				myBookReader.addControl(FBTextKind.EMPHASIS, true);
+				myBookReader.addControl(BookModel.EMPHASIS, true);
 				break;
 			case FB2Tag.STRONG:
-				myBookReader.addControl(FBTextKind.STRONG, true);
+				myBookReader.addControl(BookModel.STRONG, true);
 				break;
 			case FB2Tag.STRIKETHROUGH:
-				myBookReader.addControl(FBTextKind.STRIKETHROUGH, true);
+				myBookReader.addControl(BookModel.STRIKETHROUGH, true);
 				break;
 
 			case FB2Tag.V:
-				myBookReader.pushKind(FBTextKind.VERSE);
+				myBookReader.pushKind(BookModel.VERSE);
 				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				break;
 
 			case FB2Tag.TEXT_AUTHOR:
-				myBookReader.pushKind(FBTextKind.AUTHOR);
+				myBookReader.pushKind(BookModel.AUTHOR);
 				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				break;
 
 			case FB2Tag.SUBTITLE:
-				myBookReader.pushKind(FBTextKind.SUBTITLE);
+				myBookReader.pushKind(BookModel.SUBTITLE);
 				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				break;
 			case FB2Tag.DATE:
-				myBookReader.pushKind(FBTextKind.DATE);
+				myBookReader.pushKind(BookModel.DATE);
 				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				break;
 
@@ -295,10 +295,10 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				break;
 
 			case FB2Tag.CITE:
-				myBookReader.pushKind(FBTextKind.CITE);
+				myBookReader.pushKind(BookModel.CITE);
 				break;
 			case FB2Tag.EPIGRAPH:
-				myBookReader.pushKind(FBTextKind.EPIGRAPH);
+				myBookReader.pushKind(BookModel.EPIGRAPH);
 				break;
 
 			case FB2Tag.POEM:
@@ -306,7 +306,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				break;
 
 			case FB2Tag.STANZA:
-				myBookReader.pushKind(FBTextKind.STANZA);
+				myBookReader.pushKind(BookModel.STANZA);
 				myBookReader.beginParagraph(ZLTextParagraph.Kind.BEFORE_SKIP_PARAGRAPH);
 				myBookReader.endParagraph();
 				break;
@@ -324,17 +324,17 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				if (myBodyCounter == 0) {
 					myBookReader.setMainTextModel();
 				}
-				myBookReader.pushKind(FBTextKind.ANNOTATION);
+				myBookReader.pushKind(BookModel.ANNOTATION);
 				break;
 
 			case FB2Tag.TITLE:
 				if (myInsidePoem) {
-					myBookReader.pushKind(FBTextKind.POEM_TITLE);
+					myBookReader.pushKind(BookModel.POEM_TITLE);
 				} else if (mySectionDepth == 0) {
 					myBookReader.insertEndOfSectionParagraph();
-					myBookReader.pushKind(FBTextKind.TITLE);
+					myBookReader.pushKind(BookModel.TITLE);
 				} else {
-					myBookReader.pushKind(FBTextKind.SECTION_TITLE);
+					myBookReader.pushKind(BookModel.SECTION_TITLE);
 					if (!myBookReader.hasContentsData()) {
 						myInsideTitle = true;
 						myBookReader.enterTitle();
@@ -355,7 +355,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 					}
 					myReadMainText = true;
 				}
-				myBookReader.pushKind(FBTextKind.REGULAR);
+				myBookReader.pushKind(BookModel.REGULAR);
 				break;
 
 			case FB2Tag.A:
@@ -364,14 +364,14 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				if ((ref != null) && (ref.length() != 0)) {
 					final String type = attributes.getValue("type");
 					if (ref.charAt(0) == '#') {
-						myHyperlinkType = "note".equals(type) ? FBTextKind.FOOTNOTE : FBTextKind.INTERNAL_HYPERLINK;
+						myHyperlinkType = "note".equals(type) ? BookModel.FOOTNOTE : BookModel.INTERNAL_HYPERLINK;
 						ref = ref.substring(1);
 					} else {
-						myHyperlinkType = FBTextKind.EXTERNAL_HYPERLINK;
+						myHyperlinkType = BookModel.EXTERNAL_HYPERLINK;
 					}
 					myBookReader.addHyperlinkControl(myHyperlinkType, ref);
 				} else {
-					myHyperlinkType = FBTextKind.FOOTNOTE;
+					myHyperlinkType = BookModel.FOOTNOTE;
 					myBookReader.addControl(myHyperlinkType, true);
 				}
 				break;

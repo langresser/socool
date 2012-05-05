@@ -23,11 +23,10 @@ import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.text.view.*;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
+import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.network.NetworkLibrary;
 
 import org.geometerplus.android.fbreader.network.BookDownloader;
@@ -59,10 +58,10 @@ public class ProcessHyperlinkAction extends FBAndroidAction {
 			FBReaderApp.Instance().repaintWidget();
 			final ZLTextHyperlink hyperlink = ((ZLTextHyperlinkRegionSoul)soul).Hyperlink;
 			switch (hyperlink.Type) {
-				case FBHyperlinkType.EXTERNAL:
+				case BookModel.EXTERNAL:
 					openInBrowser(hyperlink.Id);
 					break;
-				case FBHyperlinkType.INTERNAL:
+				case BookModel.INTERNAL:
 					Reader.Model.Book.markHyperlinkAsVisited(hyperlink.Id);
 					Reader.tryOpenFootnote(hyperlink.Id);
 					break;

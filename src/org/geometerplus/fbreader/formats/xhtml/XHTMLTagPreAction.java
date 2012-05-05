@@ -28,12 +28,12 @@ class XHTMLTagPreAction extends XHTMLTagAction {
 		reader.myPreformatted = true;
 		final BookReader modelReader = reader.getModelReader();
 		modelReader.beginParagraph();
-		modelReader.addControl(FBTextKind.CODE, true);
+		modelReader.addControl(BookModel.CODE, true);
 	}
 
 	protected void doAtEnd(XHTMLReader reader) {
 		final BookReader modelReader = reader.getModelReader();
-		modelReader.addControl(FBTextKind.CODE, false);
+		modelReader.addControl(BookModel.CODE, false);
 		modelReader.endParagraph();
 		reader.myPreformatted = false;
 	}
