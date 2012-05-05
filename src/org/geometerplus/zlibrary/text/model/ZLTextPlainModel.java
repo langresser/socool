@@ -331,9 +331,7 @@ public class ZLTextPlainModel implements ZLTextModel {
 
 	public final ZLTextParagraph getParagraph(int index) {
 		final byte kind = myParagraphKinds[index];
-		return (kind == ZLTextParagraph.Kind.TEXT_PARAGRAPH) ?
-			new ZLTextParagraphImpl(this, index) :
-			new ZLTextSpecialParagraphImpl(kind, this, index);
+		return new ZLTextParagraph(this, index, kind);
 	}
 
 	public final int getTextLength(int index) {

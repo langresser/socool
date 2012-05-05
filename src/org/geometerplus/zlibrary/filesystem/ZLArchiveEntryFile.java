@@ -21,8 +21,6 @@ package org.geometerplus.zlibrary.filesystem;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.filesystem.ZLTarEntryFile;
-
 public abstract class ZLArchiveEntryFile extends ZLFile {
 	public static String normalizeEntryName(String entryName) {
 		while (entryName.startsWith("./")) {
@@ -58,8 +56,6 @@ public abstract class ZLArchiveEntryFile extends ZLFile {
 		switch (archive.myArchiveType & ArchiveType.ARCHIVE) {
 			case ArchiveType.ZIP: 
 				return new ZLZipEntryFile(archive, entryName);
-			case ArchiveType.TAR: 
-				return new ZLTarEntryFile(archive, entryName);
 			default:
 				return null;
 		}
@@ -69,8 +65,6 @@ public abstract class ZLArchiveEntryFile extends ZLFile {
 		switch (archive.myArchiveType & ArchiveType.ARCHIVE) {
 			case ArchiveType.ZIP:
 				return ZLZipEntryFile.archiveEntries(archive);
-			case ArchiveType.TAR:
-				return ZLTarEntryFile.archiveEntries(archive);
 			default:
 				return Collections.emptyList();
 		}

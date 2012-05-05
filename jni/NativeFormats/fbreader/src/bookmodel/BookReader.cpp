@@ -49,19 +49,6 @@ void BookReader::setMainTextModel() {
 	myCurrentTextModel = myModel.myBookTextModel;
 }
 
-void BookReader::setFootnoteTextModel(const std::string &id) {
-	std::map<std::string,shared_ptr<ZLTextModel> >::iterator it = myModel.myFootnotes.find(id);
-	if (it != myModel.myFootnotes.end()) {
-		myCurrentTextModel = (*it).second;
-	} else {
-		if (myFootnotesAllocator.isNull()) {
-			myFootnotesAllocator = new ZLCachedMemoryAllocator(8192, Library::Instance().cacheDirectory(), "footnotes");
-		}
-		myCurrentTextModel = new ZLTextPlainModel(id, myModel.myBookTextModel->language(), myFootnotesAllocator);
-		myModel.myFootnotes.insert(std::make_pair(id, myCurrentTextModel));
-	}
-}
-
 void BookReader::unsetTextModel() {
 	myCurrentTextModel = 0;
 }

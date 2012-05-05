@@ -26,7 +26,6 @@
 
 #include "ZLEncodingConverter.h"
 #include "DummyEncodingConverter.h"
-#include "JavaEncodingConverter.h"
 #include "IconvEncodingConverter.h"
 
 ZLEncodingCollection *ZLEncodingCollection::ourInstance = 0;

@@ -19,8 +19,8 @@
 
 package org.geometerplus.zlibrary.text.model;
 
-public interface ZLTextParagraph {
-	interface Entry {
+public final class ZLTextParagraph {
+	public interface Entry {
 		byte TEXT = 1;
 		byte IMAGE = 2;
 		byte CONTROL = 3;
@@ -30,7 +30,7 @@ public interface ZLTextParagraph {
 		byte RESET_BIDI = 7;
 	}
 
-	interface EntryIterator {
+	public interface EntryIterator {
 		byte getType();
 
 		char[] getTextData();
@@ -51,9 +51,7 @@ public interface ZLTextParagraph {
 		void next();
 	}
 
-	public EntryIterator iterator();
-
-	interface Kind {
+	public interface Kind {
 		byte TEXT_PARAGRAPH = 0;
 		//byte TREE_PARAGRAPH = 1;
 		byte EMPTY_LINE_PARAGRAPH = 2;
@@ -62,6 +60,22 @@ public interface ZLTextParagraph {
 		byte END_OF_SECTION_PARAGRAPH = 5;
 		byte END_OF_TEXT_PARAGRAPH = 6;
 	};
+	
+	private final ZLTextPlainModel myModel;
+	private final int myIndex;
+	private final byte myKind;
+	
+	ZLTextParagraph(ZLTextPlainModel model, int index, byte kind) {
+		myModel = model;
+		myIndex = index;
+		myKind = kind;
+	}
 
-	byte getKind();
+	public EntryIterator iterator() {
+		return myModel.new EntryIteratorImpl(myIndex);
+	}
+	
+	public byte getKind() {
+		return myKind;
+	}
 }

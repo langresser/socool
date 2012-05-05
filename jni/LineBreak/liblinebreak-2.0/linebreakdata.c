@@ -1,8 +1,3 @@
-/* The content of this file is generated from:
-# LineBreak-5.2.0.txt
-# Date: 2009-08-17, 12:21:00 PDT [KW]
-*/
-
 #include "linebreak.h"
 #include "linebreakdef.h"
 

@@ -31,7 +31,6 @@ public abstract class ZLFile {
 		int	BZIP2 = 0x0002;
 		int	COMPRESSED = 0x00ff;
 		int	ZIP = 0x0100;
-		int	TAR = 0x0200;
 		int	ARCHIVE = 0xff00;
 	};
 	
@@ -64,11 +63,6 @@ public abstract class ZLFile {
 			archiveType |= ArchiveType.ZIP;
 		} else if (myExtension == "epub") {
 			archiveType |= ArchiveType.ZIP;
-		} else if (myExtension == "tar") {
-			archiveType |= ArchiveType.TAR;
-		//} else if (lowerCaseName.endsWith(".tgz")) {
-			//nothing to-do myNameWithoutExtension = myNameWithoutExtension.substr(0, myNameWithoutExtension.length() - 3) + "tar";
-			//myArchiveType = myArchiveType | ArchiveType.TAR | ArchiveType.GZIP;
 		}
 		myArchiveType = archiveType;
 	}
