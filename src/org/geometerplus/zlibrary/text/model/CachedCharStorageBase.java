@@ -22,17 +22,28 @@ package org.geometerplus.zlibrary.text.model;
 import java.lang.ref.WeakReference;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
-abstract class CachedCharStorageBase implements CharStorage {
+public class CachedCharStorageBase {
 	protected final ArrayList<WeakReference<char[]>> myArray =
 		new ArrayList<WeakReference<char[]>>();
 
 	private final String myDirectoryName;
 	private final String myFileExtension;
+	private final boolean m_isReadOnly;
 
-	CachedCharStorageBase(String directoryName, String fileExtension) {
+	public CachedCharStorageBase(int blockSize, String directoryName, String fileExtension, boolean readonly) {
 		myDirectoryName = directoryName + '/';
 		myFileExtension = '.' + fileExtension;
+		m_isReadOnly = readonly;
+
+		if (!readonly) {
+			myBlockSize = blockSize;
+			new File(directoryName).mkdirs();
+		} else {
+			myBlockSize = blockSize;
+			myArray.addAll(Collections.nCopies(blockSize, new WeakReference<char[]>(null)));
+		}
 	}
 
 	protected String fileName(int index) {
@@ -50,7 +61,7 @@ abstract class CachedCharStorageBase implements CharStorage {
 				File file = new File(fileName(index));
 				int size = (int)file.length();
 				if (size < 0) {
-					throw new CachedCharStorageException("Error during reading " + fileName(index));
+					return null;
 				}
 				block = new char[size / 2];
 				InputStreamReader reader =
@@ -59,16 +70,57 @@ abstract class CachedCharStorageBase implements CharStorage {
 						"UTF-16LE"
 					);
 				if (reader.read(block) != block.length) {
-					throw new CachedCharStorageException("Error during reading " + fileName(index));
+					return null;
 				}
 				reader.close();
 			} catch (FileNotFoundException e) {
-				throw new CachedCharStorageException("Error during reading " + fileName(index));
+				return null;
 			} catch (IOException e) {
-				throw new CachedCharStorageException("Error during reading " + fileName(index));
+				return null;
 			}
 			myArray.set(index, new WeakReference<char[]>(block));
 		}
 		return block;
+	}
+	
+	private final int myBlockSize;
+
+	public char[] createNewBlock(int minimumLength) {
+		if (m_isReadOnly) {
+			return null;
+		}
+
+		int blockSize = myBlockSize;
+		if (minimumLength > blockSize) {
+			blockSize = minimumLength;
+		}
+		char[] block = new char[blockSize];
+		myArray.add(new WeakReference<char[]>(block));
+		return block;
+	}
+
+	public void freezeLastBlock() {
+		if (m_isReadOnly) {
+			return;
+		}
+
+		int index = myArray.size() - 1;
+		if (index >= 0) {
+			char[] block = myArray.get(index).get();
+			if (block == null) {
+				return;
+			}
+			try {
+				final OutputStreamWriter writer =
+					new OutputStreamWriter(
+						new FileOutputStream(fileName(index)),
+						"UTF-16LE"
+					);
+				writer.write(block);
+				writer.close();
+			} catch (IOException e) {
+				return;
+			}
+		}
 	}
 }

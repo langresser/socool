@@ -38,7 +38,7 @@ public class ZLTextPlainModel implements ZLTextModel {
 
 	protected int myParagraphsNumber;
 
-	protected final CharStorage myStorage;
+	protected final CachedCharStorageBase myStorage;
 	protected final ZLImageMap myImageMap;
 
 	private ArrayList<ZLTextMark> myMarks;
@@ -219,7 +219,7 @@ public class ZLTextPlainModel implements ZLTextModel {
 		int[] paragraphLenghts,
 		int[] textSizes,
 		byte[] paragraphKinds,
-		CharStorage storage,
+		CachedCharStorageBase storage,
 		ZLImageMap imageMap
 	) {
 		myId = id;

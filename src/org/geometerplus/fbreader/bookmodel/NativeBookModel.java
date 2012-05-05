@@ -33,7 +33,7 @@ public class NativeBookModel extends BookModelImpl {
 	}
 
 	public void initInternalHyperlinks(String directoryName, String fileExtension, int blocksNumber) {
-		myInternalHyperlinks = new CachedCharStorageRO(directoryName, fileExtension, blocksNumber);
+		myInternalHyperlinks = new CachedCharStorageBase(blocksNumber, directoryName, fileExtension, true);
 	}
 
 	public void initTOC(ZLTextModel contentsModel, int[] childrenNumbers, int[] referenceNumbers) {

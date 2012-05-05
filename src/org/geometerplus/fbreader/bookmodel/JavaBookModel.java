@@ -29,7 +29,7 @@ public class JavaBookModel extends BookModelImpl {
 
 	JavaBookModel(Book book) {
 		super(book);
-		myInternalHyperlinks = new CachedCharStorage(32768, Paths.cacheDirectory(), "links");
+		myInternalHyperlinks = new CachedCharStorageBase(32768, Paths.cacheDirectory(), "links", false);
 		BookTextModel = new ZLTextWritablePlainModel(null, book.getLanguage(), 1024, 65536, Paths.cacheDirectory(), "cache", myImageMap);
 	}
 
