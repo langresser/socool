@@ -94,7 +94,7 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 								} else {
 									author = author.trim();
 								}
-								book.addAuthor(author);
+								// TODO Ìí¼Ó×÷Õß
 								break;
 							}
 							case 105:

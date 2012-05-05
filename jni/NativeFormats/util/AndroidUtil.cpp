@@ -37,7 +37,6 @@ JavaClass AndroidUtil::Class_java_io_InputStream("java/io/InputStream");
 JavaClass AndroidUtil::Class_ZLFile("org/geometerplus/zlibrary/filesystem/ZLFile");
 JavaClass AndroidUtil::Class_ZLFileImage("org/geometerplus/zlibrary/image/ZLFileImage");
 JavaClass AndroidUtil::Class_ZLTextModel("org/geometerplus/zlibrary/text/model/ZLTextModel");
-JavaClass AndroidUtil::Class_CachedCharStorageException("org/geometerplus/zlibrary/text/model/CachedCharStorageException");
 
 JavaClass AndroidUtil::Class_Encoding("org/geometerplus/zlibrary/encodings/Encoding");
 JavaClass AndroidUtil::Class_EncodingConverter("org/geometerplus/zlibrary/encodings/EncodingConverter");
@@ -95,10 +94,8 @@ shared_ptr<StringMethod> AndroidUtil::Method_Book_getTitle;
 shared_ptr<StringMethod> AndroidUtil::Method_Book_getLanguage;
 shared_ptr<StringMethod> AndroidUtil::Method_Book_getEncodingNoDetection;
 shared_ptr<VoidMethod> AndroidUtil::Method_Book_setTitle;
-shared_ptr<VoidMethod> AndroidUtil::Method_Book_setSeriesInfo;
 shared_ptr<VoidMethod> AndroidUtil::Method_Book_setLanguage;
 shared_ptr<VoidMethod> AndroidUtil::Method_Book_setEncoding;
-shared_ptr<VoidMethod> AndroidUtil::Method_Book_addAuthor;
 shared_ptr<VoidMethod> AndroidUtil::Method_Book_addTag;
 shared_ptr<BooleanMethod> AndroidUtil::Method_Book_save;
 
@@ -109,7 +106,6 @@ shared_ptr<VoidMethod> AndroidUtil::Method_NativeBookModel_initInternalHyperlink
 shared_ptr<VoidMethod> AndroidUtil::Method_NativeBookModel_initTOC;
 shared_ptr<ObjectMethod> AndroidUtil::Method_NativeBookModel_createTextModel;
 shared_ptr<VoidMethod> AndroidUtil::Method_NativeBookModel_setBookTextModel;
-shared_ptr<VoidMethod> AndroidUtil::Method_NativeBookModel_setFootnoteModel;
 shared_ptr<VoidMethod> AndroidUtil::Method_NativeBookModel_addImage;
 
 //shared_ptr<StaticObjectMethod> AndroidUtil::StaticMethod_BookReadingException_throwForFile;
@@ -167,10 +163,8 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	Method_Book_getLanguage = new StringMethod(Class_Book, "getLanguage", "()");
 	Method_Book_getEncodingNoDetection = new StringMethod(Class_Book, "getEncodingNoDetection", "()");
 	Method_Book_setTitle = new VoidMethod(Class_Book, "setTitle", "(Ljava/lang/String;)");
-	Method_Book_setSeriesInfo = new VoidMethod(Class_Book, "setSeriesInfo", "(Ljava/lang/String;Ljava/lang/String;)");
 	Method_Book_setLanguage = new VoidMethod(Class_Book, "setLanguage", "(Ljava/lang/String;)");
 	Method_Book_setEncoding = new VoidMethod(Class_Book, "setEncoding", "(Ljava/lang/String;)");
-	Method_Book_addAuthor = new VoidMethod(Class_Book, "addAuthor", "(Ljava/lang/String;Ljava/lang/String;)");
 	Method_Book_addTag = new VoidMethod(Class_Book, "addTag", "(Lorg/geometerplus/fbreader/library/Tag;)");
 	Method_Book_save = new BooleanMethod(Class_Book, "save", "()");
 
@@ -268,10 +262,6 @@ jbyteArray AndroidUtil::createJavaByteArray(JNIEnv *env, const std::vector<jbyte
 
 void AndroidUtil::throwRuntimeException(const std::string &message) {
 	getEnv()->ThrowNew(Class_java_lang_RuntimeException.j(), message.c_str());
-}
-
-void AndroidUtil::throwCachedCharStorageException(const std::string &message) {
-	getEnv()->ThrowNew(Class_CachedCharStorageException.j(), message.c_str());
 }
 
 /*

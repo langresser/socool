@@ -56,25 +56,16 @@ static void fillMetaInfo(JNIEnv* env, jobject javaBook, Book &book) {
 		env->DeleteLocalRef(javaString);
 	}
 
-	javaString = AndroidUtil::createJavaString(env, book.seriesTitle());
-	if (javaString != 0) {
-		jstring indexString = AndroidUtil::createJavaString(env, book.indexInSeries());
-		AndroidUtil::Method_Book_setSeriesInfo->call(javaBook, javaString, indexString);
-		if (indexString != 0) {
-			env->DeleteLocalRef(indexString);
-		}
-		env->DeleteLocalRef(javaString);
-	}
-
 	const AuthorList &authors = book.authors();
-	for (size_t i = 0; i < authors.size(); ++i) {
-		const Author &author = *authors[i];
-		javaString = env->NewStringUTF(author.name().c_str());
-		jstring key = env->NewStringUTF(author.sortKey().c_str());
-		AndroidUtil::Method_Book_addAuthor->call(javaBook, javaString, key);
-		env->DeleteLocalRef(key);
-		env->DeleteLocalRef(javaString);
-	}
+	// TODO 添加作者信息
+//	for (size_t i = 0; i < authors.size(); ++i) {
+//		const Author &author = *authors[i];
+//		javaString = env->NewStringUTF(author.name().c_str());
+//		jstring key = env->NewStringUTF(author.sortKey().c_str());
+//		AndroidUtil::Method_Book_addAuthor->call(javaBook, javaString, key);
+//		env->DeleteLocalRef(key);
+//		env->DeleteLocalRef(javaString);
+//	}
 
 	const TagList &tags = book.tags();
 	for (size_t i = 0; i < tags.size(); ++i) {
@@ -256,7 +247,6 @@ JNIEXPORT jboolean JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPl
 	}
 
 	if (!model->flush()) {
-		AndroidUtil::throwCachedCharStorageException("Cannot write file from native code");
 		return JNI_FALSE;
 	}
 
@@ -275,19 +265,6 @@ JNIEXPORT jboolean JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPl
 	}
 	env->DeleteLocalRef(javaTextModel);
 
-	const std::map<std::string,shared_ptr<ZLTextModel> > &footnotes = model->footnotes();
-	std::map<std::string,shared_ptr<ZLTextModel> >::const_iterator it = footnotes.begin();
-	for (; it != footnotes.end(); ++it) {
-		jobject javaFootnoteModel = createTextModel(env, javaModel, *it->second);
-		if (javaFootnoteModel == 0) {
-			return JNI_FALSE;
-		}
-		AndroidUtil::Method_NativeBookModel_setFootnoteModel->call(javaModel, javaFootnoteModel);
-		if (env->ExceptionCheck()) {
-			return JNI_FALSE;
-		}
-		env->DeleteLocalRef(javaFootnoteModel);
-	}
 	return JNI_TRUE;
 }
 

@@ -55,14 +55,9 @@ public class Book {
 			return book;
 		}
 		if (!physicalFile.exists()) {
+			// TODO 再次从sd卡中搜索
 			return null;
 		}
-
-		FileInfoSet fileInfos = new FileInfoSet(physicalFile);
-		if (fileInfos.check(physicalFile, physicalFile != bookFile)) {
-			return book;
-		}
-		fileInfos.save();
 
 		try {
 			book.readMetaInfo();
@@ -82,17 +77,8 @@ public class Book {
 			return null;
 		}
 
-		final FileInfoSet fileInfos = new FileInfoSet(bookFile);
-
-		Book book = FBReaderApp.Instance().getDatabase().loadBookByFile(fileInfos.getId(bookFile), bookFile);
-		if (book != null) {
-			book.loadLists();
-		}
-
-		if (book != null && fileInfos.check(physicalFile, physicalFile != bookFile)) {
-			return book;
-		}
-		fileInfos.save();
+		// TODO 先查看下数据库
+		Book book = null;//FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
 
 		try {
 			if (book == null) {
@@ -109,15 +95,16 @@ public class Book {
 	}
 
 	public final ZLFile File;
+	public String m_filePath = "";
+	public int m_fileSize = 0;
+	public String m_bookAuthor = "";
 
 	private volatile long myId;
 
 	private volatile String myEncoding;
 	private volatile String myLanguage;
 	private volatile String myTitle;
-	private volatile List<Author> myAuthors;
 	private volatile List<Tag> myTags;
-	private volatile SeriesInfo mySeriesInfo;
 
 	private volatile boolean myIsSaved;
 
@@ -152,9 +139,7 @@ public class Book {
 	public void reloadInfoFromDatabase() {
 		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
 		database.reloadBook(this);
-		myAuthors = database.loadAuthors(myId);
 		myTags = database.loadTags(myId);
-		mySeriesInfo = database.loadSeriesInfo(myId);
 		myIsSaved = true;
 	}
 
@@ -179,9 +164,8 @@ public class Book {
 		myEncoding = null;
 		myLanguage = null;
 		myTitle = null;
-		myAuthors = null;
+		m_bookAuthor = null;
 		myTags = null;
-		mySeriesInfo = null;
 
 		myIsSaved = false;
 
@@ -201,64 +185,12 @@ public class Book {
 
 	private void loadLists() {
 		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
-		myAuthors = database.loadAuthors(myId);
 		myTags = database.loadTags(myId);
-		mySeriesInfo = database.loadSeriesInfo(myId);
 		myIsSaved = true;
 	}
 
-	public List<Author> authors() {
-		return (myAuthors != null) ? Collections.unmodifiableList(myAuthors) : Collections.<Author>emptyList();
-	}
-
-	void addAuthorWithNoCheck(Author author) {
-		if (myAuthors == null) {
-			myAuthors = new ArrayList<Author>();
-		}
-		myAuthors.add(author);
-	}
-
-	private void addAuthor(Author author) {
-		if (author == null) {
-			return;
-		}
-		if (myAuthors == null) {
-			myAuthors = new ArrayList<Author>();
-			myAuthors.add(author);
-			myIsSaved = false;
-		} else if (!myAuthors.contains(author)) {
-			myAuthors.add(author);
-			myIsSaved = false;
-		}
-	}
-
-	public void addAuthor(String name) {
-		addAuthor(name, "");
-	}
-
-	public void addAuthor(String name, String sortKey) {
-		String strippedName = name;
-		strippedName.trim();
-		if (strippedName.length() == 0) {
-			return;
-		}
-
-		String strippedKey = sortKey;
-		strippedKey.trim();
-		if (strippedKey.length() == 0) {
-			int index = strippedName.lastIndexOf(' ');
-			if (index == -1) {
-				strippedKey = strippedName;
-			} else {
-				strippedKey = strippedName.substring(index + 1);
-				while ((index >= 0) && (strippedName.charAt(index) == ' ')) {
-					--index;
-				}
-				strippedName = strippedName.substring(0, index + 1) + ' ' + strippedKey;
-			}
-		}
-
-		addAuthor(new Author(strippedName, strippedKey));
+	public String authors() {
+		return m_bookAuthor == null ? "" : m_bookAuthor;
 	}
 
 	public long getId() {
@@ -272,33 +204,6 @@ public class Book {
 	public void setTitle(String title) {
 		if (!ZLMiscUtil.equals(myTitle, title)) {
 			myTitle = title;
-			myIsSaved = false;
-		}
-	}
-
-	public SeriesInfo getSeriesInfo() {
-		return mySeriesInfo;
-	}
-
-	void setSeriesInfoWithNoCheck(String name, BigDecimal index) {
-		mySeriesInfo = new SeriesInfo(name, index);
-	}
-
-	public void setSeriesInfo(String name, String index) {
-		setSeriesInfo(name, SeriesInfo.createIndex(index));
-	}
-
-	public void setSeriesInfo(String name, BigDecimal index) {
-		if (mySeriesInfo == null) {
-			if (name != null) {
-				mySeriesInfo = new SeriesInfo(name, index);
-				myIsSaved = false;
-			}
-		} else if (name == null) {
-			mySeriesInfo = null;
-			myIsSaved = false;
-		} else if (!name.equals(mySeriesInfo.Name) || mySeriesInfo.Index != index) {
-			mySeriesInfo = new SeriesInfo(name, index);
 			myIsSaved = false;
 		}
 	}
@@ -369,16 +274,6 @@ public class Book {
 		if (myTitle != null && ZLMiscUtil.matchesIgnoreCase(myTitle, pattern)) {
 			return true;
 		}
-		if (mySeriesInfo != null && ZLMiscUtil.matchesIgnoreCase(mySeriesInfo.Name, pattern)) {
-			return true;
-		}
-		if (myAuthors != null) {
-			for (Author author : myAuthors) {
-				if (ZLMiscUtil.matchesIgnoreCase(author.DisplayName, pattern)) {
-					return true;
-				}
-			}
-		}
 		if (myTags != null) {
 			for (Tag tag : myTags) {
 				if (ZLMiscUtil.matchesIgnoreCase(tag.Name, pattern)) {
@@ -400,23 +295,16 @@ public class Book {
 		database.executeAsATransaction(new Runnable() {
 			public void run() {
 				if (myId >= 0) {
-					final FileInfoSet fileInfos = new FileInfoSet(File);
-					database.updateBookInfo(myId, fileInfos.getId(File), myEncoding, myLanguage, myTitle);
+					database.updateBookInfo(myId, File, myEncoding, myLanguage, myTitle);
 				} else {
 					myId = database.insertBookInfo(File, myEncoding, myLanguage, myTitle);
 					storeAllVisitedHyperinks();
 				}
 
-				long index = 0;
-				database.deleteAllBookAuthors(myId);
-				for (Author author : authors()) {
-					database.saveBookAuthorInfo(myId, index++, author);
-				}
 				database.deleteAllBookTags(myId);
 				for (Tag tag : tags()) {
 					database.saveBookTagInfo(myId, tag);
 				}
-				database.saveBookSeriesInfo(myId, mySeriesInfo);
 			}
 		});
 

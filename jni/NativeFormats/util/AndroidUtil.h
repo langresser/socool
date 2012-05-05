@@ -61,7 +61,6 @@ public:
 	static JavaClass Class_ZLFile;
 	static JavaClass Class_ZLFileImage;
 	static JavaClass Class_ZLTextModel;
-	static JavaClass Class_CachedCharStorageException;
 	static JavaClass Class_NativeFormatPlugin;
 	static JavaClass Class_PluginCollection;
 	static JavaClass Class_Encoding;
@@ -121,10 +120,8 @@ public:
 	static shared_ptr<StringMethod> Method_Book_getLanguage;
 	static shared_ptr<StringMethod> Method_Book_getEncodingNoDetection;
 	static shared_ptr<VoidMethod> Method_Book_setTitle;
-	static shared_ptr<VoidMethod> Method_Book_setSeriesInfo;
 	static shared_ptr<VoidMethod> Method_Book_setLanguage;
 	static shared_ptr<VoidMethod> Method_Book_setEncoding;
-	static shared_ptr<VoidMethod> Method_Book_addAuthor;
 	static shared_ptr<VoidMethod> Method_Book_addTag;
 	static shared_ptr<BooleanMethod> Method_Book_save;
 
@@ -135,7 +132,6 @@ public:
 	static shared_ptr<VoidMethod> Method_NativeBookModel_initTOC;
 	static shared_ptr<ObjectMethod> Method_NativeBookModel_createTextModel;
 	static shared_ptr<VoidMethod> Method_NativeBookModel_setBookTextModel;
-	static shared_ptr<VoidMethod> Method_NativeBookModel_setFootnoteModel;
 	static shared_ptr<VoidMethod> Method_NativeBookModel_addImage;
 
 	//static shared_ptr<StaticObjectMethod> StaticMethod_BookReadingException_throwForFile;
@@ -155,7 +151,6 @@ public:
 	static jbyteArray createJavaByteArray(JNIEnv *env, const std::vector<jbyte> &data);
 
 	static void throwRuntimeException(const std::string &message);
-	static void throwCachedCharStorageException(const std::string &message);
 };
 
 #endif /* __ANDROIDUTIL_H__ */

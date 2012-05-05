@@ -219,26 +219,9 @@ public class BookInfoActivity extends Activity {
 		((TextView)findViewById(R.id.book_info_title)).setText(myResource.getResource("bookInfo").getValue());
 
 		setupInfoPair(R.id.book_title, "title", book.getTitle());
+		setupInfoPair(R.id.book_authors, "authors", book.authors(), 1);
 
-		final StringBuilder buffer = new StringBuilder();
-		final List<Author> authors = book.authors();
-		for (Author a : authors) {
-			if (buffer.length() > 0) {
-				buffer.append(", ");
-			}
-			buffer.append(a.DisplayName);
-		}
-		setupInfoPair(R.id.book_authors, "authors", buffer, authors.size());
-
-		final SeriesInfo series = book.getSeriesInfo();
-		setupInfoPair(R.id.book_series, "series", series == null ? null : series.Name);
-		String seriesIndexString = null;
-		if (series != null && series.Index != null) {
-			seriesIndexString = series.Index.toString();
-		}
-		setupInfoPair(R.id.book_series_index, "indexInSeries", seriesIndexString);
-
-		buffer.delete(0, buffer.length());
+		StringBuilder buffer = new StringBuilder();
 		final HashSet<String> tagNames = new HashSet<String>();
 		for (Tag tag : book.tags()) {
 			if (!tagNames.contains(tag.Name)) {

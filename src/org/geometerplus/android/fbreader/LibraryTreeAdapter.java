@@ -31,7 +31,6 @@ import org.socool.socoolreader.reader.R;
 import org.geometerplus.android.fbreader.tree.TreeAdapter;
 import org.geometerplus.android.fbreader.covers.CoverManager;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.library.AuthorTree;
 import org.geometerplus.fbreader.library.FileTree;
 import org.geometerplus.fbreader.library.FirstLevelTree;
 import org.geometerplus.fbreader.library.LibraryTree;
@@ -86,8 +85,6 @@ class LibraryTreeAdapter extends TreeAdapter {
 				return R.drawable.ic_list_library_favorites;
 			} else if (FBReaderApp.ROOT_RECENT.equals(id)) {
 				return R.drawable.ic_list_library_recent;
-			} else if (FBReaderApp.ROOT_BY_AUTHOR.equals(id)) {
-				return R.drawable.ic_list_library_authors;
 			} else if (FBReaderApp.ROOT_BY_TITLE.equals(id)) {
 				return R.drawable.ic_list_library_books;
 			} else if (FBReaderApp.ROOT_BY_TAG.equals(id)) {
@@ -106,8 +103,6 @@ class LibraryTreeAdapter extends TreeAdapter {
 			} else {
 				return R.drawable.ic_list_library_permission_denied;
 			}
-		} else if (tree instanceof AuthorTree) {
-			return R.drawable.ic_list_library_author;
 		} else if (tree instanceof TagTree) {
 			return R.drawable.ic_list_library_tag;
 		}

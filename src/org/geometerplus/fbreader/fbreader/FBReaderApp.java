@@ -316,17 +316,7 @@ public final class FBReaderApp {
 				}
 				
 				addBookToRecentList(book);
-				final StringBuilder title = new StringBuilder(book.getTitle());
-				if (!book.authors().isEmpty()) {
-					boolean first = true;
-					for (Author a : book.authors()) {
-						title.append(first ? " (" : ", ");
-						title.append(a.DisplayName);
-						first = false;
-					}
-					title.append(")");
-				}
-				setTitle(title.toString());
+				setTitle(book.authors().toString());
 			} catch (BookReadingException e) {
 				processException(e);
 			}
@@ -1208,54 +1198,6 @@ public final class FBReaderApp {
 		return ZLResourceFile.createResourceFile("data/help/MiniHelp.en.fb2");
 	}
 
-	private void collectBooks(
-		ZLFile file, FileInfoSet fileInfos,
-		Map<Long,Book> savedBooksByFileId, Map<Long,Book> orphanedBooksByFileId,
-		Set<Book> newBooks,
-		boolean doReadMetaInfo
-	) {
-		final long fileId = fileInfos.getId(file);
-		if (savedBooksByFileId.get(fileId) != null) {
-			return;
-		}
-
-		try {
-			final Book book = orphanedBooksByFileId.get(fileId);
-			if (book != null) {
-				if (doReadMetaInfo) {
-					book.readMetaInfo();
-				}
-				addBookToLibrary(book);
-				fireModelChangedEvent(ChangeListener.Code.BookAdded);
-				newBooks.add(book);
-				return;
-			}
-		} catch (BookReadingException e) {
-			// ignore
-		}
-
-		try {
-			final Book book = new Book(file);
-			addBookToLibrary(book);
-			fireModelChangedEvent(ChangeListener.Code.BookAdded);
-			newBooks.add(book);
-			return;
-		} catch (BookReadingException e) {
-			// ignore
-		}
-
-		if (file.isArchive()) {
-			for (ZLFile entry : fileInfos.archiveEntries(file)) {
-				collectBooks(
-					entry, fileInfos,
-					savedBooksByFileId, orphanedBooksByFileId,
-					newBooks,
-					doReadMetaInfo
-				);
-			}
-		}
-	}
-
 	private List<ZLPhysicalFile> collectPhysicalFiles() {
 		final Queue<ZLFile> dirQueue = new LinkedList<ZLFile>();
 		final HashSet<ZLFile> dirSet = new HashSet<ZLFile>();
@@ -1291,16 +1233,6 @@ public final class FBReaderApp {
 
 	private synchronized void addBookToLibrary(Book book) {
 		myBooks.add(book);
-
-		List<Author> authors = book.authors();
-		if (authors.isEmpty()) {
-			authors = (List<Author>)myNullList;
-		}
-		final SeriesInfo seriesInfo = book.getSeriesInfo();
-		for (Author a : authors) {
-			final AuthorTree authorTree = getFirstLevelTree(ROOT_BY_AUTHOR).getAuthorSubTree(a);
-			authorTree.getBookSubTree(book, false);
-		}
 
 		if (myDoGroupTitlesByFirstLetter) {
 			final String letter = TitleTree.firstTitleLetter(book);
@@ -1365,8 +1297,7 @@ public final class FBReaderApp {
 
 	private void build() {
 		// Step 0: get database books marked as "existing"
-		final FileInfoSet fileInfos = new FileInfoSet();
-		final Map<Long,Book> savedBooksByFileId = m_booksDatabase.loadBooks(fileInfos);
+		final Map<Long,Book> savedBooksByFileId = m_booksDatabase.loadBooks();
 		final Map<Long,Book> savedBooksByBookId = new HashMap<Long,Book>();
 		for (Book b : savedBooksByFileId.values()) {
 			savedBooksByBookId.put(b.getId(), b);
@@ -1413,84 +1344,16 @@ public final class FBReaderApp {
 
 		fireModelChangedEvent(ChangeListener.Code.BookAdded);
 
-		// Step 2: check if files corresponding to "existing" books really exists;
-		//         add books to library if yes (and reload book info if needed);
-		//         remove from recent/favorites list if no;
-		//         collect newly "orphaned" books
-		final Set<Book> orphanedBooks = new HashSet<Book>();
-		int count = 0;
-		for (Book book : savedBooksByFileId.values()) {
-			synchronized (this) {
-				if (book.File.exists()) {
-					boolean doAdd = true;
-					final ZLPhysicalFile file = book.File.getPhysicalFile();
-					if (file == null) {
-						continue;
-					}
-					if (!fileInfos.check(file, true)) {
-						try {
-							book.readMetaInfo();
-							book.save();
-						} catch (BookReadingException e) {
-							doAdd = false;
-						}
-						file.setCached(false);
-					}
-					if (doAdd) {
-						addBookToLibrary(book);
-						if (++count % 16 == 0) {
-							fireModelChangedEvent(ChangeListener.Code.BookAdded);
-						}
-					}
-				} else {
-					myRootTree.removeBook(book, true);
-					fireModelChangedEvent(ChangeListener.Code.BookRemoved);
-					orphanedBooks.add(book);
-				}
-			}
-		}
-		fireModelChangedEvent(ChangeListener.Code.BookAdded);
-
-		// TODO Step 3: collect books from physical files; add new, update already added,
-		//         unmark orphaned as existing again, collect newly added
-//		final Map<Long,Book> orphanedBooksByFileId = FBReaderApp.Instance().getDatabase().loadBooks(fileInfos);
-//		final Set<Book> newBooks = new HashSet<Book>();
-//
-//		final List<ZLPhysicalFile> physicalFilesList = collectPhysicalFiles();
-//		for (ZLPhysicalFile file : physicalFilesList) {
-//			collectBooks(
-//				file, fileInfos,
-//				savedBooksByFileId, orphanedBooksByFileId,
-//				newBooks,
-//				!fileInfos.check(file, true)
-//			);
-//			file.setCached(false);
-//		}
-		
 		// Step 4: add help file
 		try {
 			final ZLFile helpFile = getHelpFile();
-			Book helpBook = savedBooksByFileId.get(fileInfos.getId(helpFile));
-			if (helpBook == null) {
-				helpBook = new Book(helpFile);
-			}
+			Book helpBook = new Book(helpFile);
 			addBookToLibrary(helpBook);
 			fireModelChangedEvent(ChangeListener.Code.BookAdded);
 		} catch (BookReadingException e) {
 			// that's impossible
 			e.printStackTrace();
 		}
-
-		// Step 5: save changes into database
-		fileInfos.save();
-
-//		FBReaderApp.Instance().getDatabase().executeAsATransaction(new Runnable() {
-//			public void run() {
-//				for (Book book : newBooks) {
-//					book.save();
-//				}
-//			}
-//		});
 	}
 
 	private volatile boolean myBuildStarted = false;

@@ -8,7 +8,6 @@ import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.library.BooksDatabase;
-import org.geometerplus.fbreader.library.FileInfoSet;
 import org.geometerplus.fbreader.library.LibraryUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
@@ -73,8 +72,7 @@ public class BookShelfActivity extends Activity
         FBReaderApp.Instance().addChangeListener(this);
         FBReaderApp.Instance().startBuild();
         
-        final FileInfoSet fileInfos = new FileInfoSet();
-        final Map<Long,Book> books = FBReaderApp.Instance().getDatabase().loadBooks(fileInfos);
+        final Map<Long,Book> books = FBReaderApp.Instance().getDatabase().loadBooks();
         m_bookList = new ArrayList<Book>();
         
         for (Book book : books.values()) {

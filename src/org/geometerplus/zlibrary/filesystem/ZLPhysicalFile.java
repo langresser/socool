@@ -25,7 +25,7 @@ import java.io.*;
 public final class ZLPhysicalFile extends ZLFile {
 	private final File myFile;
 
-	ZLPhysicalFile(String path) {
+	public ZLPhysicalFile(String path) {
 		this(new File(path));
 	}
 

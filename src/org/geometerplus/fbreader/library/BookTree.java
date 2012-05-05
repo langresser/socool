@@ -63,18 +63,8 @@ public class BookTree extends LibraryTree {
 		if (!myShowAuthors) {
 			return super.getSummary();
 		}
-		StringBuilder builder = new StringBuilder();
-		int count = 0;
-		for (Author author : Book.authors()) {
-			if (count++ > 0) {
-				builder.append(",  ");
-			}
-			builder.append(author.DisplayName);
-			if (count == 5) {
-				break;
-			}
-		}
-		return builder.toString();
+
+		return Book.authors();
 	}
 
 	@Override

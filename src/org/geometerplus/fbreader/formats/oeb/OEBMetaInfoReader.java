@@ -62,11 +62,7 @@ class OEBMetaInfoReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			} else {
 				a = a.trim();
 			}
-			myBook.addAuthor(a);
-		}
-
-		if (!"".equals(mySeriesTitle)) {
-			myBook.setSeriesInfo(mySeriesTitle, mySeriesIndex);
+			// TODO Ìí¼Ó×÷Õß
 		}
 	}
 

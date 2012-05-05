@@ -52,7 +52,6 @@ public final class ZLSQLiteConfig extends ZLConfig {
 				removeStatement.bindString(1, "Title"); removeStatement.execute();
 				removeStatement.bindString(1, "Language"); removeStatement.execute();
 				removeStatement.bindString(1, "Encoding"); removeStatement.execute();
-				removeStatement.bindString(1, "AuthorSortKey"); removeStatement.execute();
 				removeStatement.bindString(1, "AuthorDisplayName"); removeStatement.execute();
 				removeStatement.bindString(1, "EntriesNumber"); removeStatement.execute();
 				removeStatement.bindString(1, "TagList"); removeStatement.execute();

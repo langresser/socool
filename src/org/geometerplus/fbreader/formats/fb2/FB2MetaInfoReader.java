@@ -114,15 +114,6 @@ public class FB2MetaInfoReader extends ZLXMLReaderAdapter {
 				}
 				break;
 			case FB2Tag.SEQUENCE:
-				if (myReadState == READ_SOMETHING) {
-					String name = attributes.getValue("name");
-					if (name != null) {
-						name.trim();
-						if (name.length() != 0) {
-							myBook.setSeriesInfo(name, attributes.getValue("number"));
-						}
-					}
-				}
 				break;
 		}
 		return false;
@@ -169,7 +160,7 @@ public class FB2MetaInfoReader extends ZLXMLReaderAdapter {
 						fullName += ' ';
 					}
 					fullName += myAuthorNames[2];
-					myBook.addAuthor(fullName, myAuthorNames[2]);
+					// TODO Ìí¼Ó×÷Õß
 					myAuthorNames[0] = "";
 					myAuthorNames[1] = "";
 					myAuthorNames[2] = "";

@@ -25,6 +25,7 @@ import java.util.*;
 import org.geometerplus.android.fbreader.util.SQLiteUtil;
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.misc.ZLConfig;
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
@@ -41,25 +42,12 @@ import android.database.sqlite.SQLiteStatement;
 public class BooksDatabase {
 	private final SQLiteDatabase myDatabase;
 
-	protected Book createBook(long id, long fileId, String title, String encoding, String language) {
-		final FileInfoSet infos = new FileInfoSet(fileId);
-		return createBook(id, infos.getFile(fileId), title, encoding, language);
-	}
-	protected Book createBook(long id, ZLFile file, String title, String encoding, String language) {
+	public Book createBook(long id, ZLFile file, String title, String encoding, String language) {
 		return (file != null) ? new Book(id, file, title, encoding, language) : null;
 	}
-	protected void addAuthor(Book book, Author author) {
-		book.addAuthorWithNoCheck(author);
-	}
+
 	protected void addTag(Book book, Tag tag) {
 		book.addTagWithNoCheck(tag);
-	}
-	protected void setSeriesInfo(Book book, String series, String index) {
-		book.setSeriesInfoWithNoCheck(series, SeriesInfo.createIndex(index));
-	}
-
-	protected FileInfo createFileInfo(long id, String name, FileInfo parent) {
-		return new FileInfo(name, parent, id);
 	}
 
 	public BooksDatabase(Context context) {
@@ -109,10 +97,10 @@ public class BooksDatabase {
 
 	protected Book loadBook(long bookId) {
 		Book book = null;
-		final Cursor cursor = myDatabase.rawQuery("SELECT file_id,title,encoding,language FROM Books WHERE book_id = " + bookId, null);
+		final Cursor cursor = myDatabase.rawQuery("SELECT file_path,title,encoding,language FROM Books WHERE book_id = " + bookId, null);
 		if (cursor.moveToNext()) {
 			book = createBook(
-				bookId, cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)
+				bookId, ZLFile.createFileByPath(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3)
 			);
 		}
 		cursor.close();
@@ -129,16 +117,16 @@ public class BooksDatabase {
 		cursor.close();
 	}
 
-	protected Book loadBookByFile(long fileId, ZLFile file) {
-		if (fileId == -1) {
-			return null;
-		}
+	protected Book loadBookByFile(ZLFile file) {
 		Book book = null;
-		final Cursor cursor = myDatabase.rawQuery("SELECT book_id,title,encoding,language FROM Books WHERE file_id = " + fileId, null);
+		final Cursor cursor = myDatabase.rawQuery("SELECT book_id,title,encoding,language,author,file_size FROM Books WHERE file_path = " + file.getPath(), null);
 		if (cursor.moveToNext()) {
 			book = createBook(
 				cursor.getLong(0), file, cursor.getString(1), cursor.getString(2), cursor.getString(3)
 			);
+			book.m_filePath = file.getPath();
+			book.m_bookAuthor = cursor.getString(4);
+			book.m_fileSize = (int)cursor.getLong(5);
 		}
 		cursor.close();
 		return book;
@@ -166,44 +154,25 @@ public class BooksDatabase {
 		cursor.close();
 	}
 
-	public Map<Long,Book> loadBooks(FileInfoSet infos) {
+	public Map<Long,Book> loadBooks() {
 		Cursor cursor = myDatabase.rawQuery(
-			"SELECT book_id,file_id,title,encoding,language FROM Books" , null
+			"SELECT book_id,title,encoding,language,author,file_path,file_size FROM Books" , null
 		);
 		final HashMap<Long,Book> booksById = new HashMap<Long,Book>();
-		final HashMap<Long,Book> booksByFileId = new HashMap<Long,Book>();
 		while (cursor.moveToNext()) {
 			final long id = cursor.getLong(0);
-			final long fileId = cursor.getLong(1);
-			final Book book = createBook(id, infos.getFile(fileId),
-					cursor.getString(2), cursor.getString(3), cursor.getString(4));
+			final Book book = createBook(id, ZLFile.createFileByPath(cursor.getString(5)),
+					cursor.getString(1), cursor.getString(2), cursor.getString(3));
+			book.m_filePath = cursor.getString(5);
+			book.m_fileSize = (int)cursor.getLong(6);
+			book.m_bookAuthor = cursor.getString(4);
 			if (book != null) {
 				booksById.put(id, book);
-				booksByFileId.put(fileId, book);
 			}
 		}
 		cursor.close();
 
 		initTagCache();
-
-		cursor = myDatabase.rawQuery("SELECT author_id,name,sort_key FROM Authors", null);
-		final HashMap<Long,Author> authorById = new HashMap<Long,Author>();
-		while (cursor.moveToNext()) {
-			authorById.put(cursor.getLong(0), new Author(cursor.getString(1), cursor.getString(2)));
-		}
-		cursor.close();
-
-		cursor = myDatabase.rawQuery("SELECT book_id,author_id FROM BookAuthor ORDER BY author_index", null);
-		while (cursor.moveToNext()) {
-			Book book = booksById.get(cursor.getLong(0));
-			if (book != null) {
-				Author author = authorById.get(cursor.getLong(1));
-				if (author != null) {
-					addAuthor(book, author);
-				}
-			}
-		}
-		cursor.close();
 
 		cursor = myDatabase.rawQuery("SELECT book_id,tag_id FROM BookTag", null);
 		while (cursor.moveToNext()) {
@@ -214,17 +183,17 @@ public class BooksDatabase {
 		}
 		cursor.close();
 
-		return booksByFileId;
+		return booksById;
 	}
 
 	private SQLiteStatement myUpdateBookInfoStatement;
-	protected void updateBookInfo(long bookId, long fileId, String encoding, String language, String title) {
+	protected void updateBookInfo(long bookId, ZLFile file, String encoding, String language, String title) {
 		if (myUpdateBookInfoStatement == null) {
 			myUpdateBookInfoStatement = myDatabase.compileStatement(
-				"UPDATE Books SET file_id = ?, encoding = ?, language = ?, title = ? WHERE book_id = ?"
+				"UPDATE Books SET file_path = ?, encoding = ?, language = ?, title = ? WHERE book_id = ?"
 			);
 		}
-		myUpdateBookInfoStatement.bindLong(1, fileId);
+		myUpdateBookInfoStatement.bindString(1, file.getPath());
 		SQLiteUtil.bindString(myUpdateBookInfoStatement, 2, encoding);
 		SQLiteUtil.bindString(myUpdateBookInfoStatement, 3, language);
 		myUpdateBookInfoStatement.bindString(4, title);
@@ -236,72 +205,14 @@ public class BooksDatabase {
 	protected long insertBookInfo(ZLFile file, String encoding, String language, String title) {
 		if (myInsertBookInfoStatement == null) {
 			myInsertBookInfoStatement = myDatabase.compileStatement(
-				"INSERT OR IGNORE INTO Books (encoding,language,title,file_id) VALUES (?,?,?,?)"
+				"INSERT OR IGNORE INTO Books (encoding,language,title,file_path) VALUES (?,?,?,?)"
 			);
 		}
 		SQLiteUtil.bindString(myInsertBookInfoStatement, 1, encoding);
 		SQLiteUtil.bindString(myInsertBookInfoStatement, 2, language);
 		myInsertBookInfoStatement.bindString(3, title);
-		final FileInfoSet infoSet = new FileInfoSet(file);
-		myInsertBookInfoStatement.bindLong(4, infoSet.getId(file));
+		myInsertBookInfoStatement.bindString(4, file.getPath());
 		return myInsertBookInfoStatement.executeInsert();
-	}
-
-	private SQLiteStatement myDeleteBookAuthorsStatement;
-	protected void deleteAllBookAuthors(long bookId) {
-		if (myDeleteBookAuthorsStatement == null) {
-			myDeleteBookAuthorsStatement = myDatabase.compileStatement(
-				"DELETE FROM BookAuthor WHERE book_id = ?"
-			);
-		}
-		myDeleteBookAuthorsStatement.bindLong(1, bookId);
-		myDeleteBookAuthorsStatement.execute();
-	}
-
-	private SQLiteStatement myGetAuthorIdStatement;
-	private SQLiteStatement myInsertAuthorStatement;
-	private SQLiteStatement myInsertBookAuthorStatement;
-	protected void saveBookAuthorInfo(long bookId, long index, Author author) {
-		if (myGetAuthorIdStatement == null) {
-			myGetAuthorIdStatement = myDatabase.compileStatement(
-				"SELECT author_id FROM Authors WHERE name = ? AND sort_key = ?"
-			);
-			myInsertAuthorStatement = myDatabase.compileStatement(
-				"INSERT OR IGNORE INTO Authors (name,sort_key) VALUES (?,?)"
-			);
-			myInsertBookAuthorStatement = myDatabase.compileStatement(
-				"INSERT OR REPLACE INTO BookAuthor (book_id,author_id,author_index) VALUES (?,?,?)"
-			);
-		}
-
-		long authorId;
-		try {
-			myGetAuthorIdStatement.bindString(1, author.DisplayName);
-			myGetAuthorIdStatement.bindString(2, author.SortKey);
-			authorId = myGetAuthorIdStatement.simpleQueryForLong();
-		} catch (SQLException e) {
-			myInsertAuthorStatement.bindString(1, author.DisplayName);
-			myInsertAuthorStatement.bindString(2, author.SortKey);
-			authorId = myInsertAuthorStatement.executeInsert();
-		}
-		myInsertBookAuthorStatement.bindLong(1, bookId);
-		myInsertBookAuthorStatement.bindLong(2, authorId);
-		myInsertBookAuthorStatement.bindLong(3, index);
-		myInsertBookAuthorStatement.execute();
-	}
-
-	protected List<Author> loadAuthors(long bookId) {
-		final Cursor cursor = myDatabase.rawQuery("SELECT Authors.name,Authors.sort_key FROM BookAuthor INNER JOIN Authors ON Authors.author_id = BookAuthor.author_id WHERE BookAuthor.book_id = ?", new String[] { "" + bookId });
-		if (!cursor.moveToNext()) {
-			cursor.close();
-			return null;
-		}
-		final ArrayList<Author> list = new ArrayList<Author>();
-		do {
-			list.add(new Author(cursor.getString(0), cursor.getString(1)));
-		} while (cursor.moveToNext());
-		cursor.close();	
-		return list;
 	}
 
 	private SQLiteStatement myGetTagIdStatement;
@@ -394,193 +305,6 @@ public class BooksDatabase {
 		} while (cursor.moveToNext());
 		cursor.close();	
 		return list;
-	}
-
-	private SQLiteStatement myGetSeriesIdStatement;
-	private SQLiteStatement myInsertSeriesStatement;
-	private SQLiteStatement myInsertBookSeriesStatement;
-	private SQLiteStatement myDeleteBookSeriesStatement;
-	protected void saveBookSeriesInfo(long bookId, SeriesInfo seriesInfo) {
-		if (myGetSeriesIdStatement == null) {
-			myGetSeriesIdStatement = myDatabase.compileStatement(
-				"SELECT series_id FROM Series WHERE name = ?"
-			);
-			myInsertSeriesStatement = myDatabase.compileStatement(
-				"INSERT OR IGNORE INTO Series (name) VALUES (?)"
-			);
-			myInsertBookSeriesStatement = myDatabase.compileStatement(
-				"INSERT OR REPLACE INTO BookSeries (book_id,series_id,book_index) VALUES (?,?,?)"
-			);
-			myDeleteBookSeriesStatement = myDatabase.compileStatement(
-				"DELETE FROM BookSeries WHERE book_id = ?"
-			);
-		}
-
-		if (seriesInfo == null) {
-			myDeleteBookSeriesStatement.bindLong(1, bookId);
-			myDeleteBookSeriesStatement.execute();
-		} else {
-			long seriesId;
-			try {
-				myGetSeriesIdStatement.bindString(1, seriesInfo.Name);
-				seriesId = myGetSeriesIdStatement.simpleQueryForLong();
-			} catch (SQLException e) {
-				myInsertSeriesStatement.bindString(1, seriesInfo.Name);
-				seriesId = myInsertSeriesStatement.executeInsert();
-			}
-			myInsertBookSeriesStatement.bindLong(1, bookId);
-			myInsertBookSeriesStatement.bindLong(2, seriesId);
-			SQLiteUtil.bindString(
-					myInsertBookSeriesStatement, 3,
-					seriesInfo.Index != null ? seriesInfo.Index.toString() : null
-				);
-			myInsertBookSeriesStatement.execute();
-		}
-	}
-
-	protected SeriesInfo loadSeriesInfo(long bookId) {
-		final Cursor cursor = myDatabase.rawQuery("SELECT Series.name,BookSeries.book_index FROM BookSeries INNER JOIN Series ON Series.series_id = BookSeries.series_id WHERE BookSeries.book_id = ?", new String[] { "" + bookId });
-		SeriesInfo info = null;
-		if (cursor.moveToNext()) {
-			info = new SeriesInfo(cursor.getString(0), SeriesInfo.createIndex(cursor.getString(1)));
-		}
-		cursor.close();	
-		return info;
-	}
-
-	private SQLiteStatement myRemoveFileInfoStatement;
-	protected void removeFileInfo(long fileId) {
-		if (fileId == -1) {
-			return;
-		}
-		if (myRemoveFileInfoStatement == null) {
-			myRemoveFileInfoStatement = myDatabase.compileStatement(
-				"DELETE FROM Files WHERE file_id = ?"
-			);
-		}
-		myRemoveFileInfoStatement.bindLong(1, fileId);
-		myRemoveFileInfoStatement.execute();
-	}
-
-	private SQLiteStatement myInsertFileInfoStatement;
-	private SQLiteStatement myUpdateFileInfoStatement;
-	protected void saveFileInfo(FileInfo fileInfo) {
-		final long id = fileInfo.Id;
-		SQLiteStatement statement;
-		if (id == -1) {
-			if (myInsertFileInfoStatement == null) {
-				myInsertFileInfoStatement = myDatabase.compileStatement(
-					"INSERT OR IGNORE INTO Files (name,parent_id,size) VALUES (?,?,?)"
-				);
-			}
-			statement = myInsertFileInfoStatement;
-		} else {
-			if (myUpdateFileInfoStatement == null) {
-				myUpdateFileInfoStatement = myDatabase.compileStatement(
-					"UPDATE Files SET name = ?, parent_id = ?, size = ? WHERE file_id = ?"
-				);
-			}
-			statement = myUpdateFileInfoStatement;
-		}
-		statement.bindString(1, fileInfo.Name);
-		final FileInfo parent = fileInfo.Parent;
-		if (parent != null) {
-			statement.bindLong(2, parent.Id);
-		} else {
-			statement.bindNull(2);
-		}
-		final long size = fileInfo.FileSize;
-		if (size != -1) {
-			statement.bindLong(3, size);
-		} else {
-			statement.bindNull(3);
-		}
-		if (id == -1) {
-			fileInfo.Id = statement.executeInsert();
-		} else {
-			statement.bindLong(4, id);
-			statement.execute();
-		}
-	}
-
-	protected Collection<FileInfo> loadFileInfos() {
-		Cursor cursor = myDatabase.rawQuery(
-			"SELECT file_id,name,parent_id,size FROM Files", null
-		);
-		HashMap<Long,FileInfo> infosById = new HashMap<Long,FileInfo>();
-		while (cursor.moveToNext()) {
-			final long id = cursor.getLong(0);
-			final FileInfo info = createFileInfo(id,
-				cursor.getString(1),
-				cursor.isNull(2) ? null : infosById.get(cursor.getLong(2))
-			);
-			if (!cursor.isNull(3)) {
-				info.FileSize = cursor.getLong(3);
-			}
-			infosById.put(id, info);
-		}
-		cursor.close();
-		return infosById.values();
-	}
-
-	protected Collection<FileInfo> loadFileInfos(ZLFile file) {
-		final LinkedList<ZLFile> fileStack = new LinkedList<ZLFile>();
-		for (; file != null; file = file.getParent()) {
-			fileStack.addFirst(file);
-		}
-
-		final ArrayList<FileInfo> infos = new ArrayList<FileInfo>(fileStack.size());
-		final String[] parameters = { null };
-		FileInfo current = null;
-		for (ZLFile f : fileStack) {
-			parameters[0] = f.getLongName();
-			final Cursor cursor = myDatabase.rawQuery(
-				(current == null) ?
-					"SELECT file_id,size FROM Files WHERE name = ?" :
-					"SELECT file_id,size FROM Files WHERE parent_id = " + current.Id + " AND name = ?",
-				parameters
-			);
-			if (cursor.moveToNext()) {
-				current = createFileInfo(cursor.getLong(0), parameters[0], current);
-				if (!cursor.isNull(1)) {
-					current.FileSize = cursor.getLong(1);
-				}
-				infos.add(current);
-				cursor.close();
-			} else {
-				cursor.close();
-				break;
-			}
-		}
-
-		return infos;
-	}
-
-	protected Collection<FileInfo> loadFileInfos(long fileId) {
-		final ArrayList<FileInfo> infos = new ArrayList<FileInfo>();
-		while (fileId != -1) {
-			final Cursor cursor = myDatabase.rawQuery(
-				"SELECT name,size,parent_id FROM Files WHERE file_id = " + fileId, null
-			);
-			if (cursor.moveToNext()) {
-				FileInfo info = createFileInfo(fileId, cursor.getString(0), null);
-				if (!cursor.isNull(1)) {
-					info.FileSize = cursor.getLong(1);
-				}
-				infos.add(0, info);
-				fileId = cursor.isNull(2) ? -1 : cursor.getLong(2);
-			} else {
-				fileId = -1;
-			}
-			cursor.close();
-		}
-		for (int i = 1; i < infos.size(); ++i) {
-			final FileInfo oldInfo = infos.get(i);
-			final FileInfo newInfo = createFileInfo(oldInfo.Id, oldInfo.Name, infos.get(i - 1));
-			newInfo.FileSize = oldInfo.FileSize;
-			infos.set(i, newInfo);
-		}
-		return infos;
 	}
 
 	private SQLiteStatement mySaveRecentBookStatement;
@@ -920,36 +644,20 @@ public class BooksDatabase {
 
 
 	private void createTables() {
+		// 书本数据
 		myDatabase.execSQL(
 				"CREATE TABLE Books(" +
-					"book_id INTEGER PRIMARY KEY," +
-					"encoding TEXT," +
-					"language TEXT," +
-					"title TEXT NOT NULL," +
-					"file_id INTEGER UNIQUE NOT NULL REFERENCES Files(file_id))");
+					"book_id INTEGER PRIMARY KEY," +			// 唯一id
+					"author TEXT," +							// 作者
+					"encoding TEXT," +							// 文本编码
+					"language TEXT," +							// 书本语言
+					"title TEXT NOT NULL," +					// 书名（可自定义）
+					"access_time INTEGER NOT NULL," +			// 上次访问时间
+					"pages_full INTEGER NOT NULL," +			// 总页数
+					"page_current INTEGER NOT NULL," +			// 当前阅读进度
+					"file_path TEXT UNIQUE NOT NULL," +			// 文件路径
+					"file_size INTERGER)");						// 文件大小
 
-		myDatabase.execSQL(
-			"CREATE TABLE Authors(" +
-				"author_id INTEGER PRIMARY KEY," +
-				"name TEXT NOT NULL," +
-				"sort_key TEXT NOT NULL," +
-				"CONSTRAINT Authors_Unique UNIQUE (name, sort_key))");
-		myDatabase.execSQL(
-			"CREATE TABLE BookAuthor(" +
-				"author_id INTEGER NOT NULL REFERENCES Authors(author_id)," +
-				"book_id INTEGER NOT NULL REFERENCES Books(book_id)," +
-				"author_index INTEGER NOT NULL," +
-				"CONSTRAINT BookAuthor_Unique0 UNIQUE (author_id, book_id)," +
-				"CONSTRAINT BookAuthor_Unique1 UNIQUE (book_id, author_index))");
-		myDatabase.execSQL(
-			"CREATE TABLE Series(" +
-				"series_id INTEGER PRIMARY KEY," +
-				"name TEXT UNIQUE NOT NULL)");
-		myDatabase.execSQL(
-				"CREATE TABLE BookSeries(" +
-					"series_id INTEGER NOT NULL REFERENCES Series(series_id)," +
-					"book_id INTEGER NOT NULL UNIQUE REFERENCES Books(book_id)," +
-					"book_index TEXT)");
 		myDatabase.execSQL(
 				"CREATE TABLE Tags(" +
 					"tag_id INTEGER PRIMARY KEY," +
@@ -963,17 +671,7 @@ public class BooksDatabase {
 					"CONSTRAINT BookTag_Unique UNIQUE (tag_id, book_id))");
 		
 		// 创建索引，用于快速搜索
-		myDatabase.execSQL("CREATE INDEX BookAuthor_BookIndex ON BookAuthor (book_id)");
 		myDatabase.execSQL("CREATE INDEX BookTag_BookIndex ON BookTag (book_id)");
-		myDatabase.execSQL("CREATE INDEX BookSeries_BookIndex ON BookSeries (book_id)");
-		
-		myDatabase.execSQL(
-				"CREATE TABLE Files(" +
-					"file_id INTEGER PRIMARY KEY," +
-					"name TEXT NOT NULL," +
-					"parent_id INTEGER REFERENCES Files(file_id)," +
-					"size INTEGER," +
-					"CONSTRAINT Files_Unique UNIQUE (name, parent_id))");
 		
 		// 最近阅读
 		myDatabase.execSQL("CREATE TABLE RecentBooks(" +
@@ -1006,11 +704,6 @@ public class BooksDatabase {
 				"word INTEGER NOT NULL," +
 				"char INTEGER NOT NULL)");
 		
-		myDatabase.execSQL("CREATE TABLE IF NOT EXISTS BookList ( " +
-					"book_id INTEGER UNIQUE NOT NULL REFERENCES Books (book_id))");
-		
-		myDatabase.execSQL("CREATE INDEX BookList_BookIndex ON BookList (book_id)");
-		
 		myDatabase.execSQL("CREATE TABLE IF NOT EXISTS Favorites(" +
 					"book_id INTEGER UNIQUE NOT NULL REFERENCES Books(book_id))");
 	
@@ -1018,11 +711,5 @@ public class BooksDatabase {
 					"book_id INTEGER NOT NULL REFERENCES Books(book_id)," +
 					"hyperlink_id TEXT NOT NULL," +
 					"CONSTRAINT VisitedHyperlinks_Unique UNIQUE (book_id, hyperlink_id))");
-		
-		myDatabase.execSQL("CREATE TABLE IF NOT EXISTS BookStatus(" +
-					"book_id INTEGER NOT NULL REFERENCES Books(book_id) PRIMARY KEY," +
-					"access_time INTEGER NOT NULL," +
-					"pages_full INTEGER NOT NULL," +
-					"page_current INTEGER NOT NULL)");
 	}
 }
