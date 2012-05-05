@@ -25,6 +25,8 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.fbreader.FBTree;
+import org.geometerplus.fbreader.filetype.FileTypeCollection;
+import org.geometerplus.fbreader.formats.FormatPlugin;
 import org.geometerplus.fbreader.formats.PluginCollection;
 
 public class FileTree extends LibraryTree {
@@ -146,7 +148,8 @@ public class FileTree extends LibraryTree {
 		final TreeSet<ZLFile> set = new TreeSet<ZLFile>(ourFileComparator);
 		for (ZLFile file : myFile.children()) {
 			if (file.isDirectory() || file.isArchive() ||
-				PluginCollection.Instance().getPlugin(file) != null) {
+				PluginCollection.Instance().getPlugin(
+						FileTypeCollection.Instance.typeForFile(file), FormatPlugin.Type.ANY) != null) {
 				set.add(file);
 			}
 		}

@@ -181,7 +181,6 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	Method_NativeBookModel_initTOC = new VoidMethod(Class_NativeBookModel, "initTOC", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;[I[I)");
 	Method_NativeBookModel_createTextModel = new ObjectMethod(Class_NativeBookModel, "createTextModel", Class_ZLTextModel, "(Ljava/lang/String;Ljava/lang/String;I[I[I[I[I[BLjava/lang/String;Ljava/lang/String;I)");
 	Method_NativeBookModel_setBookTextModel = new VoidMethod(Class_NativeBookModel, "setBookTextModel", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;)");
-	Method_NativeBookModel_setFootnoteModel = new VoidMethod(Class_NativeBookModel, "setFootnoteModel", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;)");
 	Method_NativeBookModel_addImage = new VoidMethod(Class_NativeBookModel, "addImage", "(Ljava/lang/String;Lorg/geometerplus/zlibrary/image/ZLImage;)");
 
 /*

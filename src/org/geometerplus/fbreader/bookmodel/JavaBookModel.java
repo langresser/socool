@@ -38,16 +38,6 @@ public class JavaBookModel extends BookModel {
 		return BookTextModel;
 	}
 
-	@Override
-	public ZLTextModel getFootnoteModel(String id) {
-		ZLTextModel model = myFootnotes.get(id);
-		if (model == null) {
-			model = new ZLTextWritablePlainModel(id, Book.getLanguage(), 8, 512, Paths.cacheDirectory(), "cache" + myFootnotes.size(), myImageMap);
-			myFootnotes.put(id, model);
-		}
-		return model;
-	}
-
 	private char[] myCurrentLinkBlock;
 	private int myCurrentLinkBlockOffset;
 

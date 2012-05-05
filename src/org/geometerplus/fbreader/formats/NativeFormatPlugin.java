@@ -27,16 +27,12 @@ import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;
+import org.geometerplus.fbreader.filetype.FileTypeCollection;
 import org.geometerplus.fbreader.library.Book;
-import org.geometerplus.fbreader.formats.fb2.FB2NativePlugin;
 
 public class NativeFormatPlugin extends FormatPlugin {
 	public static NativeFormatPlugin create(String fileType) {
-		if ("fb2".equals(fileType)) {
-			return new FB2NativePlugin();
-		} else {
-			return new NativeFormatPlugin(fileType);
-		}
+		return new NativeFormatPlugin(fileType);
 	}
 
 	protected NativeFormatPlugin(String fileType) {
@@ -91,7 +87,8 @@ public class NativeFormatPlugin extends FormatPlugin {
 	// FIXME: temporary implementation; implement as a native code
 	@Override
 	public String readAnnotation(ZLFile file) {
-		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(file, FormatPlugin.Type.JAVA);
+		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
+				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.Type.JAVA);
 		if (plugin != null) {
 			return plugin.readAnnotation(file);
 		}

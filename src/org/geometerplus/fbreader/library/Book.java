@@ -35,6 +35,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextPosition;
 import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.filetype.FileTypeCollection;
 import org.geometerplus.fbreader.formats.*;
 import org.geometerplus.fbreader.bookmodel.BookReadingException;
 
@@ -158,7 +159,8 @@ public class Book {
 	}
 
 	private FormatPlugin getPlugin(ZLFile file) throws BookReadingException {
-		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(file);
+		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
+				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.Type.ANY);
 		if (plugin == null) {
 			throw new BookReadingException("pluginNotFound", file);
 		}

@@ -41,7 +41,6 @@ public:
 	virtual ~BookReader();
 
 	void setMainTextModel();
-	void setFootnoteTextModel(const std::string &id);
 	void unsetTextModel();
 
 	void insertEndOfSectionParagraph();

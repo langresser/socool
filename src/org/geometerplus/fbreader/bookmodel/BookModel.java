@@ -132,7 +132,6 @@ public abstract class BookModel {
 	}
 
 	public abstract ZLTextModel getTextModel();
-	public abstract ZLTextModel getFootnoteModel(String id);
 
 	public interface LabelResolver {
 		List<String> getCandidates(String id);
@@ -161,7 +160,6 @@ public abstract class BookModel {
 	
 	protected CachedCharStorageBase myInternalHyperlinks;
 	protected final ZLImageMap myImageMap = new ZLImageMap();
-	protected final HashMap<String,ZLTextModel> myFootnotes = new HashMap<String,ZLTextModel>();
 
 	protected Label getLabelInternal(String id) {
 		final int len = id.length();

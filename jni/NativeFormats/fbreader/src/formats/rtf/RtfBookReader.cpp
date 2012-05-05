@@ -95,7 +95,6 @@ void RtfBookReader::switchDestination(DestinationType destination, bool on) {
 				myBookReader.addData(id);
 				myBookReader.addControl(FOOTNOTE, false);
 				
-				myBookReader.setFootnoteTextModel(id);
 				myBookReader.pushKind(REGULAR);
 				myBookReader.beginParagraph();
 			} else {
@@ -109,8 +108,6 @@ void RtfBookReader::switchDestination(DestinationType destination, bool on) {
 				
 				if (myStateStack.empty()) {
 					myBookReader.setMainTextModel();
-				} else {
-					myBookReader.setFootnoteTextModel(myCurrentState.Id);
 				}
 			}
 			break;

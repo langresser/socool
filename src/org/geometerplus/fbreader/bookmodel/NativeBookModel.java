@@ -100,17 +100,8 @@ public class NativeBookModel extends BookModel {
 		myBookTextModel = model;
 	}
 
-	public void setFootnoteModel(ZLTextModel model) {
-		myFootnotes.put(model.getId(), model);
-	}
-
 	@Override
 	public ZLTextModel getTextModel() {
 		return myBookTextModel;
-	}
-
-	@Override
-	public ZLTextModel getFootnoteModel(String id) {
-		return myFootnotes.get(id);
 	}
 }

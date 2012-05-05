@@ -179,13 +179,6 @@ public class BookReader {
 		myCurrentTextModel = (ZLTextWritableModel)Model.BookTextModel;
 	}
 
-	public final void setFootnoteTextModel(String id) {
-		if (myCurrentTextModel != null && myCurrentTextModel != Model.BookTextModel) {
-			myCurrentTextModel.stopReading();
-		}
-		myCurrentTextModel = (ZLTextWritableModel)Model.getFootnoteModel(id);
-	}
-
 	public final void addData(char[] data) {
 		addData(data, 0, data.length, false);
 	}
