@@ -30,7 +30,7 @@ public class JavaBookModel extends BookModel {
 	JavaBookModel(Book book) {
 		super(book);
 		myInternalHyperlinks = new CachedCharStorageBase(32768, Paths.cacheDirectory(), "links", false);
-		BookTextModel = new ZLTextWritablePlainModel(null, book.getLanguage(), 1024, 65536, Paths.cacheDirectory(), "cache", myImageMap);
+		BookTextModel = new ZLTextModel(null, book.getLanguage(), 1024, 65536, Paths.cacheDirectory(), "cache", myImageMap);
 	}
 
 	@Override

@@ -88,7 +88,7 @@ public class NativeBookModel extends BookModel {
 		int[] paragraphLenghts, int[] textSizes, byte[] paragraphKinds,
 		String directoryName, String fileExtension, int blocksNumber
 	) {
-		return new ZLTextNativeModel(
+		return new ZLTextModel(
 			id, language, paragraphsNumber,
 			entryIndices, entryOffsets,
 			paragraphLenghts, textSizes, paragraphKinds,

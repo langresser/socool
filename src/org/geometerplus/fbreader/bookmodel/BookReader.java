@@ -30,7 +30,7 @@ import org.geometerplus.zlibrary.util.ZLArrayUtils;
 public class BookReader {
 	public final JavaBookModel Model;
 
-	private ZLTextWritableModel myCurrentTextModel = null;
+	private ZLTextModel myCurrentTextModel = null;
 
 	private boolean myTextParagraphExists = false;
 	private boolean myTextParagraphIsNonEmpty = false;
@@ -113,7 +113,7 @@ public class BookReader {
 
 	public final void beginParagraph(byte kind) {
 		endParagraph();
-		final ZLTextWritableModel textModel = myCurrentTextModel;
+		final ZLTextModel textModel = myCurrentTextModel;
 		if (textModel != null) {
 			textModel.createParagraph(kind);
 			final byte[] stack = myKindStack;
@@ -137,7 +137,7 @@ public class BookReader {
 	}
 
 	private final void insertEndParagraph(byte kind) {
-		final ZLTextWritableModel textModel = myCurrentTextModel;
+		final ZLTextModel textModel = myCurrentTextModel;
 		if (textModel != null && mySectionContainsRegularContents) {
 			int size = textModel.getParagraphsNumber();
 			if (size > 0 && textModel.getParagraph(size - 1).getKind() != kind) {
@@ -176,7 +176,7 @@ public class BookReader {
 		if (myCurrentTextModel != null && myCurrentTextModel != Model.BookTextModel) {
 			myCurrentTextModel.stopReading();
 		}
-		myCurrentTextModel = (ZLTextWritableModel)Model.BookTextModel;
+		myCurrentTextModel = (ZLTextModel)Model.BookTextModel;
 	}
 
 	public final void addData(char[] data) {
@@ -283,7 +283,7 @@ public class BookReader {
 	}
 
 	public final void addHyperlinkLabel(String label) {
-		final ZLTextWritableModel textModel = myCurrentTextModel;
+		final ZLTextModel textModel = myCurrentTextModel;
 		if (textModel != null) {
 			int paragraphNumber = textModel.getParagraphsNumber();
 			if (myTextParagraphExists) {
@@ -389,7 +389,7 @@ public class BookReader {
 	}
 
 	public final void addImageReference(String ref, short vOffset, boolean isCover) {
-		final ZLTextWritableModel textModel = myCurrentTextModel;
+		final ZLTextModel textModel = myCurrentTextModel;
 		if (textModel != null) {
 			mySectionContainsRegularContents = true;
 			if (myTextParagraphExists) {

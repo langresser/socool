@@ -61,11 +61,11 @@ public final class ZLTextParagraph {
 		byte END_OF_TEXT_PARAGRAPH = 6;
 	};
 	
-	private final ZLTextPlainModel myModel;
+	private final ZLTextModel myModel;
 	private final int myIndex;
 	private final byte myKind;
 	
-	ZLTextParagraph(ZLTextPlainModel model, int index, byte kind) {
+	ZLTextParagraph(ZLTextModel model, int index, byte kind) {
 		myModel = model;
 		myIndex = index;
 		myKind = kind;
