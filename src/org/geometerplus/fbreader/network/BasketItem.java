@@ -21,8 +21,8 @@ package org.geometerplus.fbreader.network;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.misc.Money;
 import org.geometerplus.zlibrary.options.ZLStringListOption;
+import org.geometerplus.zlibrary.util.Money;
 
 import org.geometerplus.fbreader.network.urlInfo.*;
 import org.geometerplus.fbreader.network.tree.BasketCatalogTree;

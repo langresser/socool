@@ -26,12 +26,12 @@ import org.geometerplus.android.fbreader.util.SQLiteUtil;
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
-import org.geometerplus.zlibrary.misc.ZLConfig;
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 
 import org.geometerplus.zlibrary.text.ZLTextFixedPosition;
 import org.geometerplus.zlibrary.text.ZLTextPosition;
+import org.geometerplus.zlibrary.util.ZLConfig;
 
 import android.content.Context;
 import android.database.Cursor;

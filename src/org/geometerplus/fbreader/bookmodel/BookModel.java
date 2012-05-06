@@ -21,10 +21,10 @@ package org.geometerplus.fbreader.bookmodel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.image.ZLImageMap;
 import org.geometerplus.zlibrary.text.CachedCharStorageBase;
 import org.geometerplus.zlibrary.text.ZLImageEntry;
 import org.geometerplus.zlibrary.text.ZLTextMark;
@@ -158,7 +158,7 @@ public class BookModel {
 	
 	
 	protected CachedCharStorageBase myInternalHyperlinks;
-	protected final ZLImageMap myImageMap = new ZLImageMap();
+	protected final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
 
 	protected Label getLabelInternal(String id) {
 		final int len = id.length();

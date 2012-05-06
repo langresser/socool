@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.zlibrary.image.*;
-import org.geometerplus.zlibrary.misc.LineBreaker;
+import org.geometerplus.zlibrary.util.LineBreaker;
 
 public final class ZLTextParagraphCursor {
 	private static final class Processor {

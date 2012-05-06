@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader.network.action;
 
 import android.app.Activity;
 
-import org.geometerplus.zlibrary.misc.Money;
+import org.geometerplus.zlibrary.util.Money;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkTree;

@@ -1,4 +1,4 @@
-package org.geometerplus.zlibrary.misc;
+package org.geometerplus.zlibrary.util;
 
 public final class LineBreaker {
 	static {

@@ -24,7 +24,7 @@ import android.app.Application;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.image.ZLImageManager;
-import org.geometerplus.zlibrary.misc.ZLConfig;
+import org.geometerplus.zlibrary.util.ZLConfig;
 
 public class FBReaderApplication extends Application {
 	@Override

@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.options;
 
-import org.geometerplus.zlibrary.misc.ZLConfig;
+import org.geometerplus.zlibrary.util.ZLConfig;
 
 public abstract class ZLOption {
 	public static final String PLATFORM_GROUP = "PlatformOptions";

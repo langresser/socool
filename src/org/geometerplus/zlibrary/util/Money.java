@@ -17,13 +17,12 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.misc;
+package org.geometerplus.zlibrary.util;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 public class Money implements Comparable<Money>, Serializable {
 	public static final Money ZERO = new Money();
