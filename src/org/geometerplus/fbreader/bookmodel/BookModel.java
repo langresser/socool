@@ -246,7 +246,7 @@ public class BookModel {
 	
 	public boolean m_isNavite = false;
 
-	public final class EntryIteratorImpl implements ZLTextParagraph.EntryIterator {
+	public final class EntryIterator {
 		private int myCounter;
 		private int myLength;
 		private byte myType;
@@ -275,7 +275,7 @@ public class BookModel {
 		// FixedHSpaceEntry data
 		private short myFixedHSpaceLength;
 
-		public EntryIteratorImpl(int index) {
+		public EntryIterator(int index) {
 			myLength = myParagraphLengths[index];
 			myDataIndex = myStartEntryIndices[index];
 			myDataOffset = myStartEntryOffsets[index];
@@ -510,7 +510,7 @@ public class BookModel {
 			endIndex = myParagraphsNumber;
 		}
 		int index = startIndex;
-		final EntryIteratorImpl it = new EntryIteratorImpl(index);
+		final EntryIterator it = new EntryIterator(index);
 		while (true) {
 			int offset = 0;
 			while (it.hasNext()) {

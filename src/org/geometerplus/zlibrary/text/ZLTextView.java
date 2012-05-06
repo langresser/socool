@@ -633,7 +633,7 @@ public class ZLTextView {
 			}
 			while (paragraph < myModel.getParagraphsNumber()
 					&& myLettersBufferLength < myLettersBuffer.length) {
-				ZLTextParagraph.EntryIterator it = myModel.getParagraph(paragraph++).iterator();
+				BookModel.EntryIterator it = myModel.getParagraph(paragraph++).iterator();
 				while (it.hasNext()
 						&& myLettersBufferLength < myLettersBuffer.length) {
 					it.next();

@@ -20,6 +20,7 @@
 package org.geometerplus.zlibrary.text;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookModel.EntryIterator;
 
 public final class ZLTextParagraph {
 	public interface Entry {
@@ -30,27 +31,6 @@ public final class ZLTextParagraph {
 		byte STYLE = 5;
 		byte FIXED_HSPACE = 6;
 		byte RESET_BIDI = 7;
-	}
-
-	public interface EntryIterator {
-		byte getType();
-
-		char[] getTextData();
-		int getTextOffset();
-		int getTextLength();
-
-		byte getControlKind();
-		boolean getControlIsStart();
-
-		byte getHyperlinkType();
-		String getHyperlinkId();
-
-		ZLImageEntry getImageEntry();
-
-		short getFixedHSpaceLength();
-
-		boolean hasNext();
-		void next();
 	}
 
 	public interface Kind {
@@ -74,7 +54,7 @@ public final class ZLTextParagraph {
 	}
 
 	public EntryIterator iterator() {
-		return myModel.new EntryIteratorImpl(myIndex);
+		return myModel.new EntryIterator(myIndex);
 	}
 	
 	public byte getKind() {
