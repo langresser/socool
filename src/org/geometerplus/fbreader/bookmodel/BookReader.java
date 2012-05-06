@@ -81,15 +81,6 @@ public class BookReader {
 		}
 	}
 
-	/*
-	public final void addControl(ZLTextStyleEntry entry) {
-		if (myTextParagraphExists) {
-			flushTextBufferToParagraph();
-			myCurrentTextModel.addControl(entry);
-		}
-	}
-	*/
-
 	public final void pushKind(byte kind) {
 		byte[] stack = myKindStack;
 		if (stack.length == myKindStackSize) {
@@ -150,12 +141,6 @@ public class BookReader {
 	public final void insertEndOfSectionParagraph() {
 		insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 	}
-
-	/*
-	public final void insertEndOfTextParagraph() {
-		insertEndParagraph(ZLTextParagraph.Kind.END_OF_TEXT_PARAGRAPH);
-	}
-	*/
 
 	public final void unsetCurrentTextModel() {
 		if (myCurrentTextModel != null) {

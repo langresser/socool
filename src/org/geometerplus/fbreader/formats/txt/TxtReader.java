@@ -1,0 +1,402 @@
+package org.geometerplus.fbreader.formats.txt;
+
+import java.util.*;
+import java.io.IOException;
+
+import org.geometerplus.zlibrary.filesystem.ZLFile;
+
+import org.geometerplus.zlibrary.text.model.ZLTextParagraph;
+import org.geometerplus.zlibrary.util.MimeType;
+import org.geometerplus.zlibrary.util.ZLArrayUtils;
+import org.geometerplus.zlibrary.xml.XMLNamespaces;
+import org.geometerplus.zlibrary.xml.ZLStringMap;
+import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
+import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
+
+import org.geometerplus.fbreader.bookmodel.*;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+
+public final class TxtReader {
+	private final BookReader myBookReader;
+
+	private boolean myInsidePoem = false;
+	private boolean myInsideTitle = false;
+	private int myBodyCounter = 0;
+	private boolean myReadMainText = false;
+	private int mySectionDepth = 0;
+	private boolean mySectionStarted = false;
+
+	private byte myHyperlinkType;
+	private boolean myInsideCoverpage = false;
+	private String myCoverImageReference;
+	private int myParagraphsBeforeBodyNumber = Integer.MAX_VALUE;
+
+	private final char[] SPACE = { ' ' };
+
+	private byte[] myTagStack = new byte[10];
+	private int myTagStackSize = 0;
+
+	public TxtReader(BookModel model) {
+ 		myBookReader = new BookReader(model);
+	}
+
+	void readBook() throws BookReadingException {
+		Base64EncodedImage.resetCounter();
+		final ZLFile file = myBookReader.Model.Book.File;
+		try {
+			ZLXMLProcessor.read(this, file);
+		} catch (IOException e) {
+			throw new BookReadingException(e, file);
+		}
+	}
+
+	public void startDocumentHandler() {
+	}
+
+	public void endDocumentHandler() {
+	}
+
+	public boolean dontCacheAttributeValues() {
+		return true;
+	}
+
+	public void characterDataHandler(char[] ch, int start, int length) {
+		if (length == 0) {
+			return;
+		}
+		final Base64EncodedImage image = myCurrentImage;
+		if (image != null) {
+			image.addData(ch, start, length);
+		} else {
+			myBookReader.addData(ch, start, length, false);
+		}
+	}
+
+	public void characterDataHandlerFinal(char[] ch, int start, int length) {
+		if (length == 0) {
+			return;
+		}
+		final Base64EncodedImage image = myCurrentImage;
+		if (image != null) {
+			image.addData(ch, start, length);
+		} else {
+			myBookReader.addData(ch, start, length, true);
+		}
+	}
+
+	public boolean endElementHandler(String tagName) {
+		final byte tag = myTagStack[--myTagStackSize];
+		switch (tag) {
+			case FB2Tag.P:
+				myBookReader.endParagraph();
+				break;
+			case FB2Tag.SUB:
+				myBookReader.addControl(BookModel.SUB, false);
+				break;
+			case FB2Tag.SUP:
+				myBookReader.addControl(BookModel.SUP, false);
+				break;
+			case FB2Tag.CODE:
+				myBookReader.addControl(BookModel.CODE, false);
+				break;
+			case FB2Tag.EMPHASIS:
+				myBookReader.addControl(BookModel.EMPHASIS, false);
+				break;
+			case FB2Tag.STRONG:
+				myBookReader.addControl(BookModel.STRONG, false);
+				break;
+			case FB2Tag.STRIKETHROUGH:
+				myBookReader.addControl(BookModel.STRIKETHROUGH, false);
+				break;
+
+			case FB2Tag.V:
+			case FB2Tag.SUBTITLE:
+			case FB2Tag.TEXT_AUTHOR:
+			case FB2Tag.DATE:
+				myBookReader.popKind();
+				myBookReader.endParagraph();
+				break;
+
+			case FB2Tag.CITE:
+			case FB2Tag.EPIGRAPH:
+				myBookReader.popKind();
+				break;
+
+			case FB2Tag.POEM:
+				myInsidePoem = false;
+				break;
+
+			case FB2Tag.STANZA:
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.AFTER_SKIP_PARAGRAPH);
+				myBookReader.endParagraph();
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.EMPTY_LINE_PARAGRAPH);
+				myBookReader.endParagraph();
+				myBookReader.popKind();
+				break;
+
+			case FB2Tag.SECTION:
+				if (myReadMainText) {
+					myBookReader.endContentsParagraph();
+					--mySectionDepth;
+					mySectionStarted = false;
+				} else {
+					myBookReader.unsetCurrentTextModel();
+				}
+				break;
+
+			case FB2Tag.ANNOTATION:
+				myBookReader.popKind();
+				if (myBodyCounter == 0) {
+					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.unsetCurrentTextModel();
+				}
+				break;
+
+			case FB2Tag.TITLE:
+				myBookReader.popKind();
+				myBookReader.exitTitle();
+				myInsideTitle = false;
+				break;
+
+			case FB2Tag.BODY:
+				myBookReader.popKind();
+				myReadMainText = false;
+				if (myReadMainText) {
+					myBookReader.insertEndOfSectionParagraph();
+				}
+				if (mySectionDepth > 0) {
+					myBookReader.endContentsParagraph();
+					mySectionDepth = 0;
+				}
+				myBookReader.unsetCurrentTextModel();
+				break;
+
+			case FB2Tag.A:
+				myBookReader.addControl(myHyperlinkType, false);
+				break;
+
+			case FB2Tag.COVERPAGE:
+				if (myBodyCounter == 0) {
+					myInsideCoverpage = false;
+					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.unsetCurrentTextModel();
+				}
+				break;
+
+			case FB2Tag.BINARY:
+				if (myCurrentImage != null) {
+					myCurrentImage.close();
+					myCurrentImage = null;
+				}
+				break;
+
+			default:
+				break;
+		}
+		return false;
+	}
+
+	public boolean startElementHandler(String tagName, ZLStringMap attributes) {
+		String id = attributes.getValue("id");
+		if (id != null) {
+			myBookReader.addHyperlinkLabel(id);
+		}
+		final byte tag = FB2Tag.getTagByName(tagName);
+		byte[] tagStack = myTagStack;
+		if (tagStack.length == myTagStackSize) {
+			tagStack = ZLArrayUtils.createCopy(tagStack, myTagStackSize, myTagStackSize * 2);
+			myTagStack = tagStack;
+		}
+		tagStack[myTagStackSize++] = tag;
+		switch (tag) {
+			case FB2Tag.P:
+				if (mySectionStarted) {
+					mySectionStarted = false;
+				} else if (myInsideTitle) {
+					myBookReader.addContentsData(SPACE);
+				}
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				break;
+
+			case FB2Tag.SUB:
+				myBookReader.addControl(BookModel.SUB, true);
+				break;
+			case FB2Tag.SUP:
+				myBookReader.addControl(BookModel.SUP, true);
+				break;
+			case FB2Tag.CODE:
+				myBookReader.addControl(BookModel.CODE, true);
+				break;
+			case FB2Tag.EMPHASIS:
+				myBookReader.addControl(BookModel.EMPHASIS, true);
+				break;
+			case FB2Tag.STRONG:
+				myBookReader.addControl(BookModel.STRONG, true);
+				break;
+			case FB2Tag.STRIKETHROUGH:
+				myBookReader.addControl(BookModel.STRIKETHROUGH, true);
+				break;
+
+			case FB2Tag.V:
+				myBookReader.pushKind(BookModel.VERSE);
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				break;
+
+			case FB2Tag.TEXT_AUTHOR:
+				myBookReader.pushKind(BookModel.AUTHOR);
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				break;
+
+			case FB2Tag.SUBTITLE:
+				myBookReader.pushKind(BookModel.SUBTITLE);
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				break;
+			case FB2Tag.DATE:
+				myBookReader.pushKind(BookModel.DATE);
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				break;
+
+			case FB2Tag.EMPTY_LINE:
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.EMPTY_LINE_PARAGRAPH);
+				myBookReader.endParagraph();
+				break;
+
+			case FB2Tag.CITE:
+				myBookReader.pushKind(BookModel.CITE);
+				break;
+			case FB2Tag.EPIGRAPH:
+				myBookReader.pushKind(BookModel.EPIGRAPH);
+				break;
+
+			case FB2Tag.POEM:
+				myInsidePoem = true;
+				break;
+
+			case FB2Tag.STANZA:
+				myBookReader.pushKind(BookModel.STANZA);
+				myBookReader.beginParagraph(ZLTextParagraph.Kind.BEFORE_SKIP_PARAGRAPH);
+				myBookReader.endParagraph();
+				break;
+
+			case FB2Tag.SECTION:
+				if (myReadMainText) {
+					myBookReader.insertEndOfSectionParagraph();
+					++mySectionDepth;
+					myBookReader.beginContentsParagraph();
+					mySectionStarted = true;
+				}
+				break;
+
+			case FB2Tag.ANNOTATION:
+				if (myBodyCounter == 0) {
+					myBookReader.setMainTextModel();
+				}
+				myBookReader.pushKind(BookModel.ANNOTATION);
+				break;
+
+			case FB2Tag.TITLE:
+				if (myInsidePoem) {
+					myBookReader.pushKind(BookModel.POEM_TITLE);
+				} else if (mySectionDepth == 0) {
+					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.pushKind(BookModel.TITLE);
+				} else {
+					myBookReader.pushKind(BookModel.SECTION_TITLE);
+					if (!myBookReader.hasContentsData()) {
+						myInsideTitle = true;
+						myBookReader.enterTitle();
+					}
+				}
+				break;
+
+			case FB2Tag.BODY:
+				++myBodyCounter;
+				myParagraphsBeforeBodyNumber = myBookReader.Model.BookTextModel.getParagraphsNumber();
+				final String name = attributes.getValue("name");
+				if (myBodyCounter == 1 || !"notes".equals(name)) {
+					myBookReader.setMainTextModel();
+					if (name != null) {
+						myBookReader.beginContentsParagraph();
+						myBookReader.addContentsData(name.toCharArray());
+						++mySectionDepth;
+					}
+					myReadMainText = true;
+				}
+				myBookReader.pushKind(BookModel.REGULAR);
+				break;
+
+			case FB2Tag.A:
+			{
+				String ref = getAttributeValue(attributes, XMLNamespaces.XLink, "href");
+				if ((ref != null) && (ref.length() != 0)) {
+					final String type = attributes.getValue("type");
+					if (ref.charAt(0) == '#') {
+						myHyperlinkType = "note".equals(type) ? BookModel.FOOTNOTE : BookModel.INTERNAL_HYPERLINK;
+						ref = ref.substring(1);
+					} else {
+						myHyperlinkType = BookModel.EXTERNAL_HYPERLINK;
+					}
+					myBookReader.addHyperlinkControl(myHyperlinkType, ref);
+				} else {
+					myHyperlinkType = BookModel.FOOTNOTE;
+					myBookReader.addControl(myHyperlinkType, true);
+				}
+				break;
+			}
+			case FB2Tag.COVERPAGE:
+				if (myBodyCounter == 0) {
+					myInsideCoverpage = true;
+					myBookReader.setMainTextModel();
+				}
+				break;
+
+			case FB2Tag.IMAGE:
+			{
+				String imgRef = getAttributeValue(attributes, XMLNamespaces.XLink, "href");
+				if ((imgRef != null) && (imgRef.length() != 0) && (imgRef.charAt(0) == '#')) {
+					String vOffset = attributes.getValue("voffset");
+					short offset = 0;
+					try {
+						offset = Short.parseShort(vOffset);
+					} catch (NumberFormatException e) {
+					}
+					imgRef = imgRef.substring(1);
+					final boolean isCoverImage =
+						myParagraphsBeforeBodyNumber ==
+						myBookReader.Model.BookTextModel.getParagraphsNumber();
+					if (!imgRef.equals(myCoverImageReference) || !isCoverImage) {
+						myBookReader.addImageReference(imgRef, offset, myInsideCoverpage || isCoverImage);
+					}
+					if (myInsideCoverpage) {
+						myCoverImageReference = imgRef;
+					}
+				}
+				break;
+			}
+			case FB2Tag.BINARY:
+				final String contentType = attributes.getValue("content-type");
+				final String imgId = attributes.getValue("id");
+				if (contentType != null && id != null) {
+					myCurrentImage = new Base64EncodedImage(MimeType.get(contentType), "");
+					myBookReader.addImage(imgId, myCurrentImage);
+				}
+				break;
+
+			default:
+				break;
+		}
+		return false;
+	}
+
+	public boolean processNamespaces() {
+		return true;
+	}
+
+	public void collectExternalEntities(HashMap<String,char[]> entityMap) {
+		entityMap.put("FBReaderVersion", FBReaderApp.Instance().getVersionName().toCharArray());
+	}
+
+	public List<String> externalDTDs() {
+		return Collections.emptyList();
+	}
+}

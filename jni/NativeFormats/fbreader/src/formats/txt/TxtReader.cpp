@@ -24,7 +24,13 @@
 
 #include "TxtReader.h"
 
-TxtReader::TxtReader(const std::string &encoding) : EncodedTextReader(encoding) {
+TxtReader::TxtReader(const std::string &encoding) {
+	ZLEncodingCollection &collection = ZLEncodingCollection::Instance();
+	myConverter = collection.converter(encoding);
+	if (myConverter.isNull()) {
+		myConverter = collection.defaultConverter();
+	}
+
 	if (strcasecmp(encoding.c_str(), "utf-8") == 0) {
 		m_unicodeFlag = kUtf8;
 	} else if (strcasecmp(encoding.c_str(), "utf-16") == 0) {
