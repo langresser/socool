@@ -24,7 +24,6 @@ import java.lang.ref.WeakReference;
 
 import org.geometerplus.zlibrary.image.NetworkImage;
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.util.MimeType;

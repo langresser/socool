@@ -38,8 +38,6 @@ import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLImageData;
 import org.geometerplus.zlibrary.image.ZLImageManager;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.network.SQLiteCookieDatabase;
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.util.MimeType;
 

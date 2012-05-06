@@ -24,11 +24,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
 import org.geometerplus.zlibrary.util.MimeType;
 
 import org.geometerplus.fbreader.Paths;
+import org.geometerplus.fbreader.network.ZLNetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkManager;
 
 public final class NetworkImage extends ZLLoadableImage {
 	public final String Url;

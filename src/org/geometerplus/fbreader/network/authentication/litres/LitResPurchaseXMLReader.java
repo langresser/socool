@@ -19,10 +19,10 @@
 
 package org.geometerplus.fbreader.network.authentication.litres;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.network.NetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkException;
 
 class LitResPurchaseXMLReader extends LitResAuthenticationXMLReader {
 	private static final String TAG_AUTHORIZATION_FAILED = "catalit-authorization-failed";

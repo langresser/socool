@@ -29,7 +29,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.util.Money;
 

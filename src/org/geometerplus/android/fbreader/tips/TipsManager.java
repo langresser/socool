@@ -23,12 +23,12 @@ import java.util.*;
 import java.io.File;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 
 import org.geometerplus.fbreader.Paths;
+import org.geometerplus.fbreader.network.ZLNetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkManager;
 import org.geometerplus.fbreader.network.atom.ATOMXMLReader;
 
 public class TipsManager {

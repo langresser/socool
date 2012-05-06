@@ -36,11 +36,11 @@ import android.widget.Toast;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 import org.geometerplus.zlibrary.resources.ZLResource;
 
+import org.geometerplus.fbreader.network.ZLNetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkManager;
+import org.geometerplus.fbreader.network.ZLNetworkRequest;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
 import org.geometerplus.fbreader.network.urlInfo.BookUrlInfo;
 

@@ -21,9 +21,6 @@ package org.geometerplus.fbreader.network.authentication.litres;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.util.Money;

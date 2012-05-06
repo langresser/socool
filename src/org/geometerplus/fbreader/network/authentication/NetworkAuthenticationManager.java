@@ -21,7 +21,6 @@ package org.geometerplus.fbreader.network.authentication;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.util.Money;
 

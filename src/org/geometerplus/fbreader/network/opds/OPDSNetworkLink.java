@@ -25,8 +25,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.util.ZLMiscUtil;
 

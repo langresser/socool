@@ -19,10 +19,10 @@
 
 package org.geometerplus.fbreader.network.tree;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;
+import org.geometerplus.fbreader.network.ZLNetworkException;
 import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationManager;
 
 class CatalogExpander extends NetworkItemsLoader {

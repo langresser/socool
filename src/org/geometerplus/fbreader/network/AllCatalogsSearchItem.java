@@ -21,9 +21,6 @@ package org.geometerplus.fbreader.network;
 
 import java.util.LinkedList;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 
 import org.geometerplus.fbreader.network.tree.NetworkItemsLoader;
 

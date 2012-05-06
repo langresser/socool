@@ -22,7 +22,6 @@ package org.geometerplus.fbreader.network;
 import java.util.*;
 import java.io.File;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 
 import org.geometerplus.fbreader.network.urlInfo.*;
 import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationManager;

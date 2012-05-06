@@ -21,10 +21,10 @@ package org.geometerplus.fbreader.network.tree;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 
 import org.geometerplus.fbreader.network.NetworkLibrary;
 import org.geometerplus.fbreader.network.NetworkItem;
+import org.geometerplus.fbreader.network.ZLNetworkException;
 
 public abstract class NetworkItemsLoader implements Runnable {
 	private final NetworkCatalogTree myTree;

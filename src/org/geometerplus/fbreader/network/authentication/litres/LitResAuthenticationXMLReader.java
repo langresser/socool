@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.authentication.litres;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkException;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 class LitResAuthenticationXMLReader extends ZLXMLReaderAdapter {

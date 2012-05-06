@@ -29,13 +29,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;
+import org.geometerplus.fbreader.network.ZLNetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkManager;
 import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationManager;
 
 import org.socool.socoolreader.reader.R;

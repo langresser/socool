@@ -23,13 +23,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.geometerplus.fbreader.network.ICustomNetworkLink;
 import org.geometerplus.fbreader.network.NetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkException;
+import org.geometerplus.fbreader.network.ZLNetworkManager;
+import org.geometerplus.fbreader.network.ZLNetworkRequest;
 import org.geometerplus.fbreader.network.urlInfo.*;
 
 public class OPDSCustomNetworkLink extends OPDSNetworkLink implements ICustomNetworkLink {

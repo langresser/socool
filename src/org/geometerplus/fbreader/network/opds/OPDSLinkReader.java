@@ -23,9 +23,6 @@ import java.util.*;
 import java.io.*;
 
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
-import org.geometerplus.zlibrary.network.ZLNetworkException;
-import org.geometerplus.zlibrary.network.ZLNetworkManager;
-import org.geometerplus.zlibrary.network.ZLNetworkRequest;
 
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.network.*;

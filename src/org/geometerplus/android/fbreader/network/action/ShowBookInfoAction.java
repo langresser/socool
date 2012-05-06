@@ -22,9 +22,9 @@ package org.geometerplus.android.fbreader.network.action;
 import android.app.Activity;
 import android.content.Intent;
 
-import org.geometerplus.zlibrary.network.ZLNetworkException;
 
 import org.geometerplus.fbreader.network.NetworkTree;
+import org.geometerplus.fbreader.network.ZLNetworkException;
 
 import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
 import org.geometerplus.android.fbreader.network.NetworkBookInfoActivity;
