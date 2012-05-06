@@ -11,33 +11,33 @@ import org.geometerplus.fbreader.formats.*;
 
 public class TxtPlugin extends JavaFormatPlugin {
 	public TxtPlugin() {
-		super("fb2");
+		super("plain text");
 	}
 
 	@Override
 	public ZLFile realBookFile(ZLFile file) {
-		return null;
+		return file;
 	}
 
 	@Override
 	public void readMetaInfo(Book book) throws BookReadingException {
-//		new FB2MetaInfoReader(book).readMetaInfo();
+		// txt格式没有附加信息
 	}
 
 	@Override
 	public void readModel(BookModel model) throws BookReadingException {
-//		new FB2Reader(model).readBook();
+		new TxtReader(model).readBook();
 	}
 
 	@Override
 	public ZLImage readCover(ZLFile file) {
-//		return new FB2CoverReader().readCover(file);
+		// 默认封面，用户可以指定图片，保存在数据库中。而非文本中
 		return null;
 	}
 
 	@Override
 	public String readAnnotation(ZLFile file) {
-//		return new FB2AnnotationReader().readAnnotation(file);
+		// 无附加信息
 		return null;
 	}
 
@@ -48,6 +48,7 @@ public class TxtPlugin extends JavaFormatPlugin {
 
 	@Override
 	public void detectLanguageAndEncoding(Book book) {
+		// TODO 编码侦测
 		book.setEncoding("auto");
 	}
 }

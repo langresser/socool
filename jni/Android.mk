@@ -112,7 +112,6 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/fbreader/src/formats/txt/PlainTextFormat.cpp \
 	NativeFormats/fbreader/src/formats/txt/TxtBookReader.cpp \
 	NativeFormats/fbreader/src/formats/txt/TxtPlugin.cpp \
-	NativeFormats/fbreader/src/formats/txt/TxtReader.cpp \
 	NativeFormats/fbreader/src/library/Book.cpp
 
 LOCAL_C_INCLUDES              := \

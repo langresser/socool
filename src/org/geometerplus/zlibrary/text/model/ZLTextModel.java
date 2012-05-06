@@ -547,16 +547,5 @@ public class ZLTextModel {
 	}
 
 	public void stopReading() {
-		/*
-		if (myCurrentDataBlock != null) {
-			myStorage.freezeLastBlock();
-			myCurrentDataBlock = null;
-		}
-		final int size = myParagraphsNumber;
-		myStartEntryIndices = ZLArrayUtils.createCopy(myStartEntryIndices, size, size);
-		myStartEntryOffsets = ZLArrayUtils.createCopy(myStartEntryOffsets, size, size);
-		myParagraphLengths = ZLArrayUtils.createCopy(myParagraphLengths, size, size);
-		myParagraphKinds = ZLArrayUtils.createCopy(myParagraphKinds, size, size);
-		*/
 	}
 }

@@ -1,402 +1,400 @@
 package org.geometerplus.fbreader.formats.txt;
 
 import java.util.*;
-import java.io.IOException;
+import java.io.*;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 
+import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookReader;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
-import org.geometerplus.zlibrary.text.model.ZLTextParagraph;
-import org.geometerplus.zlibrary.util.MimeType;
-import org.geometerplus.zlibrary.util.ZLArrayUtils;
-import org.geometerplus.zlibrary.xml.XMLNamespaces;
-import org.geometerplus.zlibrary.xml.ZLStringMap;
-import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
-import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
+public final class TxtReader extends BookReader {
+	public final static int BREAK_PARAGRAPH_AT_NEW_LINE = 1;
+	public final static int BREAK_PARAGRAPH_AT_EMPTY_LINE = 2;
+	public final static int BREAK_PARAGRAPH_AT_LINE_WITH_INDENT = 4;
+	public final static int BUFFER_SIZE = 4096;
 
-import org.geometerplus.fbreader.bookmodel.*;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
+	public boolean myInitialized = false;
+	public int myBreakType = BREAK_PARAGRAPH_AT_NEW_LINE;
+	public int myIgnoredIndent = 1;
+	public int myEmptyLinesBeforeNewSection = 1;
+	public boolean myCreateContentsTable = false;
+	
+	public final static int	kAnsi = 0;
+	public final static int	kUtf8 = 1;
+	public final static int	kUtf16le = 2;
+	public final static int	kUtf16be = 3; 
+	
+	void detectFormat(InputStream stream) {
 
-public final class TxtReader {
-	private final BookReader myBookReader;
+		final int tableSize = 10;
 
-	private boolean myInsidePoem = false;
-	private boolean myInsideTitle = false;
-	private int myBodyCounter = 0;
-	private boolean myReadMainText = false;
-	private int mySectionDepth = 0;
-	private boolean mySectionStarted = false;
+		int lineCounter = 0;
+		int emptyLineCounter = -1;
+		int stringsWithLengthLessThan81Counter = 0;
+		int[] stringIndentTable = new int[tableSize];
+		int[] emptyLinesTable = new int[tableSize];
+		int[] emptyLinesBeforeShortStringTable = new int[tableSize];
 
-	private byte myHyperlinkType;
-	private boolean myInsideCoverpage = false;
-	private String myCoverImageReference;
-	private int myParagraphsBeforeBodyNumber = Integer.MAX_VALUE;
+		boolean currentLineIsEmpty = true;
+		int currentLineLength = 0;
+		int currentLineIndent = 0;
+		int currentNumberOfEmptyLines = -1;
+		
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int length = 0;;
+		do {
+			try {
+				length = stream.read(buffer, length, BUFFER_SIZE);
+			} catch (IOException e) {
+				
+			}
 
-	private final char[] SPACE = { ' ' };
-
-	private byte[] myTagStack = new byte[10];
-	private int myTagStackSize = 0;
-
-	public TxtReader(BookModel model) {
- 		myBookReader = new BookReader(model);
-	}
-
-	void readBook() throws BookReadingException {
-		Base64EncodedImage.resetCounter();
-		final ZLFile file = myBookReader.Model.Book.File;
-		try {
-			ZLXMLProcessor.read(this, file);
-		} catch (IOException e) {
-			throw new BookReadingException(e, file);
-		}
-	}
-
-	public void startDocumentHandler() {
-	}
-
-	public void endDocumentHandler() {
-	}
-
-	public boolean dontCacheAttributeValues() {
-		return true;
-	}
-
-	public void characterDataHandler(char[] ch, int start, int length) {
-		if (length == 0) {
-			return;
-		}
-		final Base64EncodedImage image = myCurrentImage;
-		if (image != null) {
-			image.addData(ch, start, length);
-		} else {
-			myBookReader.addData(ch, start, length, false);
-		}
-	}
-
-	public void characterDataHandlerFinal(char[] ch, int start, int length) {
-		if (length == 0) {
-			return;
-		}
-		final Base64EncodedImage image = myCurrentImage;
-		if (image != null) {
-			image.addData(ch, start, length);
-		} else {
-			myBookReader.addData(ch, start, length, true);
-		}
-	}
-
-	public boolean endElementHandler(String tagName) {
-		final byte tag = myTagStack[--myTagStackSize];
-		switch (tag) {
-			case FB2Tag.P:
-				myBookReader.endParagraph();
-				break;
-			case FB2Tag.SUB:
-				myBookReader.addControl(BookModel.SUB, false);
-				break;
-			case FB2Tag.SUP:
-				myBookReader.addControl(BookModel.SUP, false);
-				break;
-			case FB2Tag.CODE:
-				myBookReader.addControl(BookModel.CODE, false);
-				break;
-			case FB2Tag.EMPHASIS:
-				myBookReader.addControl(BookModel.EMPHASIS, false);
-				break;
-			case FB2Tag.STRONG:
-				myBookReader.addControl(BookModel.STRONG, false);
-				break;
-			case FB2Tag.STRIKETHROUGH:
-				myBookReader.addControl(BookModel.STRIKETHROUGH, false);
-				break;
-
-			case FB2Tag.V:
-			case FB2Tag.SUBTITLE:
-			case FB2Tag.TEXT_AUTHOR:
-			case FB2Tag.DATE:
-				myBookReader.popKind();
-				myBookReader.endParagraph();
-				break;
-
-			case FB2Tag.CITE:
-			case FB2Tag.EPIGRAPH:
-				myBookReader.popKind();
-				break;
-
-			case FB2Tag.POEM:
-				myInsidePoem = false;
-				break;
-
-			case FB2Tag.STANZA:
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.AFTER_SKIP_PARAGRAPH);
-				myBookReader.endParagraph();
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.EMPTY_LINE_PARAGRAPH);
-				myBookReader.endParagraph();
-				myBookReader.popKind();
-				break;
-
-			case FB2Tag.SECTION:
-				if (myReadMainText) {
-					myBookReader.endContentsParagraph();
-					--mySectionDepth;
-					mySectionStarted = false;
-				} else {
-					myBookReader.unsetCurrentTextModel();
-				}
-				break;
-
-			case FB2Tag.ANNOTATION:
-				myBookReader.popKind();
-				if (myBodyCounter == 0) {
-					myBookReader.insertEndOfSectionParagraph();
-					myBookReader.unsetCurrentTextModel();
-				}
-				break;
-
-			case FB2Tag.TITLE:
-				myBookReader.popKind();
-				myBookReader.exitTitle();
-				myInsideTitle = false;
-				break;
-
-			case FB2Tag.BODY:
-				myBookReader.popKind();
-				myReadMainText = false;
-				if (myReadMainText) {
-					myBookReader.insertEndOfSectionParagraph();
-				}
-				if (mySectionDepth > 0) {
-					myBookReader.endContentsParagraph();
-					mySectionDepth = 0;
-				}
-				myBookReader.unsetCurrentTextModel();
-				break;
-
-			case FB2Tag.A:
-				myBookReader.addControl(myHyperlinkType, false);
-				break;
-
-			case FB2Tag.COVERPAGE:
-				if (myBodyCounter == 0) {
-					myInsideCoverpage = false;
-					myBookReader.insertEndOfSectionParagraph();
-					myBookReader.unsetCurrentTextModel();
-				}
-				break;
-
-			case FB2Tag.BINARY:
-				if (myCurrentImage != null) {
-					myCurrentImage.close();
-					myCurrentImage = null;
-				}
-				break;
-
-			default:
-				break;
-		}
-		return false;
-	}
-
-	public boolean startElementHandler(String tagName, ZLStringMap attributes) {
-		String id = attributes.getValue("id");
-		if (id != null) {
-			myBookReader.addHyperlinkLabel(id);
-		}
-		final byte tag = FB2Tag.getTagByName(tagName);
-		byte[] tagStack = myTagStack;
-		if (tagStack.length == myTagStackSize) {
-			tagStack = ZLArrayUtils.createCopy(tagStack, myTagStackSize, myTagStackSize * 2);
-			myTagStack = tagStack;
-		}
-		tagStack[myTagStackSize++] = tag;
-		switch (tag) {
-			case FB2Tag.P:
-				if (mySectionStarted) {
-					mySectionStarted = false;
-				} else if (myInsideTitle) {
-					myBookReader.addContentsData(SPACE);
-				}
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				break;
-
-			case FB2Tag.SUB:
-				myBookReader.addControl(BookModel.SUB, true);
-				break;
-			case FB2Tag.SUP:
-				myBookReader.addControl(BookModel.SUP, true);
-				break;
-			case FB2Tag.CODE:
-				myBookReader.addControl(BookModel.CODE, true);
-				break;
-			case FB2Tag.EMPHASIS:
-				myBookReader.addControl(BookModel.EMPHASIS, true);
-				break;
-			case FB2Tag.STRONG:
-				myBookReader.addControl(BookModel.STRONG, true);
-				break;
-			case FB2Tag.STRIKETHROUGH:
-				myBookReader.addControl(BookModel.STRIKETHROUGH, true);
-				break;
-
-			case FB2Tag.V:
-				myBookReader.pushKind(BookModel.VERSE);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				break;
-
-			case FB2Tag.TEXT_AUTHOR:
-				myBookReader.pushKind(BookModel.AUTHOR);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				break;
-
-			case FB2Tag.SUBTITLE:
-				myBookReader.pushKind(BookModel.SUBTITLE);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				break;
-			case FB2Tag.DATE:
-				myBookReader.pushKind(BookModel.DATE);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				break;
-
-			case FB2Tag.EMPTY_LINE:
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.EMPTY_LINE_PARAGRAPH);
-				myBookReader.endParagraph();
-				break;
-
-			case FB2Tag.CITE:
-				myBookReader.pushKind(BookModel.CITE);
-				break;
-			case FB2Tag.EPIGRAPH:
-				myBookReader.pushKind(BookModel.EPIGRAPH);
-				break;
-
-			case FB2Tag.POEM:
-				myInsidePoem = true;
-				break;
-
-			case FB2Tag.STANZA:
-				myBookReader.pushKind(BookModel.STANZA);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.BEFORE_SKIP_PARAGRAPH);
-				myBookReader.endParagraph();
-				break;
-
-			case FB2Tag.SECTION:
-				if (myReadMainText) {
-					myBookReader.insertEndOfSectionParagraph();
-					++mySectionDepth;
-					myBookReader.beginContentsParagraph();
-					mySectionStarted = true;
-				}
-				break;
-
-			case FB2Tag.ANNOTATION:
-				if (myBodyCounter == 0) {
-					myBookReader.setMainTextModel();
-				}
-				myBookReader.pushKind(BookModel.ANNOTATION);
-				break;
-
-			case FB2Tag.TITLE:
-				if (myInsidePoem) {
-					myBookReader.pushKind(BookModel.POEM_TITLE);
-				} else if (mySectionDepth == 0) {
-					myBookReader.insertEndOfSectionParagraph();
-					myBookReader.pushKind(BookModel.TITLE);
-				} else {
-					myBookReader.pushKind(BookModel.SECTION_TITLE);
-					if (!myBookReader.hasContentsData()) {
-						myInsideTitle = true;
-						myBookReader.enterTitle();
-					}
-				}
-				break;
-
-			case FB2Tag.BODY:
-				++myBodyCounter;
-				myParagraphsBeforeBodyNumber = myBookReader.Model.BookTextModel.getParagraphsNumber();
-				final String name = attributes.getValue("name");
-				if (myBodyCounter == 1 || !"notes".equals(name)) {
-					myBookReader.setMainTextModel();
-					if (name != null) {
-						myBookReader.beginContentsParagraph();
-						myBookReader.addContentsData(name.toCharArray());
-						++mySectionDepth;
-					}
-					myReadMainText = true;
-				}
-				myBookReader.pushKind(BookModel.REGULAR);
-				break;
-
-			case FB2Tag.A:
-			{
-				String ref = getAttributeValue(attributes, XMLNamespaces.XLink, "href");
-				if ((ref != null) && (ref.length() != 0)) {
-					final String type = attributes.getValue("type");
-					if (ref.charAt(0) == '#') {
-						myHyperlinkType = "note".equals(type) ? BookModel.FOOTNOTE : BookModel.INTERNAL_HYPERLINK;
-						ref = ref.substring(1);
+			for (int i = 0; i < length; ++i) {
+				++currentLineLength;
+				char c = (char)buffer[i];
+				if (c == '\n') {
+					++lineCounter;
+					if (currentLineIsEmpty) {
+						++emptyLineCounter;
+						++currentNumberOfEmptyLines;
 					} else {
-						myHyperlinkType = BookModel.EXTERNAL_HYPERLINK;
+						if (currentNumberOfEmptyLines >= 0) {
+							int index = Math.min(currentNumberOfEmptyLines, (int)tableSize - 1);
+							emptyLinesTable[index]++;
+							if (currentLineLength < 51) {
+								emptyLinesBeforeShortStringTable[index]++;
+							}
+						}
+						currentNumberOfEmptyLines = -1;
 					}
-					myBookReader.addHyperlinkControl(myHyperlinkType, ref);
+					if (currentLineLength < 81) {
+						++stringsWithLengthLessThan81Counter;
+					}
+					if (!currentLineIsEmpty) {
+						stringIndentTable[Math.min(currentLineIndent, tableSize - 1)]++;
+					}
+					
+					currentLineIsEmpty = true;
+					currentLineLength = 0;
+					currentLineIndent = 0;
+				} else if (c == '\r') {
+					continue;
+				} else if (c == ' ' || c == '\t') {
+					if (currentLineIsEmpty) {
+						++currentLineIndent;
+					}
 				} else {
-					myHyperlinkType = BookModel.FOOTNOTE;
-					myBookReader.addControl(myHyperlinkType, true);
+					currentLineIsEmpty = false;
 				}
-				break;
 			}
-			case FB2Tag.COVERPAGE:
-				if (myBodyCounter == 0) {
-					myInsideCoverpage = true;
-					myBookReader.setMainTextModel();
-				}
-				break;
+		} while (length == BUFFER_SIZE);
 
-			case FB2Tag.IMAGE:
-			{
-				String imgRef = getAttributeValue(attributes, XMLNamespaces.XLink, "href");
-				if ((imgRef != null) && (imgRef.length() != 0) && (imgRef.charAt(0) == '#')) {
-					String vOffset = attributes.getValue("voffset");
-					short offset = 0;
-					try {
-						offset = Short.parseShort(vOffset);
-					} catch (NumberFormatException e) {
-					}
-					imgRef = imgRef.substring(1);
-					final boolean isCoverImage =
-						myParagraphsBeforeBodyNumber ==
-						myBookReader.Model.BookTextModel.getParagraphsNumber();
-					if (!imgRef.equals(myCoverImageReference) || !isCoverImage) {
-						myBookReader.addImageReference(imgRef, offset, myInsideCoverpage || isCoverImage);
-					}
-					if (myInsideCoverpage) {
-						myCoverImageReference = imgRef;
-					}
+		int nonEmptyLineCounter = lineCounter - emptyLineCounter;
+
+		{
+			int indent = 0;
+			int lineWithIndent = 0;
+			for (; indent < tableSize; ++indent) {
+				lineWithIndent += stringIndentTable[indent];
+				if (lineWithIndent > 0.1 * nonEmptyLineCounter) {
+					break;
 				}
-				break;
 			}
-			case FB2Tag.BINARY:
-				final String contentType = attributes.getValue("content-type");
-				final String imgId = attributes.getValue("id");
-				if (contentType != null && id != null) {
-					myCurrentImage = new Base64EncodedImage(MimeType.get(contentType), "");
-					myBookReader.addImage(imgId, myCurrentImage);
-				}
-				break;
-
-			default:
-				break;
+			myIgnoredIndent = (indent + 1);
 		}
-		return false;
+
+		{
+			int breakType = 0;
+			breakType |= BREAK_PARAGRAPH_AT_EMPTY_LINE;
+	// TODO 测试下是否会有问题。默认情况下\n认定为换行
+			breakType |= BREAK_PARAGRAPH_AT_NEW_LINE;
+			if (stringsWithLengthLessThan81Counter < 0.3 * nonEmptyLineCounter) {
+				breakType |= BREAK_PARAGRAPH_AT_NEW_LINE;
+			} else {
+				breakType |= BREAK_PARAGRAPH_AT_LINE_WITH_INDENT;
+			}
+			myBreakType = (breakType);
+		}
+
+		{
+			int max = 0;
+			int index;
+			int emptyLinesBeforeNewSection = -1;
+			for (index = 2; index < tableSize; ++index) {
+				if (max < emptyLinesBeforeShortStringTable[index]) {
+					max = emptyLinesBeforeShortStringTable[index];
+					emptyLinesBeforeNewSection = index;
+				}
+			}
+			if (emptyLinesBeforeNewSection > 0) {
+				for (index = tableSize - 1; index > 0; --index) {
+					emptyLinesTable[index - 1] += emptyLinesTable[index];	
+					emptyLinesBeforeShortStringTable[index - 1] += emptyLinesBeforeShortStringTable[index];	
+				}
+				for (index = emptyLinesBeforeNewSection; index < tableSize; ++index) {
+					if ((emptyLinesBeforeShortStringTable[index] > 2) &&
+							(emptyLinesBeforeShortStringTable[index] > 0.7 * emptyLinesTable[index])) {
+						break;
+					}
+				}
+				emptyLinesBeforeNewSection = (index == tableSize) ? -1 : (int)index;
+			}
+			myEmptyLinesBeforeNewSection = (emptyLinesBeforeNewSection);
+			myCreateContentsTable = (emptyLinesBeforeNewSection > 0);
+		}
+
+		myInitialized = (true);
+	}
+	
+	public TxtReader(BookModel model)
+	{
+		super(model);
+		
+		// TODO encoding converter
+		String encoding = "utf-8";
+		if (encoding == "utf-8") {
+			m_unicodeFlag = kUtf8;
+		} else if (encoding == "utf-16") {
+			m_unicodeFlag = kUtf16le;
+		} else if (encoding == "utf-16be") {
+			m_unicodeFlag = kUtf16be;
+		} else if (encoding == "utf-16le") {
+			m_unicodeFlag = kUtf16le;
+		} else {
+			m_unicodeFlag = kAnsi;
+		}
+	}
+	
+	public void readBook()
+	{
+		readDocument(Model.Book.File);
+	}
+	
+	public void readDocument(ZLFile file)
+	{
+		startDocumentHandler();
+
+		try {
+		InputStreamReader streamReader = new InputStreamReader(file.getInputStream(), "utf-8");
+
+		final int BUFSIZE = 2048;
+		char[] buffer = new char[BUFSIZE];
+		
+		while (true) {
+			int count = streamReader.read(buffer);
+			if (count == -1) {
+				break;
+			}
+			
+			int maxLength = count;
+			int parBegin = 0;
+			if (m_unicodeFlag == kUtf16le) {
+				for (int i = parBegin; i < maxLength; ++i) {
+					char c = (char)buffer[i];
+					char cn = 0;
+					if ((i + 1) < maxLength) {
+						cn = (char)buffer[i + 1];
+					}
+					if ((c == '\n' || c == '\r') && cn == 0) {
+						boolean skipNewLine = false;
+						if (c == '\r' && cn == 0
+								&& (i + 3) < maxLength
+								&& buffer[i + 2] == '\n'
+								&& buffer[i + 3] == 0) {
+							skipNewLine = true;
+							buffer[i] = '\n';
+						}
+						if (parBegin != i) {
+//							myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 2);
+							characterDataHandler(buffer, 0, count);
+						}
+						// 跳过'\n'(\r\n的情况)
+						if (skipNewLine) {
+							i += 3; // 0d 00 0a 00
+						}
+						parBegin = i + 1;
+						newLineHandler();
+					}
+				}
+			} else if (m_unicodeFlag == kUtf16be) {
+				for (int i = parBegin; i < maxLength; ++i) {
+					char c = (char)buffer[i];
+					char cp = 0;
+					if (i - 1 >= 0) {
+						cp = (char)buffer[i - 1];
+					}
+					if ((c == '\n' || c == '\r') && cp == 0) {
+						boolean skipNewLine = false;
+						if (c == '\r' && cp == 0
+								&& (i + 2) < maxLength
+								&& buffer[i + 1] == 0
+								&& buffer[i + 2] == '\n') {
+							skipNewLine = true;
+							buffer[i] = '\n';
+						}
+						if (parBegin != i) {
+		//					str.erase();
+		//					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
+							characterDataHandler(buffer, 0, count);
+						}
+						// 跳过'\n'(\r\n的情况)
+						if (skipNewLine) {
+							i += 2; // 00 0d 00 0a
+						}
+						parBegin = i + 1;
+						newLineHandler();
+					}
+				}
+			} else {
+				for (int i = parBegin; i < maxLength; ++i) {
+					char c = (char)buffer[i];
+					if (c == '\n' || c == '\r') {
+						boolean skipNewLine = false;
+						if (c == '\r' && (i + 1) != maxLength && buffer[i + 1] == '\n') {
+							skipNewLine = true;
+							buffer[i] = '\n';
+						}
+						if (parBegin != i) {
+		//					str.erase();
+		//					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
+//							LOGD(str.c_str());
+							characterDataHandler(buffer, 0, count);
+						}
+						// 跳过'\n'(\r\n的情况)
+						if (skipNewLine) {
+							++i; // 0d 0a
+						}
+						parBegin = i + 1;
+						newLineHandler();
+					}
+				}
+			}
+			
+			if (parBegin != maxLength) {
+				//		str.erase();
+				//		myConverter->convert(str, inputBuffer + parBegin, inputBuffer + maxLength);
+				characterDataHandler(buffer, 0, count);
+			}
+
+			endDocumentHandler();
+		}
+
+		streamReader.close();
+		} catch (IOException e) {
+			
+		}
 	}
 
-	public boolean processNamespaces() {
+	protected void startDocumentHandler()
+	{
+		setMainTextModel();
+		pushKind(BookModel.REGULAR);
+		beginParagraph();
+		myLineFeedCounter = 0;
+		myInsideContentsParagraph = false;
+		enterTitle();
+		myLastLineIsEmpty = true;
+		myNewLine = true;
+		mySpaceCounter = 0;
+	}
+
+	protected void endDocumentHandler()
+	{
+		internalEndParagraph();
+	}
+	
+	protected boolean characterDataHandler(char[] ch, int start, int length)
+	{
+		int i = 0;
+		for (i = start; i < start + length; ++i) {
+			char c = ch[i];
+			if (c == ' ' || c == '\t') {
+				if (c != '\t') {
+					++mySpaceCounter;
+				} else {
+					mySpaceCounter += myIgnoredIndent + 1; // TODO: implement single option in PlainTextFormat
+				}
+			} else {
+				myLastLineIsEmpty = false;
+				break;
+			}
+		}
+
+		if (i != start + length) {
+			if ((myBreakType & BREAK_PARAGRAPH_AT_LINE_WITH_INDENT) != 0 &&
+					myNewLine && (mySpaceCounter > myIgnoredIndent)) {
+				internalEndParagraph();
+				beginParagraph();
+			}
+			addData(ch, start, length, false);
+			if (myInsideContentsParagraph) {
+				addContentsData(ch, start, length);
+			}
+			myNewLine = false;
+		}
+		return true;
+	}
+	
+	protected boolean newLineHandler()
+	{
+		if (!myLastLineIsEmpty) {
+			myLineFeedCounter = -1;
+		}
+		myLastLineIsEmpty = true;
+		++myLineFeedCounter;
+		myNewLine = true;
+		mySpaceCounter = 0;
+		boolean paragraphBreak =
+			(myBreakType & BREAK_PARAGRAPH_AT_NEW_LINE) != 0 ||
+			((myBreakType & BREAK_PARAGRAPH_AT_EMPTY_LINE) != 0 && (myLineFeedCounter > 0));
+
+		if (myCreateContentsTable) {
+			if (!myInsideContentsParagraph && (myLineFeedCounter == myEmptyLinesBeforeNewSection)) {
+				myInsideContentsParagraph = true;
+				internalEndParagraph();
+				insertEndOfSectionParagraph();
+				beginContentsParagraph();
+				enterTitle();
+				pushKind(BookModel.SECTION_TITLE);
+				beginParagraph();
+				paragraphBreak = false;
+			}
+			if (myInsideContentsParagraph && (myLineFeedCounter == 1)) {
+				exitTitle();
+				endContentsParagraph();
+				popKind();
+				myInsideContentsParagraph = false;
+				paragraphBreak = true;
+			}
+		}
+
+		if (paragraphBreak) {
+			internalEndParagraph();
+			beginParagraph();
+		}
+
 		return true;
 	}
 
-	public void collectExternalEntities(HashMap<String,char[]> entityMap) {
-		entityMap.put("FBReaderVersion", FBReaderApp.Instance().getVersionName().toCharArray());
+	private	int m_unicodeFlag;
+//		shared_ptr<ZLEncodingConverter> myConverter;
+	private	void internalEndParagraph()
+	{
+		if (!myLastLineIsEmpty) {
+			//myLineFeedCounter = 0;
+			myLineFeedCounter = -1; /* Fixed by Hatred: zero value was break LINE INDENT formater -
+			                           second line print with indent like new paragraf */
+		}
+		myLastLineIsEmpty = true;
+		endParagraph();
 	}
 
-	public List<String> externalDTDs() {
-		return Collections.emptyList();
-	}
+	private	int myLineFeedCounter;
+	private	boolean myInsideContentsParagraph;
+	private	boolean myLastLineIsEmpty;
+	private	boolean myNewLine;
+	private	int mySpaceCounter;
+	
 }

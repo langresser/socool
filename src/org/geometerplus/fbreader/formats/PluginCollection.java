@@ -26,6 +26,7 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.fbreader.formats.fb2.FB2Plugin;
 import org.geometerplus.fbreader.formats.oeb.OEBPlugin;
 import org.geometerplus.fbreader.formats.pdb.MobipocketPlugin;
+import org.geometerplus.fbreader.formats.txt.TxtPlugin;
 import org.geometerplus.fbreader.filetype.*;
 
 public class PluginCollection {
@@ -44,7 +45,7 @@ public class PluginCollection {
 
 			// This code can not be moved to constructor because nativePlugins() is a native method
 			for (NativeFormatPlugin p : ourInstance.nativePlugins()) {
-				ourInstance.addPlugin(p);
+//				ourInstance.addPlugin(p);
 				System.err.println("native plugin: " + p);
 			}
 		}
@@ -61,6 +62,7 @@ public class PluginCollection {
 		addPlugin(new FB2Plugin());
 		addPlugin(new MobipocketPlugin());
 		addPlugin(new OEBPlugin());
+		addPlugin(new TxtPlugin());
 	}
 
 	private void addPlugin(FormatPlugin plugin) {
