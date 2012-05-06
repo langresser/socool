@@ -305,7 +305,7 @@ public final class FBReaderApp {
 			try {
 				Model = BookModel.createModel(book);
 				ZLTextHyphenator.Instance().load(book.getLanguage());
-				BookTextView.setModel(Model.getTextModel());
+				BookTextView.setModel(Model);
 				BookTextView.gotoPosition(book.getStoredPosition());
 				if (bookmark == null) {
 					setView(BookTextView);

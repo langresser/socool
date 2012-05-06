@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.text.view;
 
-import org.geometerplus.zlibrary.text.model.ZLTextModel;
+import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.zlibrary.text.model.ZLTextMark;
 
 public final class ZLTextWordCursor extends ZLTextPosition {
@@ -161,7 +161,7 @@ public final class ZLTextWordCursor extends ZLTextPosition {
 
 	public void moveToParagraph(int paragraphIndex) {
 		if (!isNull() && (paragraphIndex != myParagraphCursor.Index)) {
-			final ZLTextModel model = myParagraphCursor.Model;
+			final BookModel model = myParagraphCursor.Model;
 			paragraphIndex = Math.max(0, Math.min(paragraphIndex, model.getParagraphsNumber() - 1));
 			myParagraphCursor = ZLTextParagraphCursor.cursor(model, paragraphIndex);
 			moveToParagraphStart();

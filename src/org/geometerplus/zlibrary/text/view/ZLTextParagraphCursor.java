@@ -22,6 +22,7 @@ package org.geometerplus.zlibrary.text.view;
 import java.util.*;
 
 
+import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.zlibrary.image.*;
 import org.geometerplus.zlibrary.misc.LineBreaker;
 import org.geometerplus.zlibrary.text.model.*;
@@ -190,16 +191,16 @@ public final class ZLTextParagraphCursor {
 	}
 
 	public final int Index;
-	public final ZLTextModel Model;
+	public final BookModel Model;
 	private final ArrayList<ZLTextElement> myElements = new ArrayList<ZLTextElement>();
 
-	private ZLTextParagraphCursor(ZLTextModel model, int index) {
+	private ZLTextParagraphCursor(BookModel model, int index) {
 		Model = model;
 		Index = Math.min(index, Model.getParagraphsNumber() - 1);
 		fill();
 	}
 
-	static ZLTextParagraphCursor cursor(ZLTextModel model, int index) {
+	static ZLTextParagraphCursor cursor(BookModel model, int index) {
 		ZLTextParagraphCursor result = ZLTextParagraphCursorCache.get(model, index);
 		if (result == null) {
 			result = new ZLTextParagraphCursor(model, index);

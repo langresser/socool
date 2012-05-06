@@ -28,7 +28,7 @@ public final class ZLImageEntry {
 	public final short VOffset;
 	public final boolean IsCover;
 
-	ZLImageEntry(ZLImageMap imageMap, String id, short vOffset, boolean isCover) {
+	public ZLImageEntry(ZLImageMap imageMap, String id, short vOffset, boolean isCover) {
 		myImageMap = imageMap;
 		Id = id;
 		VOffset = vOffset;

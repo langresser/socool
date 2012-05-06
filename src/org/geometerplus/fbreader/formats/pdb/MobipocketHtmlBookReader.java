@@ -42,7 +42,7 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 	}
 
 	public InputStream getInputStream() throws IOException {
-		myMobipocketStream = new MobipocketStream(Model.Book.File);
+		myMobipocketStream = new MobipocketStream(m_bookModel.Book.File);
 		return myMobipocketStream;
 	}
 
@@ -61,7 +61,7 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 
 	@Override
 	public void startElementHandler(byte tag, int offset, ZLHtmlAttributeMap attributes) {
-		final int paragraphIndex = Model.BookTextModel.getParagraphsNumber();
+		final int paragraphIndex = m_bookModel.getParagraphsNumber();
 		myPositionToParagraph.put(offset, paragraphIsOpen() ? paragraphIndex - 1 : paragraphIndex);
 		switch (tag) {
 			case HtmlTag.IMG:
@@ -182,7 +182,7 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 			if (length <= 0) {
 				break;
 			}
-			addImage(String.valueOf(index + 1), new ZLFileImage(MimeType.IMAGE_AUTO, Model.Book.File, ZLFileImage.ENCODING_NONE, offset, length));
+			addImage(String.valueOf(index + 1), new ZLFileImage(MimeType.IMAGE_AUTO, m_bookModel.Book.File, ZLFileImage.ENCODING_NONE, offset, length));
 		}
 	}
 

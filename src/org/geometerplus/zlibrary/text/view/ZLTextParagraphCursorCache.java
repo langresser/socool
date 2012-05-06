@@ -22,14 +22,14 @@ package org.geometerplus.zlibrary.text.view;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-import org.geometerplus.zlibrary.text.model.ZLTextModel;
+import org.geometerplus.fbreader.bookmodel.BookModel;
 
 class ZLTextParagraphCursorCache {
 	private final static class Key {
-		private final ZLTextModel myModel;
+		private final BookModel myModel;
 		private final int myIndex;
 
-		public Key(ZLTextModel model, int index) {
+		public Key(BookModel model, int index) {
 			myModel = model;
 			myIndex = index;
 		}
@@ -46,11 +46,11 @@ class ZLTextParagraphCursorCache {
 
 	private static final HashMap<Key,WeakReference<ZLTextParagraphCursor>> ourMap = new HashMap<Key,WeakReference<ZLTextParagraphCursor>>();
 
-	public static void put(ZLTextModel model, int index, ZLTextParagraphCursor cursor) {
+	public static void put(BookModel model, int index, ZLTextParagraphCursor cursor) {
 		ourMap.put(new Key(model, index), new WeakReference<ZLTextParagraphCursor>(cursor));
 	}
 
-	public static ZLTextParagraphCursor get(ZLTextModel model, int index) {
+	public static ZLTextParagraphCursor get(BookModel model, int index) {
 		WeakReference<ZLTextParagraphCursor> ref = ourMap.get(new Key(model, index));
 		return (ref != null) ? ref.get() : null;
 	}

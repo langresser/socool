@@ -45,7 +45,6 @@ import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
 
-import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.socool.socoolreader.reader.R;
 
 import android.view.View;
@@ -69,7 +68,7 @@ public class ZLTextView {
 		int SCROLL_PERCENTAGE = 3;
 	};
 
-	private ZLTextModel myModel;
+	private BookModel myModel;
 
 	private interface SizeUnit {
 		int PIXEL_UNIT = 0;
@@ -98,7 +97,7 @@ public class ZLTextView {
 		m_bookMarkHighlighting = new ArrayList<ZLTextHighlighting>();
 	}
 
-	public synchronized void setModel(ZLTextModel model) {
+	public synchronized void setModel(BookModel model) {
 		ZLTextParagraphCursorCache.clear();
 
 		myModel = model;
@@ -156,7 +155,7 @@ public class ZLTextView {
 		m_bookMarkHighlighting.add(highlighting);
 	}
 
-	public ZLTextModel getModel() {
+	public BookModel getModel() {
 		return myModel;
 	}
 
@@ -630,12 +629,10 @@ public class ZLTextView {
 
 	private final char[] myLettersBuffer = new char[512];
 	private int myLettersBufferLength = 0;
-	private ZLTextModel myLettersModel = null;
 	private float myCharWidth = -1f;
 
 	private final float computeCharWidth() {
-		if (myLettersModel != myModel) {
-			myLettersModel = myModel;
+		if (myModel != null) {
 			myLettersBufferLength = 0;
 			myCharWidth = -1f;
 
@@ -1134,19 +1131,19 @@ public class ZLTextView {
 		int x = getLeftMargin() + info.LeftIndent;
 		final int maxWidth = getTextAreaWidth();
 		switch (getTextStyle().getAlignment()) {
-			case ZLTextModel.ALIGN_RIGHT:
+			case BookModel.ALIGN_RIGHT:
 				x += maxWidth - getTextStyle().getRightIndent() - info.Width;
 				break;
-			case ZLTextModel.ALIGN_CENTER:
+			case BookModel.ALIGN_CENTER:
 				x += (maxWidth - getTextStyle().getRightIndent() - info.Width) / 2;
 				break;
-			case ZLTextModel.ALIGN_JUSTIFY:
+			case BookModel.ALIGN_JUSTIFY:
 				if (!endOfParagraph && (paragraphCursor.getElement(info.EndElementIndex) != ZLTextElement.AfterParagraph)) {
 					fullCorrection = maxWidth - getTextStyle().getRightIndent() - info.Width;
 				}
 				break;
-			case ZLTextModel.ALIGN_LEFT:
-			case ZLTextModel.ALIGN_UNDEFINED:
+			case BookModel.ALIGN_LEFT:
+			case BookModel.ALIGN_UNDEFINED:
 				break;
 		}
 

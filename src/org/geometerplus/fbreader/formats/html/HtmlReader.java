@@ -81,7 +81,7 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 	}
 
 	protected final CharsetDecoder createDecoder() throws UnsupportedEncodingException {
-		return Charset.forName(Model.Book.getEncoding()).newDecoder()
+		return Charset.forName(m_bookModel.Book.getEncoding()).newDecoder()
 			.onMalformedInput(CodingErrorAction.REPLACE)
 			.onUnmappableCharacter(CodingErrorAction.REPLACE);
 	}
@@ -91,7 +91,7 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 	}
 
 	public InputStream getInputStream() throws IOException {
-		return Model.Book.File.getInputStream();
+		return m_bookModel.Book.File.getInputStream();
 	}
 
 	public void startDocumentHandler() {
@@ -240,7 +240,6 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 				break;
 
 			case HtmlTag.BODY:
-				setMainTextModel();
 				pushKind(BookModel.REGULAR);
 				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				break;

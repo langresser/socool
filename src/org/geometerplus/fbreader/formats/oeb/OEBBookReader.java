@@ -88,7 +88,6 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			throw new BookReadingException(e, file);
 		}
 
-		myModelReader.setMainTextModel();
 		myModelReader.pushKind(BookModel.REGULAR);
 
 		int count = 0;
@@ -104,7 +103,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			final String referenceName = reader.getFileAlias(MiscUtil.archiveEntryName(xhtmlFile.getPath()));
 
 			myModelReader.addHyperlinkLabel(referenceName);
-			myTOCLabels.put(referenceName, myModelReader.Model.BookTextModel.getParagraphsNumber());
+			myTOCLabels.put(referenceName, myModelReader.m_bookModel.getParagraphsNumber());
 			try {
 				reader.readFile(xhtmlFile, referenceName + '#');
 			} catch (IOException e) {
@@ -130,7 +129,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			}
 			return new BookModel.Label(null, para);
 		}
-		return myModelReader.Model.getLabel(num + id.substring(index));
+		return myModelReader.m_bookModel.getLabel(num + id.substring(index));
 	}
 
 	private boolean readNCX() throws BookReadingException {
@@ -256,7 +255,6 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 					final String imageName = imageFile.getLongName();
 					final ZLFileImage image = XHTMLImageFinder.getCoverImage(imageFile);
 					if (image != null) {
-						myModelReader.setMainTextModel();
 						myModelReader.addImageReference(imageName, (short)0, true);
 						myModelReader.addImage(imageName, image);
 						myModelReader.insertEndOfSectionParagraph();
@@ -267,7 +265,6 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 					final ZLFile imageFile = ZLFile.createFileByPath(myFilePrefix + href);
 					myCoverFileName = imageFile.getPath();
 					final String imageName = imageFile.getLongName();
-					myModelReader.setMainTextModel();
 					myModelReader.addImageReference(imageName, (short)0, true);
 					myModelReader.addImage(imageName, new ZLFileImage(MimeType.IMAGE_AUTO, imageFile));
 					myModelReader.insertEndOfSectionParagraph();

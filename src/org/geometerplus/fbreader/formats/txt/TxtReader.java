@@ -169,7 +169,7 @@ public final class TxtReader extends BookReader {
 	
 	public void readBook()
 	{
-		readDocument(Model.Book.File);
+		readDocument(m_bookModel.Book.File);
 	}
 	
 	public void readDocument(ZLFile file)
@@ -289,7 +289,6 @@ public final class TxtReader extends BookReader {
 
 	protected void startDocumentHandler()
 	{
-		setMainTextModel();
 		pushKind(BookModel.REGULAR);
 		beginParagraph();
 		myLineFeedCounter = 0;

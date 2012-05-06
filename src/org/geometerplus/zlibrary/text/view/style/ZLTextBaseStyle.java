@@ -19,13 +19,13 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
+import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.options.*;
 
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
-import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.ZLTextStyle;
 import org.geometerplus.zlibrary.text.view.ZLTextHyperlink;
 
@@ -45,7 +45,7 @@ public class ZLTextBaseStyle extends ZLTextStyle {
 	public final ZLBooleanOption StrikeThroughOption =
 		new ZLBooleanOption(GROUP, "Base:strikeThrough", false);
 	public final ZLIntegerRangeOption AlignmentOption =
-		new ZLIntegerRangeOption(GROUP, "Base:alignment", 1, 4, ZLTextModel.ALIGN_JUSTIFY);
+		new ZLIntegerRangeOption(GROUP, "Base:alignment", 1, 4, BookModel.ALIGN_JUSTIFY);
 	public final ZLIntegerRangeOption LineSpaceOption =
 		new ZLIntegerRangeOption(GROUP, "Base:lineSpacing", 5, 20, 12);
 

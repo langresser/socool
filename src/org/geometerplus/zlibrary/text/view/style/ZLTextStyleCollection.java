@@ -19,9 +19,9 @@
 
 package org.geometerplus.zlibrary.text.view.style;
 
+import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.xml.*;
-import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
@@ -124,17 +124,17 @@ public class ZLTextStyleCollection {
 						int rightIndent = intValue(attributes, "rightIndent", 0);
 						int firstLineIndentDelta = intValue(attributes, "firstLineIndentDelta", 0);
 
-						byte alignment = ZLTextModel.ALIGN_UNDEFINED;
+						byte alignment = BookModel.ALIGN_UNDEFINED;
 						String alignmentString = attributes.getValue("alignment");
 						if (alignmentString != null) {
 							if (alignmentString.equals("left")) {
-								alignment = ZLTextModel.ALIGN_LEFT;
+								alignment = BookModel.ALIGN_LEFT;
 							} else if (alignmentString.equals("right")) {
-								alignment = ZLTextModel.ALIGN_RIGHT;
+								alignment = BookModel.ALIGN_RIGHT;
 							} else if (alignmentString.equals("center")) {
-								alignment = ZLTextModel.ALIGN_CENTER;
+								alignment = BookModel.ALIGN_CENTER;
 							} else if (alignmentString.equals("justify")) {
-								alignment = ZLTextModel.ALIGN_JUSTIFY;
+								alignment = BookModel.ALIGN_JUSTIFY;
 							}
 						}
 						final int lineSpacePercent = intValue(attributes, "lineSpacingPercent", -1);

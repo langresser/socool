@@ -20,9 +20,9 @@
 package org.geometerplus.zlibrary.text.model;
 
 public final class ZLTextStyleEntry {
-	final static short SUPPORTS_LEFT_INDENT = 1 << 0;
-	final static short SUPPORTS_RIGHT_INDENT = 1 << 1;
-	final static short SUPPORTS_ALIGNMENT_TYPE = 1 << 2;
+	public final static short SUPPORTS_LEFT_INDENT = 1 << 0;
+	public final static short SUPPORTS_RIGHT_INDENT = 1 << 1;
+	public final static short SUPPORTS_ALIGNMENT_TYPE = 1 << 2;
 	
 	private short myMask;
 	private short myLeftIndent;
@@ -32,7 +32,7 @@ public final class ZLTextStyleEntry {
 	public ZLTextStyleEntry() {
 	}
 
-	short getMask() {
+	public short getMask() {
 		return myMask;
 	};
 	

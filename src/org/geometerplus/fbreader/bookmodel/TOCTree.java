@@ -19,8 +19,6 @@
 
 package org.geometerplus.fbreader.bookmodel;
 
-
-import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.util.ZLTree;
 
 public class TOCTree extends ZLTree<TOCTree> {
@@ -51,15 +49,15 @@ public class TOCTree extends ZLTree<TOCTree> {
 		return myReference;
 	}
 	
-	public void setReference(ZLTextModel model, int reference) {
+	public void setReference(BookModel model, int reference) {
 		myReference = new Reference(reference, model);
 	}
 
 	public static class Reference {
 		public final int ParagraphIndex;
-		public final ZLTextModel Model;
+		public final BookModel Model;
 		
-		public Reference(final int paragraphIndex, final ZLTextModel model) {
+		public Reference(final int paragraphIndex, final BookModel model) {
 			ParagraphIndex = paragraphIndex;
 			Model = model;
 		}
