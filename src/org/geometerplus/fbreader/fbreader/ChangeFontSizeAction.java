@@ -20,7 +20,7 @@
 package org.geometerplus.fbreader.fbreader;
 
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
+import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
 
 class ChangeFontSizeAction extends FBAction {
 	private final int myDelta;

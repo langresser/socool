@@ -25,7 +25,7 @@ import java.nio.charset.*;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReader;
-import org.geometerplus.zlibrary.text.model.ZLTextParagraph;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
 

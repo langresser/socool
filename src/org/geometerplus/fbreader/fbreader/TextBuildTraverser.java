@@ -19,7 +19,10 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.text.ZLTextControlElement;
+import org.geometerplus.zlibrary.text.ZLTextTraverser;
+import org.geometerplus.zlibrary.text.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextWord;
 
 public class TextBuildTraverser extends ZLTextTraverser {
 	protected final StringBuilder myBuffer = new StringBuilder();

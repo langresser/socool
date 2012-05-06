@@ -29,8 +29,8 @@ import android.content.*;
 
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.resources.ZLResource;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
-import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
+import org.geometerplus.zlibrary.text.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.socool.socoolreader.reader.R;

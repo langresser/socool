@@ -28,7 +28,7 @@ import android.app.ListActivity;
 import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.zlibrary.resources.ZLResource;
-import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
+import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 import org.geometerplus.zlibrary.util.ZLTree;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

@@ -23,7 +23,7 @@ import android.graphics.*;
 import android.util.FloatMath;
 
 
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextView;
 import org.geometerplus.zlibrary.util.ZLAndroidColorUtil;
 
 class CurlAnimationProvider extends AnimationProvider {

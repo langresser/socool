@@ -27,8 +27,8 @@ import android.widget.TextView;
 
 
 import org.geometerplus.zlibrary.resources.ZLResource;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
-import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
+import org.geometerplus.zlibrary.text.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 
 import org.socool.socoolreader.reader.R;
 

@@ -30,8 +30,8 @@ import android.view.Gravity;
 
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.resources.ZLResource;
-import org.geometerplus.zlibrary.text.view.ZLTextRegion;
-import org.geometerplus.zlibrary.text.view.ZLTextWord;
+import org.geometerplus.zlibrary.text.ZLTextRegion;
+import org.geometerplus.zlibrary.text.ZLTextWord;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 

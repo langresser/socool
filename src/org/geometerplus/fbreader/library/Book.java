@@ -31,7 +31,7 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.ZLTextPosition;
 import org.geometerplus.zlibrary.util.ZLMiscUtil;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

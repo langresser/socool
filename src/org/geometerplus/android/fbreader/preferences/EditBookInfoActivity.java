@@ -28,7 +28,7 @@ import org.geometerplus.zlibrary.encodings.Encoding;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.resources.ZLResource;
-import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
+import org.geometerplus.zlibrary.text.ZLTextHyphenator;
 import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
 import org.geometerplus.fbreader.library.Book;

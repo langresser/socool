@@ -25,7 +25,7 @@ import android.view.*;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextView;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

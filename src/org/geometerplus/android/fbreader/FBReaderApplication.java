@@ -24,13 +24,13 @@ import android.app.Application;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.image.ZLImageManager;
-import org.geometerplus.zlibrary.misc.ZLSQLiteConfig;
+import org.geometerplus.zlibrary.misc.ZLConfig;
 
 public class FBReaderApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		new ZLSQLiteConfig(this);
+		new ZLConfig(this);
 		new ZLImageManager();
 		new FBReaderApp(this);
 	}

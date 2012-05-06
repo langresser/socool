@@ -22,7 +22,11 @@ package org.geometerplus.fbreader.library;
 import java.util.*;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.text.ZLTextElement;
+import org.geometerplus.zlibrary.text.ZLTextFixedPosition;
+import org.geometerplus.zlibrary.text.ZLTextPosition;
+import org.geometerplus.zlibrary.text.ZLTextWord;
+import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 
 
 public final class Bookmark {

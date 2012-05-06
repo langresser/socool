@@ -30,8 +30,8 @@ import org.geometerplus.zlibrary.misc.ZLConfig;
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.ZLTextFixedPosition;
+import org.geometerplus.zlibrary.text.ZLTextPosition;
 
 import android.content.Context;
 import android.database.Cursor;

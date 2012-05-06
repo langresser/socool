@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextView;
 
 class FindNextAction extends FBAction {
 	FindNextAction(FBReaderApp fbreader) {

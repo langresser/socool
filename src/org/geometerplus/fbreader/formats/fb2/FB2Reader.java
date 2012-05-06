@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
-import org.geometerplus.zlibrary.text.model.ZLTextParagraph;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.xml.XMLNamespaces;

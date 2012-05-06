@@ -25,7 +25,11 @@ import java.util.List;
 
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLImageMap;
-import org.geometerplus.zlibrary.text.model.*;
+import org.geometerplus.zlibrary.text.CachedCharStorageBase;
+import org.geometerplus.zlibrary.text.ZLImageEntry;
+import org.geometerplus.zlibrary.text.ZLTextMark;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
+import org.geometerplus.zlibrary.text.ZLTextStyleEntry;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.util.ZLSearchPattern;
 import org.geometerplus.zlibrary.util.ZLSearchUtil;

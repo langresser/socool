@@ -23,7 +23,11 @@ import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
 
-import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.text.ZLTextHyperlink;
+import org.geometerplus.zlibrary.text.ZLTextHyperlinkRegionSoul;
+import org.geometerplus.zlibrary.text.ZLTextImageRegionSoul;
+import org.geometerplus.zlibrary.text.ZLTextRegion;
+import org.geometerplus.zlibrary.text.ZLTextWordRegionSoul;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.bookmodel.BookModel;

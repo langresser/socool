@@ -25,7 +25,10 @@ import android.view.KeyEvent;
 
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.text.view.style.*;
+import org.geometerplus.zlibrary.text.ZLTextBaseStyle;
+import org.geometerplus.zlibrary.text.ZLTextFullStyleDecoration;
+import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
+import org.geometerplus.zlibrary.text.ZLTextStyleDecoration;
 import org.geometerplus.zlibrary.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
 

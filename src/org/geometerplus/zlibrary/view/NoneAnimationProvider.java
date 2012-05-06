@@ -19,7 +19,7 @@
 
 package org.geometerplus.zlibrary.view;
 
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextView;
 
 import android.graphics.*;
 

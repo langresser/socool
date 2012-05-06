@@ -19,9 +19,9 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.text.view.ZLTextRegion;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
-import org.geometerplus.zlibrary.text.view.ZLTextWordRegionSoul;
+import org.geometerplus.zlibrary.text.ZLTextRegion;
+import org.geometerplus.zlibrary.text.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextWordRegionSoul;
 
 public class MoveCursorAction extends FBAction {
 	private final ZLTextView.Direction myDirection;

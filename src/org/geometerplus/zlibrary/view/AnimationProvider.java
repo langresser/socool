@@ -25,7 +25,7 @@ import android.graphics.*;
 import android.util.FloatMath;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextView;
 
 abstract class AnimationProvider {
 	static enum Mode {

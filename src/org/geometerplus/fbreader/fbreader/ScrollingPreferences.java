@@ -22,7 +22,7 @@ package org.geometerplus.fbreader.fbreader;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLEnumOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextView;
 
 public class ScrollingPreferences {
 	private static ScrollingPreferences ourInstance;

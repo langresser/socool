@@ -1,6 +1,6 @@
 package org.geometerplus.fbreader.fbreader;
 
-import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextView;
 
 class VolumeKeyTurnPageAction extends FBAction {
 	private final boolean myForward;

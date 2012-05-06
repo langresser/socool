@@ -24,7 +24,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.text.model.*;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 
 public class BookReader {
