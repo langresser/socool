@@ -221,18 +221,6 @@ public class BookInfoActivity extends Activity {
 		setupInfoPair(R.id.book_title, "title", book.getTitle());
 		setupInfoPair(R.id.book_authors, "authors", book.authors(), 1);
 
-		StringBuilder buffer = new StringBuilder();
-		final HashSet<String> tagNames = new HashSet<String>();
-		for (Tag tag : book.tags()) {
-			if (!tagNames.contains(tag.Name)) {
-				if (buffer.length() > 0) {
-					buffer.append(", ");
-				}
-				buffer.append(tag.Name);
-				tagNames.add(tag.Name);
-			}
-		}
-		setupInfoPair(R.id.book_tags, "tags", buffer, tagNames.size());
 		String language = book.getLanguage();
 		if (!ZLLanguageUtil.languageCodes().contains(language)) {
 			language = ZLLanguageUtil.OTHER_LANGUAGE_CODE;

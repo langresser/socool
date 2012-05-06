@@ -29,7 +29,6 @@
 #include "BookModel.h"
 
 #include "../library/Book.h"
-#include "../library/Library.h"
 
 BookReader::BookReader(BookModel &model) : myModel(model) {
 	myCurrentTextModel = 0;

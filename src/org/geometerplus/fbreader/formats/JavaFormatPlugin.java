@@ -25,7 +25,7 @@ public abstract class JavaFormatPlugin extends FormatPlugin {
 	}
 
 	@Override
-	public Type type() {
-		return Type.JAVA;
+	public int type() {
+		return JAVA;
 	}
 }

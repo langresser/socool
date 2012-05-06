@@ -21,11 +21,16 @@
 #define __ZLINPUTSTREAM_H__
 
 #include <string>
-
+#include <map>
 #include <shared_ptr.h>
-#include <ZLUserData.h>
 
-class ZLInputStream : public ZLUserDataHolder {
+class ZLUserData {
+
+public:
+	virtual ~ZLUserData() {};
+};
+
+class ZLInputStream{
 
 protected:
 	ZLInputStream();
@@ -44,7 +49,28 @@ private:
 	// disable copying
 	ZLInputStream(const ZLInputStream&);
 	const ZLInputStream &operator = (const ZLInputStream&);
+
+public:
+	inline void addUserData(const std::string &key, shared_ptr<ZLUserData> data);
+	inline void removeUserData(const std::string &key);
+	inline shared_ptr<ZLUserData> getUserData(const std::string &key) const;
+
+private:
+	std::map<std::string,shared_ptr<ZLUserData> > myDataMap;
 };
+
+inline void ZLInputStream::addUserData(const std::string &key, shared_ptr<ZLUserData> data) {
+	myDataMap[key] = data;
+}
+
+inline void ZLInputStream::removeUserData(const std::string &key) {
+	myDataMap.erase(key);
+}
+
+inline shared_ptr<ZLUserData> ZLInputStream::getUserData(const std::string &key) const {
+	std::map<std::string,shared_ptr<ZLUserData> >::const_iterator it = myDataMap.find(key);
+	return (it != myDataMap.end()) ? it->second : 0;
+}
 
 class ZLInputStreamDecorator : public ZLInputStream {
 

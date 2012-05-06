@@ -46,10 +46,6 @@ public class BooksDatabase {
 		return (file != null) ? new Book(id, file, title, encoding, language) : null;
 	}
 
-	protected void addTag(Book book, Tag tag) {
-		book.addTagWithNoCheck(tag);
-	}
-
 	public BooksDatabase(Context context) {
 		myDatabase = context.openOrCreateDatabase("books.db", Context.MODE_PRIVATE, null);
 		updateDatabase();
@@ -132,28 +128,6 @@ public class BooksDatabase {
 		return book;
 	}
 
-	private boolean myTagCacheIsInitialized;
-	private final HashMap<Tag,Long> myIdByTag = new HashMap<Tag,Long>();
-	private final HashMap<Long,Tag> myTagById = new HashMap<Long,Tag>();
-
-	private void initTagCache() {
-		if (myTagCacheIsInitialized) {
-			return;
-		}
-		myTagCacheIsInitialized = true;
-
-		Cursor cursor = myDatabase.rawQuery("SELECT tag_id,parent_id,name FROM Tags ORDER BY tag_id", null);
-		while (cursor.moveToNext()) {
-			long id = cursor.getLong(0);
-			if (myTagById.get(id) == null) {
-				final Tag tag = Tag.getTag(myTagById.get(cursor.getLong(1)), cursor.getString(2));
-				myIdByTag.put(tag, id);
-				myTagById.put(id, tag);
-			}
-		}
-		cursor.close();
-	}
-
 	public Map<Long,Book> loadBooks() {
 		Cursor cursor = myDatabase.rawQuery(
 			"SELECT book_id,title,encoding,language,author,file_path,file_size FROM Books" , null
@@ -171,18 +145,6 @@ public class BooksDatabase {
 			}
 		}
 		cursor.close();
-
-		initTagCache();
-
-		cursor = myDatabase.rawQuery("SELECT book_id,tag_id FROM BookTag", null);
-		while (cursor.moveToNext()) {
-			Book book = booksById.get(cursor.getLong(0));
-			if (book != null) {
-				addTag(book, getTagById(cursor.getLong(1)));
-			}
-		}
-		cursor.close();
-
 		return booksById;
 	}
 
@@ -213,98 +175,6 @@ public class BooksDatabase {
 		myInsertBookInfoStatement.bindString(3, title);
 		myInsertBookInfoStatement.bindString(4, file.getPath());
 		return myInsertBookInfoStatement.executeInsert();
-	}
-
-	private SQLiteStatement myGetTagIdStatement;
-	private SQLiteStatement myCreateTagIdStatement;
-	private long getTagId(Tag tag) {
-		if (myGetTagIdStatement == null) {
-			myGetTagIdStatement = myDatabase.compileStatement(
-				"SELECT tag_id FROM Tags WHERE parent_id = ? AND name = ?"
-			);
-			myCreateTagIdStatement = myDatabase.compileStatement(
-				"INSERT OR IGNORE INTO Tags (parent_id,name) VALUES (?,?)"
-			);
-		}	
-		{
-			final Long id = myIdByTag.get(tag);
-			if (id != null) {
-				return id;
-			}
-		}
-		if (tag.Parent != null) {
-			myGetTagIdStatement.bindLong(1, getTagId(tag.Parent));
-		} else {
-			myGetTagIdStatement.bindNull(1);
-		}
-		myGetTagIdStatement.bindString(2, tag.Name);
-		long id;
-		try {
-			id = myGetTagIdStatement.simpleQueryForLong();
-		} catch (SQLException e) {
-			if (tag.Parent != null) {
-				myCreateTagIdStatement.bindLong(1, getTagId(tag.Parent));
-			} else {
-				myCreateTagIdStatement.bindNull(1);
-			}
-			myCreateTagIdStatement.bindString(2, tag.Name);
-			id = myCreateTagIdStatement.executeInsert();
-		}
-		myIdByTag.put(tag, id);
-		myTagById.put(id, tag);
-		return id;
-	}
-
-	private SQLiteStatement myDeleteBookTagsStatement;
-	protected void deleteAllBookTags(long bookId) {
-		if (myDeleteBookTagsStatement == null) {
-			myDeleteBookTagsStatement = myDatabase.compileStatement(
-				"DELETE FROM BookTag WHERE book_id = ?"
-			);
-		}
-		myDeleteBookTagsStatement.bindLong(1, bookId);
-		myDeleteBookTagsStatement.execute();
-	}
-
-	private SQLiteStatement myInsertBookTagStatement;
-	protected void saveBookTagInfo(long bookId, Tag tag) {
-		if (myInsertBookTagStatement == null) {
-			myInsertBookTagStatement = myDatabase.compileStatement(
-				"INSERT OR IGNORE INTO BookTag (book_id,tag_id) VALUES (?,?)"
-			);
-		}
-		myInsertBookTagStatement.bindLong(1, bookId);
-		myInsertBookTagStatement.bindLong(2, getTagId(tag));
-		myInsertBookTagStatement.execute();
-	}
-
-	private Tag getTagById(long id) {
-		Tag tag = myTagById.get(id);
-		if (tag == null) {
-			final Cursor cursor = myDatabase.rawQuery("SELECT parent_id,name FROM Tags WHERE tag_id = ?", new String[] { "" + id });
-			if (cursor.moveToNext()) {
-				final Tag parent = cursor.isNull(0) ? null : getTagById(cursor.getLong(0));
-				tag = Tag.getTag(parent, cursor.getString(1));
-				myIdByTag.put(tag, id);
-				myTagById.put(id, tag);
-			}
-			cursor.close();
-		}
-		return tag;
-	}
-
-	protected List<Tag> loadTags(long bookId) {
-		final Cursor cursor = myDatabase.rawQuery("SELECT Tags.tag_id FROM BookTag INNER JOIN Tags ON Tags.tag_id = BookTag.tag_id WHERE BookTag.book_id = ?", new String[] { "" + bookId });
-		if (!cursor.moveToNext()) {
-			cursor.close();
-			return null;
-		}
-		ArrayList<Tag> list = new ArrayList<Tag>();
-		do {
-			list.add(getTagById(cursor.getLong(0)));
-		} while (cursor.moveToNext());
-		cursor.close();	
-		return list;
 	}
 
 	private SQLiteStatement mySaveRecentBookStatement;
@@ -658,21 +528,7 @@ public class BooksDatabase {
 					"file_path TEXT UNIQUE NOT NULL," +			// 文件路径
 					"file_size INTERGER)");						// 文件大小
 
-		myDatabase.execSQL(
-				"CREATE TABLE Tags(" +
-					"tag_id INTEGER PRIMARY KEY," +
-					"name TEXT NOT NULL," +
-					"parent_id INTEGER REFERENCES Tags(tag_id)," +
-					"CONSTRAINT Tags_Unique UNIQUE (name, parent_id))");
-		myDatabase.execSQL(
-				"CREATE TABLE BookTag(" +
-					"tag_id INTEGER NOT NULL REFERENCES Tags(tag_id)," +
-					"book_id INTEGER NOT NULL REFERENCES Books(book_id)," +
-					"CONSTRAINT BookTag_Unique UNIQUE (tag_id, book_id))");
-		
-		// 创建索引，用于快速搜索
-		myDatabase.execSQL("CREATE INDEX BookTag_BookIndex ON BookTag (book_id)");
-		
+	
 		// 最近阅读
 		myDatabase.execSQL("CREATE TABLE RecentBooks(" +
 				"book_index INTEGER PRIMARY KEY," +

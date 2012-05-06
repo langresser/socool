@@ -48,16 +48,6 @@ public abstract class LibraryTree extends FBTree {
 		return true;
 	}
 
-	public TagTree getTagSubTree(Tag tag) {
-		final TagTree temp = new TagTree(tag);
-		int position = Collections.binarySearch(subTrees(), temp);
-		if (position >= 0) {
-			return (TagTree)subTrees().get(position);
-		} else {
-			return new TagTree(this, tag, - position - 1);
-		}
-	}
-
 	public TitleTree getTitleSubTree(String title) {
 		final TitleTree temp = new TitleTree(title);
 		int position = Collections.binarySearch(subTrees(), temp);

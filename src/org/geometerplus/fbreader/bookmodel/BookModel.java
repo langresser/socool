@@ -98,14 +98,14 @@ public abstract class BookModel {
 
 		final BookModel model;
 		switch (plugin.type()) {
-			case NATIVE:
+			case FormatPlugin.NATIVE:
 				model = new NativeBookModel(book);
 				break;
-			case JAVA:
+			case FormatPlugin.JAVA:
 				model = new JavaBookModel(book);
 				break;
 			default:
-				throw new BookReadingException("unknownPluginType", plugin.type().toString(), null);
+				return null;
 		}
 
 //		Debug.startMethodTracing("socoolreader.trace");//calc为文件生成名

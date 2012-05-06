@@ -163,7 +163,6 @@ class OEBMetaInfoReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 					myAuthorList2.add(bufferContent);
 					break;
 				case Subject:
-					myBook.addTag(bufferContent);
 					break;
 				case Language:
 				{

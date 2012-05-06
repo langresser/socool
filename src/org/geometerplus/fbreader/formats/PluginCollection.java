@@ -35,8 +35,8 @@ public class PluginCollection {
 
 	private static PluginCollection ourInstance;
 
-	private final Map<FormatPlugin.Type,List<FormatPlugin>> myPlugins =
-		new HashMap<FormatPlugin.Type,List<FormatPlugin>>();
+	private final Map<Integer, List<FormatPlugin>> myPlugins =
+		new HashMap<Integer, List<FormatPlugin>>();
 
 	public static PluginCollection Instance() {
 		if (ourInstance == null) {
@@ -64,7 +64,7 @@ public class PluginCollection {
 	}
 
 	private void addPlugin(FormatPlugin plugin) {
-		final FormatPlugin.Type type = plugin.type();
+		final int type = plugin.type();
 		List<FormatPlugin> list = myPlugins.get(type);
 		if (list == null) {
 			list = new ArrayList<FormatPlugin>();
@@ -73,15 +73,15 @@ public class PluginCollection {
 		list.add(plugin);
 	}
 
-	public FormatPlugin getPlugin(FileType fileType, FormatPlugin.Type formatType) {
+	public FormatPlugin getPlugin(FileType fileType, int formatType) {
 		if (fileType == null) {
 			return null;
 		}
 
-		if (formatType == FormatPlugin.Type.ANY) {
-			FormatPlugin p = getPlugin(fileType, FormatPlugin.Type.NATIVE);
+		if (formatType == FormatPlugin.ANY) {
+			FormatPlugin p = getPlugin(fileType, FormatPlugin.NATIVE);
 			if (p == null) {
-				p = getPlugin(fileType, FormatPlugin.Type.JAVA);
+				p = getPlugin(fileType, FormatPlugin.JAVA);
 			}
 			return p;
 		} else {

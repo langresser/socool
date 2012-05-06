@@ -29,6 +29,11 @@ import org.geometerplus.fbreader.library.Book;
 
 public abstract class FormatPlugin {
 	private final String myFileType;
+	public final static int ANY = 0;
+	public final static int JAVA = 1;
+	public final static int NATIVE = 2;
+	public final static int EXTERNAL = 3;
+	public final static int NONE = 4;
 
 	protected FormatPlugin(String fileType) {
 		myFileType = fileType;
@@ -48,14 +53,7 @@ public abstract class FormatPlugin {
 	public abstract ZLImage readCover(ZLFile file);
 	public abstract String readAnnotation(ZLFile file);
 
-	public enum Type {
-		ANY,
-		JAVA,
-		NATIVE,
-		EXTERNAL,
-		NONE
-	};
-	public abstract Type type();
+	public abstract int type();
 
 	public abstract EncodingCollection supportedEncodings();
 }

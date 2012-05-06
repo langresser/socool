@@ -1,32 +1,11 @@
-/*
- * Copyright (C) 2011-2012 Geometer Plus <contact@geometerplus.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
-
 #include <AndroidUtil.h>
 #include <JniEnvelope.h>
 #include <ZLFileImage.h>
 
 #include "fbreader/src/bookmodel/BookModel.h"
 #include "fbreader/src/formats/FormatPlugin.h"
-#include "fbreader/src/library/Library.h"
-#include "fbreader/src/library/Author.h"
 #include "fbreader/src/library/Book.h"
-#include "fbreader/src/library/Tag.h"
+#include "../filesystem/ZLFSManager.h"
 
 static shared_ptr<FormatPlugin> findCppPlugin(jobject base) {
 	const std::string fileType = AndroidUtil::Method_NativeFormatPlugin_supportedFileType->callForCppString(base);
@@ -55,23 +34,7 @@ static void fillMetaInfo(JNIEnv* env, jobject javaBook, Book &book) {
 		AndroidUtil::Method_Book_setEncoding->call(javaBook, javaString);
 		env->DeleteLocalRef(javaString);
 	}
-
-	const AuthorList &authors = book.authors();
 	// TODO 添加作者信息
-//	for (size_t i = 0; i < authors.size(); ++i) {
-//		const Author &author = *authors[i];
-//		javaString = env->NewStringUTF(author.name().c_str());
-//		jstring key = env->NewStringUTF(author.sortKey().c_str());
-//		AndroidUtil::Method_Book_addAuthor->call(javaBook, javaString, key);
-//		env->DeleteLocalRef(key);
-//		env->DeleteLocalRef(javaString);
-//	}
-
-	const TagList &tags = book.tags();
-	for (size_t i = 0; i < tags.size(); ++i) {
-		const Tag &tag = *tags[i];
-		AndroidUtil::Method_Book_addTag->call(javaBook, tag.javaTag(env));
-	}
 }
 
 void fillLanguageAndEncoding(JNIEnv* env, jobject javaBook, Book &book) {
@@ -125,7 +88,7 @@ JNIEXPORT void JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 }
 
 static bool initInternalHyperlinks(JNIEnv *env, jobject javaModel, BookModel &model) {
-	ZLCachedMemoryAllocator allocator(131072, Library::Instance().cacheDirectory(), "nlinks");
+	ZLCachedMemoryAllocator allocator(131072, ZLFSManager::Instance().cacheDirectory(), "nlinks");
 
 	ZLUnicodeUtil::Ucs2String ucs2id;
 	ZLUnicodeUtil::Ucs2String ucs2modelId;

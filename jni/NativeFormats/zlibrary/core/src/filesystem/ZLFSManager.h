@@ -46,6 +46,8 @@ protected:
 	
 public:
 	void normalize(std::string &path) const;
+	std::string cacheDirectory() const;
+	std::string normalizeUnixPath(const std::string &path) const;
 protected:
 	void normalizeRealPath(std::string &path) const;
 	bool useNativeImplementation(const std::string &path) const;

@@ -132,17 +132,6 @@ public class FB2MetaInfoReader extends ZLXMLReaderAdapter {
 				break;
 			case FB2Tag.GENRE:
 				if (myReadState == READ_GENRE) {
-					final String genre = myBuffer.toString().trim();
-					if (genre.length() > 0) {
-						final ArrayList<Tag> tags = FB2TagManager.humanReadableTags(genre);
-						if (tags != null) {
-							for (Tag t : tags) {
-								myBook.addTag(t);
-							}
-						} else {
-							myBook.addTag(genre);
-						}
-					}
 					myReadState = READ_SOMETHING;
 				}
 				break;

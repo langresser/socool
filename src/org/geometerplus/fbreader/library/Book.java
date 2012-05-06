@@ -47,7 +47,6 @@ public class Book {
 		if (book == null) {
 			return null;
 		}
-		book.loadLists();
 
 		final ZLFile bookFile = book.File;
 		final ZLPhysicalFile physicalFile = bookFile.getPhysicalFile();
@@ -104,7 +103,6 @@ public class Book {
 	private volatile String myEncoding;
 	private volatile String myLanguage;
 	private volatile String myTitle;
-	private volatile List<Tag> myTags;
 
 	private volatile boolean myIsSaved;
 
@@ -139,13 +137,12 @@ public class Book {
 	public void reloadInfoFromDatabase() {
 		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
 		database.reloadBook(this);
-		myTags = database.loadTags(myId);
 		myIsSaved = true;
 	}
 
 	private FormatPlugin getPlugin(ZLFile file) throws BookReadingException {
 		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
-				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.Type.ANY);
+				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.ANY);
 		if (plugin == null) {
 			throw new BookReadingException("pluginNotFound", file);
 		}
@@ -165,7 +162,6 @@ public class Book {
 		myLanguage = null;
 		myTitle = null;
 		m_bookAuthor = null;
-		myTags = null;
 
 		myIsSaved = false;
 
@@ -175,18 +171,6 @@ public class Book {
 			final int index = fileName.lastIndexOf('.');
 			setTitle(index > 0 ? fileName.substring(0, index) : fileName);
 		}
-		final String demoPathPrefix = Paths.BooksDirectoryOption().getValue() + java.io.File.separator + "Demos" + java.io.File.separator;
-		if (File.getPath().startsWith(demoPathPrefix)) {
-			final String demoTag = LibraryUtil.resource().getResource("demo").getValue();
-			setTitle(getTitle() + " (" + demoTag + ")");
-			addTag(demoTag);
-		}
-	}
-
-	private void loadLists() {
-		final BooksDatabase database = FBReaderApp.Instance().getDatabase();
-		myTags = database.loadTags(myId);
-		myIsSaved = true;
 	}
 
 	public String authors() {
@@ -243,44 +227,11 @@ public class Book {
 		}
 	}
 
-	public List<Tag> tags() {
-		return (myTags != null) ? Collections.unmodifiableList(myTags) : Collections.<Tag>emptyList();
-	}
-
-	void addTagWithNoCheck(Tag tag) {
-		if (myTags == null) {
-			myTags = new ArrayList<Tag>();
-		}
-		myTags.add(tag);
-	}
-
-	public void addTag(Tag tag) {
-		if (tag != null) {
-			if (myTags == null) {
-				myTags = new ArrayList<Tag>();
-			}
-			if (!myTags.contains(tag)) {
-				myTags.add(tag);
-				myIsSaved = false;
-			}
-		}
-	}
-
-	public void addTag(String tagName) {
-		addTag(Tag.getTag(null, tagName));
-	}
-
 	public boolean matches(String pattern) {
 		if (myTitle != null && ZLMiscUtil.matchesIgnoreCase(myTitle, pattern)) {
 			return true;
 		}
-		if (myTags != null) {
-			for (Tag tag : myTags) {
-				if (ZLMiscUtil.matchesIgnoreCase(tag.Name, pattern)) {
-					return true;
-				}
-			}
-		}
+
 		if (ZLMiscUtil.matchesIgnoreCase(File.getLongName(), pattern)) {
 			return true;
 		}
@@ -299,11 +250,6 @@ public class Book {
 				} else {
 					myId = database.insertBookInfo(File, myEncoding, myLanguage, myTitle);
 					storeAllVisitedHyperinks();
-				}
-
-				database.deleteAllBookTags(myId);
-				for (Tag tag : tags()) {
-					database.saveBookTagInfo(myId, tag);
 				}
 			}
 		});

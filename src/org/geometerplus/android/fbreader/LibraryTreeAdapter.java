@@ -34,7 +34,6 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.FileTree;
 import org.geometerplus.fbreader.library.FirstLevelTree;
 import org.geometerplus.fbreader.library.LibraryTree;
-import org.geometerplus.fbreader.library.TagTree;
 
 class LibraryTreeAdapter extends TreeAdapter {
 	private CoverManager myCoverManager;
@@ -103,8 +102,6 @@ class LibraryTreeAdapter extends TreeAdapter {
 			} else {
 				return R.drawable.ic_list_library_permission_denied;
 			}
-		} else if (tree instanceof TagTree) {
-			return R.drawable.ic_list_library_tag;
 		}
 
 		return R.drawable.ic_list_library_books;

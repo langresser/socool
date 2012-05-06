@@ -88,7 +88,7 @@ public class NativeFormatPlugin extends FormatPlugin {
 	@Override
 	public String readAnnotation(ZLFile file) {
 		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
-				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.Type.JAVA);
+				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.JAVA);
 		if (plugin != null) {
 			return plugin.readAnnotation(file);
 		}
@@ -96,8 +96,8 @@ public class NativeFormatPlugin extends FormatPlugin {
 	}
 
 	@Override
-	public Type type() {
-		return Type.NATIVE;
+	public int type() {
+		return NATIVE;
 	}
 
 	@Override

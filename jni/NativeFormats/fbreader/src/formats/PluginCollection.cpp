@@ -1,22 +1,3 @@
-/*
- * Copyright (C) 2004-2012 Geometer Plus <contact@geometerplus.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
-
 #include <AndroidUtil.h>
 #include <JniEnvelope.h>
 
@@ -27,36 +8,16 @@
 
 #include "../library/Book.h"
 
-////#include "docbook/DocBookPlugin.h"
-//#include "html/HtmlPlugin.h"
 #include "txt/TxtPlugin.h"
-//#include "pdb/PdbPlugin.h"
-//#include "tcr/TcrPlugin.h"
-//#include "oeb/OEBPlugin.h"
-//#include "chm/CHMPlugin.h"
 #include "rtf/RtfPlugin.h"
-//#include "openreader/OpenReaderPlugin.h"
-////#include "pdf/PdfPlugin.h"
 
 PluginCollection *PluginCollection::ourInstance = 0;
 
 PluginCollection &PluginCollection::Instance() {
 	if (ourInstance == 0) {
 		ourInstance = new PluginCollection();
-//		//ourInstance->myPlugins.push_back(new DocBookPlugin());
-		//ourInstance->myPlugins.push_back(new HtmlPlugin());
 		ourInstance->myPlugins.push_back(new TxtPlugin());
-//		ourInstance->myPlugins.push_back(new PluckerPlugin());
-//		ourInstance->myPlugins.push_back(new PalmDocPlugin());
-//		ourInstance->myPlugins.push_back(new MobipocketPlugin());
-//		ourInstance->myPlugins.push_back(new EReaderPlugin());
-//		ourInstance->myPlugins.push_back(new ZTXTPlugin());
-//		ourInstance->myPlugins.push_back(new TcrPlugin());
-//		ourInstance->myPlugins.push_back(new CHMPlugin());
-		//ourInstance->myPlugins.push_back(new OEBPlugin());
 		ourInstance->myPlugins.push_back(new RtfPlugin());
-//		ourInstance->myPlugins.push_back(new OpenReaderPlugin());
-//		//ourInstance->myPlugins.push_back(new PdfPlugin());
 	}
 	return *ourInstance;
 }

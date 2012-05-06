@@ -87,23 +87,19 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/zlibrary/core/src/language/ZLStatisticsXMLReader.cpp \
 	NativeFormats/zlibrary/core/src/library/ZLibrary.cpp \
 	NativeFormats/zlibrary/core/src/logger/ZLLogger.cpp \
-	NativeFormats/zlibrary/core/src/util/ZLFileUtil.cpp \
 	NativeFormats/zlibrary/core/src/util/ZLStringUtil.cpp \
 	NativeFormats/zlibrary/core/src/util/ZLUnicodeUtil.cpp \
-	NativeFormats/zlibrary/core/src/util/ZLUserData.cpp \
 	NativeFormats/zlibrary/core/src/xml/ZLAsynchronousInputStream.cpp \
 	NativeFormats/zlibrary/core/src/xml/ZLXMLReader.cpp \
 	NativeFormats/zlibrary/core/src/xml/expat/ZLXMLReaderInternal.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFSDir.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFileInputStream.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/ZLUnixFileOutputStream.cpp \
-	NativeFormats/zlibrary/core/src/library/ZLUnixLibrary.cpp \
 	NativeFormats/zlibrary/text/src/model/ZLCachedMemoryAllocator.cpp \
 	NativeFormats/zlibrary/text/src/model/ZLTextModel.cpp \
 	NativeFormats/zlibrary/text/src/model/ZLTextParagraph.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/JavaFSDir.cpp \
 	NativeFormats/zlibrary/core/src/filesystem/JavaInputStream.cpp \
-	NativeFormats/zlibrary/core/src/library/ZLAndroidLibraryImplementation.cpp \
 	NativeFormats/fbreader/src/bookmodel/BookModel.cpp \
 	NativeFormats/fbreader/src/bookmodel/BookReader.cpp \
 	NativeFormats/fbreader/src/formats/EncodedTextReader.cpp \
@@ -118,11 +114,7 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/fbreader/src/formats/txt/TxtBookReader.cpp \
 	NativeFormats/fbreader/src/formats/txt/TxtPlugin.cpp \
 	NativeFormats/fbreader/src/formats/txt/TxtReader.cpp \
-	NativeFormats/fbreader/src/library/Author.cpp \
-	NativeFormats/fbreader/src/library/Book.cpp \
-	NativeFormats/fbreader/src/library/Comparators.cpp \
-	NativeFormats/fbreader/src/library/Library.cpp \
-	NativeFormats/fbreader/src/library/Tag.cpp
+	NativeFormats/fbreader/src/library/Book.cpp
 
 LOCAL_C_INCLUDES              := \
 	$(LOCAL_PATH)/NativeFormats/util \

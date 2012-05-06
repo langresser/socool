@@ -23,7 +23,6 @@
 
 #include "../FormatPlugin.h"
 #include "../../library/Book.h"
-#include "../../library/Author.h"
 
 RtfDescriptionReader::RtfDescriptionReader(Book &book) : RtfReader(book.encoding()), myBook(book) {
 }
@@ -70,7 +69,7 @@ void RtfDescriptionReader::switchDestination(DestinationType destination, bool o
 		case DESTINATION_AUTHOR:
 			myDoRead = on;
 			if (!on) {
-				myBook.addAuthor(myBuffer);
+				// TODO add author
 				myBuffer.erase();
 			}
 			break;

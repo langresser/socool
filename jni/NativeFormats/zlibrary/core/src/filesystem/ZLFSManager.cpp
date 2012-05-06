@@ -18,7 +18,6 @@
  */
 
 #include <ZLibrary.h>
-#include <ZLFileUtil.h>
 #include <ZLStringUtil.h>
 #include <AndroidUtil.h>
 #include <JniEnvelope.h>
@@ -39,16 +38,6 @@
 #include "JavaInputStream.h"
 #include "JavaFSDir.h"
 
-//static std::string getPwdDir() {
-//	char *pwd = getenv("PWD");
-//	return (pwd != 0) ? pwd : "";
-//}
-//
-//static std::string getHomeDir() {
-//	char *home = getenv("HOME");
-//	return (home != 0) ? home : "";
-//}
-
 ZLFSManager *ZLFSManager::ourInstance = 0;
 
 void ZLFSManager::createInstance() {
@@ -60,6 +49,16 @@ void ZLFSManager::deleteInstance() {
 		delete ourInstance;
 		ourInstance = 0;
 	}
+}
+
+std::string ZLFSManager::cacheDirectory() const {
+	JNIEnv *env = AndroidUtil::getEnv();
+	jstring res = (jstring)AndroidUtil::StaticMethod_Paths_cacheDirectory->call();
+	std::string str = AndroidUtil::fromJavaString(env, res);
+		if (res != 0) {
+			env->DeleteLocalRef(res);
+	}
+	return str;
 }
 
 int ZLFSManager::findLastFileNameDelimiter(const std::string &path) const {
@@ -81,8 +80,40 @@ void ZLFSManager::normalize(std::string &path) const {
 	} else {
 		std::string realPath = path.substr(0, index);
 		normalizeRealPath(realPath);
-		path = realPath + ':' + ZLFileUtil::normalizeUnixPath(path.substr(index + 1));
+		path = realPath + ':' + normalizeUnixPath(path.substr(index + 1));
 	}
+}
+
+std::string ZLFSManager::normalizeUnixPath(const std::string &path) const {
+	std::string nPath = path;
+	while (nPath.length() >= 2 && nPath.substr(2) == "./") {
+		nPath.erase(0, 2);
+	}
+	int index;
+	while ((index = nPath.find("/../")) != -1) {
+		const int prevIndex = (int)nPath.rfind('/', index - 1);
+		if (prevIndex == -1) {
+			nPath.erase(0, index + 4);
+		} else {
+			nPath.erase(prevIndex, index + 3 - prevIndex);
+		}
+	}
+	int len = nPath.length();
+	if ((len >= 3) && (nPath.substr(len - 3) == "/..")) {
+		int prevIndex = std::max((int)nPath.rfind('/', len - 4), 0);
+		nPath.erase(prevIndex);
+	}
+	while ((index = nPath.find("/./")) != -1) {
+		nPath.erase(index, 2);
+	}
+	while (nPath.length() >= 2 &&
+				 nPath.substr(nPath.length() - 2) == "/.") {
+		nPath.erase(nPath.length() - 2);
+	}
+	while ((index = nPath.find("//")) != -1) {
+		nPath.erase(index, 1);
+	}
+	return nPath;
 }
 
 std::string ZLFSManager::mimeType(const std::string &path) const {

@@ -101,7 +101,6 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 							{
 								final byte[] buffer = new byte[size - 8];
 								stream.read(buffer);
-								book.addTag(new String(buffer, encodingName));
 								break;
 							}
 						}

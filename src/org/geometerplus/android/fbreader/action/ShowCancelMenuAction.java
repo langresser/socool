@@ -24,7 +24,6 @@ import java.util.List;
 import android.content.Intent;
 
 import org.geometerplus.android.fbreader.BookShelfActivity;
-import org.geometerplus.android.fbreader.CancelActivity;
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 

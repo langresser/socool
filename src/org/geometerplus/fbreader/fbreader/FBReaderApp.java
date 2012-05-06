@@ -1221,16 +1221,6 @@ public final class FBReaderApp {
 		return fileList;
 	}
 
-	private final List<?> myNullList = Collections.singletonList(null);
-
-	private LibraryTree getTagTree(Tag tag) {
-		if (tag == null || tag.Parent == null) {
-			return getFirstLevelTree(ROOT_BY_TAG).getTagSubTree(tag);
-		} else {
-			return getTagTree(tag.Parent).getTagSubTree(tag);
-		}
-	}
-
 	private synchronized void addBookToLibrary(Book book) {
 		myBooks.add(book);
 
@@ -1243,14 +1233,6 @@ public final class FBReaderApp {
 			}
 		} else {
 			getFirstLevelTree(ROOT_BY_TITLE).getBookSubTree(book, true);
-		}
-
-		List<Tag> tags = book.tags();
-		if (tags.isEmpty()) {
-			tags = (List<Tag>)myNullList;
-		}
-		for (Tag t : tags) {
-			getTagTree(t).getBookSubTree(book, true);
 		}
 
 		final SearchResultsTree found =
