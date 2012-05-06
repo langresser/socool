@@ -26,12 +26,13 @@ import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLImageMap;
 import org.geometerplus.zlibrary.text.model.*;
 
+import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.FormatPlugin;
 
 import android.os.Debug;
 
-public abstract class BookModel {
+public class BookModel {
 	public final static byte NONE = 0;
 	public final static byte INTERNAL = 1;
 	public final static byte EXTERNAL = 2;
@@ -96,17 +97,7 @@ public abstract class BookModel {
 
 		System.err.println("using plugin: " + plugin.supportedFileType() + "/" + plugin.type());
 
-		final BookModel model;
-		switch (plugin.type()) {
-			case FormatPlugin.NATIVE:
-				model = new NativeBookModel(book);
-				break;
-			case FormatPlugin.JAVA:
-				model = new JavaBookModel(book);
-				break;
-			default:
-				return null;
-		}
+		final BookModel model = new BookModel(book);
 
 //		Debug.startMethodTracing("socoolreader.trace");//calc为文件生成名
 		plugin.readModel(model);
@@ -129,9 +120,9 @@ public abstract class BookModel {
 
 	protected BookModel(Book book) {
 		Book = book;
+		myInternalHyperlinks = new CachedCharStorageBase(32768, Paths.cacheDirectory(), "links", false);
+		BookTextModel = new ZLTextModel(null, book.getLanguage(), 1024, 65536, Paths.cacheDirectory(), "cache", myImageMap);
 	}
-
-	public abstract ZLTextModel getTextModel();
 
 	public interface LabelResolver {
 		List<String> getCandidates(String id);
@@ -189,5 +180,43 @@ public abstract class BookModel {
 
 	public void addImage(String id, ZLImage image) {
 		myImageMap.put(id, image);
+	}
+	
+	public final ZLTextModel BookTextModel;
+
+	public ZLTextModel getTextModel() {
+		return BookTextModel;
+	}
+
+	private char[] myCurrentLinkBlock;
+	private int myCurrentLinkBlockOffset;
+
+	void addHyperlinkLabel(String label, ZLTextModel model, int paragraphNumber) {
+		final String modelId = model.getId();
+		final int labelLength = label.length();
+		final int idLength = (modelId != null) ? modelId.length() : 0;
+		final int len = 4 + labelLength + idLength;
+
+		char[] block = myCurrentLinkBlock;
+		int offset = myCurrentLinkBlockOffset;
+		if ((block == null) || (offset + len > block.length)) {
+			if (block != null) {
+				myInternalHyperlinks.freezeLastBlock();
+			}
+			block = myInternalHyperlinks.createNewBlock(len);
+			myCurrentLinkBlock = block;
+			offset = 0;
+		}
+		block[offset++] = (char)labelLength;
+		label.getChars(0, labelLength, block, offset);
+		offset += labelLength;
+		block[offset++] = (char)idLength;
+		if (idLength > 0) {
+			modelId.getChars(0, idLength, block, offset);
+			offset += idLength;
+		}
+		block[offset++] = (char)paragraphNumber;
+		block[offset++] = (char)(paragraphNumber >> 16);
+		myCurrentLinkBlockOffset = offset;
 	}
 }

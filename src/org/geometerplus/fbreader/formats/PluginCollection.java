@@ -30,24 +30,13 @@ import org.geometerplus.fbreader.formats.txt.TxtPlugin;
 import org.geometerplus.fbreader.filetype.*;
 
 public class PluginCollection {
-	static {
-		System.loadLibrary("NativeFormats-v2");
-	}
-
 	private static PluginCollection ourInstance;
 
-	private final Map<Integer, List<FormatPlugin>> myPlugins =
-		new HashMap<Integer, List<FormatPlugin>>();
+	private final Map<Integer, List<FormatPlugin>> myPlugins = new HashMap<Integer, List<FormatPlugin>>();
 
 	public static PluginCollection Instance() {
 		if (ourInstance == null) {
 			ourInstance = new PluginCollection();
-
-			// This code can not be moved to constructor because nativePlugins() is a native method
-			for (NativeFormatPlugin p : ourInstance.nativePlugins()) {
-//				ourInstance.addPlugin(p);
-				System.err.println("native plugin: " + p);
-			}
 		}
 		return ourInstance;
 	}
@@ -98,13 +87,5 @@ public class PluginCollection {
 			}
 			return null;
 		}
-	}
-
-	private native NativeFormatPlugin[] nativePlugins();
-	private native void free();
-
-	protected void finalize() throws Throwable {
-		free();
-		super.finalize();
 	}
 }
