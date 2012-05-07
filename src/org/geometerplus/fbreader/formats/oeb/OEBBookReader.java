@@ -31,7 +31,7 @@ import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
 import org.geometerplus.fbreader.bookmodel.*;
 import org.geometerplus.fbreader.formats.xhtml.XHTMLReader;
-import org.geometerplus.fbreader.formats.util.MiscUtil;
+import org.geometerplus.fbreader.formats.html.MiscUtil;
 
 class Reference {
 	public final String Title;

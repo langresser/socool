@@ -26,7 +26,7 @@ import org.geometerplus.zlibrary.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
-import org.geometerplus.fbreader.formats.util.MiscUtil;
+import org.geometerplus.fbreader.formats.html.MiscUtil;
 
 class XHTMLImageFinder extends ZLXMLReaderAdapter {
 	static ZLFileImage getCoverImage(ZLFile coverFile) {

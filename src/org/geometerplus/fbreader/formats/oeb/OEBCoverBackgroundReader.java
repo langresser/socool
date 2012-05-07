@@ -24,7 +24,7 @@ import org.geometerplus.zlibrary.image.ZLFileImage;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.xml.*;
 
-import org.geometerplus.fbreader.formats.util.MiscUtil;
+import org.geometerplus.fbreader.formats.html.MiscUtil;
 
 class OEBCoverBackgroundReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 	private ZLFileImage myImage;
