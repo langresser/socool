@@ -8,7 +8,6 @@ import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.library.BooksDatabase;
-import org.geometerplus.fbreader.library.LibraryUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLImageData;
@@ -154,7 +153,7 @@ public class BookShelfActivity extends Activity
 		final int position = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
 		final Book book = null;//((LibraryTree)getListAdapter().getItem(position)).getBook();
 		if (book != null) {
-			final ZLResource resource = LibraryUtil.resource();
+			final ZLResource resource = ZLResource.resource("library");
 			menu.setHeaderTitle(book.getTitle());
 			menu.add(0, OPEN_BOOK_ITEM_ID, 0, resource.getResource("openBook").getValue());
 			menu.add(0, SHOW_BOOK_INFO_ITEM_ID, 0, resource.getResource("showBookInfo").getValue());
@@ -213,7 +212,7 @@ public class BookShelfActivity extends Activity
 	}
 
 	private MenuItem addMenuItem(Menu menu, int index, String resourceKey, int iconId) {
-		final String label = LibraryUtil.resource().getResource("menu").getResource(resourceKey).getValue();
+		final String label = ZLResource.resource("library").getResource("menu").getResource(resourceKey).getValue();
 		final MenuItem item = menu.add(0, index, Menu.NONE, label);
 		item.setOnMenuItemClickListener(this);
 		item.setIcon(iconId);

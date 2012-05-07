@@ -51,7 +51,6 @@ import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.filetype.FileType;
 import org.geometerplus.fbreader.filetype.FileTypeCollection;
@@ -303,24 +302,21 @@ public final class FBReaderApp {
 			Model = null;
 			System.gc();
 			System.gc();
-			try {
-				Model = BookModel.createModel(book);
-				ZLTextHyphenator.Instance().load(book.getLanguage());
-				BookTextView.setModel(Model);
-				BookTextView.gotoPosition(book.getStoredPosition());
-				if (bookmark == null) {
-					setView(BookTextView);
-					resetWidget();
-					repaintWidget(true);
-				} else {
-					gotoBookmark(bookmark);
-				}
-				
-				addBookToRecentList(book);
-				setTitle(book.authors().toString());
-			} catch (BookReadingException e) {
-				processException(e);
+
+			Model = BookModel.createModel(book);
+			ZLTextHyphenator.Instance().load(book.getLanguage());
+			BookTextView.setModel(Model);
+			BookTextView.gotoPosition(book.getStoredPosition());
+			if (bookmark == null) {
+				setView(BookTextView);
+				resetWidget();
+				repaintWidget(true);
+			} else {
+				gotoBookmark(bookmark);
 			}
+			
+			addBookToRecentList(book);
+			setTitle(book.authors().toString());
 		}
 	}
 
@@ -1328,15 +1324,10 @@ public final class FBReaderApp {
 		fireModelChangedEvent(ChangeListener.Code.BookAdded);
 
 		// Step 4: add help file
-		try {
-			final ZLFile helpFile = getHelpFile();
-			Book helpBook = new Book(helpFile);
-			addBookToLibrary(helpBook);
-			fireModelChangedEvent(ChangeListener.Code.BookAdded);
-		} catch (BookReadingException e) {
-			// that's impossible
-			e.printStackTrace();
-		}
+		final ZLFile helpFile = getHelpFile();
+		Book helpBook = new Book(helpFile);
+		addBookToLibrary(helpBook);
+		fireModelChangedEvent(ChangeListener.Code.BookAdded);
 	}
 
 	private volatile boolean myBuildStarted = false;

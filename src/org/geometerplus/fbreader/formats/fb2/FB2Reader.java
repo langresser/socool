@@ -61,13 +61,12 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
  		myBookReader = new BookReader(model);
 	}
 
-	void readBook() throws BookReadingException {
+	void readBook() {
 		Base64EncodedImage.resetCounter();
 		final ZLFile file = myBookReader.m_bookModel.Book.File;
 		try {
 			ZLXMLProcessor.read(this, file);
 		} catch (IOException e) {
-			throw new BookReadingException(e, file);
 		}
 	}
 

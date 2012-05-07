@@ -7,8 +7,6 @@
 #include "FormatPlugin.h"
 
 #include "../library/Book.h"
-
-#include "txt/TxtPlugin.h"
 #include "rtf/RtfPlugin.h"
 
 PluginCollection *PluginCollection::ourInstance = 0;
@@ -16,7 +14,6 @@ PluginCollection *PluginCollection::ourInstance = 0;
 PluginCollection &PluginCollection::Instance() {
 	if (ourInstance == 0) {
 		ourInstance = new PluginCollection();
-		ourInstance->myPlugins.push_back(new TxtPlugin());
 		ourInstance->myPlugins.push_back(new RtfPlugin());
 	}
 	return *ourInstance;

@@ -72,7 +72,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 	private HashMap<String,String> myFileNumbers = new HashMap<String,String>();
 	private HashMap<String,Integer> myTOCLabels = new HashMap<String,Integer>();
 
-	void readBook(ZLFile file) throws BookReadingException {
+	void readBook(ZLFile file) {
 		myFilePrefix = MiscUtil.htmlDirectoryPrefix(file);
 
 		myIdToHref.clear();
@@ -85,7 +85,6 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 		try {
 			read(file);
 		} catch (IOException e) {
-			throw new BookReadingException(e, file);
 		}
 
 		myModelReader.pushKind(BookModel.REGULAR);
@@ -107,7 +106,6 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			try {
 				reader.readFile(xhtmlFile, referenceName + '#');
 			} catch (IOException e) {
-				throw new BookReadingException(e, xhtmlFile);
 			}
 			myModelReader.insertEndOfSectionParagraph();
 		}
@@ -132,7 +130,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 		return myModelReader.m_bookModel.getLabel(num + id.substring(index));
 	}
 
-	private boolean readNCX() throws BookReadingException {
+	private boolean readNCX() {
 		if (myNCXTOCFileName == null) {
 			return false;
 		}
@@ -172,7 +170,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 		return true;
 	}
 
-	private void generateTOC() throws BookReadingException {
+	private void generateTOC() {
 		if (readNCX()) {
 			return;
 		}

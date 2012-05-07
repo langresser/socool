@@ -24,7 +24,6 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
@@ -39,12 +38,12 @@ public class FB2Plugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public void readMetaInfo(Book book) throws BookReadingException {
+	public void readMetaInfo(Book book) {
 		new FB2MetaInfoReader(book).readMetaInfo();
 	}
 
 	@Override
-	public void readModel(BookModel model) throws BookReadingException {
+	public void readModel(BookModel model) {
 		new FB2Reader(model).readBook();
 	}
 

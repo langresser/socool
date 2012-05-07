@@ -27,7 +27,6 @@ import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.library.Tag;
 
@@ -58,7 +57,7 @@ public class FB2MetaInfoReader extends ZLXMLReaderAdapter {
 		return true;
 	}
 	
-	public void readMetaInfo() throws BookReadingException {
+	public void readMetaInfo() {
 		myReadState = READ_NOTHING;
 		myAuthorNames[0] = "";
 		myAuthorNames[1] = "";
@@ -67,7 +66,6 @@ public class FB2MetaInfoReader extends ZLXMLReaderAdapter {
 		try {
 			ZLXMLProcessor.read(this, myBook.File, 512);
 		} catch (IOException e) {
-			throw new BookReadingException(e, myBook.File);
 		}
 	}
 

@@ -37,7 +37,6 @@ import org.geometerplus.zlibrary.util.ZLMiscUtil;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.filetype.FileTypeCollection;
 import org.geometerplus.fbreader.formats.*;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 
 import org.geometerplus.fbreader.Paths;
 
@@ -58,12 +57,8 @@ public class Book {
 			return null;
 		}
 
-		try {
-			book.readMetaInfo();
-			return book;
-		} catch (BookReadingException e) {
-			return null;
-		}
+		book.readMetaInfo();
+		return book;
 	}
 
 	public static Book getByFile(ZLFile bookFile) {
@@ -76,17 +71,20 @@ public class Book {
 			return null;
 		}
 
+		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
+				FileTypeCollection.Instance.typeForFile(bookFile), FormatPlugin.ANY);
+
+		if (plugin == null) {
+			return null;
+		}
+
 		// TODO 先查看下数据库
 		Book book = null;//FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
 
-		try {
-			if (book == null) {
-				book = new Book(bookFile);
-			} else {
-				book.readMetaInfo();
-			}
-		} catch (BookReadingException e) {
-			return null;
+		if (book == null) {
+			book = new Book(bookFile);
+		} else {
+			book.readMetaInfo();
 		}
 
 		book.save();
@@ -118,20 +116,20 @@ public class Book {
 		myIsSaved = true;
 	}
 
-	public Book(ZLFile file) throws BookReadingException {
+	public Book(ZLFile file) {
 		myId = -1;
 		final FormatPlugin plugin = getPlugin(file);
-		File = plugin.realBookFile(file);
-		readMetaInfo(plugin);
+		if (plugin != null) {
+			File = plugin.realBookFile(file);
+			readMetaInfo(plugin);
+		} else {
+			File = null;
+		}
 	}
 
 	public void reloadInfoFromFile() {
-		try {
-			readMetaInfo();
-			save();
-		} catch (BookReadingException e) {
-			// ignore
-		}
+		readMetaInfo();
+		save();
 	}
 
 	public void reloadInfoFromDatabase() {
@@ -140,24 +138,25 @@ public class Book {
 		myIsSaved = true;
 	}
 
-	private FormatPlugin getPlugin(ZLFile file) throws BookReadingException {
+	private FormatPlugin getPlugin(ZLFile file) {
 		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
 				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.ANY);
 		if (plugin == null) {
-			throw new BookReadingException("pluginNotFound", file);
+			// TODO logmsg
+			return null;
 		}
 		return plugin;
 	}
 
-	public FormatPlugin getPlugin() throws BookReadingException {
+	public FormatPlugin getPlugin() {
 		return getPlugin(File);
 	}
 
-	public void readMetaInfo() throws BookReadingException {
+	public void readMetaInfo() {
 		readMetaInfo(getPlugin());
 	}
 
-	private void readMetaInfo(FormatPlugin plugin) throws BookReadingException {
+	private void readMetaInfo(FormatPlugin plugin) {
 		myEncoding = null;
 		myLanguage = null;
 		myTitle = null;
@@ -166,6 +165,7 @@ public class Book {
 		myIsSaved = false;
 
 		plugin.readMetaInfo(this);
+
 		if (myTitle == null || myTitle.length() == 0) {
 			final String fileName = File.getShortName();
 			final int index = fileName.lastIndexOf('.');
@@ -205,10 +205,7 @@ public class Book {
 
 	public String getEncoding() {
 		if (myEncoding == null) {
-			try {
-				getPlugin().detectLanguageAndEncoding(this);
-			} catch (BookReadingException e) {
-			}
+			getPlugin().detectLanguageAndEncoding(this);
 			if (myEncoding == null) {
 				setEncoding("utf-8");
 			}
@@ -351,12 +348,7 @@ public class Book {
 				return image;
 			}
 		}
-		ZLImage image = null;
-		try {
-			image = getPlugin().readCover(File);
-		} catch (BookReadingException e) {
-			// ignore
-		}
+		ZLImage image = getPlugin().readCover(File);
 		myCover = image != null ? new WeakReference<ZLImage>(image) : NULL_IMAGE;
 		return image;
 	}

@@ -32,9 +32,7 @@ import org.geometerplus.zlibrary.text.ZLTextHyphenator;
 import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
 import org.geometerplus.fbreader.library.Book;
-import org.geometerplus.fbreader.library.BooksDatabase;
 import org.geometerplus.fbreader.formats.FormatPlugin;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 
 import org.geometerplus.android.fbreader.BookInfoActivity;
 import org.geometerplus.android.fbreader.SCReaderActivity;
@@ -98,13 +96,7 @@ class EncodingPreference extends ZLStringListPreference {
 		super(context, rootResource, resourceKey);
 		myBook = book;
 
-		final FormatPlugin plugin;
-		try {
-			plugin = book.getPlugin();
-		} catch (BookReadingException e) {
-			return;
-		}
-
+		final FormatPlugin plugin = book.getPlugin();
 		final List<Encoding> encodings =
 			new ArrayList<Encoding>(plugin.supportedEncodings().encodings());
 		Collections.sort(encodings, new Comparator<Encoding>() {

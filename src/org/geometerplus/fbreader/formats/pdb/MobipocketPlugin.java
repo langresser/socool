@@ -32,7 +32,6 @@ import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.formats.JavaFormatPlugin;
 
 public class MobipocketPlugin extends JavaFormatPlugin {
@@ -41,15 +40,16 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public void readMetaInfo(Book book) throws BookReadingException {
+	public void readMetaInfo(Book book) {
 		InputStream stream = null;
 		try {
 			stream = book.File.getInputStream();
 			final PdbHeader header = new PdbHeader(stream);
 			PdbUtil.skip(stream, header.Offsets[0] + 16 - header.length());
 			if (PdbUtil.readInt(stream) != 0x4D4F4249) /* "MOBI" */ {
-				throw new BookReadingException("unsupportedFileFormat", book.File);
+				return;
 			}
+
 			final int length = (int)PdbUtil.readInt(stream);
 			PdbUtil.skip(stream, 4);
 			final int encodingCode = (int)PdbUtil.readInt(stream);
@@ -112,7 +112,6 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 			stream.read(titleBuffer);
 			book.setTitle(new String(titleBuffer, encodingName));
 		} catch (IOException e) {
-			throw new BookReadingException(e, book.File);
 		} finally {
 			if (stream != null) {
 				try {
@@ -124,11 +123,10 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public void readModel(BookModel model) throws BookReadingException {
+	public void readModel(BookModel model) {
 		try {
 			new MobipocketHtmlBookReader(model).readBook();
 		} catch (IOException e) {
-			throw new BookReadingException(e, model.Book.File);
 		}
 	}
 
@@ -253,14 +251,14 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public void detectLanguageAndEncoding(Book book) throws BookReadingException {
+	public void detectLanguageAndEncoding(Book book) {
 		InputStream stream = null;
 		try {
 			stream = book.File.getInputStream();
 			final PdbHeader header = new PdbHeader(stream);
 			PdbUtil.skip(stream, header.Offsets[0] + 16 - header.length());
 			if (PdbUtil.readInt(stream) != 0x4D4F4249) /* "MOBI" */ {
-				throw new BookReadingException("unsupportedFileFormat", book.File);
+				return;
 			}
 			final int length = (int)PdbUtil.readInt(stream);
 			PdbUtil.skip(stream, 4);
@@ -274,7 +272,6 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 			final int languageCode = (int)PdbUtil.readInt(stream);
 			book.setLanguage(ZLLanguageUtil.languageByIntCode(languageCode & 0xFF, (languageCode >> 8) & 0xFF));
 		} catch (IOException e) {
-			throw new BookReadingException(e, book.File);
 		} finally {
 			if (stream != null) {
 				try {

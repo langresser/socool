@@ -24,7 +24,6 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.library.Book;
 
 public abstract class FormatPlugin {
@@ -43,15 +42,15 @@ public abstract class FormatPlugin {
 		return myFileType;
 	}
 
-	public ZLFile realBookFile(ZLFile file) throws BookReadingException {
+	public ZLFile realBookFile(ZLFile file) {
 		return file;
 	}
 
-	public abstract void readMetaInfo(Book book) throws BookReadingException;
-	public abstract void readModel(BookModel model) throws BookReadingException;
-	public abstract void detectLanguageAndEncoding(Book book) throws BookReadingException;
-	public abstract ZLImage readCover(ZLFile file);
-	public abstract String readAnnotation(ZLFile file);
+	public abstract void readMetaInfo(Book book);				// 读取附加信息
+	public abstract void readModel(BookModel model);			// 读取文本信息
+	public abstract void detectLanguageAndEncoding(Book book);	// 监测编码和语言
+	public abstract ZLImage readCover(ZLFile file);						// 读取封面信息
+	public abstract String readAnnotation(ZLFile file);					// 读取简介信息
 
 	public abstract int type();
 

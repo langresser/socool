@@ -59,12 +59,11 @@ class NCXReader extends ZLXMLReaderAdapter {
 	NCXReader(BookReader modelReader) {
 	}
 
-	void readFile(ZLFile file) throws BookReadingException {
+	void readFile(ZLFile file) {
 		myLocalPathPrefix = MiscUtil.archiveEntryName(MiscUtil.htmlDirectoryPrefix(file));
 		try {
 			read(file);
 		} catch (IOException e) {
-			throw new BookReadingException(e, file);
 		}
 	}
 

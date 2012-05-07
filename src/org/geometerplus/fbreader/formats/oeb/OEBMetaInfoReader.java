@@ -26,7 +26,6 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.xml.*;
 
 import org.geometerplus.fbreader.library.Book;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 
 class OEBMetaInfoReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 	private final Book myBook;
@@ -43,7 +42,7 @@ class OEBMetaInfoReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 		myBook.setLanguage(null);
 	}
 
-	void readMetaInfo(ZLFile file) throws BookReadingException {
+	void readMetaInfo(ZLFile file) {
 		myReadState = ReadState.Nothing;
 		mySeriesTitle = "";
 		mySeriesIndex = null;
@@ -51,7 +50,6 @@ class OEBMetaInfoReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 		try {
 			ZLXMLProcessor.read(this, file, 512);
 		} catch (IOException e) {
-			throw new BookReadingException(e, file);
 		}
 
 		final ArrayList<String> authors = myAuthorList.isEmpty() ? myAuthorList2 : myAuthorList;

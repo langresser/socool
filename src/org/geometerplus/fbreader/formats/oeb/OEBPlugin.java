@@ -24,7 +24,6 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.bookmodel.BookReadingException;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
@@ -33,7 +32,7 @@ public class OEBPlugin extends JavaFormatPlugin {
 		super("ePub");
 	}
 
-	private ZLFile getOpfFile(ZLFile oebFile) throws BookReadingException {
+	private ZLFile getOpfFile(ZLFile oebFile) {
 		if ("opf".equals(oebFile.getExtension())) {
 			return oebFile;
 		}
@@ -53,36 +52,29 @@ public class OEBPlugin extends JavaFormatPlugin {
 				return child;
 			}
 		}
-		throw new BookReadingException("opfFileNotFound", oebFile);
+		
+		return null;
 	}
 
 	@Override
-	public void readMetaInfo(Book book) throws BookReadingException {
+	public void readMetaInfo(Book book){
 		new OEBMetaInfoReader(book).readMetaInfo(getOpfFile(book.File));
 	}
 	
 	@Override
-	public void readModel(BookModel model) throws BookReadingException {
+	public void readModel(BookModel model) {
 		model.Book.File.setCached(true);
 		new OEBBookReader(model).readBook(getOpfFile(model.Book.File));
 	}
 
 	@Override
 	public ZLImage readCover(ZLFile file) {
-		try {
-			return new OEBCoverReader().readCover(getOpfFile(file));
-		} catch (BookReadingException e) {
-			return null;
-		} 
+		return new OEBCoverReader().readCover(getOpfFile(file)); 
 	}
 
 	@Override
 	public String readAnnotation(ZLFile file) {
-		try {
-			return new OEBAnnotationReader().readAnnotation(getOpfFile(file));
-		} catch (BookReadingException e) {
-			return null;
-		} 
+		return new OEBAnnotationReader().readAnnotation(getOpfFile(file)); 
 	}
 
 	@Override

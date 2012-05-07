@@ -99,7 +99,7 @@ public class BookModel {
 	
 	
 
-	public static BookModel createModel(Book book) throws BookReadingException {
+	public static BookModel createModel(Book book) {
 		final FormatPlugin plugin = book.getPlugin();
 
 		System.err.println("using plugin: " + plugin.supportedFileType() + "/" + plugin.type());
