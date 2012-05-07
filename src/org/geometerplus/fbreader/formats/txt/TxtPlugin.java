@@ -25,7 +25,7 @@ public class TxtPlugin extends JavaFormatPlugin {
 
 	@Override
 	public void readModel(BookModel model) {
-		new TxtReader(model).readBook();
+		new TxtReader(model).readDocument();
 	}
 
 	@Override

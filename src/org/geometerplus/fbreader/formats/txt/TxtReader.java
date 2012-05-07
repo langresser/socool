@@ -167,22 +167,17 @@ public final class TxtReader extends BookReader {
 		}
 	}
 	
-	public void readBook()
-	{
-		readDocument(m_bookModel.Book.File);
-	}
-	
-	public void readDocument(ZLFile file)
+	public void readDocument()
 	{
 		startDocumentHandler();
 
 		try {
-		InputStreamReader streamReader = new InputStreamReader(file.getInputStream(), "utf-8");
+		InputStreamReader streamReader = new InputStreamReader(m_bookModel.Book.File.getInputStream(), "utf-8");
 
 		final int BUFSIZE = 2048;
-		char[] buffer = new char[BUFSIZE];
-		
+
 		while (true) {
+			char[] buffer = new char[BUFSIZE];
 			int count = streamReader.read(buffer);
 			if (count == -1) {
 				break;
@@ -260,7 +255,7 @@ public final class TxtReader extends BookReader {
 		//					str.erase();
 		//					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
 //							LOGD(str.c_str());
-							characterDataHandler(buffer, 0, count);
+							characterDataHandler(buffer, 0, i - parBegin);
 						}
 						// 跳过'\n'(\r\n的情况)
 						if (skipNewLine) {
@@ -277,14 +272,13 @@ public final class TxtReader extends BookReader {
 				//		myConverter->convert(str, inputBuffer + parBegin, inputBuffer + maxLength);
 				characterDataHandler(buffer, 0, count);
 			}
-
-			endDocumentHandler();
 		}
 
 		streamReader.close();
 		} catch (IOException e) {
-			
 		}
+		
+		endDocumentHandler();
 	}
 
 	protected void startDocumentHandler()
