@@ -29,7 +29,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
 
 

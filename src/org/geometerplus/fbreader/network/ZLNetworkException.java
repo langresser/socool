@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 public class ZLNetworkException extends Exception {
 	private static final long serialVersionUID = 4272384299121648643L;

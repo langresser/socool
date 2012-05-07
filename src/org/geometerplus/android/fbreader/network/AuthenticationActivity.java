@@ -29,8 +29,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLStringOption;
-import org.geometerplus.zlibrary.resources.ZLResource;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;

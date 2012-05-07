@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader.preferences;
 import android.content.Context;
 import android.preference.EditTextPreference;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 abstract class ZLStringPreference extends EditTextPreference {
 	private String myValue;

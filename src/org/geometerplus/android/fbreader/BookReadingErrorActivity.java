@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import org.geometerplus.zlibrary.error.ErrorKeys;
 import org.geometerplus.zlibrary.error.ErrorUtil;
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 

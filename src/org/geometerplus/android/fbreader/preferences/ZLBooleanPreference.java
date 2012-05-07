@@ -21,8 +21,8 @@ package org.geometerplus.android.fbreader.preferences;
 
 import android.content.Context;
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
-import org.geometerplus.zlibrary.resources.ZLResource;
 
 class ZLBooleanPreference extends ZLCheckBoxPreference {
 	private final ZLBooleanOption myOption;

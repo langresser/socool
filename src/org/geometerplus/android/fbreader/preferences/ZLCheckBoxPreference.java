@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader.preferences;
 import android.content.Context;
 import android.preference.CheckBoxPreference;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 abstract class ZLCheckBoxPreference extends CheckBoxPreference {
 	ZLCheckBoxPreference(Context context, ZLResource rootResource, String resourceKey) {

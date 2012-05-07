@@ -21,8 +21,8 @@ package org.geometerplus.android.fbreader.preferences;
 
 import android.content.Context;
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLBoolean3Option;
-import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
 
 class ZLBoolean3Preference extends ZLStringListPreference {

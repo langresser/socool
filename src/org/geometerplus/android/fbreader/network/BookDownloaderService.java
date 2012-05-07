@@ -36,7 +36,7 @@ import android.widget.Toast;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 import org.geometerplus.fbreader.network.ZLNetworkException;
 import org.geometerplus.fbreader.network.ZLNetworkManager;

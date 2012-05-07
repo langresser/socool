@@ -22,8 +22,8 @@ package org.geometerplus.android.fbreader.preferences;
 import android.content.Context;
 import android.preference.ListPreference;
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.resources.ZLResource;
 
 class ZLIntegerRangePreference extends ListPreference {
 	private final ZLIntegerRangeOption myOption;

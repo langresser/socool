@@ -22,7 +22,6 @@ package org.geometerplus.zlibrary.util;
 import java.util.*;
 
 import org.geometerplus.zlibrary.filesystem.*;
-import org.geometerplus.zlibrary.resources.ZLResource;
 
 public abstract class ZLLanguageUtil {
 	public static final String OTHER_LANGUAGE_CODE = "other";

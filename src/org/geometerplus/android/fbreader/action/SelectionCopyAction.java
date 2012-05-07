@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader.action;
 import android.app.Application;
 import android.text.ClipboardManager;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 

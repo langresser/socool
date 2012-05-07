@@ -1,31 +1,29 @@
-/*
- * Copyright (C) 2007-2012 Geometer Plus <contact@geometerplus.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
+package org.geometerplus.zlibrary.filesystem;
 
-package org.geometerplus.zlibrary.resources;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 
-import java.util.*;
-
-import org.geometerplus.zlibrary.filesystem.*;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
-final class ZLTreeResource extends ZLResource {
+public class ZLResource {
+	public final String Name;
+	
+	public static ZLResource resource(String key) {
+		ZLResource.buildTree();
+		if (ZLResource.ourRoot == null) {
+			return null;
+		}
+		return ZLResource.ourRoot.getResource(key);
+	}
+
+	protected ZLResource(String name) {
+		Name = name;
+	}
+
 	private static interface Condition {
 		abstract boolean accepts(int number);
 	}
@@ -109,7 +107,7 @@ final class ZLTreeResource extends ZLResource {
 		return null;
 	}
 
-	static volatile ZLTreeResource ourRoot;
+	static volatile ZLResource ourRoot;
 	private static final Object ourLock = new Object();
 
     private static long ourTimeStamp = 0;
@@ -118,13 +116,13 @@ final class ZLTreeResource extends ZLResource {
 
 	private boolean myHasValue;
 	private	String myValue;
-	private HashMap<String,ZLTreeResource> myChildren;
+	private HashMap<String,ZLResource> myChildren;
 	private LinkedHashMap<Condition,String> myConditionalValues;
 	
 	static void buildTree() {
 		synchronized (ourLock) {
 			if (ourRoot == null) {
-				ourRoot = new ZLTreeResource("", null);
+				ourRoot = new ZLResource("", null);
 				ourLanguage = "en";
 				ourCountry = "UK";
 				loadData();
@@ -162,8 +160,8 @@ final class ZLTreeResource extends ZLResource {
 		loadData(reader, ourLanguage + "_" + ourCountry + ".xml");
 	}
 
-	private	ZLTreeResource(String name, String value) {
-		super(name);
+	private	ZLResource(String name, String value) {
+		this(name);
 		setValue(value);
 	}
 	
@@ -172,18 +170,15 @@ final class ZLTreeResource extends ZLResource {
 		myValue = value;
 	}
 	
-	@Override
 	public boolean hasValue() {
 		return myHasValue;
 	}
 	
-	@Override
 	public String getValue() {
 		updateLanguage();
-		return myHasValue ? myValue : ZLMissingResource.Value;
+		return myHasValue ? myValue : null;
 	}
 
-	@Override
 	public String getValue(int number) {
 		updateLanguage();
 		if (myConditionalValues != null) {
@@ -193,56 +188,53 @@ final class ZLTreeResource extends ZLResource {
 				}
 			}
 		}
-		return myHasValue ? myValue : ZLMissingResource.Value;
+		return myHasValue ? myValue : null;
 	}
 
-	@Override
 	public ZLResource getResource(String key) {
-		final HashMap<String,ZLTreeResource> children = myChildren;
+		final HashMap<String,ZLResource> children = myChildren;
 		if (children != null) {
-			ZLTreeResource child = children.get(key);
+			ZLResource child = children.get(key);
 			if (child != null) {
 				return child;
 			}
 		}
-		return ZLMissingResource.Instance;
+		return null;
 	}
 		
 	private static class ResourceTreeReader extends ZLXMLReaderAdapter {
 		private static final String NODE = "node"; 
-		private final ArrayList<ZLTreeResource> myStack = new ArrayList<ZLTreeResource>();
+		private final ArrayList<ZLResource> myStack = new ArrayList<ZLResource>();
 		
-		public void readDocument(ZLTreeResource root, ZLFile file) {
+		public void readDocument(ZLResource root, ZLFile file) {
 			myStack.clear();
 			myStack.add(root);
 			readQuietly(file);
 		}
 
-		@Override
 		public boolean dontCacheAttributeValues() {
 			return true;
 		}
 
-		@Override
 		public boolean startElementHandler(String tag, ZLStringMap attributes) {
-			final ArrayList<ZLTreeResource> stack = myStack;
+			final ArrayList<ZLResource> stack = myStack;
 			if (!stack.isEmpty() && (NODE.equals(tag))) {
 				final String name = attributes.getValue("name");
 				final String condition = attributes.getValue("condition");
 				final String value = attributes.getValue("value");
-				final ZLTreeResource peek = stack.get(stack.size() - 1);
+				final ZLResource peek = stack.get(stack.size() - 1);
 				if (name != null) {
-					ZLTreeResource node;
-					HashMap<String,ZLTreeResource> children = peek.myChildren;
+					ZLResource node;
+					HashMap<String,ZLResource> children = peek.myChildren;
 					if (children == null) {
 						node = null;
-						children = new HashMap<String,ZLTreeResource>();
+						children = new HashMap<String,ZLResource>();
 						peek.myChildren = children;
 					} else {
 						node = children.get(name);
 					}
 					if (node == null) {
-						node = new ZLTreeResource(name, value);
+						node = new ZLResource(name, value);
 						children.put(name, node);
 					} else {
 						if (value != null) {
@@ -265,9 +257,8 @@ final class ZLTreeResource extends ZLResource {
 			return false;
 		}
 
-		@Override
 		public boolean endElementHandler(String tag) {
-			final ArrayList<ZLTreeResource> stack = myStack;
+			final ArrayList<ZLResource> stack = myStack;
 			if (!stack.isEmpty() && (NODE.equals(tag))) {
 				stack.remove(stack.size() - 1);
 			}

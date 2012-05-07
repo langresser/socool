@@ -21,8 +21,8 @@ package org.geometerplus.android.fbreader.preferences;
 
 import android.content.Context;
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLEnumOption;
-import org.geometerplus.zlibrary.resources.ZLResource;
 
 class ZLEnumPreference<T extends Enum<T>> extends ZLStringListPreference {
 	private final ZLEnumOption<T> myOption;

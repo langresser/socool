@@ -30,6 +30,7 @@ import org.geometerplus.zlibrary.error.ErrorKeys;
 import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
@@ -37,7 +38,6 @@ import org.geometerplus.zlibrary.options.ZLColorOption;
 import org.geometerplus.zlibrary.options.ZLEnumOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
-import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.text.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.ZLTextView;
 import org.geometerplus.zlibrary.text.ZLTextWordCursor;

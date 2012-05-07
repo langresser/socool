@@ -34,11 +34,11 @@ import android.widget.*;
 
 import org.socool.socoolreader.reader.R;
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLImageData;
 import org.geometerplus.zlibrary.image.ZLImageManager;
 import org.geometerplus.zlibrary.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.util.MimeType;
 
 

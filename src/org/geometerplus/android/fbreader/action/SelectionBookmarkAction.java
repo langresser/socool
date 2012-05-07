@@ -19,7 +19,7 @@
 
 package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.text.ZLTextView;
 
 import org.geometerplus.fbreader.library.Bookmark;

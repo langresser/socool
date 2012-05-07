@@ -32,8 +32,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.filetype.FileTypeCollection;

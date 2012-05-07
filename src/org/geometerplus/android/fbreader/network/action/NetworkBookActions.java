@@ -28,7 +28,7 @@ import android.net.Uri;
 import android.content.Intent;
 import android.content.DialogInterface;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 import org.socool.socoolreader.reader.R;
 

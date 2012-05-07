@@ -23,8 +23,8 @@ import java.util.ArrayList;
 
 import android.content.Context;
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLStringOption;
-import org.geometerplus.zlibrary.resources.ZLResource;
 import org.geometerplus.zlibrary.view.AndroidFontUtil;
 
 

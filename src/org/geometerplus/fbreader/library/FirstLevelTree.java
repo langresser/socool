@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.library;
 
-import org.geometerplus.zlibrary.resources.ZLResource;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 
 public class FirstLevelTree extends LibraryTree {
 	private final String myId;
