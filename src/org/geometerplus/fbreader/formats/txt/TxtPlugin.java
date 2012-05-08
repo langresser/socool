@@ -1,5 +1,9 @@
 package org.geometerplus.fbreader.formats.txt;
 
+import java.io.BufferedInputStream;
+
+import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
+
 import org.geometerplus.zlibrary.encodings.AutoEncodingCollection;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
@@ -25,6 +29,7 @@ public class TxtPlugin extends JavaFormatPlugin {
 
 	@Override
 	public void readModel(BookModel model) {
+		detectLanguageAndEncoding(model.Book);
 		new TxtReader(model).readDocument();
 	}
 
@@ -48,6 +53,17 @@ public class TxtPlugin extends JavaFormatPlugin {
 	@Override
 	public void detectLanguageAndEncoding(Book book) {
 		// TODO ±‡¬Î’Ï≤‚
-		book.setEncoding("auto");
+		java.nio.charset.Charset charset = null;   
+		try {   
+		  charset = CodepageDetectorProxy.getInstance().detectCodepage(
+				  new BufferedInputStream(book.File.getInputStream()), 200);   
+		} catch (Exception ex) {	
+		}
+
+		if(charset!=null){   
+			book.setEncoding(charset.name());
+		}else{
+			book.setEncoding("auto");
+		}
 	}
 }

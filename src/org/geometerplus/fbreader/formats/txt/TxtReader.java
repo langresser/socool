@@ -152,8 +152,7 @@ public final class TxtReader extends BookReader {
 	{
 		super(model);
 		
-		// TODO encoding converter
-		String encoding = "utf-8";
+		String encoding = model.Book.getEncoding();
 		if (encoding == "utf-8") {
 			m_unicodeFlag = kUtf8;
 		} else if (encoding == "utf-16") {
@@ -172,7 +171,8 @@ public final class TxtReader extends BookReader {
 		startDocumentHandler();
 
 		try {
-		InputStreamReader streamReader = new InputStreamReader(m_bookModel.Book.File.getInputStream(), "utf-8");
+		InputStreamReader streamReader = new InputStreamReader(
+				m_bookModel.Book.File.getInputStream(), m_bookModel.Book.getEncoding());
 
 		final int BUFSIZE = 2048;
 

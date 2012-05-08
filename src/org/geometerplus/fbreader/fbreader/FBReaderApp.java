@@ -19,6 +19,11 @@
 
 package org.geometerplus.fbreader.fbreader;
 
+import info.monitorenter.cpdetector.io.ASCIIDetector;
+import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
+import info.monitorenter.cpdetector.io.JChardetFacade;
+import info.monitorenter.cpdetector.io.UnicodeDetector;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -201,6 +206,11 @@ public final class FBReaderApp {
 		BookTextView = new ZLTextView();
 
 		setView(BookTextView);
+		
+		CodepageDetectorProxy detector =   CodepageDetectorProxy.getInstance();
+		detector.add(UnicodeDetector.getInstance());
+		detector.add(ASCIIDetector.getInstance());
+		detector.add(JChardetFacade.getInstance());
 	}
 	
 	public BooksDatabase getDatabase()
