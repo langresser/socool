@@ -2,8 +2,11 @@ package org.geometerplus.fbreader.formats.txt;
 
 import java.util.*;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReader;
@@ -153,13 +156,13 @@ public final class TxtReader extends BookReader {
 		super(model);
 		
 		String encoding = model.Book.getEncoding();
-		if (encoding == "utf-8") {
+		if (encoding.equalsIgnoreCase("utf-8")) {
 			m_unicodeFlag = kUtf8;
-		} else if (encoding == "utf-16") {
+		} else if (encoding.equalsIgnoreCase("utf-16")) {
 			m_unicodeFlag = kUtf16le;
-		} else if (encoding == "utf-16be") {
+		} else if (encoding.equalsIgnoreCase("utf-16be")) {
 			m_unicodeFlag = kUtf16be;
-		} else if (encoding == "utf-16le") {
+		} else if (encoding.equalsIgnoreCase("utf-16le")) {
 			m_unicodeFlag = kUtf16le;
 		} else {
 			m_unicodeFlag = kAnsi;
@@ -171,106 +174,57 @@ public final class TxtReader extends BookReader {
 		startDocumentHandler();
 
 		try {
-		InputStreamReader streamReader = new InputStreamReader(
-				m_bookModel.Book.File.getInputStream(), m_bookModel.Book.getEncoding());
-
 		final int BUFSIZE = 2048;
-
+		
+		String path = m_bookModel.Book.File.getPath();
+		File file = new File(path);
+		
+		FileChannel streamReader = new RandomAccessFile(path, "r").getChannel();
+		MappedByteBuffer mbb = streamReader.map(FileChannel.MapMode.READ_ONLY, 0, streamReader.size());
+//		BufferedRandomAccessFile streamReader = new BufferedRandomAccessFile(file, "r");
+		ByteBuffer bb = ByteBuffer.allocate(BUFSIZE);
+		Charset cs = Charset.forName (m_bookModel.Book.getEncoding());
 		while (true) {
-			char[] buffer = new char[BUFSIZE];
-			int count = streamReader.read(buffer);
-			if (count == -1) {
+			bb.clear();
+			int count = streamReader.read(bb);
+			if (count == -1 || count == 0) {
 				break;
 			}
 			
-			int maxLength = count;
+			bb.flip();
+		    CharBuffer cb = cs.decode(bb);
+			char[] text = cb.array();
+			int maxLength = text.length;
 			int parBegin = 0;
-			if (m_unicodeFlag == kUtf16le) {
-				for (int i = parBegin; i < maxLength; ++i) {
-					char c = (char)buffer[i];
-					char cn = 0;
-					if ((i + 1) < maxLength) {
-						cn = (char)buffer[i + 1];
+
+			for (int i = parBegin; i < maxLength; ++i) {
+				char c = text[i];
+				if (c == '\n' || c == '\r') {
+					boolean skipNewLine = false;
+					if (c == '\r' && (i + 1) != maxLength && text[i + 1] == '\n') {
+						skipNewLine = true;
+						text[i] = '\n';
 					}
-					if ((c == '\n' || c == '\r') && cn == 0) {
-						boolean skipNewLine = false;
-						if (c == '\r' && cn == 0
-								&& (i + 3) < maxLength
-								&& buffer[i + 2] == '\n'
-								&& buffer[i + 3] == 0) {
-							skipNewLine = true;
-							buffer[i] = '\n';
-						}
-						if (parBegin != i) {
-//							myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 2);
-							characterDataHandler(buffer, 0, count);
-						}
-						// 跳过'\n'(\r\n的情况)
-						if (skipNewLine) {
-							i += 3; // 0d 00 0a 00
-						}
-						parBegin = i + 1;
-						newLineHandler();
-					}
-				}
-			} else if (m_unicodeFlag == kUtf16be) {
-				for (int i = parBegin; i < maxLength; ++i) {
-					char c = (char)buffer[i];
-					char cp = 0;
-					if (i - 1 >= 0) {
-						cp = (char)buffer[i - 1];
-					}
-					if ((c == '\n' || c == '\r') && cp == 0) {
-						boolean skipNewLine = false;
-						if (c == '\r' && cp == 0
-								&& (i + 2) < maxLength
-								&& buffer[i + 1] == 0
-								&& buffer[i + 2] == '\n') {
-							skipNewLine = true;
-							buffer[i] = '\n';
-						}
-						if (parBegin != i) {
-		//					str.erase();
-		//					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
-							characterDataHandler(buffer, 0, count);
-						}
-						// 跳过'\n'(\r\n的情况)
-						if (skipNewLine) {
-							i += 2; // 00 0d 00 0a
-						}
-						parBegin = i + 1;
-						newLineHandler();
-					}
-				}
-			} else {
-				for (int i = parBegin; i < maxLength; ++i) {
-					char c = (char)buffer[i];
-					if (c == '\n' || c == '\r') {
-						boolean skipNewLine = false;
-						if (c == '\r' && (i + 1) != maxLength && buffer[i + 1] == '\n') {
-							skipNewLine = true;
-							buffer[i] = '\n';
-						}
-						if (parBegin != i) {
-		//					str.erase();
-		//					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
+					if (parBegin != i) {
+	//					str.erase();
+	//					myConverter->convert(str, inputBuffer + parBegin, inputBuffer + i + 1);
 //							LOGD(str.c_str());
-							characterDataHandler(buffer, 0, i - parBegin);
-						}
-						// 跳过'\n'(\r\n的情况)
-						if (skipNewLine) {
-							++i; // 0d 0a
-						}
-						parBegin = i + 1;
-						newLineHandler();
+						
+						characterDataHandler(text, parBegin, i - parBegin);
 					}
+					// 跳过'\n'(\r\n的情况)
+					if (skipNewLine) {
+						++i; // 0d 0a
+					}
+					parBegin = i + 1;
+					newLineHandler();
 				}
 			}
 			
 			if (parBegin != maxLength) {
 				//		str.erase();
 				//		myConverter->convert(str, inputBuffer + parBegin, inputBuffer + maxLength);
-				characterDataHandler(buffer, 0, count);
+				characterDataHandler(text, parBegin, maxLength - parBegin);
 			}
 		}
 
