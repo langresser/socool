@@ -127,7 +127,7 @@ public class BookReader {
 
 	private final void insertEndParagraph(byte kind) {
 		if (m_bookModel != null && mySectionContainsRegularContents) {
-			int size = m_bookModel.getParagraphsNumber();
+			int size = m_bookModel.myParagraphsNumber;
 			if (size > 0 && m_bookModel.getParagraph(size - 1).getKind() != kind) {
 				m_bookModel.createParagraph(kind);
 				mySectionContainsRegularContents = false;
@@ -137,12 +137,6 @@ public class BookReader {
 
 	public final void insertEndOfSectionParagraph() {
 		insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
-	}
-
-	public final void unsetCurrentTextModel() {
-		if (m_bookModel != null) {
-			m_bookModel.stopReading();
-		}
 	}
 
 	public final void enterTitle() {
@@ -258,7 +252,7 @@ public class BookReader {
 
 	public final void addHyperlinkLabel(String label) {
 		if (m_bookModel != null) {
-			int paragraphNumber = m_bookModel.getParagraphsNumber();
+			int paragraphNumber = m_bookModel.myParagraphsNumber;
 			if (myTextParagraphExists) {
 				--paragraphNumber;
 			}
@@ -286,7 +280,7 @@ public class BookReader {
 
 	public final void beginContentsParagraph(int referenceNumber) {
 		if (referenceNumber == -1) {
-			referenceNumber = m_bookModel.getParagraphsNumber();
+			referenceNumber = m_bookModel.myParagraphsNumber;
 		}
 		TOCTree parentTree = myCurrentContentsTree;
 		if (parentTree.Level > 0) {

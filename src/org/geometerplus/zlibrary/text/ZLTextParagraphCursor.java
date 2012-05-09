@@ -176,7 +176,7 @@ public final class ZLTextParagraphCursor {
 
 	private ZLTextParagraphCursor(BookModel model, int index) {
 		Model = model;
-		Index = Math.min(index, Model.getParagraphsNumber() - 1);
+		Index = Math.min(index, Model.myParagraphsNumber - 1);
 		fill();
 	}
 
@@ -213,7 +213,7 @@ public final class ZLTextParagraphCursor {
 	}
 
 	public boolean isLast() {
-		return (Index + 1 >= Model.getParagraphsNumber());
+		return (Index + 1 >= Model.myParagraphsNumber);
 	}
 
 	public boolean isEndOfSection() {

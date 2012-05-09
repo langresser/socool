@@ -96,7 +96,7 @@ public class ZLTextView {
 		myNextPage.reset();
 		if (myModel != null) {
 			resetTextStyle();
-			final int paragraphsNumber = myModel.getParagraphsNumber();
+			final int paragraphsNumber = myModel.myParagraphsNumber;
 			if (paragraphsNumber > 0) {
 				myCurrentPage.moveStartCursor(ZLTextParagraphCursor.cursor(myModel, 0));
 			}
@@ -206,7 +206,7 @@ public class ZLTextView {
 			return 0;
 		}
 		int startIndex = 0;
-		int endIndex = myModel.getParagraphsNumber();
+		int endIndex = myModel.myParagraphsNumber;
 		if (thisSectionOnly) {
 			// TODO: implement
 		}
@@ -253,7 +253,7 @@ public class ZLTextView {
 
 	public void clearFindResults() {
 		if (!findResultsAreEmpty()) {
-			myModel.removeAllMarks();
+			myModel.myMarks = null;
 			rebuildPaintInfo();
 			FBReaderApp.Instance().resetWidget();
 			FBReaderApp.Instance().repaintWidget();
@@ -433,7 +433,7 @@ public class ZLTextView {
 			context.clear(getBackgroundColor());
 		}
 
-		if (myModel == null || myModel.getParagraphsNumber() == 0) {
+		if (myModel == null || myModel.myParagraphsNumber == 0) {
 			return;
 		}
 
@@ -520,14 +520,14 @@ public class ZLTextView {
 	}
 
 	protected final synchronized int sizeOfFullText() {
-		if (myModel == null || myModel.getParagraphsNumber() == 0) {
+		if (myModel == null || myModel.myParagraphsNumber == 0) {
 			return 1;
 		}
-		return myModel.getTextLength(myModel.getParagraphsNumber() - 1);
+		return myModel.getTextLength(myModel.myParagraphsNumber - 1);
 	}
 
 	protected final synchronized int getCurrentCharNumber(PageIndex pageIndex, boolean startNotEndOfPage) {
-		if (myModel == null || myModel.getParagraphsNumber() == 0) {
+		if (myModel == null || myModel.myParagraphsNumber == 0) {
 			return 0;
 		}
 		final ZLTextPage page = getPage(pageIndex);
@@ -537,7 +537,7 @@ public class ZLTextView {
 		} else {
 			int end = sizeOfTextBeforeCursor(page.EndCursor);
 			if (end == -1) {
-				end = myModel.getTextLength(myModel.getParagraphsNumber() - 1) - 1;
+				end = myModel.getTextLength(myModel.myParagraphsNumber - 1) - 1;
 			}
 			return Math.max(1, end);
 		}
@@ -586,7 +586,7 @@ public class ZLTextView {
 		final int textWidth = getTextAreaWidth();
 		final int textHeight = getTextAreaHeight();
 
-		final int num = myModel.getParagraphsNumber();
+		final int num = myModel.myParagraphsNumber;
 		final int totalTextSize = myModel.getTextLength(num - 1);
 		final float charsPerParagraph = ((float)totalTextSize) / num;
 
@@ -606,7 +606,7 @@ public class ZLTextView {
 	}
 
 	protected synchronized int computeTextPageNumber(int textSize) {
-		if (myModel == null || myModel.getParagraphsNumber() == 0) {
+		if (myModel == null || myModel.myParagraphsNumber == 0) {
 			return 1;
 		}
 
@@ -627,11 +627,11 @@ public class ZLTextView {
 			myCharWidth = -1f;
 
 			int paragraph = 0;
-			final int textSize = myModel.getTextLength(myModel.getParagraphsNumber() - 1);
+			final int textSize = myModel.getTextLength(myModel.myParagraphsNumber - 1);
 			if (textSize > myLettersBuffer.length) {
 				paragraph = myModel.findParagraphByTextLength((textSize - myLettersBuffer.length) / 2);
 			}
-			while (paragraph < myModel.getParagraphsNumber()
+			while (paragraph < myModel.myParagraphsNumber
 					&& myLettersBufferLength < myLettersBuffer.length) {
 				BookModel.EntryIterator it = myModel.getParagraph(paragraph++).iterator();
 				while (it.hasNext()
@@ -723,7 +723,7 @@ public class ZLTextView {
 	}
 
 	public final synchronized void gotoPage(int page) {
-		if (myModel == null || myModel.getParagraphsNumber() == 0) {
+		if (myModel == null || myModel.myParagraphsNumber == 0) {
 			return;
 		}
 
@@ -1231,7 +1231,7 @@ public class ZLTextView {
 	}
 
 	public final synchronized void gotoPosition(int paragraphIndex, int wordIndex, int charIndex) {
-		if (myModel != null && myModel.getParagraphsNumber() > 0) {
+		if (myModel != null && myModel.myParagraphsNumber > 0) {
 			FBReaderApp.Instance().resetWidget();
 			myCurrentPage.moveStartCursor(paragraphIndex, wordIndex, charIndex);
 			myPreviousPage.reset();
@@ -1244,7 +1244,7 @@ public class ZLTextView {
 	}
 
 	private final synchronized void gotoPositionByEnd(int paragraphIndex, int wordIndex, int charIndex) {
-		if (myModel != null && myModel.getParagraphsNumber() > 0) {
+		if (myModel != null && myModel.myParagraphsNumber > 0) {
 			myCurrentPage.moveEndCursor(paragraphIndex, wordIndex, charIndex);
 			myPreviousPage.reset();
 			myNextPage.reset();

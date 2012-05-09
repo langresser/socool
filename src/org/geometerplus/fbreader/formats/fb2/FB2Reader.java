@@ -160,7 +160,6 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 					--mySectionDepth;
 					mySectionStarted = false;
 				} else {
-					myBookReader.unsetCurrentTextModel();
 				}
 				break;
 
@@ -168,7 +167,6 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				myBookReader.popKind();
 				if (myBodyCounter == 0) {
 					myBookReader.insertEndOfSectionParagraph();
-					myBookReader.unsetCurrentTextModel();
 				}
 				break;
 
@@ -188,7 +186,6 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 					myBookReader.endContentsParagraph();
 					mySectionDepth = 0;
 				}
-				myBookReader.unsetCurrentTextModel();
 				break;
 
 			case FB2Tag.A:
@@ -199,7 +196,6 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				if (myBodyCounter == 0) {
 					myInsideCoverpage = false;
 					myBookReader.insertEndOfSectionParagraph();
-					myBookReader.unsetCurrentTextModel();
 				}
 				break;
 
@@ -328,7 +324,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 
 			case FB2Tag.BODY:
 				++myBodyCounter;
-				myParagraphsBeforeBodyNumber = myBookReader.m_bookModel.getParagraphsNumber();
+				myParagraphsBeforeBodyNumber = myBookReader.m_bookModel.myParagraphsNumber;
 				final String name = attributes.getValue("name");
 				if (myBodyCounter == 1 || !"notes".equals(name)) {
 					if (name != null) {
@@ -378,7 +374,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 					imgRef = imgRef.substring(1);
 					final boolean isCoverImage =
 						myParagraphsBeforeBodyNumber ==
-						myBookReader.m_bookModel.getParagraphsNumber();
+						myBookReader.m_bookModel.myParagraphsNumber;
 					if (!imgRef.equals(myCoverImageReference) || !isCoverImage) {
 						myBookReader.addImageReference(imgRef, offset, myInsideCoverpage || isCoverImage);
 					}

@@ -98,7 +98,6 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 	}
 
 	public void endDocumentHandler() {
-		unsetCurrentTextModel();
 	}
 
 	public void byteDataHandler(byte[] data, int start, int length) {

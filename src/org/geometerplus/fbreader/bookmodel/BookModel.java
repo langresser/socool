@@ -131,16 +131,64 @@ public class BookModel {
 		Book = book;
 		myInternalHyperlinks = new CachedCharStorageBase(32768, Paths.cacheDirectory(), "links", false);
 	}
+	
+	public BookModel(
+			String id, String language, int paragraphsNumber,
+			int[] entryIndices, int[] entryOffsets,
+			int[] paragraphLengths, int[] textSizes,
+			byte[] paragraphKinds,
+			String directoryName, String fileExtension, int blocksNumber
+		) {
+		this(
+				id, language,
+				entryIndices, entryOffsets, paragraphLengths, textSizes, paragraphKinds,
+				new CachedCharStorageBase(blocksNumber, directoryName, fileExtension, true));
+			myParagraphsNumber = paragraphsNumber;
+	}
+
+	protected BookModel(
+		String id,
+		String language,
+		int[] entryIndices,
+		int[] entryOffsets,
+		int[] paragraphLenghts,
+		int[] textSizes,
+		byte[] paragraphKinds,
+		CachedCharStorageBase storage) {
+		myId = id;
+		myLanguage = language;
+		myStartEntryIndices = entryIndices;
+		myStartEntryOffsets = entryOffsets;
+		myParagraphLengths = paragraphLenghts;
+		myTextSizes = textSizes;
+		myParagraphKinds = paragraphKinds;
+		myStorage = storage;
+	}
+	
+	// write able
+	public BookModel(String id, String language, int arraySize, int dataBlockSize, String directoryName, String extension) {
+		this(id, language,
+			new int[arraySize], new int[arraySize],
+			new int[arraySize], new int[arraySize],
+			new byte[arraySize],
+			new CachedCharStorageBase(dataBlockSize, directoryName, extension, false));
+	}
+	private char[] myCurrentDataBlock;
+	private int myBlockOffset;
+	private void extend() {
+		final int size = myStartEntryIndices.length;
+		myStartEntryIndices = ZLArrayUtils.createCopy(myStartEntryIndices, size, size << 1);
+		myStartEntryOffsets = ZLArrayUtils.createCopy(myStartEntryOffsets, size, size << 1);
+		myParagraphLengths = ZLArrayUtils.createCopy(myParagraphLengths, size, size << 1);
+		myTextSizes = ZLArrayUtils.createCopy(myTextSizes, size, size << 1);
+		myParagraphKinds = ZLArrayUtils.createCopy(myParagraphKinds, size, size << 1);
+	}
 
 	public interface LabelResolver {
 		List<String> getCandidates(String id);
 	}
 
-	private LabelResolver myResolver;
-
-	public void setLabelResolver(LabelResolver resolver) {
-		myResolver = resolver;
-	}
+	public LabelResolver myResolver;
 
 	public Label getLabel(String id) {
 		Label label = getLabelInternal(id);
@@ -238,18 +286,16 @@ public class BookModel {
 	protected int[] myTextSizes;
 	protected byte[] myParagraphKinds;
 
-	protected int myParagraphsNumber;
+	public int myParagraphsNumber;
 
 	protected final CachedCharStorageBase myStorage;
 
-	private ArrayList<ZLTextMark> myMarks;
+	public ArrayList<ZLTextMark> myMarks;
 	
-	public boolean m_isNavite = false;
-
 	public final class EntryIterator {
-		private int myCounter;
-		private int myLength;
-		private byte myType;
+		public int myCounter;
+		public int myLength;
+		public byte myType;
 
 		int myDataIndex;
 		int myDataOffset;
@@ -414,42 +460,7 @@ public class BookModel {
 		}
 	}
 
-	public BookModel(
-			String id, String language, int paragraphsNumber,
-			int[] entryIndices, int[] entryOffsets,
-			int[] paragraphLengths, int[] textSizes,
-			byte[] paragraphKinds,
-			String directoryName, String fileExtension, int blocksNumber
-		) {
-		this(
-				id, language,
-				entryIndices, entryOffsets, paragraphLengths, textSizes, paragraphKinds,
-				new CachedCharStorageBase(blocksNumber, directoryName, fileExtension, true), true
-			);
-			myParagraphsNumber = paragraphsNumber;
-	}
-
-	protected BookModel(
-		String id,
-		String language,
-		int[] entryIndices,
-		int[] entryOffsets,
-		int[] paragraphLenghts,
-		int[] textSizes,
-		byte[] paragraphKinds,
-		CachedCharStorageBase storage,
-		boolean isNative
-	) {
-		myId = id;
-		myLanguage = language;
-		myStartEntryIndices = entryIndices;
-		myStartEntryOffsets = entryOffsets;
-		myParagraphLengths = paragraphLenghts;
-		myTextSizes = textSizes;
-		myParagraphKinds = paragraphKinds;
-		myStorage = storage;
-		m_isNavite = isNative;
-	}
+	
 
 	public final String getId() {
 		return myId;
@@ -539,14 +550,6 @@ public class BookModel {
 		return (myMarks != null) ? myMarks : Collections.<ZLTextMark>emptyList();
 	}
 
-	public final void removeAllMarks() {
-		myMarks = null;
-	}
-
-	public final int getParagraphsNumber() {
-		return myParagraphsNumber;
-	}
-
 	public final ZLTextParagraph getParagraph(int index) {
 		final byte kind = myParagraphKinds[index];
 		return new ZLTextParagraph(this, index, kind);
@@ -586,35 +589,6 @@ public class BookModel {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// write able
-	public BookModel(String id, String language, int arraySize, int dataBlockSize, String directoryName, String extension) {
-		this(id, language,
-			new int[arraySize], new int[arraySize],
-			new int[arraySize], new int[arraySize],
-			new byte[arraySize],
-			new CachedCharStorageBase(dataBlockSize, directoryName, extension, false),
-			false);
-	}
-	private char[] myCurrentDataBlock;
-	private int myBlockOffset;
-	private void extend() {
-		final int size = myStartEntryIndices.length;
-		myStartEntryIndices = ZLArrayUtils.createCopy(myStartEntryIndices, size, size << 1);
-		myStartEntryOffsets = ZLArrayUtils.createCopy(myStartEntryOffsets, size, size << 1);
-		myParagraphLengths = ZLArrayUtils.createCopy(myParagraphLengths, size, size << 1);
-		myTextSizes = ZLArrayUtils.createCopy(myTextSizes, size, size << 1);
-		myParagraphKinds = ZLArrayUtils.createCopy(myParagraphKinds, size, size << 1);
-	}
 
 	public void createParagraph(byte kind) {
 		final int index = myParagraphsNumber++;
@@ -644,10 +618,6 @@ public class BookModel {
 			myBlockOffset = 0;
 		}
 		return block;
-	}
-
-	public void addText(char[] text) {
-		addText(text, 0, text.length);
 	}
 
 	public void addText(char[] text, int offset, int length) {
@@ -730,8 +700,5 @@ public class BookModel {
 		final char[] block = getDataBlock(1);
 		++myParagraphLengths[myParagraphsNumber - 1];
 		block[myBlockOffset++] = (char)ZLTextParagraph.Entry.RESET_BIDI;
-	}
-
-	public void stopReading() {
 	}
 }

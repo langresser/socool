@@ -36,7 +36,7 @@ class XHTMLTagParagraphWithControlAction extends XHTMLTagAction {
 			case BookModel.TITLE:
 			case BookModel.H1:
 			case BookModel.H2:
-				if (modelReader.m_bookModel.getParagraphsNumber() > 1) {
+				if (modelReader.m_bookModel.myParagraphsNumber > 1) {
 					modelReader.insertEndOfSectionParagraph();
 				}
 				modelReader.enterTitle();

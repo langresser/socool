@@ -59,7 +59,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 
 	OEBBookReader(BookModel model) {
 		myModelReader = new BookReader(model);
-		model.setLabelResolver(new BookModel.LabelResolver() {
+		model.myResolver = (new BookModel.LabelResolver() {
 			public List<String> getCandidates(String id) {
 				final int index = id.indexOf("#");
 				return index > 0
@@ -102,7 +102,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			final String referenceName = reader.getFileAlias(MiscUtil.archiveEntryName(xhtmlFile.getPath()));
 
 			myModelReader.addHyperlinkLabel(referenceName);
-			myTOCLabels.put(referenceName, myModelReader.m_bookModel.getParagraphsNumber());
+			myTOCLabels.put(referenceName, myModelReader.m_bookModel.myParagraphsNumber);
 			try {
 				reader.readFile(xhtmlFile, referenceName + '#');
 			} catch (IOException e) {
