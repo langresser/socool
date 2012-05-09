@@ -44,18 +44,6 @@ public abstract class ZLFile {
 		myExtension = (index > 0) ? name.substring(index + 1).toLowerCase().intern() : "";
 		myShortName = name.substring(name.lastIndexOf('/') + 1);
 
-		/*
-		if (lowerCaseName.endsWith(".gz")) {
-			myNameWithoutExtension = myNameWithoutExtension.substring(0, myNameWithoutExtension.length() - 3);
-			lowerCaseName = lowerCaseName.substring(0, lowerCaseName.length() - 3);
-			myArchiveType = myArchiveType | ArchiveType.GZIP;
-		}
-		if (lowerCaseName.endsWith(".bz2")) {
-			myNameWithoutExtension = myNameWithoutExtension.substring(0, myNameWithoutExtension.length() - 4);
-			lowerCaseName = lowerCaseName.substring(0, lowerCaseName.length() - 4);
-			myArchiveType = myArchiveType | ArchiveType.BZIP2;
-		}
-		*/
 		int archiveType = ArchiveType.NONE;
 		if (myExtension == "zip") {
 			archiveType |= ArchiveType.ZIP;

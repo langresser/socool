@@ -182,7 +182,7 @@ public final class TxtReader extends BookReader {
 		FileChannel streamReader = new RandomAccessFile(path, "r").getChannel();
 		MappedByteBuffer mbb = streamReader.map(FileChannel.MapMode.READ_ONLY, 0, streamReader.size());
 //		BufferedRandomAccessFile streamReader = new BufferedRandomAccessFile(file, "r");
-		ByteBuffer bb = ByteBuffer.allocate(BUFSIZE);
+		ByteBuffer bb = ByteBuffer.allocate((int)streamReader.size());
 		Charset cs = Charset.forName (m_bookModel.Book.getEncoding());
 		while (true) {
 			bb.clear();
