@@ -301,25 +301,25 @@ public class BookModel {
 		int myDataOffset;
 
 		// TextEntry data
-		private char[] myTextData;
-		private int myTextOffset;
-		private int myTextLength;
+		public char[] myTextData;
+		public int myTextOffset;
+		public int myTextLength;
 
 		// ControlEntry data
-		private byte myControlKind;
-		private boolean myControlIsStart;
+		public byte myControlKind;
+		public boolean myControlIsStart;
 		// HyperlinkControlEntry data
-		private byte myHyperlinkType;
-		private String myHyperlinkId;
+		public byte myHyperlinkType;
+		public String myHyperlinkId;
 
 		// ImageEntry
-		private ZLImageEntry myImageEntry;
+		public ZLImageEntry myImageEntry;
 
 		// StyleEntry
-		private ZLTextStyleEntry myStyleEntry;
+		public ZLTextStyleEntry myStyleEntry;
 
 		// FixedHSpaceEntry data
-		private short myFixedHSpaceLength;
+		public short myFixedHSpaceLength;
 
 		public EntryIterator(int index) {
 			myLength = myParagraphLengths[index];
@@ -332,45 +332,6 @@ public class BookModel {
 			myLength = myParagraphLengths[index];
 			myDataIndex = myStartEntryIndices[index];
 			myDataOffset = myStartEntryOffsets[index];
-		}
-
-		public byte getType() {
-			return myType;
-		}
-
-		public char[] getTextData() {
-			return myTextData;
-		}
-		public int getTextOffset() {
-			return myTextOffset;
-		}
-		public int getTextLength() {
-			return myTextLength;
-		}
-
-		public byte getControlKind() {
-			return myControlKind;
-		}
-		public boolean getControlIsStart() {
-			return myControlIsStart;
-		}
-		public byte getHyperlinkType() {
-			return myHyperlinkType;
-		}
-		public String getHyperlinkId() {
-			return myHyperlinkId;
-		}
-
-		public ZLImageEntry getImageEntry() {
-			return myImageEntry;
-		}
-
-		public ZLTextStyleEntry getStyleEntry() {
-			return myStyleEntry;
-		}
-
-		public short getFixedHSpaceLength() {
-			return myFixedHSpaceLength;
 		}
 
 		public boolean hasNext() {
@@ -526,10 +487,10 @@ public class BookModel {
 			int offset = 0;
 			while (it.hasNext()) {
 				it.next();
-				if (it.getType() == ZLTextParagraph.Entry.TEXT) {
-					char[] textData = it.getTextData();
-					int textOffset = it.getTextOffset();
-					int textLength = it.getTextLength();
+				if (it.myType == ZLTextParagraph.Entry.TEXT) {
+					char[] textData = it.myTextData;
+					int textOffset = it.myTextOffset;
+					int textLength = it.myTextLength;
 					for (int pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern); pos != -1;
 						pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern, pos + 1)) {
 						myMarks.add(new ZLTextMark(index, offset + pos, pattern.getLength()));

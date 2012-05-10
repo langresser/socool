@@ -42,26 +42,26 @@ public final class ZLTextParagraphCursor {
 			final ArrayList<ZLTextElement> elements = myElements;
 			for (BookModel.EntryIterator it = myParagraph.iterator(); it.hasNext(); ) {
 				it.next();
-				switch (it.getType()) {
+				switch (it.myType) {
 					case ZLTextParagraph.Entry.TEXT:
-						processTextEntry(it.getTextData(), it.getTextOffset(), it.getTextLength(), hyperlink);
+						processTextEntry(it.myTextData, it.myTextOffset, it.myTextLength, hyperlink);
 						break;
 					case ZLTextParagraph.Entry.CONTROL:
 						if (hyperlink != null) {
-							hyperlinkDepth += it.getControlIsStart() ? 1 : -1;
+							hyperlinkDepth += it.myControlIsStart ? 1 : -1;
 							if (hyperlinkDepth == 0) {
 								hyperlink = null;
 							}
 						}
-						elements.add(ZLTextControlElement.get(it.getControlKind(), it.getControlIsStart()));
+						elements.add(ZLTextControlElement.get(it.myControlKind, it.myControlIsStart));
 						break;
 					case ZLTextParagraph.Entry.HYPERLINK_CONTROL:
 					{
-						final byte hyperlinkType = it.getHyperlinkType();
+						final byte hyperlinkType = it.myHyperlinkType;
 						if (hyperlinkType != 0) {
 							final ZLTextHyperlinkControlElement control =
 								new ZLTextHyperlinkControlElement(
-									it.getControlKind(), hyperlinkType, it.getHyperlinkId()
+									it.myControlKind, hyperlinkType, it.myHyperlinkId
 								);
 							elements.add(control);
 							hyperlink = control.Hyperlink;
@@ -70,7 +70,7 @@ public final class ZLTextParagraphCursor {
 						break;
 					}
 					case ZLTextParagraph.Entry.IMAGE:
-						final ZLImageEntry imageEntry = it.getImageEntry();
+						final ZLImageEntry imageEntry = it.myImageEntry;
 						final ZLImage image = imageEntry.getImage();
 						if (image != null) {
 							ZLImageData data = ZLImageManager.Instance().getImageData(image);
@@ -86,7 +86,7 @@ public final class ZLTextParagraphCursor {
 						// TODO: implement
 						break;
 					case ZLTextParagraph.Entry.FIXED_HSPACE:
-						elements.add(ZLTextFixedHSpaceElement.getElement(it.getFixedHSpaceLength()));
+						elements.add(ZLTextFixedHSpaceElement.getElement(it.myFixedHSpaceLength));
 						break;
 				}
 			}

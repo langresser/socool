@@ -637,10 +637,10 @@ public class ZLTextView {
 				while (it.hasNext()
 						&& myLettersBufferLength < myLettersBuffer.length) {
 					it.next();
-					if (it.getType() == ZLTextParagraph.Entry.TEXT) {
-						final int len = Math.min(it.getTextLength(),
+					if (it.myType == ZLTextParagraph.Entry.TEXT) {
+						final int len = Math.min(it.myTextLength,
 								myLettersBuffer.length - myLettersBufferLength);
-						System.arraycopy(it.getTextData(), it.getTextOffset(),
+						System.arraycopy(it.myTextData, it.myTextOffset,
 								myLettersBuffer, myLettersBufferLength, len);
 						myLettersBufferLength += len;
 					}
