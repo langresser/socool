@@ -174,10 +174,7 @@ public final class TxtReader extends BookReader {
 		startDocumentHandler();
 
 		try {
-		final int BUFSIZE = 2048;
-		
 		String path = m_bookModel.Book.File.getPath();
-		File file = new File(path);
 		
 		FileChannel streamReader = new RandomAccessFile(path, "r").getChannel();
 		MappedByteBuffer mbb = streamReader.map(FileChannel.MapMode.READ_ONLY, 0, streamReader.size());
@@ -241,7 +238,7 @@ public final class TxtReader extends BookReader {
 		beginParagraph();
 		myLineFeedCounter = 0;
 		myInsideContentsParagraph = false;
-		enterTitle();
+		myInsideTitle = true;
 		myLastLineIsEmpty = true;
 		myNewLine = true;
 		mySpaceCounter = 0;
@@ -303,13 +300,13 @@ public final class TxtReader extends BookReader {
 				internalEndParagraph();
 				insertEndOfSectionParagraph();
 				beginContentsParagraph();
-				enterTitle();
+				myInsideTitle = true;
 				pushKind(BookModel.SECTION_TITLE);
 				beginParagraph();
 				paragraphBreak = false;
 			}
 			if (myInsideContentsParagraph && (myLineFeedCounter == 1)) {
-				exitTitle();
+				myInsideTitle = false;
 				endContentsParagraph();
 				popKind();
 				myInsideContentsParagraph = false;

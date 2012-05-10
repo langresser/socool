@@ -38,20 +38,14 @@ import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.FormatPlugin;
 
+import android.util.Log;
+
 
 public class BookModel {
 	public final static byte NONE = 0;
 	public final static byte INTERNAL = 1;
 	public final static byte EXTERNAL = 2;
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	public final static byte REGULAR = 0;
 	public final static byte TITLE = 1;
@@ -117,19 +111,9 @@ public class BookModel {
 		return model;
 	}
 
-	public static final class Label {
-		public final String ModelId;
-		public final int ParagraphIndex;
-
-		public Label(String modelId, int paragraphIndex) {
-			ModelId = modelId;
-			ParagraphIndex = paragraphIndex;
-		}
-	}
-
 	protected BookModel(Book book) {
 		Book = book;
-		myInternalHyperlinks = new CachedCharStorageBase(32768, Paths.cacheDirectory(), "links", false);
+		myInternalHyperlinks = new CachedCharStorageBase(32768, Paths.cacheDirectory(), "links");
 		myId = null;
 		myLanguage = book.getLanguage();
 		myStartEntryIndices = new int[1024];
@@ -137,68 +121,11 @@ public class BookModel {
 		myParagraphLengths = new int[1024];
 		myTextSizes = new int[1024];
 		myParagraphKinds = new byte[1024];
-		myStorage = new CachedCharStorageBase(65535, Paths.cacheDirectory(), "cache", false);
+		myStorage = new CachedCharStorageBase(65535, Paths.cacheDirectory(), "cache");
 	}
 
 	private char[] myCurrentDataBlock;
 	private int myBlockOffset;
-	private void extend() {
-		final int size = myStartEntryIndices.length;
-		myStartEntryIndices = ZLArrayUtils.createCopy(myStartEntryIndices, size, size << 1);
-		myStartEntryOffsets = ZLArrayUtils.createCopy(myStartEntryOffsets, size, size << 1);
-		myParagraphLengths = ZLArrayUtils.createCopy(myParagraphLengths, size, size << 1);
-		myTextSizes = ZLArrayUtils.createCopy(myTextSizes, size, size << 1);
-		myParagraphKinds = ZLArrayUtils.createCopy(myParagraphKinds, size, size << 1);
-	}
-
-	public interface LabelResolver {
-		List<String> getCandidates(String id);
-	}
-
-	public LabelResolver myResolver;
-
-	public Label getLabel(String id) {
-		Label label = getLabelInternal(id);
-		if (label == null && myResolver != null) {
-			for (String candidate : myResolver.getCandidates(id)) {
-				label = getLabelInternal(candidate);
-				if (label != null) {
-					break;
-				}
-			}
-		}
-		return label;
-	}
-
-	protected Label getLabelInternal(String id) {
-		final int len = id.length();
-		final int size = myInternalHyperlinks.myArray.size();
-
-		for (int i = 0; i < size; ++i) {
-			final char[] block = myInternalHyperlinks.block(i);
-			for (int offset = 0; offset < block.length; ) {
-				final int labelLength = (int)block[offset++];
-				if (labelLength == 0) {
-					break;
-				}
-				final int idLength = (int)block[offset + labelLength];
-				if ((labelLength != len) || !id.equals(new String(block, offset, labelLength))) {
-					offset += labelLength + idLength + 3;
-					continue;
-				}
-				offset += labelLength + 1;
-				final String modelId = (idLength > 0) ? new String(block, offset, idLength) : null;
-				offset += idLength;
-				final int paragraphNumber = (int)block[offset] + (((int)block[offset + 1]) << 16);
-				return new Label(modelId, paragraphNumber);
-			}
-		}
-		return null;
-	}
-
-	public void addImage(String id, ZLImage image) {
-		myImageMap.put(id, image);
-	}
 	
 	public Book Book = null;
 	public final TOCTree TOCTree = new TOCTree();
@@ -206,6 +133,22 @@ public class BookModel {
 	protected final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
 	private char[] myCurrentLinkBlock;
 	private int myCurrentLinkBlockOffset;
+	public final String myId;
+	public final String myLanguage;
+
+	protected int[] myStartEntryIndices;
+	protected int[] myStartEntryOffsets;
+	protected int[] myParagraphLengths;
+	protected int[] myTextSizes;
+	protected byte[] myParagraphKinds;
+
+	public int myParagraphsNumber;
+	protected final CachedCharStorageBase myStorage;
+	public ArrayList<ZLTextMark> myMarks;
+
+	public void addImage(String id, ZLImage image) {
+		myImageMap.put(id, image);
+	}
 
 	void addHyperlinkLabel(String label, int paragraphNumber) {
 		final String modelId = myId;
@@ -235,23 +178,6 @@ public class BookModel {
 		block[offset++] = (char)(paragraphNumber >> 16);
 		myCurrentLinkBlockOffset = offset;
 	}
-
-	public final String myId;
-	public final String myLanguage;
-
-	protected int[] myStartEntryIndices;
-	protected int[] myStartEntryOffsets;
-	protected int[] myParagraphLengths;
-	protected int[] myTextSizes;
-	protected byte[] myParagraphKinds;
-
-	public int myParagraphsNumber;
-
-	protected final CachedCharStorageBase myStorage;
-
-	public ArrayList<ZLTextMark> myMarks;
-	
-	
 
 	public final ZLTextMark getFirstMark() {
 		return ((myMarks == null) || myMarks.isEmpty()) ? null : myMarks.get(0);
@@ -372,7 +298,12 @@ public class BookModel {
 		final int index = myParagraphsNumber++;
 		int[] startEntryIndices = myStartEntryIndices;
 		if (index == startEntryIndices.length) {
-			extend();
+			final int size = myStartEntryIndices.length;
+			myStartEntryIndices = ZLArrayUtils.createCopy(myStartEntryIndices, size, size << 1);
+			myStartEntryOffsets = ZLArrayUtils.createCopy(myStartEntryOffsets, size, size << 1);
+			myParagraphLengths = ZLArrayUtils.createCopy(myParagraphLengths, size, size << 1);
+			myTextSizes = ZLArrayUtils.createCopy(myTextSizes, size, size << 1);
+			myParagraphKinds = ZLArrayUtils.createCopy(myParagraphKinds, size, size << 1);
 			startEntryIndices = myStartEntryIndices;
 		}
 		if (index > 0) {
@@ -387,6 +318,7 @@ public class BookModel {
 
 	private char[] getDataBlock(int minimumLength) {
 		char[] block = myCurrentDataBlock;
+		Log.d("fuck", "getDataBlock: " + minimumLength);
 		if ((block == null) || (minimumLength > block.length - myBlockOffset)) {
 			if (block != null) {
 				myStorage.freezeLastBlock();
@@ -610,5 +542,60 @@ public class BookModel {
 			++myCounter;
 			myDataOffset = dataOffset;
 		}
+	}
+	
+	public interface LabelResolver {
+		List<String> getCandidates(String id);
+	}
+
+	public static final class Label {
+		public final String ModelId;
+		public final int ParagraphIndex;
+
+		public Label(String modelId, int paragraphIndex) {
+			ModelId = modelId;
+			ParagraphIndex = paragraphIndex;
+		}
+	}
+
+	public LabelResolver myResolver;
+
+	public Label getLabel(String id) {
+		Label label = getLabelInternal(id);
+		if (label == null && myResolver != null) {
+			for (String candidate : myResolver.getCandidates(id)) {
+				label = getLabelInternal(candidate);
+				if (label != null) {
+					break;
+				}
+			}
+		}
+		return label;
+	}
+
+	protected Label getLabelInternal(String id) {
+		final int len = id.length();
+		final int size = myInternalHyperlinks.myArray.size();
+
+		for (int i = 0; i < size; ++i) {
+			final char[] block = myInternalHyperlinks.block(i);
+			for (int offset = 0; offset < block.length; ) {
+				final int labelLength = (int)block[offset++];
+				if (labelLength == 0) {
+					break;
+				}
+				final int idLength = (int)block[offset + labelLength];
+				if ((labelLength != len) || !id.equals(new String(block, offset, labelLength))) {
+					offset += labelLength + idLength + 3;
+					continue;
+				}
+				offset += labelLength + 1;
+				final String modelId = (idLength > 0) ? new String(block, offset, idLength) : null;
+				offset += idLength;
+				final int paragraphNumber = (int)block[offset] + (((int)block[offset + 1]) << 16);
+				return new Label(modelId, paragraphNumber);
+			}
+		}
+		return null;
 	}
 }

@@ -172,7 +172,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 
 			case FB2Tag.TITLE:
 				myBookReader.popKind();
-				myBookReader.exitTitle();
+				myBookReader.myInsideTitle = false;
 				myInsideTitle = false;
 				break;
 
@@ -317,7 +317,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 					myBookReader.pushKind(BookModel.SECTION_TITLE);
 					if (!myBookReader.hasContentsData()) {
 						myInsideTitle = true;
-						myBookReader.enterTitle();
+						myBookReader.myInsideTitle = true;
 					}
 				}
 				break;

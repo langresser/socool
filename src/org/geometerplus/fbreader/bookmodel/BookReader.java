@@ -43,7 +43,7 @@ public class BookReader {
 	private byte myHyperlinkKind;
 	private String myHyperlinkReference = "";
 
-	private boolean myInsideTitle = false;
+	public boolean myInsideTitle = false;
 	private boolean mySectionContainsRegularContents = false;
 
 	private TOCTree myCurrentContentsTree;
@@ -137,14 +137,6 @@ public class BookReader {
 
 	public final void insertEndOfSectionParagraph() {
 		insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
-	}
-
-	public final void enterTitle() {
-		myInsideTitle = true;
-	}
-
-	public final void exitTitle() {
-		myInsideTitle = false;
 	}
 
 	public final void addData(char[] data) {

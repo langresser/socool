@@ -24,26 +24,21 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import android.util.Log;
+
 public class CachedCharStorageBase {
 	public final ArrayList<WeakReference<char[]>> myArray =
 		new ArrayList<WeakReference<char[]>>();
 
 	private final String myDirectoryName;
 	private final String myFileExtension;
-	private final boolean m_isReadOnly;
 
-	public CachedCharStorageBase(int blockSize, String directoryName, String fileExtension, boolean readonly) {
+	public CachedCharStorageBase(int blockSize, String directoryName, String fileExtension) {
 		myDirectoryName = directoryName + '/';
 		myFileExtension = '.' + fileExtension;
-		m_isReadOnly = readonly;
 
-		if (!readonly) {
-			myBlockSize = blockSize;
-			new File(directoryName).mkdirs();
-		} else {
-			myBlockSize = blockSize;
-			myArray.addAll(Collections.nCopies(blockSize, new WeakReference<char[]>(null)));
-		}
+		myBlockSize = blockSize;
+		new File(directoryName).mkdirs();
 	}
 
 	protected String fileName(int index) {
@@ -52,6 +47,7 @@ public class CachedCharStorageBase {
 
 	public char[] block(int index) {
 		char[] block = myArray.get(index).get();
+		Log.d("fuck", "block: " + index);
 		if (block == null) {
 			try {
 				File file = new File(fileName(index));
@@ -82,9 +78,7 @@ public class CachedCharStorageBase {
 	private final int myBlockSize;
 
 	public char[] createNewBlock(int minimumLength) {
-		if (m_isReadOnly) {
-			return null;
-		}
+		Log.d("fuck", "createNewBlock:" + minimumLength);
 
 		int blockSize = myBlockSize;
 		if (minimumLength > blockSize) {
@@ -96,9 +90,7 @@ public class CachedCharStorageBase {
 	}
 
 	public void freezeLastBlock() {
-		if (m_isReadOnly) {
-			return;
-		}
+		Log.d("fuck", "freezeLastBlock: " + myArray.size());
 
 		int index = myArray.size() - 1;
 		if (index >= 0) {

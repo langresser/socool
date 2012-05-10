@@ -39,7 +39,7 @@ class XHTMLTagParagraphWithControlAction extends XHTMLTagAction {
 				if (modelReader.m_bookModel.myParagraphsNumber > 1) {
 					modelReader.insertEndOfSectionParagraph();
 				}
-				modelReader.enterTitle();
+				modelReader.myInsideTitle = true;
 				break;
 		}
 		modelReader.pushKind(myControl);
@@ -54,17 +54,8 @@ class XHTMLTagParagraphWithControlAction extends XHTMLTagAction {
 			case BookModel.TITLE:
 			case BookModel.H1:
 			case BookModel.H2:
-				modelReader.exitTitle();
+				modelReader.myInsideTitle = false;
 				break;
 		}
 	}
 }
-/*
-void XHTMLTagParagraphWithControlAction::doAtStart(XHTMLReader &reader, const char**) {
-	if ((myControl == TITLE) && (bookReader(reader).model().bookTextModel()->paragraphsNumber() > 1)) {
-		bookReader(reader).insertEndOfSectionParagraph();
-	}
-	bookReader(reader).pushKind(myControl);
-	bookReader(reader).beginParagraph();
-}
-*/
