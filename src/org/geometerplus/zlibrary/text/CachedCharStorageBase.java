@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CachedCharStorageBase {
-	protected final ArrayList<WeakReference<char[]>> myArray =
+	public final ArrayList<WeakReference<char[]>> myArray =
 		new ArrayList<WeakReference<char[]>>();
 
 	private final String myDirectoryName;
@@ -48,10 +48,6 @@ public class CachedCharStorageBase {
 
 	protected String fileName(int index) {
 		return myDirectoryName + index + myFileExtension;
-	}
-
-	public int size() {
-		return myArray.size();
 	}
 
 	public char[] block(int index) {

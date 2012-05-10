@@ -172,7 +172,7 @@ public class BookModel {
 
 	protected Label getLabelInternal(String id) {
 		final int len = id.length();
-		final int size = myInternalHyperlinks.size();
+		final int size = myInternalHyperlinks.myArray.size();
 
 		for (int i = 0; i < size; ++i) {
 			final char[] block = myInternalHyperlinks.block(i);
@@ -378,7 +378,7 @@ public class BookModel {
 		if (index > 0) {
 			myTextSizes[index] = myTextSizes[index - 1];
 		}
-		final int dataSize = myStorage.size();
+		final int dataSize = myStorage.myArray.size();
 		startEntryIndices[index] = (dataSize == 0) ? 0 : (dataSize - 1);
 		myStartEntryOffsets[index] = myBlockOffset;
 		myParagraphLengths[index] = 0;
