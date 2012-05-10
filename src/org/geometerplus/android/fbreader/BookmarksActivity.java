@@ -217,7 +217,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 			return;
 		}
 
-		final Bookmark bookmark = new Bookmark(fbreader.Model.Book, view.getModel().getId(), cursor, 20);
+		final Bookmark bookmark = new Bookmark(fbreader.Model.Book, view.getModel().myId, cursor, 20);
 		if (bookmark != null) {
 			myThisBookBookmarks.add(0, bookmark);
 			AllBooksBookmarks.add(0, bookmark);

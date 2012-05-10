@@ -383,7 +383,7 @@ public final class FBReaderApp {
 			return null;
 		}
 
-		return new Bookmark(Model.Book, view.getModel().getId(), cursor, maxLength);
+		return new Bookmark(Model.Book, view.getModel().myId, cursor, maxLength);
 	}
 
 	public TOCTree getCurrentTOCElement() {

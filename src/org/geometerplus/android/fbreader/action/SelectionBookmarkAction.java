@@ -42,7 +42,7 @@ public class SelectionBookmarkAction extends FBAndroidAction {
 		// TODO add comment
 		Bookmark bookmark = new Bookmark(
 			Reader.Model.Book,
-			fbview.getModel().getId(), text,
+			fbview.getModel().myId, text,
 			fbview.getStartCursor(), fbview.getSelectionStartPosition(),
 			fbview.getSelectionEndPosition(), null);
 		bookmark.save();
