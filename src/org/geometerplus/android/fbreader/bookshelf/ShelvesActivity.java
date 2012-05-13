@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.geometerplus.fbreader.library.Book;
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.socool.socoolreader.reader.R;
 
 public class ShelvesActivity extends Activity {
@@ -229,9 +231,6 @@ public class ShelvesActivity extends Activity {
     private void restoreAddTask(Bundle savedInstanceState) {
         if (savedInstanceState.getBoolean(STATE_ADD_IN_PROGRESS)) {
             final String id = savedInstanceState.getString(STATE_ADD_BOOK);
-            if (!BooksManager.bookExists(getContentResolver(), id)) {
-                mAddTask = (AddTask) new AddTask().execute(id);
-            }
         }
     }
 
@@ -272,9 +271,6 @@ public class ShelvesActivity extends Activity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
         return super.onMenuItemSelected(featureId, item);
-    }
-
-    private void onSettings() {
     }
 
     @Override
@@ -407,7 +403,7 @@ public class ShelvesActivity extends Activity {
         }
     }
 
-    private class AddTask extends UserTask<String, Void, BooksStore.Book> {
+    private class AddTask extends UserTask<String, Void, Book> {
         private final Object mLock = new Object();
         private String mBookId;
 
@@ -422,12 +418,12 @@ public class ShelvesActivity extends Activity {
             }
         }
 
-        public BooksStore.Book doInBackground(String... params) {
+        public Book doInBackground(String... params) {
             synchronized (mLock) {
                 mBookId = params[0];
             }
-            return BooksManager.loadAndAddBook(getContentResolver(), mBookId,
-                    BookStoreFactory.get(ShelvesActivity.this));
+            return new Book(ZLFile.createFileByPath(""));
+            //return BooksManager.loadAndAddBook(mBookId);
         }
 
         @Override
@@ -436,7 +432,7 @@ public class ShelvesActivity extends Activity {
         }
 
         @Override
-        public void onPostExecute(BooksStore.Book book) {
+        public void onPostExecute(Book book) {
             hidePanel(mAddPanel, false);
         }
     }
@@ -478,28 +474,28 @@ public class ShelvesActivity extends Activity {
         public Integer doInBackground(Void... params) {
             int imported = 0;
 
-            final List<String> list = mBooks;
-			final BooksStore booksStore = BookStoreFactory.get(ShelvesActivity.this);
-			final int count = list.size();
-			final ContentResolver resolver = mResolver;
-			final AtomicInteger importCount = mImportCount;
-
-			for (int i = importCount.get(); i < count; i++) {
-			    publishProgress(i, count);
-			    if (isCancelled()) return null;
-			    final String id = list.get(i);
-			    if (!BooksManager.bookExists(mResolver, id)) {
-			        if (isCancelled()) return null;
-			        BooksStore.Book book = BooksManager.loadAndAddBook(resolver, id, booksStore);
-			        if (book != null) {
-			            if (Config.LOGD) {
-			                android.util.Log.d(LOG_TAG, book.toString());
-			            }
-			            imported++;
-			        }
-			    }
-			    importCount.incrementAndGet();
-			}
+//            final List<String> list = mBooks;
+//			final BooksStore booksStore = BookStoreFactory.get(ShelvesActivity.this);
+//			final int count = list.size();
+//			final ContentResolver resolver = mResolver;
+//			final AtomicInteger importCount = mImportCount;
+//
+//			for (int i = importCount.get(); i < count; i++) {
+//			    publishProgress(i, count);
+//			    if (isCancelled()) return null;
+//			    final String id = list.get(i);
+//			    if (!BooksManager.bookExists(mResolver, id)) {
+//			        if (isCancelled()) return null;
+//			        BooksStore.Book book = BooksManager.loadAndAddBook(resolver, id, booksStore);
+//			        if (book != null) {
+//			            if (Config.LOGD) {
+//			                android.util.Log.d(LOG_TAG, book.toString());
+//			            }
+//			            imported++;
+//			        }
+//			    }
+//			    importCount.incrementAndGet();
+//			}
 
             return imported;
         }

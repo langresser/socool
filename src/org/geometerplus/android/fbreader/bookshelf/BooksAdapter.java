@@ -1,5 +1,6 @@
 package org.geometerplus.android.fbreader.bookshelf;
 
+import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
 import android.widget.FilterQueryProvider;
 import android.widget.TextView;
@@ -15,12 +16,7 @@ import android.graphics.BitmapFactory;
 
 import org.socool.socoolreader.reader.R;
 
-class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
-    private static final String[] PROJECTION_IDS_AND_TITLE = new String[] {
-            BooksStore.Book._ID, "BooksStore.Book.INTERNAL_ID", "BooksStore.Book.TITLE",
-            "BooksStore.Book.SORT_TITLE"
-    };
-
+class BooksAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private final int mTitleIndex;
     private final int mSortTitleIndex;
@@ -31,14 +27,32 @@ class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
     private final FastBitmapDrawable mDefaultCover;
     private final String[] mArguments2 = new String[2];
 
+//  Bitmap bitmap = book.loadCover(0);
+//  if (bitmap != null) {
+//      bitmap = ImageUtilities.createBookCover(bitmap, BOOK_COVER_WIDTH, BOOK_COVER_HEIGHT);
+//      
+//      // 创建缓存文件夹 TODO 初始化的时候创建
+//      File cacheDirectory = new File(Paths.coverCacheDirectory());
+//      if (!cacheDirectory.exists()) {
+//          cacheDirectory.mkdirs();
+//      }
+//
+//      File coverFile = new File(cacheDirectory, book.getInternalId());
+//      FileOutputStream out = null;
+//      try {
+//          out = new FileOutputStream(coverFile);
+//          bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+//      } catch (FileNotFoundException e) {
+//          return null;
+//      } finally {
+//      	try {
+//      		out.close();
+//          } catch (IOException e) {
+//          }
+//      }
+//  }
     BooksAdapter(ShelvesActivity activity) {
-        super(activity, activity.managedQuery(BooksStore.Book.CONTENT_URI,
-                PROJECTION_IDS_AND_TITLE,
-                null, null, "BooksStore.Book.DEFAULT_SORT_ORDER"), true);
-
-        final Cursor c = getCursor();
-
-        mActivity = activity;
+    	mActivity = activity;
         mInflater = LayoutInflater.from(activity);
         mTitleIndex = 0;//c.getColumnIndexOrThrow(BooksStore.Book.TITLE);
         mSortTitleIndex = 0;//c.getColumnIndexOrThrow(BooksStore.Book.SORT_TITLE);
@@ -50,8 +64,6 @@ class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
 
         final StringBuilder selection = new StringBuilder();
         mSelection = selection.toString();
-
-        setFilterQueryProvider(this);
     }
 
     FastBitmapDrawable getDefaultCover() {
@@ -99,26 +111,27 @@ class BooksAdapter extends CursorAdapter implements FilterQueryProvider {
         }
     }
 
-    @Override
-    public void changeCursor(Cursor cursor) {
-        final Cursor oldCursor = getCursor();
-        if (oldCursor != null) mActivity.stopManagingCursor(oldCursor);
-        super.changeCursor(cursor);
-    }
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    public Cursor runQuery(CharSequence constraint) {
-        if (constraint == null || constraint.length() == 0) {
-            return mActivity.managedQuery(BooksStore.Book.CONTENT_URI, PROJECTION_IDS_AND_TITLE,
-                    null, null, "BooksStore.Book.DEFAULT_SORT_ORDER");
-        }
+	@Override
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-        final StringBuilder buffer = new StringBuilder();
-        buffer.append('%').append(constraint).append('%');
-        final String pattern = buffer.toString();
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-        final String[] arguments2 = mArguments2;
-        arguments2[0] = arguments2[1] = pattern;
-        return mActivity.managedQuery(BooksStore.Book.CONTENT_URI, PROJECTION_IDS_AND_TITLE,
-                mSelection, arguments2, "BooksStore.Book.DEFAULT_SORT_ORDER");
-    }
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

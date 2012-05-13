@@ -52,7 +52,6 @@ public class TxtPlugin extends JavaFormatPlugin {
 
 	@Override
 	public void detectLanguageAndEncoding(Book book) {
-		// TODO ±‡¬Î’Ï≤‚
 		java.nio.charset.Charset charset = null;   
 		try {   
 		  charset = CodepageDetectorProxy.getInstance().detectCodepage(
