@@ -19,6 +19,7 @@
 
 package org.geometerplus.fbreader.formats.xhtml;
 
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.bookmodel.*;
@@ -43,7 +44,7 @@ class XHTMLTagParagraphWithControlAction extends XHTMLTagAction {
 				break;
 		}
 		modelReader.pushKind(myControl);
-		modelReader.beginParagraph();
+		modelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 	}
 
 	protected void doAtEnd(XHTMLReader reader) {

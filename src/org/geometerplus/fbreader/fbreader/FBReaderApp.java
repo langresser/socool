@@ -280,13 +280,11 @@ public final class FBReaderApp {
 	}
 
 
-	public void tryOpenFootnote(String id) {
+	public void tryOpenInternalLink(String id) {
 		if (Model != null) {
 			BookModel.Label label = Model.getLabel(id);
 			if (label != null) {
 				if (label.ModelId == null) {
-					if (getCurrentView() == BookTextView) {
-					}
 					BookTextView.gotoPosition(label.ParagraphIndex, 0, 0);
 					setView(BookTextView);
 				}

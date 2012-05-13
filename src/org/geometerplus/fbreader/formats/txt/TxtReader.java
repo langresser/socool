@@ -11,6 +11,7 @@ import java.nio.charset.Charset;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReader;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 
 public final class TxtReader extends BookReader {
 	public final static int BREAK_PARAGRAPH_AT_NEW_LINE = 1;
@@ -235,7 +236,7 @@ public final class TxtReader extends BookReader {
 	protected void startDocumentHandler()
 	{
 		pushKind(BookModel.REGULAR);
-		beginParagraph();
+		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 		myLineFeedCounter = 0;
 		myInsideContentsParagraph = false;
 		myInsideTitle = true;
@@ -270,7 +271,7 @@ public final class TxtReader extends BookReader {
 			if ((myBreakType & BREAK_PARAGRAPH_AT_LINE_WITH_INDENT) != 0 &&
 					myNewLine && (mySpaceCounter > myIgnoredIndent)) {
 				internalEndParagraph();
-				beginParagraph();
+				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 			}
 			addData(ch, start, length, false);
 			if (myInsideContentsParagraph) {
@@ -302,7 +303,7 @@ public final class TxtReader extends BookReader {
 				beginContentsParagraph();
 				myInsideTitle = true;
 				pushKind(BookModel.SECTION_TITLE);
-				beginParagraph();
+				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				paragraphBreak = false;
 			}
 			if (myInsideContentsParagraph && (myLineFeedCounter == 1)) {
@@ -316,7 +317,7 @@ public final class TxtReader extends BookReader {
 
 		if (paragraphBreak) {
 			internalEndParagraph();
-			beginParagraph();
+			beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 		}
 
 		return true;

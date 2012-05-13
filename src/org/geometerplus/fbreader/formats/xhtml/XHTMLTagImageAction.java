@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.formats.xhtml;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
@@ -51,7 +52,7 @@ class XHTMLTagImageAction extends XHTMLTagAction {
 				modelReader.addImageReference(imageName, (short)0, false);
 				modelReader.addImage(imageName, new ZLFileImage(MimeType.IMAGE_AUTO, imageFile));
 				if (flag) {
-					modelReader.beginParagraph();
+					modelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 				}
 			}
 		}

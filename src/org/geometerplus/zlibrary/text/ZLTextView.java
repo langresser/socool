@@ -40,6 +40,8 @@ import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.geometerplus.zlibrary.view.ZLPaintContext;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
 
+import android.util.Log;
+
 public class ZLTextView {
 	// paint state
 	public static final int NOTHING_TO_PAINT = 0;
@@ -1835,6 +1837,7 @@ public class ZLTextView {
 			return;
 		}
 
+//		Log.d("drawWord", new String(word.toString()));
 		final ZLPaintContext context = myContext;
 		context.setTextColor(color);
 		if (start == 0 && length == -1) {

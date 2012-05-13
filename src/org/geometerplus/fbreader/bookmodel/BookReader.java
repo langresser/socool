@@ -96,10 +96,6 @@ public class BookReader {
 		return false;
 	}
 
-	public final void beginParagraph() {
-		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-	}
-
 	public final void beginParagraph(byte kind) {
 		endParagraph();
 		final BookModel textModel = m_bookModel;

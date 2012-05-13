@@ -26,6 +26,7 @@ import java.nio.charset.CharsetDecoder;
 import org.geometerplus.zlibrary.html.ZLByteBuffer;
 import org.geometerplus.zlibrary.html.ZLHtmlAttributeMap;
 import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.MimeType;
 
 import org.geometerplus.fbreader.formats.html.HtmlReader;
@@ -73,7 +74,7 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 						if (paragraphIsOpen()) {
 							endParagraph();
 							addImageReference("" + index, false);
-							beginParagraph();
+							beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 						} else {
 							addImageReference("" + index, false);
 						}

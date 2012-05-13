@@ -67,7 +67,7 @@ public class ProcessHyperlinkAction extends FBAndroidAction {
 					break;
 				case BookModel.INTERNAL:
 					Reader.Model.Book.markHyperlinkAsVisited(hyperlink.Id);
-					Reader.tryOpenFootnote(hyperlink.Id);
+					Reader.tryOpenInternalLink(hyperlink.Id);
 					break;
 			}
 		} else if (soul instanceof ZLTextImageRegionSoul) {

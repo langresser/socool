@@ -7,6 +7,8 @@ import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.zlibrary.image.*;
 import org.geometerplus.zlibrary.util.LineBreaker;
 
+import android.util.Log;
+
 public final class ZLTextParagraphCursor {
 	private static final class Processor {
 		private final ZLTextParagraph myParagraph;
@@ -97,65 +99,71 @@ public final class ZLTextParagraphCursor {
 		private static final int SPACE = 1;
 		//private static final int NON_BREAKABLE_SPACE = 2;
 		private void processTextEntry(final char[] data, final int offset, final int length, ZLTextHyperlink hyperlink) {
-			if (length != 0) {
-				if (ourBreaks.length < length) {
-					ourBreaks = new byte[length];
-				}
-				final byte[] breaks = ourBreaks;
-				myLineBreaker.setLineBreaks(data, offset, length, breaks);
-
-				final ZLTextElement hSpace = ZLTextElement.HSpace;
-				final ArrayList<ZLTextElement> elements = myElements;
-				char ch = 0;
-				char previousChar = 0;
-				int spaceState = NO_SPACE;
-				int wordStart = 0;
-				for (int index = 0; index < length; ++index) {
-					previousChar = ch;
-					ch = data[offset + index];
-					if (Character.isSpace(ch)) {
-						if (index > 0 && spaceState == NO_SPACE) {
-							addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink);
-						}
-						spaceState = SPACE;
-					} else {
-						switch (spaceState) {
-							case SPACE:
-								//if (breaks[index - 1] == LineBreak.NOBREAK || previousChar == '-') {
-								//}
-								elements.add(hSpace);
-								wordStart = index;
-								break;
-							//case NON_BREAKABLE_SPACE:
-								//break;
-							case NO_SPACE:
-								if (index > 0 &&
-									breaks[index - 1] != LineBreaker.NOBREAK &&
-									previousChar != '-' &&
-									index != wordStart) {
-									addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink);
-									wordStart = index;
-								}
-								break;
-						}
-						spaceState = NO_SPACE;
-					}
-				}
-				switch (spaceState) {
-					case SPACE:
-						elements.add(hSpace);
-						break;
-					//case NON_BREAKABLE_SPACE:
-						//break;
-					case NO_SPACE:
-						addWord(data, offset + wordStart, length - wordStart, myOffset + wordStart, hyperlink);
-						break;
-				}
-				myOffset += length;
+			if (length == 0) {
+				return;
 			}
+
+			if (ourBreaks.length < length) {
+				ourBreaks = new byte[length];
+			}
+			String text = new String(data, offset, length);
+//			Log.d("processTextEntry", text);
+			final byte[] breaks = ourBreaks;
+			myLineBreaker.setLineBreaks(data, offset, length, breaks);
+			
+			final ZLTextElement hSpace = ZLTextElement.HSpace;
+			final ArrayList<ZLTextElement> elements = myElements;
+			char ch = 0;
+			char previousChar = 0;
+			int spaceState = NO_SPACE;
+			int wordStart = 0;
+			for (int index = 0; index < length; ++index) {
+				previousChar = ch;
+				ch = data[offset + index];
+				if (Character.isSpace(ch)) {
+					if (index > 0 && spaceState == NO_SPACE) {
+						addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink);
+					}
+					spaceState = SPACE;
+				} else {
+					switch (spaceState) {
+						case SPACE:
+							//if (breaks[index - 1] == LineBreak.NOBREAK || previousChar == '-') {
+							//}
+							elements.add(hSpace);
+							wordStart = index;
+							break;
+						//case NON_BREAKABLE_SPACE:
+							//break;
+						case NO_SPACE:
+							if (index > 0 &&
+								breaks[index - 1] != LineBreaker.NOBREAK &&
+								previousChar != '-' &&
+								index != wordStart) {
+								addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink);
+								wordStart = index;
+							}
+							break;
+					}
+					spaceState = NO_SPACE;
+				}
+			}
+			switch (spaceState) {
+				case SPACE:
+					elements.add(hSpace);
+					break;
+				//case NON_BREAKABLE_SPACE:
+					//break;
+				case NO_SPACE:
+					addWord(data, offset + wordStart, length - wordStart, myOffset + wordStart, hyperlink);
+					break;
+			}
+			myOffset += length;
 		}
 
 		private final void addWord(char[] data, int offset, int len, int paragraphOffset, ZLTextHyperlink hyperlink) {
+//			String text = new String(data, offset, len);
+//			Log.d("addWord", text);
 			ZLTextWord word = new ZLTextWord(data, offset, len, paragraphOffset);
 			for (int i = myFirstMark; i < myLastMark; ++i) {
 				final ZLTextMark mark = (ZLTextMark)myMarks.get(i);

@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.text.CachedCharStorageBase;
 import org.geometerplus.zlibrary.text.ZLImageEntry;
 import org.geometerplus.zlibrary.text.ZLTextMark;
 import org.geometerplus.zlibrary.text.ZLTextParagraph;
@@ -113,70 +113,33 @@ public class BookModel {
 
 	protected BookModel(Book book) {
 		Book = book;
-		myInternalHyperlinks = new CachedCharStorageBase(32768, Paths.cacheDirectory(), "links");
 		myId = null;
 		myLanguage = book.getLanguage();
-		myStartEntryIndices = new int[1024];
-		myStartEntryOffsets = new int[1024];
+		
+		m_paragraphStartIndex = new int[1024];
 		myParagraphLengths = new int[1024];
 		myTextSizes = new int[1024];
 		myParagraphKinds = new byte[1024];
-		myStorage = new CachedCharStorageBase(65535, Paths.cacheDirectory(), "cache");
 	}
-
-	private char[] myCurrentDataBlock;
-	private int myBlockOffset;
 	
 	public Book Book = null;
 	public final TOCTree TOCTree = new TOCTree();
-	protected CachedCharStorageBase myInternalHyperlinks;
 	protected final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
-	private char[] myCurrentLinkBlock;
-	private int myCurrentLinkBlockOffset;
 	public final String myId;
 	public final String myLanguage;
 
-	protected int[] myStartEntryIndices;
-	protected int[] myStartEntryOffsets;
+	protected int[] m_paragraphStartIndex;
 	protected int[] myParagraphLengths;
 	protected int[] myTextSizes;
 	protected byte[] myParagraphKinds;
 
 	public int myParagraphsNumber;
-	protected final CachedCharStorageBase myStorage;
 	public ArrayList<ZLTextMark> myMarks;
+	
+	public HashMap<String, Label> myInternalHyperlinks = new HashMap<String, Label>();
 
 	public void addImage(String id, ZLImage image) {
 		myImageMap.put(id, image);
-	}
-
-	void addHyperlinkLabel(String label, int paragraphNumber) {
-		final String modelId = myId;
-		final int labelLength = label.length();
-		final int idLength = (modelId != null) ? modelId.length() : 0;
-		final int len = 4 + labelLength + idLength;
-
-		char[] block = myCurrentLinkBlock;
-		int offset = myCurrentLinkBlockOffset;
-		if ((block == null) || (offset + len > block.length)) {
-			if (block != null) {
-				myInternalHyperlinks.freezeLastBlock();
-			}
-			block = myInternalHyperlinks.createNewBlock(len);
-			myCurrentLinkBlock = block;
-			offset = 0;
-		}
-		block[offset++] = (char)labelLength;
-		label.getChars(0, labelLength, block, offset);
-		offset += labelLength;
-		block[offset++] = (char)idLength;
-		if (idLength > 0) {
-			modelId.getChars(0, idLength, block, offset);
-			offset += idLength;
-		}
-		block[offset++] = (char)paragraphNumber;
-		block[offset++] = (char)(paragraphNumber >> 16);
-		myCurrentLinkBlockOffset = offset;
 	}
 
 	public final ZLTextMark getFirstMark() {
@@ -296,135 +259,140 @@ public class BookModel {
 
 	public void createParagraph(byte kind) {
 		final int index = myParagraphsNumber++;
-		int[] startEntryIndices = myStartEntryIndices;
-		if (index == startEntryIndices.length) {
-			final int size = myStartEntryIndices.length;
-			myStartEntryIndices = ZLArrayUtils.createCopy(myStartEntryIndices, size, size << 1);
-			myStartEntryOffsets = ZLArrayUtils.createCopy(myStartEntryOffsets, size, size << 1);
+		if (index == myParagraphLengths.length) {
+			final int size = myParagraphLengths.length;
+			m_paragraphStartIndex = ZLArrayUtils.createCopy(m_paragraphStartIndex, size, size << 1);
 			myParagraphLengths = ZLArrayUtils.createCopy(myParagraphLengths, size, size << 1);
 			myTextSizes = ZLArrayUtils.createCopy(myTextSizes, size, size << 1);
 			myParagraphKinds = ZLArrayUtils.createCopy(myParagraphKinds, size, size << 1);
-			startEntryIndices = myStartEntryIndices;
 		}
 		if (index > 0) {
 			myTextSizes[index] = myTextSizes[index - 1];
 		}
-		final int dataSize = myStorage.myArray.size();
-		startEntryIndices[index] = (dataSize == 0) ? 0 : (dataSize - 1);
-		myStartEntryOffsets[index] = myBlockOffset;
+
+		m_paragraphStartIndex[index] = m_elements.size();
 		myParagraphLengths[index] = 0;
 		myParagraphKinds[index] = kind;
 	}
+	
+	public Vector<Element> m_elements = new Vector<Element>();
+	class Element {
+		public int m_type;
+		public char[] m_text = null;
 
-	private char[] getDataBlock(int minimumLength) {
-		char[] block = myCurrentDataBlock;
-		Log.d("fuck", "getDataBlock: " + minimumLength);
-		if ((block == null) || (minimumLength > block.length - myBlockOffset)) {
-			if (block != null) {
-				myStorage.freezeLastBlock();
-			}
-			block = myStorage.createNewBlock(minimumLength);
-			myCurrentDataBlock = block;
-			myBlockOffset = 0;
+		public String m_imageId = null;
+		public short m_imagevOffset = 0;
+		public boolean m_isCover = false;
+
+		public short m_kind = 0;
+		public boolean m_isStart = false;
+		
+		public byte m_hyperlinkType = 0;
+		public String m_label = null;
+		
+		public ZLTextStyleEntry m_textStyle = null;
+		
+		public int m_len = 0;
+		
+		Element(int type)
+		{
+			m_type = type;
 		}
-		return block;
+
+		Element(char[] text, int offset, int length)
+		{
+			m_type = ZLTextParagraph.Entry.TEXT;
+			m_text = new char[length];
+			System.arraycopy(text, offset, m_text, 0, length);
+//			Log.d("holi", m_text);
+		}
+		
+		Element(String id, short vOffset, boolean isCover)
+		{
+			m_type = ZLTextParagraph.Entry.IMAGE;
+			m_imageId = id;
+			m_imagevOffset = vOffset;
+			m_isCover = isCover;
+		}
+		
+		Element(short textKind, boolean isStart)
+		{
+			m_type = ZLTextParagraph.Entry.CONTROL;
+			m_kind = textKind;
+			m_isStart = isStart;
+		}
+		
+		Element(byte textKind, byte hyperlinkType, String label)
+		{
+			m_type = ZLTextParagraph.Entry.HYPERLINK_CONTROL;
+			m_kind = textKind;
+			m_hyperlinkType = hyperlinkType;
+			m_label = label;
+		}
+		
+		Element(ZLTextStyleEntry entry)
+		{
+			m_type = ZLTextParagraph.Entry.STYLE;
+			m_textStyle = entry;
+		}
+		
+		Element(int type, int len)
+		{
+			m_type = type;
+			m_len = len;
+		}
 	}
 
 	public void addText(char[] text, int offset, int length) {
-		char[] block = getDataBlock(3 + length);
 		++myParagraphLengths[myParagraphsNumber - 1];
-		int blockOffset = myBlockOffset;
-		block[blockOffset++] = (char)ZLTextParagraph.Entry.TEXT;
-		block[blockOffset++] = (char)length;
-		block[blockOffset++] = (char)(length >> 16);
-		System.arraycopy(text, offset, block, blockOffset, length);
-		myBlockOffset = blockOffset + length;
 		myTextSizes[myParagraphsNumber - 1] += length;
+		m_elements.add(new Element(text, offset, length));
 	}
 
 	public void addImage(String id, short vOffset, boolean isCover) {
-		final int len = id.length();
-		final char[] block = getDataBlock(4 + len);
 		++myParagraphLengths[myParagraphsNumber - 1];
-		int blockOffset = myBlockOffset;
-		block[blockOffset++] = (char)ZLTextParagraph.Entry.IMAGE;
-		block[blockOffset++] = (char)vOffset;
-		block[blockOffset++] = (char)len;
-		id.getChars(0, len, block, blockOffset);
-		blockOffset += len;
-		block[blockOffset++] = (char)(isCover ? 1 : 0);
-		myBlockOffset = blockOffset;
+		m_elements.add(new Element(id, vOffset, isCover));
 	}
 
 	public void addControl(byte textKind, boolean isStart) {
-		final char[] block = getDataBlock(2);
 		++myParagraphLengths[myParagraphsNumber - 1];
-		block[myBlockOffset++] = (char)ZLTextParagraph.Entry.CONTROL;
 		short kind = textKind;
 		if (isStart) {
 			kind += 0x0100;
 		}
-		block[myBlockOffset++] = (char)kind;
+		m_elements.add(new Element(kind, isStart));
 	}
 
 	public void addHyperlinkControl(byte textKind, byte hyperlinkType, String label) {
-		final short labelLength = (short)label.length();
-		final char[] block = getDataBlock(3 + labelLength);
 		++myParagraphLengths[myParagraphsNumber - 1];
-		int blockOffset = myBlockOffset;
-		block[blockOffset++] = (char)ZLTextParagraph.Entry.HYPERLINK_CONTROL;
-		block[blockOffset++] = (char)((hyperlinkType << 8) + textKind);
-		block[blockOffset++] = (char)labelLength;
-		label.getChars(0, labelLength, block, blockOffset);
-		myBlockOffset = blockOffset + labelLength;
+		m_elements.add(new Element(textKind, hyperlinkType, label));
 	}
 
 	public void addStyleEntry(ZLTextStyleEntry entry) {
-		int len = 2;
-		for (int mask = entry.getMask(); mask != 0; mask >>= 1) {
-			len += mask & 1;
-		}
-		final char[] block = getDataBlock(len);
-		++myParagraphLengths[myParagraphsNumber - 1];
-		block[myBlockOffset++] = (char)ZLTextParagraph.Entry.STYLE;
-		block[myBlockOffset++] = (char)entry.getMask();
-		if (entry.isLeftIndentSupported()) {
-			block[myBlockOffset++] = (char)entry.getLeftIndent();
-		}
-		if (entry.isRightIndentSupported()) {
-			block[myBlockOffset++] = (char)entry.getRightIndent();
-		}
-		if (entry.isAlignmentTypeSupported()) {
-			block[myBlockOffset++] = (char)entry.getAlignmentType();
-		}
+		++myParagraphLengths[myParagraphsNumber - 1];		
+		m_elements.add(new Element(entry));
 	}
 
 	public void addFixedHSpace(short length) {
-		final char[] block = getDataBlock(2);
 		++myParagraphLengths[myParagraphsNumber - 1];
-		block[myBlockOffset++] = (char)ZLTextParagraph.Entry.FIXED_HSPACE;
-		block[myBlockOffset++] = (char)length;
+		m_elements.add(new Element(ZLTextParagraph.Entry.FIXED_HSPACE, length));
 	}	
 
 	public void addBidiReset() {
-		final char[] block = getDataBlock(1);
 		++myParagraphLengths[myParagraphsNumber - 1];
-		block[myBlockOffset++] = (char)ZLTextParagraph.Entry.RESET_BIDI;
+		m_elements.add(new Element(ZLTextParagraph.Entry.RESET_BIDI));
 	}
-	
-	
 	
 	
 	public final class EntryIterator {
 		public int myCounter;
 		public int myLength;
 		public byte myType;
-
-		int myDataIndex;
-		int myDataOffset;
+		
+		public int m_index;
 
 		// TextEntry data
-		public char[] myTextData;
+		public char[] myTextData = null;
 		public int myTextOffset;
 		public int myTextLength;
 
@@ -446,15 +414,16 @@ public class BookModel {
 
 		public EntryIterator(int index) {
 			myLength = myParagraphLengths[index];
-			myDataIndex = myStartEntryIndices[index];
-			myDataOffset = myStartEntryOffsets[index];
+			m_index = m_paragraphStartIndex[index];
+			myCounter = 0;
+//			Log.d("EntryIterator", "length:" + myLength + "index:" +  m_index);
 		}
 
 		void reset(int index) {
 			myCounter = 0;
 			myLength = myParagraphLengths[index];
-			myDataIndex = myStartEntryIndices[index];
-			myDataOffset = myStartEntryOffsets[index];
+			m_index = m_paragraphStartIndex[index];
+//			Log.d("reset", "length:" + myLength + "index:" +  m_index);
 		}
 
 		public boolean hasNext() {
@@ -462,32 +431,18 @@ public class BookModel {
 		}
 
 		public void next() {
-			int dataOffset = myDataOffset;
-			char[] data = myStorage.block(myDataIndex);
-			if (dataOffset == data.length) {
-				data = myStorage.block(++myDataIndex);
-				dataOffset = 0;
-			}
-			byte type = (byte)data[dataOffset];
-			if (type == 0) {
-				data = myStorage.block(++myDataIndex);
-				dataOffset = 0;
-				type = (byte)data[0];
-			}
-			myType = type;
-			++dataOffset;
-			switch (type) {
+			Element element = m_elements.get(m_index);
+			myType = (byte)element.m_type;
+			switch (element.m_type) {
 				case ZLTextParagraph.Entry.TEXT:
-					myTextLength =
-						(int)data[dataOffset++] +
-						(((int)data[dataOffset++]) << 16);
-					myTextData = data;
-					myTextOffset = dataOffset;
-					dataOffset += myTextLength;
+					myTextLength = element.m_text.length;
+					myTextData = element.m_text;
+//					Log.d("fuck", element.m_text);
+					myTextOffset = 0;
 					break;
 				case ZLTextParagraph.Entry.CONTROL:
 				{
-					short kind = (short)data[dataOffset++];
+					short kind = (short)element.m_kind;
 					myControlKind = (byte)kind;
 					myControlIsStart = (kind & 0x0100) == 0x0100;
 					myHyperlinkType = 0;
@@ -495,52 +450,32 @@ public class BookModel {
 				}
 				case ZLTextParagraph.Entry.HYPERLINK_CONTROL:
 				{
-					short kind = (short)data[dataOffset++];
-					myControlKind = (byte)kind;
+					myControlKind = (byte)element.m_kind;
 					myControlIsStart = true;
-					myHyperlinkType = (byte)(kind >> 8);
-					short labelLength = (short)data[dataOffset++];
-					myHyperlinkId = new String(data, dataOffset, labelLength);
-					dataOffset += labelLength;
+					myHyperlinkType = (byte)element.m_hyperlinkType;
+					myHyperlinkId = element.m_label;
 					break;
 				}
 				case ZLTextParagraph.Entry.IMAGE:
 				{
-					final short vOffset = (short)data[dataOffset++];
-					final short len = (short)data[dataOffset++];
-					final String id = new String(data, dataOffset, len);
-					dataOffset += len;
-					final boolean isCover = data[dataOffset++] != 0;
+					final short vOffset = (short)element.m_imagevOffset;
+					final String id = element.m_imageId;
+					final boolean isCover = element.m_isCover;
 					myImageEntry = new ZLImageEntry(myImageMap, id, vOffset, isCover);
 					break;
 				}
 				case ZLTextParagraph.Entry.FIXED_HSPACE:
-					myFixedHSpaceLength = (short)data[dataOffset++];
+					myFixedHSpaceLength = (short)element.m_len;
 					break;
 				case ZLTextParagraph.Entry.STYLE:
-				{
-					final int mask = (int)data[dataOffset++];
-					final ZLTextStyleEntry entry = new ZLTextStyleEntry();
-					if ((mask & ZLTextStyleEntry.SUPPORTS_LEFT_INDENT) ==
-								ZLTextStyleEntry.SUPPORTS_LEFT_INDENT) {
-						entry.setLeftIndent((short)data[dataOffset++]);
-					}
-					if ((mask & ZLTextStyleEntry.SUPPORTS_RIGHT_INDENT) ==
-								ZLTextStyleEntry.SUPPORTS_RIGHT_INDENT) {
-						entry.setRightIndent((short)data[dataOffset++]);
-					}
-					if ((mask & ZLTextStyleEntry.SUPPORTS_ALIGNMENT_TYPE) ==
-								ZLTextStyleEntry.SUPPORTS_ALIGNMENT_TYPE) {
-						entry.setAlignmentType((byte)data[dataOffset++]);
-					}
-					myStyleEntry = entry;
-				}
+					myStyleEntry = element.m_textStyle;
+					break;
 				case ZLTextParagraph.Entry.RESET_BIDI:
 					// No data => skip
 					break;
 			}
+			++m_index;
 			++myCounter;
-			myDataOffset = dataOffset;
 		}
 	}
 	
@@ -558,44 +493,23 @@ public class BookModel {
 		}
 	}
 
+	void addHyperlinkLabel(String label, int paragraphNumber) {
+		myInternalHyperlinks.put(label, new Label(myId, paragraphNumber));
+	}
+
 	public LabelResolver myResolver;
 
+	// 不直接显示，作为内部链接可以进行跳转
 	public Label getLabel(String id) {
-		Label label = getLabelInternal(id);
+		Label label = myInternalHyperlinks.get(id);
 		if (label == null && myResolver != null) {
 			for (String candidate : myResolver.getCandidates(id)) {
-				label = getLabelInternal(candidate);
+				label = myInternalHyperlinks.get(candidate);
 				if (label != null) {
 					break;
 				}
 			}
 		}
 		return label;
-	}
-
-	protected Label getLabelInternal(String id) {
-		final int len = id.length();
-		final int size = myInternalHyperlinks.myArray.size();
-
-		for (int i = 0; i < size; ++i) {
-			final char[] block = myInternalHyperlinks.block(i);
-			for (int offset = 0; offset < block.length; ) {
-				final int labelLength = (int)block[offset++];
-				if (labelLength == 0) {
-					break;
-				}
-				final int idLength = (int)block[offset + labelLength];
-				if ((labelLength != len) || !id.equals(new String(block, offset, labelLength))) {
-					offset += labelLength + idLength + 3;
-					continue;
-				}
-				offset += labelLength + 1;
-				final String modelId = (idLength > 0) ? new String(block, offset, idLength) : null;
-				offset += idLength;
-				final int paragraphNumber = (int)block[offset] + (((int)block[offset + 1]) << 16);
-				return new Label(modelId, paragraphNumber);
-			}
-		}
-		return null;
 	}
 }
