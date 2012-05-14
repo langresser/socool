@@ -28,7 +28,7 @@ import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 
 public class BookReader {
-	public final BookModel m_bookModel;
+	public BookModel m_bookModel;
 
 	private boolean myTextParagraphExists = false;
 	private boolean myTextParagraphIsNonEmpty = false;
@@ -46,13 +46,18 @@ public class BookReader {
 	public boolean myInsideTitle = false;
 	private boolean mySectionContainsRegularContents = false;
 
-	private TOCTree myCurrentContentsTree;
+	protected TOCTree myCurrentContentsTree;
 
 	private CharsetDecoder myByteDecoder;
 
 	public BookReader(BookModel model) {
-		m_bookModel = model;
-		myCurrentContentsTree = model.TOCTree;
+		if (model != null) {
+			m_bookModel = model;
+			myCurrentContentsTree = model.TOCTree;
+		} else {
+			m_bookModel = null;
+			myCurrentContentsTree = null;
+		}
 	}
 
 	public final void setByteDecoder(CharsetDecoder decoder) {

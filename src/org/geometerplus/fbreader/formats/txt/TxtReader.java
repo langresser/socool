@@ -24,48 +24,233 @@ public final class TxtReader extends BookReader {
 	public int myEmptyLinesBeforeNewSection = 1;
 	public boolean myCreateContentsTable = false;
 	
-	public final static int	kAnsi = 0;
-	public final static int	kUtf8 = 1;
-	public final static int	kUtf16le = 2;
-	public final static int	kUtf16be = 3; 
+	public final int BUFFER_SIZE = 1024 * 10;		// 假定文件缓存区有10k
+	public final int MAX_BUFFER_SIZE = 1024 * 30;	// 最大缓存区有30k，实际读取的文件总字节数在10k~30k之间，前后会多一个段落的数据
 	
+
 	public int m_currentOffset = 0;
+
+	public FileChannel m_streamReader = null;
+	
+	public HashMap<Integer, Integer> m_paraOffset = new HashMap<Integer, Integer>();
 	
 	public TxtReader(BookModel model)
 	{
 		super(model);
 		
-		String encoding = model.Book.getEncoding();
-		if (encoding.equalsIgnoreCase("utf-8")) {
-			m_unicodeFlag = kUtf8;
-		} else if (encoding.equalsIgnoreCase("utf-16")) {
-			m_unicodeFlag = kUtf16le;
-		} else if (encoding.equalsIgnoreCase("utf-16be")) {
-			m_unicodeFlag = kUtf16be;
-		} else if (encoding.equalsIgnoreCase("utf-16le")) {
-			m_unicodeFlag = kUtf16le;
-		} else {
-			m_unicodeFlag = kAnsi;
+		if (model != null) {
+			String path = model.Book.File.getPath();
+			
+			try {
+				m_streamReader = new RandomAccessFile(path, "r").getChannel();
+				initParagraphData();
+			} catch (Exception e) {
+				
+			}
 		}
 	}
 	
-	public void readDocument()
+	public void setModel(BookModel model)
+	{
+		// 如果换文件，则关闭原文件
+		if (m_streamReader != null && !m_bookModel.Book.File.getPath().equalsIgnoreCase(model.Book.File.getPath())) {
+			try {
+				m_streamReader.close();
+			} catch (Exception e) {
+				
+			}
+		}
+
+		m_bookModel = model;
+		myCurrentContentsTree = model.TOCTree;
+		
+		String path = m_bookModel.Book.File.getPath();
+
+		try {
+			m_streamReader = new RandomAccessFile(path, "r").getChannel();
+			initParagraphData();
+		} catch (Exception e) {
+			
+		}
+	}
+
+	// TODO 考虑全是\r形式的换行符文件 测试 \n和\r\n形式的文件
+	private void initParagraphData()
+	{
+		try {
+
+		final long size = m_streamReader.size();
+		int currentOffset = 0;
+		final String encoding = m_bookModel.Book.getEncoding();
+		
+//		ByteBuffer bb = ByteBuffer.allocate(BUFFER_SIZE);
+//		byte[] buffer = new byte[BUFFER_SIZE];
+
+		int paraCount = 0;
+		m_paraOffset.put(0, 0);
+		byte lastReadByte = -1;	// TODO 可能考虑换个字符标识
+		do {
+			int readSize = (int)size / BUFFER_SIZE == 0 ? (int)size % BUFFER_SIZE : BUFFER_SIZE;
+			MappedByteBuffer mapBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, currentOffset, readSize);
+//			int count = m_streamReader.read(bb);
+//			bb.flip();
+//			bb.get(buffer);
+	
+			for (int i = 0; i < readSize; ++i) {
+				byte c = mapBuffer.get(i);
+				
+				// 记录每个新段落对应的文件偏移(整个文件最后一个字符为换行符则忽略)
+				// TODO 考虑count字符处恰好为\n的情况
+				if (c == 0x0a && currentOffset + i < size - 1) {
+					// unicode需要判断前一个或后一个字节内容
+					if (encoding.equalsIgnoreCase("utf-16le")) {
+						 // 0d 00 0a 00
+						if (i + 1 < readSize) {
+							byte cn = mapBuffer.get(i + 1);
+							if (cn == 0) {
+								++paraCount;
+								int offset = currentOffset + i + 2;
+								m_paraOffset.put(paraCount, offset);
+							}
+						} else if (i == readSize - 1) {
+							// 缓存区末尾恰好为\n，则要再读取一个字节，进行判断
+							MappedByteBuffer mapBufferNext = m_streamReader.map(FileChannel.MapMode.READ_ONLY, currentOffset + readSize, 1);
+							byte cn = mapBufferNext.get(0);
+							if (cn == 0) {
+								++paraCount;
+								int offset = currentOffset + i + 2;
+								m_paraOffset.put(paraCount, offset);
+							}
+						}
+					} else if (encoding.equalsIgnoreCase("utf-16be")) {
+						// 00 0d 00 0a
+						if (i - 1 >= 0) {
+							byte cp = mapBuffer.get(i - 1);
+							if (cp == 0) {
+								++paraCount;
+								int offset = currentOffset + i + 1;
+								m_paraOffset.put(paraCount, offset);
+							}
+						} else if (i == 0) {
+							// 如果\n为文件开始，则要判断上次读取的缓存区的最后一个字符
+							if (lastReadByte == 0) {
+								++paraCount;
+								int offset = currentOffset + i + 1;
+								m_paraOffset.put(paraCount, offset);
+							}
+						}
+					} else {
+						// utf-8或ansi直接判断字符，也不需要考虑\n在缓存区头，或者缓存区末尾的情况
+						++paraCount;
+						int offset = currentOffset + i + 1;
+						m_paraOffset.put(paraCount, offset);
+					}
+				}
+			}
+			
+			lastReadByte = mapBuffer.get(readSize - 1);
+			currentOffset += readSize;
+		} while (currentOffset < size);
+
+		} catch (IOException e) {
+		}
+	}
+		
+	public void readDocument(int paragraph)
 	{
 		startDocumentHandler();
 
 		try {
-		String path = m_bookModel.Book.File.getPath();
 		
-		FileChannel streamReader = new RandomAccessFile(path, "r").getChannel();
-		MappedByteBuffer mbb = streamReader.map(FileChannel.MapMode.READ_ONLY, 0, streamReader.size());
-//		BufferedRandomAccessFile streamReader = new BufferedRandomAccessFile(file, "r");
-		ByteBuffer bb = ByteBuffer.allocate((int)streamReader.size());
-		Charset cs = Charset.forName (m_bookModel.Book.getEncoding());
+		final int fileOffset = m_paraOffset.get(paragraph);
+		final long size = m_streamReader.size();
 
-		bb.clear();
-		int count = streamReader.read(bb);
-		bb.flip();
-	    CharBuffer cb = cs.decode(bb);
+		int readOffset = 0;
+		int maxSize = BUFFER_SIZE;
+		int paraStart = fileOffset;
+		
+
+		if (fileOffset > BUFFER_SIZE) {
+			readOffset = fileOffset - BUFFER_SIZE;
+			maxSize += BUFFER_SIZE;
+			paraStart = BUFFER_SIZE;
+		} else {
+			readOffset = 0;
+			maxSize += fileOffset;
+			paraStart = fileOffset;
+		}
+		
+		if (fileOffset + BUFFER_SIZE > size) {
+			maxSize += size - fileOffset;
+		} else {
+			maxSize += BUFFER_SIZE;
+		}
+		
+		// 读取30k的内容，保留10k的最小缓存区，然后从开头结尾再截取出完整段落
+		MappedByteBuffer mappedBufferPre = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
+		MappedByteBuffer mappedBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
+		MappedByteBuffer mappedBufferNext = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
+		
+		final String encoding = m_bookModel.Book.getEncoding();
+		int i = paraStart;
+		for (; i > 0; --i) {
+			byte c = mappedBuffer.get(i);
+			if (c == 0x0a) {
+				if (encoding.equalsIgnoreCase("utf-16le")) {
+					// 0d 00 0a 00
+					byte cn = mappedBuffer.get(i + 1);
+					if (cn == 0) {
+						i += 2;
+						break;
+					}
+				} else if (encoding.equalsIgnoreCase("utf-16be")) {
+					// 00 0d 00 0a
+					if (i >= 1) {
+						byte cp = mappedBuffer.get(i - 1);
+						if (cp == 0) {
+							++i;
+							break;
+						}
+					}
+				} else {
+					++i;
+					break;
+				}
+			}
+		}
+		
+		int j = paraStart + BUFFER_SIZE;
+		for (; j < maxSize; ++j) {
+			byte c = mappedBuffer.get(j);
+			if (c == 0x0a) {
+				if (encoding.equalsIgnoreCase("utf-16le")) {
+					// 0d 00 0a 00
+					if (j + 1 < maxSize) {
+						byte cn = mappedBuffer.get(j + 1);
+						if (cn == 0) {
+							j -= 3;
+							break;
+						}	
+					}
+				} else if (encoding.equalsIgnoreCase("utf-16be")) {
+					// 00 0d 00 0a
+					if (j >= 1) {
+						byte cp = mappedBuffer.get(j - 1);
+						if (cp == 0) {
+							j -= 4;
+							break;
+						}
+					}
+				} else {
+					--j;
+					break;
+				}
+			}
+		}
+		
+		byte[] buffer = new byte[j - i];
+		Charset cs = Charset.forName (encoding);
+	    CharBuffer cb = cs.decode(buffer);
 		char[] text = cb.array();
 		int maxLength = text.length;
 		int parBegin = 0;
@@ -94,7 +279,7 @@ public final class TxtReader extends BookReader {
 			characterDataHandler(text, parBegin, maxLength - parBegin);
 		}
 
-		streamReader.close();
+		m_streamReader.close();
 		} catch (IOException e) {
 		}
 		
