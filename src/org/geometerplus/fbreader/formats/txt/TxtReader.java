@@ -88,7 +88,7 @@ public final class TxtReader extends BookReader {
 
 		int paraCount = 0;
 		m_paraOffset.put(0, 0);
-		byte lastReadByte = -1;	// TODO 可能考虑换个字符标识
+		byte lastReadByte = -1;
 		do {
 			int readSize = (int)size / BUFFER_SIZE == 0 ? (int)size % BUFFER_SIZE : BUFFER_SIZE;
 			MappedByteBuffer mapBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, currentOffset, readSize);
@@ -100,7 +100,6 @@ public final class TxtReader extends BookReader {
 				byte c = mapBuffer.get(i);
 				
 				// 记录每个新段落对应的文件偏移(整个文件最后一个字符为换行符则忽略)
-				// TODO 考虑count字符处恰好为\n的情况
 				if (c == 0x0a && currentOffset + i < size - 1) {
 					// unicode需要判断前一个或后一个字节内容
 					if (encoding.equalsIgnoreCase("utf-16le")) {
@@ -187,75 +186,78 @@ public final class TxtReader extends BookReader {
 		}
 		
 		// 读取30k的内容，保留10k的最小缓存区，然后从开头结尾再截取出完整段落
-		MappedByteBuffer mappedBufferPre = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
 		MappedByteBuffer mappedBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
-		MappedByteBuffer mappedBufferNext = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
 		
 		final String encoding = m_bookModel.Book.getEncoding();
-		int i = paraStart;
-		for (; i > 0; --i) {
-			byte c = mappedBuffer.get(i);
+		int ii = paraStart;
+		for (; ii > 0; --ii) {
+			byte c = mappedBuffer.get(ii);
 			if (c == 0x0a) {
 				if (encoding.equalsIgnoreCase("utf-16le")) {
 					// 0d 00 0a 00
-					byte cn = mappedBuffer.get(i + 1);
+					byte cn = mappedBuffer.get(ii + 1);
 					if (cn == 0) {
-						i += 2;
+						ii += 2;
 						break;
 					}
 				} else if (encoding.equalsIgnoreCase("utf-16be")) {
 					// 00 0d 00 0a
-					if (i >= 1) {
-						byte cp = mappedBuffer.get(i - 1);
+					if (ii >= 1) {
+						byte cp = mappedBuffer.get(ii - 1);
 						if (cp == 0) {
-							++i;
+							++ii;
 							break;
 						}
 					}
 				} else {
-					++i;
+					++ii;
 					break;
 				}
 			}
 		}
 		
-		int j = paraStart + BUFFER_SIZE;
-		for (; j < maxSize; ++j) {
-			byte c = mappedBuffer.get(j);
+		int jj = paraStart + BUFFER_SIZE;
+		for (; jj < maxSize; ++jj) {
+			byte c = mappedBuffer.get(jj);
 			if (c == 0x0a) {
 				if (encoding.equalsIgnoreCase("utf-16le")) {
 					// 0d 00 0a 00
-					if (j + 1 < maxSize) {
-						byte cn = mappedBuffer.get(j + 1);
+					if (jj + 1 < maxSize) {
+						byte cn = mappedBuffer.get(jj + 1);
 						if (cn == 0) {
-							j -= 3;
+							jj -= 3;
 							break;
 						}	
 					}
 				} else if (encoding.equalsIgnoreCase("utf-16be")) {
 					// 00 0d 00 0a
-					if (j >= 1) {
-						byte cp = mappedBuffer.get(j - 1);
+					if (jj >= 1) {
+						byte cp = mappedBuffer.get(jj - 1);
 						if (cp == 0) {
-							j -= 4;
+							jj -= 4;
 							break;
 						}
 					}
 				} else {
-					--j;
+					--jj;
 					break;
 				}
 			}
 		}
 		
-		byte[] buffer = new byte[j - i];
+		ByteBuffer buffer = ByteBuffer.allocate(jj - ii);
+		for (int i = ii; i < jj; ++i) {
+			buffer.put(i - ii, mappedBuffer.get(i));
+		}
+
+		ByteBuffer.arr
 		Charset cs = Charset.forName (encoding);
 	    CharBuffer cb = cs.decode(buffer);
 		char[] text = cb.array();
 		int maxLength = text.length;
 		int parBegin = 0;
 
-		for (int i = parBegin; i < maxLength; ++i) {
+		for (int i = 0; i < maxLength; ++i) {
 			char c = text[i];
 			if (c == '\n' || c == '\r') {
 				boolean skipNewLine = false;
