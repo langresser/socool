@@ -13,6 +13,8 @@ import org.geometerplus.fbreader.bookmodel.BookReader;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.text.ZLTextParagraph;
 
+import android.util.Log;
+
 public final class TxtReader extends BookReader {
 	public final static int BREAK_PARAGRAPH_AT_NEW_LINE = 1;
 	public final static int BREAK_PARAGRAPH_AT_EMPTY_LINE = 2;
@@ -89,15 +91,20 @@ public final class TxtReader extends BookReader {
 		int paraCount = 0;
 		m_paraOffset.put(0, 0);
 		byte lastReadByte = -1;
+		long startTime = System.nanoTime();
+		byte[] byteBuffer = new byte[BUFFER_SIZE];
+
 		do {
 			int readSize = (int)size / BUFFER_SIZE == 0 ? (int)size % BUFFER_SIZE : BUFFER_SIZE;
 			MappedByteBuffer mapBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, currentOffset, readSize);
 //			int count = m_streamReader.read(bb);
 //			bb.flip();
 //			bb.get(buffer);
+			mapBuffer.get(byteBuffer, 0, readSize);
 	
 			for (int i = 0; i < readSize; ++i) {
-				byte c = mapBuffer.get(i);
+//				byte c = mapBuffer.get(i);
+				byte c = byteBuffer[i];
 				
 				// 记录每个新段落对应的文件偏移(整个文件最后一个字符为换行符则忽略)
 				if (c == 0x0a && currentOffset + i < size - 1) {
@@ -124,7 +131,7 @@ public final class TxtReader extends BookReader {
 					} else if (encoding.equalsIgnoreCase("utf-16be")) {
 						// 00 0d 00 0a
 						if (i - 1 >= 0) {
-							byte cp = mapBuffer.get(i - 1);
+							byte cp = byteBuffer[i - 1];
 							if (cp == 0) {
 								++paraCount;
 								int offset = currentOffset + i + 1;
@@ -147,10 +154,12 @@ public final class TxtReader extends BookReader {
 				}
 			}
 			
-			lastReadByte = mapBuffer.get(readSize - 1);
+			lastReadByte = byteBuffer[readSize - 1];
 			currentOffset += readSize;
 		} while (currentOffset < size);
 
+		long lastTime = System.nanoTime() - startTime;
+		Log.d("ProfileTime", "init1:" + lastTime);
 		} catch (IOException e) {
 		}
 	}
@@ -250,7 +259,6 @@ public final class TxtReader extends BookReader {
 			buffer.put(i - ii, mappedBuffer.get(i));
 		}
 
-		ByteBuffer.arr
 		Charset cs = Charset.forName (encoding);
 	    CharBuffer cb = cs.decode(buffer);
 		char[] text = cb.array();
