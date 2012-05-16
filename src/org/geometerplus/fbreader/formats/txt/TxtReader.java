@@ -79,6 +79,9 @@ public final class TxtReader extends BookReader {
 	// TODO 考虑全是\r形式的换行符文件 测试 \n和\r\n形式的文件
 	private void initParagraphData()
 	{
+		long startTime = System.currentTimeMillis();
+		int count = 0;
+		long allTime = 0;
 		try {
 
 		final long size = m_streamReader.size();
@@ -91,20 +94,24 @@ public final class TxtReader extends BookReader {
 		int paraCount = 0;
 		m_paraOffset.put(0, 0);
 		byte lastReadByte = -1;
-		long startTime = System.nanoTime();
 		byte[] byteBuffer = new byte[BUFFER_SIZE];
-
+		
 		do {
+			++count;
 			int readSize = (int)size / BUFFER_SIZE == 0 ? (int)size % BUFFER_SIZE : BUFFER_SIZE;
 			MappedByteBuffer mapBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, currentOffset, readSize);
 //			int count = m_streamReader.read(bb);
 //			bb.flip();
 //			bb.get(buffer);
-			mapBuffer.get(byteBuffer, 0, readSize);
+//			long start = System.currentTimeMillis();
+//			mapBuffer.get(byteBuffer, 0, readSize);
+//			allTime += System.currentTimeMillis() - start;
 	
 			for (int i = 0; i < readSize; ++i) {
-//				byte c = mapBuffer.get(i);
-				byte c = byteBuffer[i];
+				long start = System.currentTimeMillis();
+				byte c = mapBuffer.get(i);
+				allTime += System.currentTimeMillis() - start;
+//				byte c = byteBuffer[i];
 				
 				// 记录每个新段落对应的文件偏移(整个文件最后一个字符为换行符则忽略)
 				if (c == 0x0a && currentOffset + i < size - 1) {
@@ -158,10 +165,12 @@ public final class TxtReader extends BookReader {
 			currentOffset += readSize;
 		} while (currentOffset < size);
 
-		long lastTime = System.nanoTime() - startTime;
-		Log.d("ProfileTime", "init1:" + lastTime);
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
+		double lastTime = (System.currentTimeMillis() - startTime) / 1000.0;
+		Log.d("ProfileTime", "init1: " + lastTime + "count:" + count + "all:" + allTime / 1000.0 + "avg:" + allTime / 1000.0 / count);
 	}
 		
 	public void readDocument(int paragraph)
