@@ -2330,8 +2330,8 @@ public class ZLTextView {
 				height > 10, false, false, false
 			);
 
-			int pageNumber = getCurrentCharNumber(pageIndex, true);
-			int totalPageNumber = sizeOfFullText();
+			int pageNumber = 0;//getCurrentCharNumber(pageIndex, true);
+			int totalPageNumber = 1;//sizeOfFullText(); TODO impl it
 			float percent = (float)pageNumber / totalPageNumber;
 
 			final StringBuilder info = new StringBuilder();
@@ -2380,7 +2380,7 @@ public class ZLTextView {
 				if (myTOCMarks == null) {
 					updateTOCMarks(model);
 				}
-				final int fullLength = sizeOfFullText();
+				final int fullLength = 1;//sizeOfFullText(); TODO impl it
 				for (TOCTree tocItem : myTOCMarks) {
 					TOCTree.Reference reference = tocItem.getReference();
 					if (reference != null) {

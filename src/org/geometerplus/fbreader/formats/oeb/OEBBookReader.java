@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLFileImage;
+import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
@@ -107,7 +108,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 				reader.readFile(xhtmlFile, referenceName + '#');
 			} catch (IOException e) {
 			}
-			myModelReader.insertEndOfSectionParagraph();
+			myModelReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 		}
 
 		generateTOC();
@@ -255,7 +256,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 					if (image != null) {
 						myModelReader.addImageReference(imageName, (short)0, true);
 						myModelReader.addImage(imageName, image);
-						myModelReader.insertEndOfSectionParagraph();
+						myModelReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 					} else {
 						myCoverFileName = null;
 					}
@@ -265,7 +266,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 					final String imageName = imageFile.getLongName();
 					myModelReader.addImageReference(imageName, (short)0, true);
 					myModelReader.addImage(imageName, new ZLFileImage(MimeType.IMAGE_AUTO, imageFile));
-					myModelReader.insertEndOfSectionParagraph();
+					myModelReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 				}
 			}
 		} else if (myState == READ_TOUR && SITE == tag) {

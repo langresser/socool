@@ -58,8 +58,8 @@ public final class TxtReader extends BookReader {
 		if (m_streamReader != null && !m_bookModel.Book.File.getPath().equalsIgnoreCase(model.Book.File.getPath())) {
 			try {
 				m_streamReader.close();
-			} catch (Exception e) {
-				
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -72,7 +72,7 @@ public final class TxtReader extends BookReader {
 			m_streamReader = new RandomAccessFile(path, "r").getChannel();
 			initParagraphData();
 		} catch (IOException e) {
-			
+			e.printStackTrace();
 		}
 	}
 
@@ -81,16 +81,12 @@ public final class TxtReader extends BookReader {
 	{
 		long startTime = System.currentTimeMillis();
 		int count = 0;
-		long allTime = 0;
 		try {
 
 		final long size = m_streamReader.size();
 		int currentOffset = 0;
 		final String encoding = m_bookModel.Book.getEncoding();
 		
-//		ByteBuffer bb = ByteBuffer.allocate(BUFFER_SIZE);
-//		byte[] buffer = new byte[BUFFER_SIZE];
-
 		int paraCount = 0;
 		m_paraOffset.put(0, 0);
 		byte lastReadByte = -1;
@@ -100,19 +96,13 @@ public final class TxtReader extends BookReader {
 		do {
 			++count;
 			int readSize = (int)size / BUFFER_SIZE == 0 ? (int)size % BUFFER_SIZE : BUFFER_SIZE;
-//			MappedByteBuffer mapBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, currentOffset, readSize);
-//			int count = m_streamReader.read(bb);
-//			bb.flip();
-//			bb.get(buffer);
 			mapBuffer.clear();
 			readSize = m_streamReader.read(mapBuffer);
-			long start = System.currentTimeMillis();
 			mapBuffer.flip();
 			mapBuffer.get(byteBuffer, 0, readSize);
-			allTime += System.currentTimeMillis() - start;
 	
 			for (int i = 0; i < readSize; ++i) {
-				byte c = byteBuffer[i];//0;//mapBuffer.get(i);
+				byte c = byteBuffer[i];
 				
 				// 记录每个新段落对应的文件偏移(整个文件最后一个字符为换行符则忽略)
 				if (c == 0x0a && currentOffset + i < size - 1) {
@@ -166,17 +156,35 @@ public final class TxtReader extends BookReader {
 			currentOffset += readSize;
 		} while (currentOffset < size);
 
+		m_bookModel.m_allParagraphNumber = paraCount;
+		m_bookModel.m_allTextSize = (int)size;
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		
 		double lastTime = (System.currentTimeMillis() - startTime) / 1000.0;
-		Log.d("ProfileTime", "init1: " + lastTime + "count:" + count + "all:" + allTime / 1000.0);
+		Log.d("ProfileTime", "init1: " + lastTime + "count:" + count);
 		Log.d("InitPara", "Para: " + m_paraOffset.size() + "lastOffset: " + m_paraOffset.get(m_paraOffset.size() - 1));
+	}
+	
+	public int getParagraphByOffset(int offset)
+	{
+		final int size = m_paraOffset.size();
+		for (int i = 0; i < size; ++i) {
+			if (m_paraOffset.get(i) > offset) {
+				Log.d("getParagraphByOffset", "para:" + (i - 1) + "offset:" + offset);
+				return i - 1;
+			}
+		}
+
+		return 0;
 	}
 		
 	public void readDocument(int paragraph)
 	{
+		Log.d("readDocument", "read:" + paragraph);
 		startDocumentHandler();
 
 		try {
@@ -186,7 +194,7 @@ public final class TxtReader extends BookReader {
 
 		int readOffset = 0;
 		int maxSize = BUFFER_SIZE;
-		int paraStart = fileOffset;
+		int paraStart = 0;
 		
 
 		if (fileOffset > BUFFER_SIZE) {
@@ -265,6 +273,9 @@ public final class TxtReader extends BookReader {
 			}
 		}
 		
+		m_bookModel.m_beginParagraph = getParagraphByOffset(ii + readOffset);
+		m_bookModel.m_endParagraph = getParagraphByOffset(jj + readOffset);
+
 		ByteBuffer buffer = ByteBuffer.allocate(jj - ii);
 		for (int i = ii; i < jj; ++i) {
 			buffer.put(i - ii, mappedBuffer.get(i));
@@ -300,15 +311,17 @@ public final class TxtReader extends BookReader {
 			characterDataHandler(text, parBegin, maxLength - parBegin);
 		}
 
-		m_streamReader.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		endDocumentHandler();
+		Log.d("readDocument", String.format("readover:%1d    begin:%2d    end:%3d", paragraph, m_bookModel.m_beginParagraph, m_bookModel.m_endParagraph));
 	}
 
 	protected void startDocumentHandler()
 	{
+		m_bookModel.clearParagraphData();
 		pushKind(BookModel.REGULAR);
 		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 		myLineFeedCounter = 0;
@@ -373,7 +386,7 @@ public final class TxtReader extends BookReader {
 			if (!myInsideContentsParagraph && (myLineFeedCounter == myEmptyLinesBeforeNewSection)) {
 				myInsideContentsParagraph = true;
 				internalEndParagraph();
-				insertEndOfSectionParagraph();
+				insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 				beginContentsParagraph();
 				myInsideTitle = true;
 				pushKind(BookModel.SECTION_TITLE);
@@ -397,8 +410,6 @@ public final class TxtReader extends BookReader {
 		return true;
 	}
 
-	private	int m_unicodeFlag;
-//		shared_ptr<ZLEncodingConverter> myConverter;
 	private	void internalEndParagraph()
 	{
 		if (!myLastLineIsEmpty) {

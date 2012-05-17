@@ -161,7 +161,6 @@ public final class ZLTextWordCursor extends ZLTextPosition {
 	public void moveToParagraph(int paragraphIndex) {
 		if (!isNull() && (paragraphIndex != myParagraphCursor.Index)) {
 			final BookModel model = myParagraphCursor.Model;
-			paragraphIndex = Math.max(0, Math.min(paragraphIndex, model.myParagraphsNumber - 1));
 			myParagraphCursor = ZLTextParagraphCursor.cursor(model, paragraphIndex);
 			moveToParagraphStart();
 		}		

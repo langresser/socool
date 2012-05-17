@@ -126,18 +126,14 @@ public class BookReader {
 		}
 	}
 
-	private final void insertEndParagraph(byte kind) {
+	public final void insertEndParagraph(byte kind) {
 		if (m_bookModel != null && mySectionContainsRegularContents) {
 			int size = m_bookModel.myParagraphsNumber;
-			if (size > 0 && m_bookModel.getParagraph(size - 1).getKind() != kind) {
+			if (size > 0 && m_bookModel.getParagraphKind(size - 1) != kind) {
 				m_bookModel.createParagraph(kind);
 				mySectionContainsRegularContents = false;
 			}
 		}
-	}
-
-	public final void insertEndOfSectionParagraph() {
-		insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 	}
 
 	public final void addData(char[] data) {

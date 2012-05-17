@@ -166,7 +166,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 			case FB2Tag.ANNOTATION:
 				myBookReader.popKind();
 				if (myBodyCounter == 0) {
-					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 				}
 				break;
 
@@ -180,7 +180,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				myBookReader.popKind();
 				myReadMainText = false;
 				if (myReadMainText) {
-					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 				}
 				if (mySectionDepth > 0) {
 					myBookReader.endContentsParagraph();
@@ -195,7 +195,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 			case FB2Tag.COVERPAGE:
 				if (myBodyCounter == 0) {
 					myInsideCoverpage = false;
-					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 				}
 				break;
 
@@ -296,7 +296,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 
 			case FB2Tag.SECTION:
 				if (myReadMainText) {
-					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 					++mySectionDepth;
 					myBookReader.beginContentsParagraph();
 					mySectionStarted = true;
@@ -311,7 +311,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				if (myInsidePoem) {
 					myBookReader.pushKind(BookModel.POEM_TITLE);
 				} else if (mySectionDepth == 0) {
-					myBookReader.insertEndOfSectionParagraph();
+					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 					myBookReader.pushKind(BookModel.TITLE);
 				} else {
 					myBookReader.pushKind(BookModel.SECTION_TITLE);

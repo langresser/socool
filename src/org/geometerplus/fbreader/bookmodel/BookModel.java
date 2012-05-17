@@ -127,6 +127,12 @@ public class BookModel {
 	protected final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
 	public final String myId;
 	public final String myLanguage;
+	
+	public boolean m_isStreamRead = false;
+	public int m_beginParagraph = 0;
+	public int m_endParagraph = 0;
+	public int m_allParagraphNumber = 0;
+	public int m_allTextSize = 0;
 
 	protected int[] m_paragraphStartIndex;
 	protected int[] myParagraphLengths;
@@ -137,6 +143,13 @@ public class BookModel {
 	public ArrayList<ZLTextMark> myMarks;
 	
 	public HashMap<String, Label> myInternalHyperlinks = new HashMap<String, Label>();
+	public Vector<Element> m_elements = new Vector<Element>();
+
+	public void clearParagraphData()
+	{
+		myParagraphsNumber = 0;
+		m_elements.clear();
+	}
 
 	public void addImage(String id, ZLImage image) {
 		myImageMap.put(id, image);
@@ -221,14 +234,27 @@ public class BookModel {
 	public final List<ZLTextMark> getMarks() {
 		return (myMarks != null) ? myMarks : Collections.<ZLTextMark>emptyList();
 	}
+	
+	public final byte getParagraphKind(int index)
+	{
+		final byte kind = myParagraphKinds[index - m_beginParagraph];
+		return kind;
+	}
 
 	public final ZLTextParagraph getParagraph(int index) {
-		final byte kind = myParagraphKinds[index];
+		Log.d("getParagraph", String.format("para: %1d   begin:%2d    end:%3d", index, m_beginParagraph, m_endParagraph));
+		if (m_beginParagraph != 0 || m_endParagraph != 0) {
+			if (index >= m_endParagraph || index < m_beginParagraph) {
+				Book.getPlugin().readParagraph(index);
+			}
+		}
+
+		final byte kind = myParagraphKinds[index - m_beginParagraph];
 		return new ZLTextParagraph(this, index, kind);
 	}
 
 	public final int getTextLength(int index) {
-		return myTextSizes[Math.max(Math.min(index, myParagraphsNumber - 1), 0)];
+		return myTextSizes[Math.max(Math.min(index - m_beginParagraph, myParagraphsNumber - 1), 0)];
 	}
 
 	private static int binarySearch(int[] array, int length, int value) {
@@ -259,6 +285,10 @@ public class BookModel {
 
 	public void createParagraph(byte kind) {
 		final int index = myParagraphsNumber++;
+		if (!m_isStreamRead) {
+			m_allParagraphNumber = myParagraphsNumber;
+		}
+
 		if (index == myParagraphLengths.length) {
 			final int size = myParagraphLengths.length;
 			m_paragraphStartIndex = ZLArrayUtils.createCopy(m_paragraphStartIndex, size, size << 1);
@@ -275,7 +305,6 @@ public class BookModel {
 		myParagraphKinds[index] = kind;
 	}
 	
-	public Vector<Element> m_elements = new Vector<Element>();
 	class Element {
 		public int m_type;
 		public char[] m_text = null;
@@ -413,17 +442,17 @@ public class BookModel {
 		public short myFixedHSpaceLength;
 
 		public EntryIterator(int index) {
-			myLength = myParagraphLengths[index];
-			m_index = m_paragraphStartIndex[index];
+			myLength = myParagraphLengths[index - m_beginParagraph];
+			m_index = m_paragraphStartIndex[index - m_beginParagraph];
 			myCounter = 0;
-//			Log.d("EntryIterator", "length:" + myLength + "index:" +  m_index);
+			Log.d("EntryIterator", "length:" + myLength + "index:" +  m_index);
 		}
 
 		void reset(int index) {
 			myCounter = 0;
-			myLength = myParagraphLengths[index];
-			m_index = m_paragraphStartIndex[index];
-//			Log.d("reset", "length:" + myLength + "index:" +  m_index);
+			myLength = myParagraphLengths[index - m_beginParagraph];
+			m_index = m_paragraphStartIndex[index - m_beginParagraph];
+			Log.d("reset", "length:" + myLength + "index:" +  m_index);
 		}
 
 		public boolean hasNext() {
@@ -431,13 +460,14 @@ public class BookModel {
 		}
 
 		public void next() {
+			Log.d("next", String.format("index:%1d   all:%1d", m_index, m_elements.size()));
 			Element element = m_elements.get(m_index);
 			myType = (byte)element.m_type;
 			switch (element.m_type) {
 				case ZLTextParagraph.Entry.TEXT:
 					myTextLength = element.m_text.length;
 					myTextData = element.m_text;
-//					Log.d("fuck", element.m_text);
+					Log.d("next", new String(element.m_text));
 					myTextOffset = 0;
 					break;
 				case ZLTextParagraph.Entry.CONTROL:
