@@ -972,7 +972,7 @@ public class ZLTextView {
 		// TODO 智能排版，自动过滤空格，但是要考虑某些文件有意使用空格进行排版
 		if (isFirstLine) {
 			info.LeftIndent += myTextStyle.getFirstLineIndentDelta();
-			Log.d("isFirstLine", "Indent: " + info.LeftIndent + "style: " + myTextStyle.Base.getClass().getName());
+//			Log.d("isFirstLine", "Indent: " + info.LeftIndent + "style: " + myTextStyle.Base.getClass().getName());
 		}
 
 		info.Width = info.LeftIndent;
@@ -1399,6 +1399,12 @@ public class ZLTextView {
 				buildInfos(page, page.StartCursor, page.EndCursor);
 				break;
 			case END_IS_KNOWN:
+				// 先设置好字体，然后才能找到正确的起始字符
+				if (!myModel.m_supportRichText) {
+					final ZLTextStyleDecoration decoration =
+							ZLTextStyleCollection.Instance().getDecoration(BookModel.NONE);
+					setTextStyle(decoration.createDecoratedStyle(ZLTextStyleCollection.Instance().getBaseStyle()));
+				}
 				page.StartCursor.setCursor(findStart(page.EndCursor, SizeUnit.PIXEL_UNIT, getTextAreaHeight()));
 				buildInfos(page, page.StartCursor, page.EndCursor);
 				break;

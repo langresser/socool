@@ -23,7 +23,7 @@ public final class TxtReader extends BookReader {
 	public int myIgnoredIndent = 1;
 	public int myEmptyLinesBeforeNewSection = 1;
 	
-	public final int BUFFER_SIZE = 1024 * 3;		// 假定文件缓存区有10k
+	public final int BUFFER_SIZE = 1024 * 20;		// 假定文件缓存区有10k
 
 	public FileChannel m_streamReader = null;
 	
@@ -195,26 +195,32 @@ public final class TxtReader extends BookReader {
 		int paraStart = 0;
 		
 
+		//----10k------========20k=========-----10k------
+		//|直到\n|++5k++++++++++++++++++++++|直到\n|
 		if (size <= BUFFER_SIZE) {
 			// 如果文件比较小，就直接读取
 			readOffset = 0;
 			maxSize = (int)size;
 			paraStart = 0;
 		} else {
-			if (fileOffset > BUFFER_SIZE) {
-				readOffset = fileOffset - BUFFER_SIZE;
-				maxSize += BUFFER_SIZE;
-				paraStart = BUFFER_SIZE;
+			final int tempBufferSize = BUFFER_SIZE / 2;
+			
+			// 如果开始读取的位置小于10k，那么就从头读取，否则取10k最大缓存
+			if (fileOffset > tempBufferSize) {
+				readOffset = fileOffset - tempBufferSize;
+				maxSize += tempBufferSize;
+				paraStart = tempBufferSize / 2;
 			} else {
 				readOffset = 0;
 				maxSize += fileOffset;
-				paraStart = fileOffset;
+				paraStart = 0;		// 如果在文件比较开头的位置，那么就直接从头开始读取(由于是文件开头，所以可以保证这个事完整字符)
 			}
 			
-			if (fileOffset + BUFFER_SIZE > size) {
+			// 20k的正式缓冲后，再有一个10k的缓冲
+			if (fileOffset + tempBufferSize > size) {
 				maxSize += size - fileOffset;
 			} else {
-				maxSize += BUFFER_SIZE;
+				maxSize += tempBufferSize;
 			}	
 		}
 		
@@ -225,12 +231,13 @@ public final class TxtReader extends BookReader {
 		m_streamReader.read(mapBuffer);
 		mapBuffer.flip();
 		mapBuffer.get(buffer);
-//		MappedByteBuffer mappedBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
 		
 		final String encoding = m_bookModel.Book.getEncoding();
+		
+		// 从缓冲区开头读取到换行符，保证完整字符
 		int ii = paraStart;
 		for (; ii > 0; --ii) {
-			byte c = buffer[ii];
+			final byte c = buffer[ii];
 			if (c == 0x0a) {
 				if (encoding.equalsIgnoreCase("utf-16le")) {
 					// 0d 00 0a 00
@@ -255,6 +262,7 @@ public final class TxtReader extends BookReader {
 			}
 		}
 		
+		// 结尾缓冲读取到换行，保证字符完整
 		int jj = paraStart + BUFFER_SIZE;
 		for (; jj < maxSize; ++jj) {
 			byte c = buffer[jj];
