@@ -78,8 +78,7 @@ public class Book {
 			return null;
 		}
 
-		// TODO 先查看下数据库
-		Book book = null;//FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
+		Book book = FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
 
 		if (book == null) {
 			book = new Book(bookFile);
@@ -295,12 +294,6 @@ public class Book {
 			for (String linkId : myVisitedHyperlinks) {
 				FBReaderApp.Instance().getDatabase().addVisitedHyperlink(myId, linkId);
 			}
-		}
-	}
-
-	public void insertIntoBookList() {
-		if (myId != -1) {
-			FBReaderApp.Instance().getDatabase().insertIntoBookList(myId);
 		}
 	}
 

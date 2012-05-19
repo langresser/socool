@@ -51,6 +51,7 @@ public class TxtPlugin extends JavaFormatPlugin {
 	@Override
 	public void readModel(BookModel model) {
 		model.m_isStreamRead = true;
+		model.m_supportRichText = false;
 
 		detectLanguageAndEncoding(model.Book);
 		m_reader.setModel(model);

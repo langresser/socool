@@ -106,14 +106,18 @@ public class BookReader {
 		final BookModel textModel = m_bookModel;
 		if (textModel != null) {
 			textModel.createParagraph(kind);
-			final byte[] stack = myKindStack;
-			final int size = myKindStackSize;
-			for (int i = 0; i < size; ++i) {
-				textModel.addControl(stack[i], true);
+			
+			if (m_bookModel.m_supportRichText) {
+				final byte[] stack = myKindStack;
+				final int size = myKindStackSize;
+				for (int i = 0; i < size; ++i) {
+					textModel.addControl(stack[i], true);
+				}
+				if (myHyperlinkReference.length() != 0) {
+					textModel.addHyperlinkControl(myHyperlinkKind, hyperlinkType(myHyperlinkKind), myHyperlinkReference);
+				}
 			}
-			if (myHyperlinkReference.length() != 0) {
-				textModel.addHyperlinkControl(myHyperlinkKind, hyperlinkType(myHyperlinkKind), myHyperlinkReference);
-			}
+			
 			myTextParagraphExists = true;
 		}
 	}

@@ -23,7 +23,7 @@ public final class TxtReader extends BookReader {
 	public int myIgnoredIndent = 1;
 	public int myEmptyLinesBeforeNewSection = 1;
 	
-	public final int BUFFER_SIZE = 1024 * 1000;		// 假定文件缓存区有10k
+	public final int BUFFER_SIZE = 1024 * 10;		// 假定文件缓存区有10k
 
 	public FileChannel m_streamReader = null;
 	
@@ -358,7 +358,8 @@ public final class TxtReader extends BookReader {
 
 	protected void endDocumentHandler()
 	{
-		internalEndParagraph();
+		popKind();
+		endParagraph();
 	}
 	
 	protected boolean characterDataHandler(char[] ch, int start, int length)
@@ -369,14 +370,9 @@ public final class TxtReader extends BookReader {
 	
 	protected boolean newLineHandler()
 	{
-		internalEndParagraph();
+		endParagraph();
 		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 
 		return true;
-	}
-
-	private	void internalEndParagraph()
-	{
-		endParagraph();
 	}
 }

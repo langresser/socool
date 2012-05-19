@@ -115,7 +115,7 @@ public class BooksDatabase {
 
 	protected Book loadBookByFile(ZLFile file) {
 		Book book = null;
-		final Cursor cursor = myDatabase.rawQuery("SELECT book_id,title,encoding,language,author,file_size FROM Books WHERE file_path = " + file.getPath(), null);
+		final Cursor cursor = myDatabase.rawQuery("SELECT book_id,title,encoding,language,author,file_size FROM Books WHERE file_path = '" + file.getPath() + "'", null);
 		if (cursor.moveToNext()) {
 			book = createBook(
 				cursor.getLong(0), file, cursor.getString(1), cursor.getString(2), cursor.getString(3)
@@ -167,14 +167,22 @@ public class BooksDatabase {
 	protected long insertBookInfo(ZLFile file, String encoding, String language, String title) {
 		if (myInsertBookInfoStatement == null) {
 			myInsertBookInfoStatement = myDatabase.compileStatement(
-				"INSERT OR IGNORE INTO Books (encoding,language,title,file_path) VALUES (?,?,?,?)"
+				"INSERT OR IGNORE INTO Books (author,encoding,language,title,access_time,"+
+				"pages_full,page_current,file_path,file_size) VALUES (?,?,?,?,?,?,?,?,?)"
 			);
 		}
-		SQLiteUtil.bindString(myInsertBookInfoStatement, 1, encoding);
-		SQLiteUtil.bindString(myInsertBookInfoStatement, 2, language);
-		myInsertBookInfoStatement.bindString(3, title);
-		myInsertBookInfoStatement.bindString(4, file.getPath());
-		return myInsertBookInfoStatement.executeInsert();
+		// TODO 添加作者等信息
+		myInsertBookInfoStatement.bindString(1, "");
+		myInsertBookInfoStatement.bindString(2, encoding == null ? "" : encoding);
+		myInsertBookInfoStatement.bindString(3, language == null ? "" : language);
+		myInsertBookInfoStatement.bindString(4, title);
+		myInsertBookInfoStatement.bindLong(5, 0);
+		myInsertBookInfoStatement.bindLong(6, 0);
+		myInsertBookInfoStatement.bindLong(7, 0);
+		myInsertBookInfoStatement.bindString(8, file.getPath());
+		myInsertBookInfoStatement.bindLong(9, 0);
+		long bookId = myInsertBookInfoStatement.executeInsert();
+		return bookId;
 	}
 
 	private SQLiteStatement mySaveRecentBookStatement;
@@ -441,42 +449,6 @@ public class BooksDatabase {
 		myStorePositionStatement.execute();
 	}
 
-	private SQLiteStatement myInsertIntoBookListStatement;
-	protected boolean insertIntoBookList(long bookId) {
-		if (myInsertIntoBookListStatement == null) {
-			myInsertIntoBookListStatement = myDatabase.compileStatement(
-				"INSERT OR IGNORE INTO BookList(book_id) VALUES (?)"
-			);
-		}
-		myInsertIntoBookListStatement.bindLong(1, bookId);
-		myInsertIntoBookListStatement.execute();
-		return true;
-	}
-
-	private SQLiteStatement myDeleteFromBookListStatement;
-	public boolean deleteFromBookList(long bookId) {
-		if (myDeleteFromBookListStatement == null) {
-			myDeleteFromBookListStatement = myDatabase.compileStatement(
-				"DELETE FROM BookList WHERE book_id = ?"
-			);
-		}
-		myDeleteFromBookListStatement.bindLong(1, bookId);
-		myDeleteFromBookListStatement.execute();
-		deleteVisitedHyperlinks(bookId);
-		return true;
-	}
-
-	private SQLiteStatement myCheckBookListStatement;
-	protected boolean checkBookList(long bookId) {
-		if (myCheckBookListStatement == null) {
-			myCheckBookListStatement = myDatabase.compileStatement(
-				"SELECT COUNT(*) FROM BookList WHERE book_id = ?"
-			);
-		}
-		myCheckBookListStatement.bindLong(1, bookId);
-		return myCheckBookListStatement.simpleQueryForLong() > 0;
-	}
-
 	private SQLiteStatement myDeleteVisitedHyperlinksStatement;
 	private void deleteVisitedHyperlinks(long bookId) {
 		if (myDeleteVisitedHyperlinksStatement == null) {
@@ -522,9 +494,9 @@ public class BooksDatabase {
 					"encoding TEXT," +							// 文本编码
 					"language TEXT," +							// 书本语言
 					"title TEXT NOT NULL," +					// 书名（可自定义）
-					"access_time INTEGER NOT NULL," +			// 上次访问时间
-					"pages_full INTEGER NOT NULL," +			// 总页数
-					"page_current INTEGER NOT NULL," +			// 当前阅读进度
+					"access_time INTEGER," +			// 上次访问时间
+					"pages_full INTEGER," +			// 总页数
+					"page_current INTEGER," +			// 当前阅读进度
 					"file_path TEXT UNIQUE NOT NULL," +			// 文件路径
 					"file_size INTERGER)");						// 文件大小
 

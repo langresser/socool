@@ -93,11 +93,13 @@ public class ZLTextView {
 		ZLTextParagraphCursorCache.clear();
 
 		myModel = model;
+		
 		myCurrentPage.reset();
 		myPreviousPage.reset();
 		myNextPage.reset();
 		if (myModel != null) {
 			resetTextStyle();
+
 			final int paragraphsNumber = myModel.myParagraphsNumber;
 			if (paragraphsNumber > 0) {
 				myCurrentPage.moveStartCursor(ZLTextParagraphCursor.cursor(myModel, 0));
@@ -600,8 +602,8 @@ public class ZLTextView {
 				charsPerParagraph * 1.2f);
 
 		final int strHeight = getWordHeight() + myContext.getDescent();
-		final int effectiveHeight = (int) (textHeight - (getTextStyle().getSpaceBefore()
-				+ getTextStyle().getSpaceAfter()) / charsPerParagraph);
+		final int effectiveHeight = (int) (textHeight - (myTextStyle.getSpaceBefore()
+				+ myTextStyle.getSpaceAfter()) / charsPerParagraph);
 		final int linesPerPage = effectiveHeight / strHeight;
 
 		return charsPerLine * linesPerPage;
@@ -832,12 +834,12 @@ public class ZLTextView {
 					setTextStyle(area.Style);
 				}
 				final int areaX = area.XStart;
-				final int areaY = area.YEnd - getElementDescent(element) - getTextStyle().getVerticalShift();
+				final int areaY = area.YEnd - getElementDescent(element) - myTextStyle.getVerticalShift();
 				if (element instanceof ZLTextWord) {
 					drawWord(
 						areaX, areaY, (ZLTextWord)element, charIndex, -1, false,
 						mySelection.isAreaSelected(area)
-							? getSelectedForegroundColor() : getTextColor(getTextStyle().Hyperlink)
+							? getSelectedForegroundColor() : getTextColor(myTextStyle.Hyperlink)
 					);
 				} else if (element instanceof ZLTextImageElement) {
 					final ZLTextImageElement imageElement = (ZLTextImageElement)element;
@@ -874,10 +876,10 @@ public class ZLTextView {
 			final int len = info.EndCharIndex - start;
 			final ZLTextWord word = (ZLTextWord)paragraph.getElement(info.EndElementIndex);
 			drawWord(
-				area.XStart, area.YEnd - myContext.getDescent() - getTextStyle().getVerticalShift(),
+				area.XStart, area.YEnd - myContext.getDescent() - myTextStyle.getVerticalShift(),
 				word, start, len, area.AddHyphenationSign,
 				mySelection.isAreaSelected(area)
-					? getSelectedForegroundColor() : getTextColor(getTextStyle().Hyperlink)
+					? getSelectedForegroundColor() : getTextColor(myTextStyle.Hyperlink)
 			);
 		}
 	}
@@ -891,8 +893,11 @@ public class ZLTextView {
 			resetTextStyle();
 			final ZLTextParagraphCursor paragraphCursor = result.getParagraphCursor();
 			final int wordIndex = result.getElementIndex();
-			applyControls(paragraphCursor, 0, wordIndex);
-			ZLTextLineInfo info = new ZLTextLineInfo(paragraphCursor, wordIndex, result.getCharIndex(), getTextStyle());
+			if (wordIndex != 0) {
+				applyControls(paragraphCursor, 0, wordIndex);
+			}
+
+			ZLTextLineInfo info = new ZLTextLineInfo(paragraphCursor, wordIndex, result.getCharIndex(), myTextStyle);
 			final int endIndex = info.ParagraphCursorLength;
 			while (info.EndElementIndex != endIndex) {
 				info = processTextLine(paragraphCursor, info.EndElementIndex, info.EndCharIndex, endIndex);
@@ -914,7 +919,7 @@ public class ZLTextView {
 
 	private boolean isHyphenationPossible() {
 		return ZLTextStyleCollection.Instance().getBaseStyle().AutoHyphenationOption.getValue()
-			&& getTextStyle().allowHyphenations();
+			&& myTextStyle.allowHyphenations();
 	}
 
 	private ZLTextLineInfo processTextLine(
@@ -923,7 +928,7 @@ public class ZLTextView {
 		final int startCharIndex,
 		final int endIndex
 	) {
-		final ZLTextLineInfo info = new ZLTextLineInfo(paragraphCursor, startIndex, startCharIndex, getTextStyle());
+		final ZLTextLineInfo info = new ZLTextLineInfo(paragraphCursor, startIndex, startCharIndex, myTextStyle);
 		final ZLTextLineInfo cachedInfo = myLineInfoCache.get(info);
 		if (cachedInfo != null) {
 			applyControls(paragraphCursor, startIndex, cachedInfo.EndElementIndex);
@@ -945,17 +950,17 @@ public class ZLTextView {
 				}
 				element = paragraphCursor.getElement(currentElementIndex);
 			}
-			info.StartStyle = getTextStyle();
+			info.StartStyle = myTextStyle;
 			info.RealStartElementIndex = currentElementIndex;
 			info.RealStartCharIndex = currentCharIndex;
 		}
 
-		ZLTextStyle storedStyle = getTextStyle();
+		ZLTextStyle storedStyle = myTextStyle;
 
-		info.LeftIndent = getTextStyle().getLeftIndent();
+		info.LeftIndent = myTextStyle.getLeftIndent();
 		// TODO 智能排版，自动过滤空格，但是要考虑某些文件有意使用空格进行排版
 		if (isFirstLine) {
-			info.LeftIndent += getTextStyle().getFirstLineIndentDelta();
+			info.LeftIndent += myTextStyle.getFirstLineIndentDelta();
 		}
 
 		info.Width = info.LeftIndent;
@@ -969,7 +974,7 @@ public class ZLTextView {
 		int newWidth = info.Width;
 		int newHeight = info.Height;
 		int newDescent = info.Descent;
-		int maxWidth = getTextAreaWidth() - getTextStyle().getRightIndent();
+		int maxWidth = getTextAreaWidth() - myTextStyle.getRightIndent();
 		boolean wordOccurred = false;
 		boolean isVisible = false;
 		int lastSpaceWidth = 0;
@@ -1024,7 +1029,7 @@ public class ZLTextView {
 				info.EndElementIndex = currentElementIndex;
 				info.EndCharIndex = currentCharIndex;
 				info.SpaceCounter = internalSpaceCounter;
-				storedStyle = getTextStyle();
+				storedStyle = myTextStyle;
 				removeLastSpace = !wordOccurred && (internalSpaceCounter > 0);
 			}
 		} while (currentElementIndex != endIndex);
@@ -1081,7 +1086,7 @@ public class ZLTextView {
 						info.EndElementIndex = currentElementIndex;
 						info.EndCharIndex = hyphenationPosition;
 						info.SpaceCounter = internalSpaceCounter;
-						storedStyle = getTextStyle();
+						storedStyle = myTextStyle;
 						removeLastSpace = false;
 					}
 				}
@@ -1099,7 +1104,7 @@ public class ZLTextView {
 			info.Height += info.StartStyle.getSpaceBefore();
 		}
 		if (info.isEndOfParagraph()) {
-			info.VSpaceAfter = getTextStyle().getSpaceAfter();
+			info.VSpaceAfter = myTextStyle.getSpaceAfter();
 		}
 
 		if (info.EndElementIndex != endIndex || endIndex == info.ParagraphCursorLength) {
@@ -1123,16 +1128,16 @@ public class ZLTextView {
 
 		int x = FBReaderApp.Instance().getLeftMargin() + info.LeftIndent;
 		final int maxWidth = getTextAreaWidth();
-		switch (getTextStyle().getAlignment()) {
+		switch (myTextStyle.getAlignment()) {
 			case BookModel.ALIGN_RIGHT:
-				x += maxWidth - getTextStyle().getRightIndent() - info.Width;
+				x += maxWidth - myTextStyle.getRightIndent() - info.Width;
 				break;
 			case BookModel.ALIGN_CENTER:
-				x += (maxWidth - getTextStyle().getRightIndent() - info.Width) / 2;
+				x += (maxWidth - myTextStyle.getRightIndent() - info.Width) / 2;
 				break;
 			case BookModel.ALIGN_JUSTIFY:
 				if (!endOfParagraph && (paragraphCursor.getElement(info.EndElementIndex) != ZLTextElement.AfterParagraph)) {
-					fullCorrection = maxWidth - getTextStyle().getRightIndent() - info.Width;
+					fullCorrection = maxWidth - myTextStyle.getRightIndent() - info.Width;
 				}
 				break;
 			case BookModel.ALIGN_LEFT:
@@ -1152,14 +1157,14 @@ public class ZLTextView {
 				if (wordOccurred && (spaceCounter > 0)) {
 					final int correction = fullCorrection / spaceCounter;
 					final int spaceLength = myContext.getSpaceWidth() + correction;
-					if (getTextStyle().isUnderline()) {
+					if (myTextStyle.isUnderline()) {
 						spaceElement = new ZLTextElementArea(
 							paragraphIndex, wordIndex, 0,
 							0, // length
 							true, // is last in element
 							false, // add hyphenation sign
 							false, // changed style
-							getTextStyle(), element, x, x + spaceLength, y, y
+							myTextStyle, element, x, x + spaceLength, y, y
 						);
 					} else {
 						spaceElement = null;
@@ -1182,7 +1187,7 @@ public class ZLTextView {
 					length - charIndex,
 					true, // is last in element
 					false, // add hyphenation sign
-					changeStyle, getTextStyle(), element,
+					changeStyle, myTextStyle, element,
 					x, x + width - 1, y - height + 1, y + descent
 				));
 				changeStyle = false;
@@ -1208,7 +1213,7 @@ public class ZLTextView {
 						len,
 						false, // is last in element
 						addHyphenationSign,
-						changeStyle, getTextStyle(), word,
+						changeStyle, myTextStyle, word,
 						x, x + width - 1, y - height + 1, y + descent
 					)
 				);
@@ -1678,10 +1683,6 @@ public class ZLTextView {
 			return 0;
 		}
 		return myContext.getWidth() - FBReaderApp.Instance().getRightMargin() - 1;
-	}
-
-	final ZLTextStyle getTextStyle() {
-		return myTextStyle;
 	}
 
 	final void setTextStyle(ZLTextStyle style) {

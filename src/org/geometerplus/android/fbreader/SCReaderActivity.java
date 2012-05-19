@@ -122,8 +122,6 @@ public final class SCReaderActivity extends Activity {
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
 	
-	private String m_currentBookPath = null;
-
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);

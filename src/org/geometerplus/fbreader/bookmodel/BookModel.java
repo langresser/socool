@@ -128,7 +128,8 @@ public class BookModel {
 	public final String myId;
 	public final String myLanguage;
 	
-	public boolean m_isStreamRead = false;
+	public boolean m_isStreamRead = false;			// 当前文件是否支持流读取(txt支持)
+	public boolean m_supportRichText = true;		// 当前文件是否支持富文本显示(txt不支持)
 	public int m_beginParagraph = 0;
 	public int m_endParagraph = 0;
 	public int m_allParagraphNumber = 0;

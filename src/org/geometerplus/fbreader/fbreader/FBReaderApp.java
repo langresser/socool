@@ -375,14 +375,12 @@ public final class FBReaderApp {
 		}
 		Book book = Book.getByFile(file);
 		if (book != null) {
-			book.insertIntoBookList();
 			return book;
 		}
 		if (file.isArchive()) {
 			for (ZLFile child : file.children()) {
 				book = Book.getByFile(child);
 				if (book != null) {
-					book.insertIntoBookList();
 					return book;
 				}
 			}
@@ -1530,7 +1528,6 @@ public final class FBReaderApp {
 		getFirstLevelTree(ROOT_FAVORITES).removeBook(book, false);
 		myRootTree.removeBook(book, true);
 
-		m_booksDatabase.deleteFromBookList(book.getId());
 		if ((removeMode & REMOVE_FROM_DISK) != 0) {
 			book.File.getPhysicalFile().delete();
 		}
