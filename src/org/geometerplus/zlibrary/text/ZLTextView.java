@@ -889,8 +889,19 @@ public class ZLTextView {
 		int textAreaHeight = getTextAreaHeight();
 		page.LineInfos.clear();
 		int counter = 0;
+		// 纯txt显示，只需要在每页开始的时候初始化格式
+		if (!myModel.m_supportRichText) {
+			final ZLTextStyleDecoration decoration =
+					ZLTextStyleCollection.Instance().getDecoration(BookModel.NONE);
+			setTextStyle(decoration.createDecoratedStyle(ZLTextStyleCollection.Instance().getBaseStyle()));
+		}
+
 		do {
-			resetTextStyle();
+			// 富文本显示每个段落都进行格式初始化
+			if (myModel.m_supportRichText) {
+				resetTextStyle();
+			}
+			
 			final ZLTextParagraphCursor paragraphCursor = result.getParagraphCursor();
 			final int wordIndex = result.getElementIndex();
 			if (wordIndex != 0) {
@@ -914,6 +925,8 @@ public class ZLTextView {
 				counter++;
 			}
 		} while (result.isEndOfParagraph() && result.nextParagraph() && !result.getParagraphCursor().isEndOfSection() && (textAreaHeight >= 0));
+		
+		// 排版完毕，进行段落初始化
 		resetTextStyle();
 	}
 
@@ -955,12 +968,11 @@ public class ZLTextView {
 			info.RealStartCharIndex = currentCharIndex;
 		}
 
-		ZLTextStyle storedStyle = myTextStyle;
-
 		info.LeftIndent = myTextStyle.getLeftIndent();
 		// TODO 智能排版，自动过滤空格，但是要考虑某些文件有意使用空格进行排版
 		if (isFirstLine) {
 			info.LeftIndent += myTextStyle.getFirstLineIndentDelta();
+			Log.d("isFirstLine", "Indent: " + info.LeftIndent + "style: " + myTextStyle.Base.getClass().getName());
 		}
 
 		info.Width = info.LeftIndent;
@@ -1029,7 +1041,6 @@ public class ZLTextView {
 				info.EndElementIndex = currentElementIndex;
 				info.EndCharIndex = currentCharIndex;
 				info.SpaceCounter = internalSpaceCounter;
-				storedStyle = myTextStyle;
 				removeLastSpace = !wordOccurred && (internalSpaceCounter > 0);
 			}
 		} while (currentElementIndex != endIndex);
@@ -1086,7 +1097,6 @@ public class ZLTextView {
 						info.EndElementIndex = currentElementIndex;
 						info.EndCharIndex = hyphenationPosition;
 						info.SpaceCounter = internalSpaceCounter;
-						storedStyle = myTextStyle;
 						removeLastSpace = false;
 					}
 				}
@@ -1097,8 +1107,6 @@ public class ZLTextView {
 			info.Width -= lastSpaceWidth;
 			info.SpaceCounter--;
 		}
-
-		setTextStyle(storedStyle);
 
 		if (isFirstLine) {
 			info.Height += info.StartStyle.getSpaceBefore();
@@ -1120,6 +1128,7 @@ public class ZLTextView {
 		final ZLTextParagraphCursor paragraphCursor = info.ParagraphCursor;
 
 		setTextStyle(info.StartStyle);
+		
 		int spaceCounter = info.SpaceCounter;
 		int fullCorrection = 0;
 		final boolean endOfParagraph = info.isEndOfParagraph();
@@ -1699,6 +1708,9 @@ public class ZLTextView {
 	}
 
 	final void resetTextStyle() {
+		if (!myModel.m_supportRichText) {
+			return;
+		}
 		setTextStyle(ZLTextStyleCollection.Instance().getBaseStyle());
 	}
 

@@ -107,6 +107,7 @@ public class BookReader {
 		if (textModel != null) {
 			textModel.createParagraph(kind);
 			
+			// 只有富文本显示需要这些控制
 			if (m_bookModel.m_supportRichText) {
 				final byte[] stack = myKindStack;
 				final int size = myKindStackSize;

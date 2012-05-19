@@ -23,7 +23,7 @@ public final class TxtReader extends BookReader {
 	public int myIgnoredIndent = 1;
 	public int myEmptyLinesBeforeNewSection = 1;
 	
-	public final int BUFFER_SIZE = 1024 * 10;		// 假定文件缓存区有10k
+	public final int BUFFER_SIZE = 1024 * 3;		// 假定文件缓存区有10k
 
 	public FileChannel m_streamReader = null;
 	
@@ -294,9 +294,19 @@ public final class TxtReader extends BookReader {
 		char[] text = cb.array();
 		int maxLength = text.length;
 		int parBegin = 0;
-
+		
+		// 过滤最开始的空格
 		for (int i = 0; i < maxLength; ++i) {
-			char c = text[i];
+			final char c = text[i];
+			if (c == ' ' || c == '\t' || c == '　' || c == '	') {
+				++parBegin;
+			} else {
+				break;
+			}
+		}
+
+		for (int i = parBegin; i < maxLength; ++i) {
+			final char c = text[i];
 			if (c == '\n' || c == '\r') {
 				boolean skipNewLine = false;
 				if (c == '\r' && (i + 1) != maxLength && text[i + 1] == '\n') {
