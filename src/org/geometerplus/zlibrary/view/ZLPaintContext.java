@@ -38,6 +38,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Typeface;
+import android.util.Log;
 
 public class ZLPaintContext {
 	private final ArrayList<String> myFamilies = new ArrayList<String>();
@@ -443,8 +444,8 @@ public class ZLPaintContext {
 		}
 		if (!containsSoftHyphen) {
 //			// TODO delete it  wangjia
-//			String word = new String(string, offset, length);
-//			Log.e("caonima", word);
+			String word = new String(string, offset, length);
+			Log.e("drawString", String.format("word: %1s   x: %1d  y:%1d", word, x, y));
 			myCanvas.drawText(string, offset, length, x, y, myTextPaint);
 		} else {
 			final char[] corrected = new char[length];

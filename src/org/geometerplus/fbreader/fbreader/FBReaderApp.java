@@ -106,20 +106,10 @@ public final class FBReaderApp {
 	public final ZLEnumOption<ImageTappingAction> ImageTappingActionOption =
 		new ZLEnumOption<ImageTappingAction>("Options", "ImageTappingAction", ImageTappingAction.openImageView);
 
-	public final ZLIntegerRangeOption LeftMarginOption;
-	public final ZLIntegerRangeOption RightMarginOption;
-	public final ZLIntegerRangeOption TopMarginOption;
-	public final ZLIntegerRangeOption BottomMarginOption;
-	{
-		final int dpi = getDisplayDPI();
-		final int x = getPixelWidth();
-		final int y = getPixelHeight();
-		final int horMargin = Math.min(dpi / 5, Math.min(x, y) / 30);
-		LeftMarginOption = new ZLIntegerRangeOption("Options", "LeftMargin", 0, 100, horMargin);
-		RightMarginOption = new ZLIntegerRangeOption("Options", "RightMargin", 0, 100, horMargin);
-		TopMarginOption = new ZLIntegerRangeOption("Options", "TopMargin", 0, 100, 0);
-		BottomMarginOption = new ZLIntegerRangeOption("Options", "BottomMargin", 0, 100, 4);
-	}
+	public ZLIntegerRangeOption LeftMarginOption = null;
+	public ZLIntegerRangeOption RightMarginOption = null;
+	public ZLIntegerRangeOption TopMarginOption = null;
+	public ZLIntegerRangeOption BottomMarginOption = null;
 
 	public final ZLIntegerRangeOption ScrollbarTypeOption =
 		new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 3, ZLTextView.SCROLLBAR_SHOW_AS_FOOTER);
@@ -277,6 +267,43 @@ public final class FBReaderApp {
 			myBindings = new ZLKeyBindings("Keys");
 		}
 		return myBindings;
+	}
+
+	public int getLeftMargin() {
+		if (LeftMarginOption == null) {
+			final int dpi = getDisplayDPI();
+			final int x = getPixelWidth();
+			final int y = getPixelHeight();
+			final int horMargin = Math.min(dpi / 5, Math.min(x, y) / 30);
+			LeftMarginOption = new ZLIntegerRangeOption("Options", "LeftMargin", 0, 100, horMargin);
+		}
+
+		return LeftMarginOption.getValue();
+	}
+
+	public int getRightMargin() {
+		if (RightMarginOption == null) {
+			final int dpi = getDisplayDPI();
+			final int x = getPixelWidth();
+			final int y = getPixelHeight();
+			final int horMargin = Math.min(dpi / 5, Math.min(x, y) / 30);
+			RightMarginOption = new ZLIntegerRangeOption("Options", "RightMargin", 0, 100, horMargin);
+		}
+		return RightMarginOption.getValue();
+	}
+	
+	public int getTopMargin() {
+		if (TopMarginOption == null) {
+			TopMarginOption = new ZLIntegerRangeOption("Options", "TopMargin", 0, 100, 0);
+		}
+		return TopMarginOption.getValue();
+	}
+
+	public int getBottomMargin() {
+		if (BottomMarginOption == null) {
+			BottomMarginOption = new ZLIntegerRangeOption("Options", "BottomMargin", 0, 100, 4);
+		}
+		return BottomMarginOption.getValue();
 	}
 
 
@@ -791,35 +818,32 @@ public final class FBReaderApp {
 	}
 
 	private DisplayMetrics myMetrics;
+	private void initDisplayMetrics()
+	{
+		if (myActivity == null) {
+			return;
+		}
+
+		myMetrics = new DisplayMetrics();
+		myActivity.getWindowManager().getDefaultDisplay().getMetrics(myMetrics);
+	}
 	public int getDisplayDPI() {
 		if (myMetrics == null) {
-			if (myActivity == null) {
-				return 0;
-			}
-			myMetrics = new DisplayMetrics();
-			myActivity.getWindowManager().getDefaultDisplay().getMetrics(myMetrics);
+			initDisplayMetrics();
 		}
 		return (int)(160 * myMetrics.density);
 	}
 
 	public int getPixelWidth() {
 		if (myMetrics == null) {
-			if (myActivity == null) {
-				return 0;
-			}
-			myMetrics = new DisplayMetrics();
-			myActivity.getWindowManager().getDefaultDisplay().getMetrics(myMetrics);
+			initDisplayMetrics();
 		}
 		return myMetrics.widthPixels;
 	}
 
 	public int getPixelHeight() {
 		if (myMetrics == null) {
-			if (myActivity == null) {
-				return 0;
-			}
-			myMetrics = new DisplayMetrics();
-			myActivity.getWindowManager().getDefaultDisplay().getMetrics(myMetrics);
+			initDisplayMetrics();
 		}
 		return myMetrics.heightPixels;
 	}

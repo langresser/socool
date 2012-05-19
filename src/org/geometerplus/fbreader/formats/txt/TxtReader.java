@@ -10,7 +10,6 @@ import java.nio.charset.Charset;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookReader;
-import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.text.ZLTextParagraph;
 
 import android.util.Log;
@@ -21,16 +20,10 @@ public final class TxtReader extends BookReader {
 	public final static int BREAK_PARAGRAPH_AT_LINE_WITH_INDENT = 4;
 
 	public boolean myInitialized = false;
-	public int myBreakType = BREAK_PARAGRAPH_AT_NEW_LINE;
 	public int myIgnoredIndent = 1;
 	public int myEmptyLinesBeforeNewSection = 1;
-	public boolean myCreateContentsTable = false;
 	
-	public final int BUFFER_SIZE = 1024 * 10;		// 假定文件缓存区有10k
-	public final int MAX_BUFFER_SIZE = 1024 * 30;	// 最大缓存区有30k，实际读取的文件总字节数在10k~30k之间，前后会多一个段落的数据
-	
-
-	public int m_currentOffset = 0;
+	public final int BUFFER_SIZE = 1024 * 1000;		// 假定文件缓存区有10k
 
 	public FileChannel m_streamReader = null;
 	
@@ -110,7 +103,7 @@ public final class TxtReader extends BookReader {
 					if (encoding.equalsIgnoreCase("utf-16le")) {
 						 // 0d 00 0a 00
 						if (i + 1 < readSize) {
-							byte cn = mapBuffer.get(i + 1);
+							byte cn = byteBuffer[i + 1];
 							if (cn == 0) {
 								++paraCount;
 								int offset = currentOffset + i + 2;
@@ -172,6 +165,11 @@ public final class TxtReader extends BookReader {
 	public int getParagraphByOffset(int offset)
 	{
 		final int size = m_paraOffset.size();
+		final int lastOffset = m_paraOffset.get(m_bookModel.m_allParagraphNumber - 1);
+		if (offset >= lastOffset) {
+			return m_bookModel.m_allParagraphNumber - 1;
+		}
+
 		for (int i = 0; i < size; ++i) {
 			if (m_paraOffset.get(i) > offset) {
 				Log.d("getParagraphByOffset", "para:" + (i - 1) + "offset:" + offset);
@@ -197,33 +195,46 @@ public final class TxtReader extends BookReader {
 		int paraStart = 0;
 		
 
-		if (fileOffset > BUFFER_SIZE) {
-			readOffset = fileOffset - BUFFER_SIZE;
-			maxSize += BUFFER_SIZE;
-			paraStart = BUFFER_SIZE;
-		} else {
+		if (size <= BUFFER_SIZE) {
+			// 如果文件比较小，就直接读取
 			readOffset = 0;
-			maxSize += fileOffset;
-			paraStart = fileOffset;
-		}
-		
-		if (fileOffset + BUFFER_SIZE > size) {
-			maxSize += size - fileOffset;
+			maxSize = (int)size;
+			paraStart = 0;
 		} else {
-			maxSize += BUFFER_SIZE;
+			if (fileOffset > BUFFER_SIZE) {
+				readOffset = fileOffset - BUFFER_SIZE;
+				maxSize += BUFFER_SIZE;
+				paraStart = BUFFER_SIZE;
+			} else {
+				readOffset = 0;
+				maxSize += fileOffset;
+				paraStart = fileOffset;
+			}
+			
+			if (fileOffset + BUFFER_SIZE > size) {
+				maxSize += size - fileOffset;
+			} else {
+				maxSize += BUFFER_SIZE;
+			}	
 		}
 		
 		// 读取30k的内容，保留10k的最小缓存区，然后从开头结尾再截取出完整段落
-		MappedByteBuffer mappedBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
+		ByteBuffer mapBuffer = ByteBuffer.allocateDirect(maxSize);
+		byte[] buffer = new byte[maxSize];
+		m_streamReader.position(readOffset);
+		m_streamReader.read(mapBuffer);
+		mapBuffer.flip();
+		mapBuffer.get(buffer);
+//		MappedByteBuffer mappedBuffer = m_streamReader.map(FileChannel.MapMode.READ_ONLY, readOffset, maxSize);
 		
 		final String encoding = m_bookModel.Book.getEncoding();
 		int ii = paraStart;
 		for (; ii > 0; --ii) {
-			byte c = mappedBuffer.get(ii);
+			byte c = buffer[ii];
 			if (c == 0x0a) {
 				if (encoding.equalsIgnoreCase("utf-16le")) {
 					// 0d 00 0a 00
-					byte cn = mappedBuffer.get(ii + 1);
+					byte cn = buffer[ii + 1];
 					if (cn == 0) {
 						ii += 2;
 						break;
@@ -231,7 +242,7 @@ public final class TxtReader extends BookReader {
 				} else if (encoding.equalsIgnoreCase("utf-16be")) {
 					// 00 0d 00 0a
 					if (ii >= 1) {
-						byte cp = mappedBuffer.get(ii - 1);
+						byte cp = buffer[ii - 1];
 						if (cp == 0) {
 							++ii;
 							break;
@@ -246,12 +257,12 @@ public final class TxtReader extends BookReader {
 		
 		int jj = paraStart + BUFFER_SIZE;
 		for (; jj < maxSize; ++jj) {
-			byte c = mappedBuffer.get(jj);
+			byte c = buffer[jj];
 			if (c == 0x0a) {
 				if (encoding.equalsIgnoreCase("utf-16le")) {
 					// 0d 00 0a 00
 					if (jj + 1 < maxSize) {
-						byte cn = mappedBuffer.get(jj + 1);
+						byte cn = buffer[jj + 1];
 						if (cn == 0) {
 							jj -= 3;
 							break;
@@ -260,7 +271,7 @@ public final class TxtReader extends BookReader {
 				} else if (encoding.equalsIgnoreCase("utf-16be")) {
 					// 00 0d 00 0a
 					if (jj >= 1) {
-						byte cp = mappedBuffer.get(jj - 1);
+						byte cp = buffer[jj - 1];
 						if (cp == 0) {
 							jj -= 4;
 							break;
@@ -273,16 +284,13 @@ public final class TxtReader extends BookReader {
 			}
 		}
 		
-		m_bookModel.m_beginParagraph = getParagraphByOffset(ii + readOffset);
-		m_bookModel.m_endParagraph = getParagraphByOffset(jj + readOffset);
+		ii = Math.max(0, ii);
+		jj = Math.min(jj, maxSize);
 
-		ByteBuffer buffer = ByteBuffer.allocate(jj - ii);
-		for (int i = ii; i < jj; ++i) {
-			buffer.put(i - ii, mappedBuffer.get(i));
-		}
+		ByteBuffer textBuffer = ByteBuffer.wrap(buffer, ii, jj - ii);
 
 		Charset cs = Charset.forName (encoding);
-	    CharBuffer cb = cs.decode(buffer);
+	    CharBuffer cb = cs.decode(textBuffer);
 		char[] text = cb.array();
 		int maxLength = text.length;
 		int parBegin = 0;
@@ -302,6 +310,23 @@ public final class TxtReader extends BookReader {
 				if (skipNewLine) {
 					++i; // 0d 0a
 				}
+				
+				// 过滤掉段首空格
+				if ((i + 1 < maxLength)) {
+					final char css = text[i + 1];
+					// 分别对应半角和全角的空格
+					if (css == ' ' || css == '\t' || css == '　' || css == '	') {
+						++i;
+					}
+				}
+				
+				if ((i + 1 < maxLength)) {
+					final char css = text[i + 1];
+					if (css == ' ' || css == '\t' || css == '　' || css == '	') {
+						++i;
+					}
+				}
+
 				parBegin = i + 1;
 				newLineHandler();
 			}
@@ -310,6 +335,10 @@ public final class TxtReader extends BookReader {
 		if (parBegin != maxLength) {
 			characterDataHandler(text, parBegin, maxLength - parBegin);
 		}
+
+
+		m_bookModel.m_beginParagraph = getParagraphByOffset(ii + readOffset);
+		m_bookModel.m_endParagraph = getParagraphByOffset(jj + readOffset);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -324,12 +353,7 @@ public final class TxtReader extends BookReader {
 		m_bookModel.clearParagraphData();
 		pushKind(BookModel.REGULAR);
 		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-		myLineFeedCounter = 0;
-		myInsideContentsParagraph = false;
 		myInsideTitle = true;
-		myLastLineIsEmpty = true;
-		myNewLine = true;
-		mySpaceCounter = 0;
 	}
 
 	protected void endDocumentHandler()
@@ -339,92 +363,20 @@ public final class TxtReader extends BookReader {
 	
 	protected boolean characterDataHandler(char[] ch, int start, int length)
 	{
-		int i = 0;
-		for (i = start; i < start + length; ++i) {
-			char c = ch[i];
-			if (c == ' ' || c == '\t') {
-				if (c != '\t') {
-					++mySpaceCounter;
-				} else {
-					mySpaceCounter += myIgnoredIndent + 1; // TODO: implement single option in PlainTextFormat
-				}
-			} else {
-				myLastLineIsEmpty = false;
-				break;
-			}
-		}
-
-		if (i != start + length) {
-			if ((myBreakType & BREAK_PARAGRAPH_AT_LINE_WITH_INDENT) != 0 &&
-					myNewLine && (mySpaceCounter > myIgnoredIndent)) {
-				internalEndParagraph();
-				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-			}
-			addData(ch, start, length, false);
-			if (myInsideContentsParagraph) {
-				addContentsData(ch, start, length);
-			}
-			myNewLine = false;
-		}
+		addData(ch, start, length, false);
 		return true;
 	}
 	
 	protected boolean newLineHandler()
 	{
-		if (!myLastLineIsEmpty) {
-			myLineFeedCounter = -1;
-		}
-		myLastLineIsEmpty = true;
-		++myLineFeedCounter;
-		myNewLine = true;
-		mySpaceCounter = 0;
-		boolean paragraphBreak =
-			(myBreakType & BREAK_PARAGRAPH_AT_NEW_LINE) != 0 ||
-			((myBreakType & BREAK_PARAGRAPH_AT_EMPTY_LINE) != 0 && (myLineFeedCounter > 0));
-
-		if (myCreateContentsTable) {
-			if (!myInsideContentsParagraph && (myLineFeedCounter == myEmptyLinesBeforeNewSection)) {
-				myInsideContentsParagraph = true;
-				internalEndParagraph();
-				insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
-				beginContentsParagraph();
-				myInsideTitle = true;
-				pushKind(BookModel.SECTION_TITLE);
-				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				paragraphBreak = false;
-			}
-			if (myInsideContentsParagraph && (myLineFeedCounter == 1)) {
-				myInsideTitle = false;
-				endContentsParagraph();
-				popKind();
-				myInsideContentsParagraph = false;
-				paragraphBreak = true;
-			}
-		}
-
-		if (paragraphBreak) {
-			internalEndParagraph();
-			beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-		}
+		internalEndParagraph();
+		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 
 		return true;
 	}
 
 	private	void internalEndParagraph()
 	{
-		if (!myLastLineIsEmpty) {
-			//myLineFeedCounter = 0;
-			myLineFeedCounter = -1; /* Fixed by Hatred: zero value was break LINE INDENT formater -
-			                           second line print with indent like new paragraf */
-		}
-		myLastLineIsEmpty = true;
 		endParagraph();
 	}
-
-	private	int myLineFeedCounter;
-	private	boolean myInsideContentsParagraph;
-	private	boolean myLastLineIsEmpty;
-	private	boolean myNewLine;
-	private	int mySpaceCounter;
-	
 }

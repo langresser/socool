@@ -243,8 +243,8 @@ public class BookModel {
 
 	public final ZLTextParagraph getParagraph(int index) {
 		Log.d("getParagraph", String.format("para: %1d   begin:%2d    end:%3d", index, m_beginParagraph, m_endParagraph));
-		if (m_beginParagraph != 0 || m_endParagraph != 0) {
-			if (index >= m_endParagraph || index < m_beginParagraph) {
+		if (m_isStreamRead) {
+			if (index < m_allParagraphNumber && (index >= m_endParagraph || index < m_beginParagraph)) {
 				Book.getPlugin().readParagraph(index);
 			}
 		}

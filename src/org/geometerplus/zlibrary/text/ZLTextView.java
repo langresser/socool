@@ -472,7 +472,7 @@ public class ZLTextView {
 
 		final ArrayList<ZLTextLineInfo> lineInfos = page.LineInfos;
 		final int[] labels = new int[lineInfos.size() + 1];
-		int y = getTopMargin();
+		int y = FBReaderApp.Instance().getTopMargin();
 		int index = 0;
 		for (ZLTextLineInfo info : lineInfos) {
 			prepareTextLine(page, info, y);
@@ -480,7 +480,7 @@ public class ZLTextView {
 			labels[++index] = page.TextElementMap.size();
 		}
 
-		y = getTopMargin();
+		y = FBReaderApp.Instance().getTopMargin();
 		index = 0;
 		for (ZLTextLineInfo info : lineInfos) {
 			drawTextLine(page, info, labels[index], labels[index + 1], y);
@@ -790,7 +790,7 @@ public class ZLTextView {
 				final int top = y + 1;
 				int left, right, bottom = y + info.Height + info.Descent;
 				if (selectionStartArea.compareTo(fromArea) < 0) {
-					left = getLeftMargin();
+					left = FBReaderApp.Instance().getLeftMargin();
 				} else {
 					left = selectionStartArea.XStart;
 				}
@@ -953,6 +953,7 @@ public class ZLTextView {
 		ZLTextStyle storedStyle = getTextStyle();
 
 		info.LeftIndent = getTextStyle().getLeftIndent();
+		// TODO 智能排版，自动过滤空格，但是要考虑某些文件有意使用空格进行排版
 		if (isFirstLine) {
 			info.LeftIndent += getTextStyle().getFirstLineIndentDelta();
 		}
@@ -1120,7 +1121,7 @@ public class ZLTextView {
 		boolean wordOccurred = false;
 		boolean changeStyle = true;
 
-		int x = getLeftMargin() + info.LeftIndent;
+		int x = FBReaderApp.Instance().getLeftMargin() + info.LeftIndent;
 		final int maxWidth = getTextAreaWidth();
 		switch (getTextStyle().getAlignment()) {
 			case BookModel.ALIGN_RIGHT:
@@ -1655,28 +1656,28 @@ public class ZLTextView {
 		if (myContext == null) {
 			return 0;
 		}
-		return myContext.getHeight() - getTopMargin() - getBottomMargin();
+		return myContext.getHeight() - FBReaderApp.Instance().getTopMargin() - FBReaderApp.Instance().getBottomMargin();
 	}
 
 	int getTextAreaWidth() {
 		if (myContext == null) {
 			return 0;
 		}
-		return myContext.getWidth() - getLeftMargin() - getRightMargin();
+		return myContext.getWidth() - FBReaderApp.Instance().getLeftMargin() - FBReaderApp.Instance().getRightMargin();
 	}
 
 	int getBottomLine() {
 		if (myContext == null) {
 			return 0;
 		}
-		return myContext.getHeight() - getBottomMargin() - 1;
+		return myContext.getHeight() - FBReaderApp.Instance().getBottomMargin() - 1;
 	}
 
 	int getRightLine() {
 		if (myContext == null) {
 			return 0;
 		}
-		return myContext.getWidth() - getRightMargin() - 1;
+		return myContext.getWidth() - FBReaderApp.Instance().getRightMargin() - 1;
 	}
 
 	final ZLTextStyle getTextStyle() {
@@ -2183,22 +2184,6 @@ public class ZLTextView {
 		return true;
 	}
 
-	public int getLeftMargin() {
-		return FBReaderApp.Instance().LeftMarginOption.getValue();
-	}
-
-	public int getRightMargin() {
-		return FBReaderApp.Instance().RightMarginOption.getValue();
-	}
-	
-	public int getTopMargin() {
-		return FBReaderApp.Instance().TopMarginOption.getValue();
-	}
-
-	public int getBottomMargin() {
-		return FBReaderApp.Instance().BottomMarginOption.getValue();
-	}
-
 	public ZLFile getWallpaperFile() {
 		final String filePath = FBReaderApp.Instance().getColorProfile().WallpaperOption.getValue();
 		if ("".equals(filePath)) {
@@ -2309,8 +2294,8 @@ public class ZLTextView {
 			final ZLColor fgColor = getTextColor(ZLTextHyperlink.NO_LINK);
 			final ZLColor fillColor = FBReaderApp.Instance().getColorProfile().FooterFillOption.getValue();
 
-			final int left = getLeftMargin();
-			final int right = context.getWidth() - getRightMargin();
+			final int left = FBReaderApp.Instance().getLeftMargin();
+			final int right = context.getWidth() - FBReaderApp.Instance().getRightMargin();
 			final int height = getHeight();
 			final int lineWidth = height <= 10 ? 1 : 2;
 			final int delta = height <= 10 ? 0 : 1;
