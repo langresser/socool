@@ -7,7 +7,6 @@ import android.widget.AbsListView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.database.CharArrayBuffer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -82,9 +81,7 @@ class BooksAdapter extends BaseAdapter {
 	    BubbleTextView title;
 	    String bookId;
 	    CrossFadeDrawable transition;
-	    final CharArrayBuffer buffer = new CharArrayBuffer(64);
 	    boolean queryCover;
-	    String sortTitle;
 	}
 
 	@Override
@@ -94,20 +91,18 @@ class BooksAdapter extends BaseAdapter {
 			convertView = (BubbleTextView) mInflater.inflate(R.layout.shelf_book, parent, false);
 			holder = new BookViewHolder();
 			convertView.setTag(holder);
+			
+			final CrossFadeDrawable transition = new CrossFadeDrawable(mDefaultCoverBitmap, null);
+	        transition.setCallback(convertView);
+	        transition.setCrossFadeEnabled(true);
+	        holder.transition = transition;
 		} else {
 			holder = (BookViewHolder)convertView.getTag();
 		}
         
         holder.title = (BubbleTextView) convertView;
-
-        final CrossFadeDrawable transition = new CrossFadeDrawable(mDefaultCoverBitmap, null);
-        transition.setCallback(convertView);
-        transition.setCrossFadeEnabled(true);
-        holder.transition = transition;
-
         String bookId = "";
         holder.bookId = bookId;
-        holder.sortTitle = "";
 
         if (mActivity.mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING ||
         		mActivity.isPendingCoversUpdate()) {
@@ -119,7 +114,8 @@ class BooksAdapter extends BaseAdapter {
             holder.queryCover = false;
         }
 
-        holder.title.setText("1234");
+        Book book = mActivity.m_bookList.get(position);
+        holder.title.setText(book.getTitle());
 		return convertView;
 	}
 	

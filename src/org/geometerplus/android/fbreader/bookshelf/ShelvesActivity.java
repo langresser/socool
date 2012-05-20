@@ -470,55 +470,31 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                 int totalItemCount) {
 
-            if (mScrollState != SCROLL_STATE_FLING) return;
-
-            final int count = view.getChildCount();
-            if (count == 0) return;
-
-            final StringBuilder buffer = new StringBuilder(7);
-
-            String title = ((BooksAdapter.BookViewHolder) view.getChildAt(0).getTag()).sortTitle;
-            title = title.substring(0, Math.min(title.length(), 2));
-            if (title.length() == 2) {
-                buffer.append(Character.toUpperCase(title.charAt(0)));
-                buffer.append(title.charAt(1));
-            } else {
-                buffer.append(title.toUpperCase());
-            }
-
-            if (count > 1) {
-                buffer.append(" - ");
-
-                final int lastChild = count - 1;
-                title = ((BooksAdapter.BookViewHolder) view.getChildAt(lastChild).getTag()).sortTitle;
-                title = title.substring(0, Math.min(title.length(), 2));
-
-                if (title.length() == 2) {
-                    buffer.append(Character.toUpperCase(title.charAt(0)));
-                    buffer.append(title.charAt(1));
-                } else {
-                   buffer.append(title.toUpperCase());
-                }
-            }
-
-            final String prefix = buffer.toString();
-            final Handler scrollHandler = mScrollHandler;
-
-            if (!mPopupWillShow && (mPopup == null || !mPopup.isShowing()) &&
-                    !prefix.equals(mPreviousPrefix)) {
-
-                mPopupWillShow = true;
-                final Runnable showPopup = mShowPopup;
-                scrollHandler.removeCallbacks(showPopup);
-                scrollHandler.postDelayed(showPopup, WINDOW_SHOW_DELAY);
-            }
-
-            mGridPositionText.setText(prefix);
-            mPreviousPrefix = prefix;
-
-            final Runnable dismissPopup = mDismissPopup;
-            scrollHandler.removeCallbacks(dismissPopup);
-            scrollHandler.postDelayed(dismissPopup, WINDOW_DISMISS_DELAY);            
+//            if (mScrollState != SCROLL_STATE_FLING) return;
+//
+//            final int count = view.getChildCount();
+//            if (count == 0) return;
+//
+//
+//            // 显示混动到哪里的提示
+//            final String prefix = "";
+//            final Handler scrollHandler = mScrollHandler;
+//
+//            if (!mPopupWillShow && (mPopup == null || !mPopup.isShowing()) &&
+//                    !prefix.equals(mPreviousPrefix)) {
+//
+//                mPopupWillShow = true;
+//                final Runnable showPopup = mShowPopup;
+//                scrollHandler.removeCallbacks(showPopup);
+//                scrollHandler.postDelayed(showPopup, WINDOW_SHOW_DELAY);
+//            }
+//
+//            mGridPositionText.setText(prefix);
+//            mPreviousPrefix = prefix;
+//
+//            final Runnable dismissPopup = mDismissPopup;
+//            scrollHandler.removeCallbacks(dismissPopup);
+//            scrollHandler.postDelayed(dismissPopup, WINDOW_DISMISS_DELAY);            
         }
     }
 
@@ -558,8 +534,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
 
     private class BookViewer implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            int index = (Integer) view.getTag();
-        	Book book = m_bookList.get(index);
+        	Book book = m_bookList.get(position);
     		 startActivity(new Intent(getApplicationContext(), SCReaderActivity.class)
     		 			.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.File.getPath())
         				.setAction(Intent.ACTION_VIEW));

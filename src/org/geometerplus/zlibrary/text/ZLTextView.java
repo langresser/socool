@@ -968,6 +968,8 @@ public class ZLTextView {
 			info.RealStartCharIndex = currentCharIndex;
 		}
 
+		ZLTextStyle storedStyle = myTextStyle;
+
 		info.LeftIndent = myTextStyle.getLeftIndent();
 		// TODO 智能排版，自动过滤空格，但是要考虑某些文件有意使用空格进行排版
 		if (isFirstLine) {
@@ -1041,6 +1043,7 @@ public class ZLTextView {
 				info.EndElementIndex = currentElementIndex;
 				info.EndCharIndex = currentCharIndex;
 				info.SpaceCounter = internalSpaceCounter;
+				storedStyle = myTextStyle;
 				removeLastSpace = !wordOccurred && (internalSpaceCounter > 0);
 			}
 		} while (currentElementIndex != endIndex);
@@ -1097,6 +1100,7 @@ public class ZLTextView {
 						info.EndElementIndex = currentElementIndex;
 						info.EndCharIndex = hyphenationPosition;
 						info.SpaceCounter = internalSpaceCounter;
+						storedStyle = myTextStyle;
 						removeLastSpace = false;
 					}
 				}
@@ -1106,6 +1110,10 @@ public class ZLTextView {
 		if (removeLastSpace) {
 			info.Width -= lastSpaceWidth;
 			info.SpaceCounter--;
+		}
+
+		if (myModel.m_supportRichText) {
+			setTextStyle(storedStyle);
 		}
 
 		if (isFirstLine) {
