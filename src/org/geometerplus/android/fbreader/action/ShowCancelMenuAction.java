@@ -19,12 +19,10 @@
 
 package org.geometerplus.android.fbreader.action;
 
-import java.util.List;
-
 import android.content.Intent;
 
-import org.geometerplus.android.fbreader.BookShelfActivity;
 import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.android.fbreader.bookshelf.ShelvesActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowCancelMenuAction extends FBAndroidAction {
@@ -34,7 +32,7 @@ public class ShowCancelMenuAction extends FBAndroidAction {
 
 	@Override
 	protected void run(Object ... params) {
-		Intent intent = new Intent(BaseActivity, BookShelfActivity.class);
+		Intent intent = new Intent(BaseActivity, ShelvesActivity.class);
 		BaseActivity.startActivity(intent);
 	}
 }

@@ -21,16 +21,13 @@
 				<data android:scheme="CachedCharStorageException" />
 			</intent-filter>
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.BookShelfActivity">
-		</activity>
 		<activity android:name="org.geometerplus.android.fbreader.bookshelf.ShelvesActivity">
-		    
-		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.SCReaderActivity" android:icon="@drawable/socool_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
+			</intent-filter>		    
+		</activity>
+		<activity android:name="org.geometerplus.android.fbreader.SCReaderActivity" android:icon="@drawable/socool_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.fbreader.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />

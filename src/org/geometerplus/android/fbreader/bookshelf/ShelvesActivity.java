@@ -1,48 +1,43 @@
 package org.geometerplus.android.fbreader.bookshelf;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Config;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import org.geometerplus.android.fbreader.BookInfoActivity;
+import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.android.fbreader.covers.CoverManager;
+import org.geometerplus.android.fbreader.util.UIUtil;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
+import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.socool.socoolreader.reader.R;
 
-public class ShelvesActivity extends Activity {
-    private static final String LOG_TAG = "Shelves";
-
-    private static final int REQUEST_SCAN_FOR_ADD = 1;
-    private static final int REQUEST_SCAN_FOR_CHECK = 2;
-
+public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListener {
     private static final int COVER_TRANSITION_DURATION = 175;    
 
     private static final int MESSAGE_UPDATE_BOOK_COVERS = 1;    
@@ -51,36 +46,24 @@ public class ShelvesActivity extends Activity {
     private static final int WINDOW_DISMISS_DELAY = 600;
     private static final int WINDOW_SHOW_DELAY = 600;    
 
-    private static final String ACTION_IMPORT = "shelves.intent.action.ACTION_IMPORT";
-
-    private static final String STATE_IMPORT_IN_PROGRESS = "shelves.import.inprogress";
-    private static final String STATE_IMPORT_BOOKS = "shelves.import.books";
-    private static final String STATE_IMPORT_INDEX = "shelves.import.index";    
-
-    private static final String STATE_ADD_IN_PROGRESS = "shelves.add.inprogress";
-    private static final String STATE_ADD_BOOK = "shelves.add.book";
-
-    private ImportTask mImportTask;
-    private AddTask mAddTask;
-
     private final Handler mScrollHandler = new ScrollHandler();
-    private int mScrollState = ShelvesScrollManager.SCROLL_STATE_IDLE;
+    public int mScrollState = ShelvesScrollManager.SCROLL_STATE_IDLE;
     private boolean mPendingCoversUpdate;
     private boolean mFingerUp = true;
     private PopupWindow mPopup;
 
-    private FastBitmapDrawable mDefaultCover;
-
     private View mGridPosition;
     private TextView mGridPositionText;
 
-    private ProgressBar mImportProgress;
-    private View mImportPanel;
-    private View mAddPanel;
+    // 导入和添加数据时的提示进度界面
+//    private ProgressBar mImportProgress;
+//    private View mImportPanel;
+//    private View mAddPanel;
     private ShelvesView mGrid;
-
-    private Bundle mSavedState;
-
+    
+    boolean m_realExit = false;
+	public ArrayList<Book> m_bookList;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,58 +72,21 @@ public class ShelvesActivity extends Activity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 0);
+        
+        FBReaderApp.Instance().addChangeListener(this);
+        FBReaderApp.Instance().startBuild();
+        
+        final Map<Long,Book> books = FBReaderApp.Instance().getDatabase().loadBooks();
+        m_bookList = new ArrayList<Book>();
+        
+        for (Book book : books.values()) {
+        	m_bookList.add(book);
+        }
 
         setContentView(R.layout.screen_shelves);
         getWindow().setBackgroundDrawable(null);
 
-        setupViews();
-        handleSearchQuery(getIntent());
-    }
-
-    int getScrollState() {
-        return mScrollState;
-    }
-
-    boolean isPendingCoversUpdate() {
-        return mPendingCoversUpdate;
-    }
-
-    FastBitmapDrawable getDefaultCover() {
-        return mDefaultCover;
-    }
-
-    private void handleSearchQuery(Intent queryIntent) {
-        final String queryAction = queryIntent.getAction();
-        if (Intent.ACTION_SEARCH.equals(queryAction)) {
-            onSearch(queryIntent);
-        } else if (Intent.ACTION_VIEW.equals(queryAction)) {
-            final Intent viewIntent = new Intent(Intent.ACTION_VIEW, queryIntent.getData());
-	        startActivity(viewIntent);
-	    }
-    }
-
-    private void onSearch(Intent intent) {
-        final String queryString = intent.getStringExtra(SearchManager.QUERY);
-        mGrid.setFilterText(queryString);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        final String action = intent.getAction();
-        if (Intent.ACTION_SEARCH.equals(action)) {
-            onSearch(intent);
-        } else if (Intent.ACTION_VIEW.equals(action)) {
-            final Intent viewIntent = new Intent(Intent.ACTION_VIEW, intent.getData());
-            startActivity(viewIntent);
-        } else if (ACTION_IMPORT.equals(action)) {
-        }
-    }
-
-    private void setupViews() {
         final BooksAdapter adapter = new BooksAdapter(this);
-        mDefaultCover = adapter.getDefaultCover();
 
         mGrid = (ShelvesView) findViewById(R.id.grid_shelves);
 
@@ -157,23 +103,101 @@ public class ShelvesActivity extends Activity {
         mGridPosition = getLayoutInflater().inflate(R.layout.grid_position, null);
         mGridPositionText = (TextView) mGridPosition.findViewById(R.id.text);
     }
+    
+ // 当书籍信息改变时调用
+ 	public void onLibraryChanged(final Code code) {
+ 		runOnUiThread(new Runnable() {
+ 			public void run() {
+ 				switch (code) {
+ 					case StatusChanged:
+ 						setProgressBarIndeterminateVisibility(!FBReaderApp.Instance().isUpToDate());
+ 						break;
+ 					case Found:
+// 						openSearchResults();
+ 						break;
+ 					case NotFound:
+ 						UIUtil.showErrorMessage(ShelvesActivity.this, "bookNotFound");
+ 						break;
+ 				}
+ 			}
+ 		});
+ 	}
+ 	
+ 	//
+	// Book deletion
+	//
+	private class BookDeleter implements DialogInterface.OnClickListener {
+		private final Book myBook;
+		private final int myMode;
+
+		BookDeleter(Book book, int removeMode) {
+			myBook = book;
+			myMode = removeMode;
+		}
+
+		public void onClick(DialogInterface dialog, int which) {
+			deleteBook(myBook, myMode);
+		}
+	}
+
+	private void tryToDeleteBook(Book book) {
+		final ZLResource dialogResource = ZLResource.resource("dialog");
+		final ZLResource buttonResource = dialogResource.getResource("button");
+		final ZLResource boxResource = dialogResource.getResource("deleteBookBox");
+		new AlertDialog.Builder(this)
+			.setTitle(book.getTitle())
+			.setMessage(boxResource.getResource("message").getValue())
+			.setIcon(0)
+			.setPositiveButton(buttonResource.getResource("yes").getValue(), new BookDeleter(book, FBReaderApp.REMOVE_FROM_DISK))
+			.setNegativeButton(buttonResource.getResource("no").getValue(), null)
+			.create().show();
+	}
+
+	private void deleteBook(Book book, int mode) {
+		FBReaderApp.Instance().removeBook(book, mode);
+
+		// TODO refresh
+	}
+
+    boolean isPendingCoversUpdate() {
+        return mPendingCoversUpdate;
+    }
+
+//    private void handleSearchQuery(Intent queryIntent) {
+//        final String queryAction = queryIntent.getAction();
+//        if (Intent.ACTION_SEARCH.equals(queryAction)) {
+//            onSearch(queryIntent);
+//        } else if (Intent.ACTION_VIEW.equals(queryAction)) {
+//            final Intent viewIntent = new Intent(Intent.ACTION_VIEW, queryIntent.getData());
+//	        startActivity(viewIntent);
+//	    }
+//    }
+//
+//    private void onSearch(Intent intent) {
+//        final String queryString = intent.getStringExtra(SearchManager.QUERY);
+//        mGrid.setFilterText(queryString);
+//    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mSavedState != null) restoreLocalState(mSavedState);
+        
+        m_realExit = false;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stopBooksUpdater();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        stopBooksUpdater();
     }
 
     @Override
@@ -182,94 +206,40 @@ public class ShelvesActivity extends Activity {
 
         dismissPopup();
 
-        stopBooksUpdater();
-
-        onCancelAdd();
-        onCancelImport();
-
-        ImageUtilities.cleanupCache();
-    }
-
-    private void stopBooksUpdater() {
+        CoverManager.cleanupCache();
+        FBReaderApp.Instance().removeChangeListener(this);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        restoreLocalState(savedInstanceState);
-        mSavedState = null;
-    }
-
-    private void restoreLocalState(Bundle savedInstanceState) {
-        restoreAddTask(savedInstanceState);
-        restoreImportTask(savedInstanceState);
     }
 
     @Override
+    // 被来电中断应用，保存信息
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveAddTask(outState);
-        saveImportTask(outState);
-        mSavedState = outState;
-    }
-
-    private void saveAddTask(Bundle outState) {
-        final AddTask task = mAddTask;
-        if (task != null && task.getStatus() != UserTask.Status.FINISHED) {
-            final String bookId = task.getBookId();
-            task.cancel(true);
-
-            if (bookId != null) {
-                outState.putBoolean(STATE_ADD_IN_PROGRESS, true);
-                outState.putString(STATE_ADD_BOOK, bookId);
-            }
-
-            mAddTask = null;
-        }
-    }
-
-    private void restoreAddTask(Bundle savedInstanceState) {
-        if (savedInstanceState.getBoolean(STATE_ADD_IN_PROGRESS)) {
-            final String id = savedInstanceState.getString(STATE_ADD_BOOK);
-        }
-    }
-
-    private void saveImportTask(Bundle outState) {
-        final ImportTask task = mImportTask;
-        if (task != null && task.getStatus() != UserTask.Status.FINISHED) {
-            task.cancel(true);
-
-            outState.putBoolean(STATE_IMPORT_IN_PROGRESS, true);
-            outState.putStringArrayList(STATE_IMPORT_BOOKS, task.mBooks);
-            outState.putInt(STATE_IMPORT_INDEX, task.mImportCount.get());
-
-            mImportTask = null;
-        }
-    }
-
-    private void restoreImportTask(Bundle savedInstanceState) {
-        if (savedInstanceState.getBoolean(STATE_IMPORT_IN_PROGRESS)) {
-            ArrayList<String> books = savedInstanceState.getStringArrayList(STATE_IMPORT_BOOKS);
-            int index = savedInstanceState.getInt(STATE_IMPORT_INDEX);
-
-            if (books != null) {
-                if (index < books.size()) {
-                    mImportTask = (ImportTask) new ImportTask(books, index).execute();
-                }
-            } else {
-                mImportTask = (ImportTask) new ImportTask().execute();                
-            }
-        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    	addMenuItem(menu, 1, "localSearch", R.drawable.ic_menu_search);
         return super.onCreateOptionsMenu(menu);
     }
+    
+    private MenuItem addMenuItem(Menu menu, int index, String resourceKey, int iconId) {
+		final String label = ZLResource.resource("library").getResource("menu").getResource(resourceKey).getValue();
+		final MenuItem item = menu.add(0, index, Menu.NONE, label);
+		item.setIcon(iconId);
+		return item;
+	}
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-
+    	if (item.getItemId() == 1) {
+    		return onSearchRequested();
+    	}
+  
         return super.onMenuItemSelected(featureId, item);
     }
 
@@ -285,79 +255,141 @@ public class ShelvesActivity extends Activity {
         }
         return super.onKeyUp(keyCode, event);
     }
+    
+    @Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	if (keyCode == KeyEvent.KEYCODE_BACK) {
+    		if (m_realExit == false) {
+    			m_realExit = true;
+    			
+    			Toast.makeText(getApplicationContext(), getResources().getString(R.string.real_exit_tip), Toast.LENGTH_SHORT).show();
+    			return true;
+    		} else {
+    			if (FBReaderApp.Instance() != null) {
+    				FBReaderApp.Instance().closeWindow();
+    			}
+    			
+            	finish();
+            	return true;
+    		}
+    	} else {
+    		return super.onKeyDown(keyCode, event);
+    	}
+	}
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenu.ContextMenuInfo menuInfo) {
 
+    	final int position = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
+		final Book book = null;//((LibraryTree)getListAdapter().getItem(position)).getBook();
+		if (book != null) {
+			final ZLResource resource = ZLResource.resource("library");
+			menu.setHeaderTitle(book.getTitle());
+			menu.add(0, OPEN_BOOK_ITEM_ID, 0, resource.getResource("openBook").getValue());
+			menu.add(0, SHOW_BOOK_INFO_ITEM_ID, 0, resource.getResource("showBookInfo").getValue());
+			if (book.File.getPhysicalFile() != null) {
+				menu.add(0, SHARE_BOOK_ITEM_ID, 0, resource.getResource("shareBook").getValue());
+			}
+
+			if (FBReaderApp.Instance().canRemoveBookFile(book)) {
+				menu.add(0, DELETE_BOOK_ITEM_ID, 0, resource.getResource("deleteBook").getValue());
+			}
+		}
+
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+    private static final int OPEN_BOOK_ITEM_ID = 0;
+	private static final int SHOW_BOOK_INFO_ITEM_ID = 1;
+	private static final int SHARE_BOOK_ITEM_ID = 2;
+	private static final int DELETE_BOOK_ITEM_ID = 3;
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+    	final int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
+		final Book book = null;//((LibraryTree)getListAdapter().getItem(position)).getBook();
+		if (book != null) {
+			switch (item.getItemId()) {
+			case OPEN_BOOK_ITEM_ID:
+				openBook(book);
+				return true;
+			case SHOW_BOOK_INFO_ITEM_ID:
+				showBookInfo(book);
+				return true;
+			case SHARE_BOOK_ITEM_ID:
+				UIUtil.shareBook(this, book);
+				return true;
+			case DELETE_BOOK_ITEM_ID:
+				tryToDeleteBook(book);
+				return true;
+			}
+		}
         return super.onContextItemSelected(item);
     }
+    
+    //
+	// show BookInfoActivity
+	//
+	private static final int BOOK_INFO_REQUEST = 1;
 
-    private void onCancelAdd() {
-        if (mAddTask != null && mAddTask.getStatus() == UserTask.Status.RUNNING) {
-            mAddTask.cancel(true);
-            mAddTask = null;
-        }
-    }
+	protected void showBookInfo(Book book) {
+		startActivityForResult(
+			new Intent(getApplicationContext(), BookInfoActivity.class)
+				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, book.File.getPath()),
+			BOOK_INFO_REQUEST
+		);
+	}
+    
+    private void openBook(Book book) {
+		startActivity(
+			new Intent(getApplicationContext(), SCReaderActivity.class)
+				.setAction(Intent.ACTION_VIEW)
+				.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.File.getPath())
+				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+		);
+	}
 
-    private void onCancelImport() {
-        if (mImportTask != null && mImportTask.getStatus() == UserTask.Status.RUNNING) {
-            mImportTask.cancel(true);
-            mImportTask = null;
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_SCAN_FOR_ADD:
-                    onScanAdd(data);
-                    break;
-                case REQUEST_SCAN_FOR_CHECK:
-                    onScanCheck(data);
-                    break;
-            }
-        }
+		if (requestCode == BOOK_INFO_REQUEST && data != null) {
+			final String path = data.getStringExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY);
+			final Book book = Book.getByFile(ZLFile.createFileByPath(path));
+			FBReaderApp.Instance().refreshBookInfo(book);
+//			TODO refresh
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
     }
 
-    private void onScanAdd(Intent data) {
-    }
-
-    private void onScanCheck(Intent data) {
-    }
-
-    private void showPanel(View panel, boolean slideUp) {
-        panel.startAnimation(AnimationUtils.loadAnimation(this,
-                slideUp ? R.anim.slide_in : R.anim.slide_out_top));
-        panel.setVisibility(View.VISIBLE);
-    }
-
-    private void hidePanel(View panel, boolean slideDown) {
-        panel.startAnimation(AnimationUtils.loadAnimation(this,
-                slideDown ? R.anim.slide_out : R.anim.slide_in_top));
-        panel.setVisibility(View.GONE);
-    }
+    // 动画显示和隐藏界面
+//    private void showPanel(View panel, boolean slideUp) {
+//        panel.startAnimation(AnimationUtils.loadAnimation(this,
+//                slideUp ? R.anim.slide_in : R.anim.slide_out_top));
+//        panel.setVisibility(View.VISIBLE);
+//    }
+//
+//    private void hidePanel(View panel, boolean slideDown) {
+//        panel.startAnimation(AnimationUtils.loadAnimation(this,
+//                slideDown ? R.anim.slide_out : R.anim.slide_in_top));
+//        panel.setVisibility(View.GONE);
+//    }
 
     private void updateBookCovers() {
         mPendingCoversUpdate = false;
 
         final ShelvesView grid = mGrid;
-        final FastBitmapDrawable cover = mDefaultCover;
+        final FastBitmapDrawable cover = null;// TODO 根据文件类型获取封面
         final int count = grid.getChildCount();
 
         for (int i = 0; i < count; i++) {
             final View view = grid.getChildAt(i);
-            final BookViewHolder holder = (BookViewHolder) view.getTag();
+            final BooksAdapter.BookViewHolder holder = (BooksAdapter.BookViewHolder) view.getTag();
             if (holder.queryCover) {
                 final String bookId = holder.bookId;
 
-                FastBitmapDrawable cached = ImageUtilities.getCachedCover(bookId, cover);
+                FastBitmapDrawable cached = CoverManager.getCachedCover(bookId, cover);
                 CrossFadeDrawable d = holder.transition;
                 d.setEnd(cached.getBitmap());
                 holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null,
@@ -403,121 +435,6 @@ public class ShelvesActivity extends Activity {
         }
     }
 
-    private class AddTask extends UserTask<String, Void, Book> {
-        private final Object mLock = new Object();
-        private String mBookId;
-
-        @Override
-        public void onPreExecute() {
-            showPanel(mAddPanel, false);
-        }
-
-        String getBookId() {
-            synchronized (mLock) {
-                return mBookId;
-            }
-        }
-
-        public Book doInBackground(String... params) {
-            synchronized (mLock) {
-                mBookId = params[0];
-            }
-            return new Book(ZLFile.createFileByPath(""));
-            //return BooksManager.loadAndAddBook(mBookId);
-        }
-
-        @Override
-        public void onCancelled() {
-            hidePanel(mAddPanel, false);            
-        }
-
-        @Override
-        public void onPostExecute(Book book) {
-            hidePanel(mAddPanel, false);
-        }
-    }
-
-    private class ImportTask extends UserTask<Void, Integer, Integer> {
-        private ContentResolver mResolver;
-
-        final AtomicInteger mImportCount = new AtomicInteger();
-        ArrayList<String> mBooks;
-
-        ImportTask() {
-        }
-
-        ImportTask(ArrayList<String> books, int index) {
-            mBooks = books;
-            mImportCount.set(index);
-        }
-
-        @Override
-        public void onPreExecute() {
-            if (mImportPanel == null) {
-                mImportPanel = ((ViewStub) findViewById(R.id.stub_import)).inflate();
-                mImportProgress = (ProgressBar) mImportPanel.findViewById(R.id.progress);
-
-                final View cancelButton = mImportPanel.findViewById(R.id.button_cancel);
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        onCancelImport();
-                    }
-                });
-            }
-
-            mResolver = getContentResolver();
-            mImportProgress.setProgress(0);
-
-            showPanel(mImportPanel, true);
-        }
-
-        public Integer doInBackground(Void... params) {
-            int imported = 0;
-
-//            final List<String> list = mBooks;
-//			final BooksStore booksStore = BookStoreFactory.get(ShelvesActivity.this);
-//			final int count = list.size();
-//			final ContentResolver resolver = mResolver;
-//			final AtomicInteger importCount = mImportCount;
-//
-//			for (int i = importCount.get(); i < count; i++) {
-//			    publishProgress(i, count);
-//			    if (isCancelled()) return null;
-//			    final String id = list.get(i);
-//			    if (!BooksManager.bookExists(mResolver, id)) {
-//			        if (isCancelled()) return null;
-//			        BooksStore.Book book = BooksManager.loadAndAddBook(resolver, id, booksStore);
-//			        if (book != null) {
-//			            if (Config.LOGD) {
-//			                android.util.Log.d(LOG_TAG, book.toString());
-//			            }
-//			            imported++;
-//			        }
-//			    }
-//			    importCount.incrementAndGet();
-//			}
-
-            return imported;
-        }
-
-        @Override
-        public void onProgressUpdate(Integer... values) {
-            final ProgressBar progress = mImportProgress;
-            progress.setMax(values[1]);
-            progress.setProgress(values[0]);
-        }
-
-        @Override
-        public void onCancelled() {
-            hidePanel(mImportPanel, true);
-        }
-
-        @Override
-        public void onPostExecute(Integer countImport) {
-            hidePanel(mImportPanel, true);
-        }
-    }
-
     private class ShelvesScrollManager implements AbsListView.OnScrollListener {
         private String mPreviousPrefix;
         private boolean mPopupWillShow;
@@ -560,7 +477,7 @@ public class ShelvesActivity extends Activity {
 
             final StringBuilder buffer = new StringBuilder(7);
 
-            String title = ((BookViewHolder) view.getChildAt(0).getTag()).sortTitle;
+            String title = ((BooksAdapter.BookViewHolder) view.getChildAt(0).getTag()).sortTitle;
             title = title.substring(0, Math.min(title.length(), 2));
             if (title.length() == 2) {
                 buffer.append(Character.toUpperCase(title.charAt(0)));
@@ -573,7 +490,7 @@ public class ShelvesActivity extends Activity {
                 buffer.append(" - ");
 
                 final int lastChild = count - 1;
-                title = ((BookViewHolder) view.getChildAt(lastChild).getTag()).sortTitle;
+                title = ((BooksAdapter.BookViewHolder) view.getChildAt(lastChild).getTag()).sortTitle;
                 title = title.substring(0, Math.min(title.length(), 2));
 
                 if (title.length() == 2) {
@@ -641,7 +558,11 @@ public class ShelvesActivity extends Activity {
 
     private class BookViewer implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            onView(((BookViewHolder) view.getTag()).bookId);
+            int index = (Integer) view.getTag();
+        	Book book = m_bookList.get(index);
+    		 startActivity(new Intent(getApplicationContext(), SCReaderActivity.class)
+    		 			.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.File.getPath())
+        				.setAction(Intent.ACTION_VIEW));
         }
     }
 }
