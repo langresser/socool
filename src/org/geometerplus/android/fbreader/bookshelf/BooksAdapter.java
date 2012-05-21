@@ -54,12 +54,9 @@ class BooksAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(activity);
 
         mDefaultCoverBitmap = BitmapFactory.decodeResource(activity.getResources(),
-                R.drawable.unknown_cover);
+                //R.drawable.shelf_default_cover);
+        		R.drawable.unknown_cover);
         mDefaultCover = new FastBitmapDrawable(mDefaultCoverBitmap);
-    }
-
-    FastBitmapDrawable getDefaultCover() {
-        return mDefaultCover;
     }
 
 	@Override
@@ -80,7 +77,6 @@ class BooksAdapter extends BaseAdapter {
 	class BookViewHolder {
 	    BubbleTextView title;
 	    String bookId;
-	    CrossFadeDrawable transition;
 	    boolean queryCover;
 	}
 
@@ -91,11 +87,6 @@ class BooksAdapter extends BaseAdapter {
 			convertView = (BubbleTextView) mInflater.inflate(R.layout.shelf_book, parent, false);
 			holder = new BookViewHolder();
 			convertView.setTag(holder);
-			
-			final CrossFadeDrawable transition = new CrossFadeDrawable(mDefaultCoverBitmap, null);
-	        transition.setCallback(convertView);
-	        transition.setCrossFadeEnabled(true);
-	        holder.transition = transition;
 		} else {
 			holder = (BookViewHolder)convertView.getTag();
 		}

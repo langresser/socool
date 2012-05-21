@@ -94,7 +94,6 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         grid.setTextFilterEnabled(true);
         grid.setAdapter(adapter);
         grid.setOnScrollListener(new ShelvesScrollManager());
-        grid.setOnTouchListener(new FingerTracker());
         grid.setOnItemSelectedListener(new SelectionTracker());
         grid.setOnItemClickListener(new BookViewer());
 
@@ -390,24 +389,13 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
                 final String bookId = holder.bookId;
 
                 FastBitmapDrawable cached = CoverManager.getCachedCover(bookId, cover);
-                CrossFadeDrawable d = holder.transition;
-                d.setEnd(cached.getBitmap());
                 holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                        null, d);
-                d.startTransition(COVER_TRANSITION_DURATION);
+                        null, cached);
                 holder.queryCover = false;
             }
         }
 
         grid.invalidate();
-    }
-
-    private void postUpdateBookCovers() {
-        Handler handler = mScrollHandler;
-        Message message = handler.obtainMessage(MESSAGE_UPDATE_BOOK_COVERS, ShelvesActivity.this);
-        handler.removeMessages(MESSAGE_UPDATE_BOOK_COVERS);
-        mPendingCoversUpdate = true;
-        handler.sendMessage(message);
     }
 
     private void dismissPopup() {
@@ -452,18 +440,6 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         };
 
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-            if (mScrollState == SCROLL_STATE_FLING && scrollState != SCROLL_STATE_FLING) {
-                final Handler handler = mScrollHandler;
-                final Message message = handler.obtainMessage(MESSAGE_UPDATE_BOOK_COVERS,
-                        ShelvesActivity.this);
-                handler.removeMessages(MESSAGE_UPDATE_BOOK_COVERS);
-                handler.sendMessageDelayed(message, mFingerUp ? 0 : DELAY_SHOW_BOOK_COVERS);
-                mPendingCoversUpdate = true;
-            } else if (scrollState == SCROLL_STATE_FLING) {
-                mPendingCoversUpdate = false;
-                mScrollHandler.removeMessages(MESSAGE_UPDATE_BOOK_COVERS);
-            }
-
             mScrollState = scrollState;
         }
 
@@ -501,31 +477,11 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
     private static class ScrollHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_UPDATE_BOOK_COVERS:
-                    ((ShelvesActivity) msg.obj).updateBookCovers();
-                    break;
-            }
-        }
-    }
-
-    private class FingerTracker implements View.OnTouchListener {
-        public boolean onTouch(View view, MotionEvent event) {
-            final int action = event.getAction();
-            mFingerUp = action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL;
-            if (mFingerUp && mScrollState != ShelvesScrollManager.SCROLL_STATE_FLING) {
-                postUpdateBookCovers();
-            }
-            return false;
         }
     }
 
     private class SelectionTracker implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            if (mScrollState != ShelvesScrollManager.SCROLL_STATE_IDLE) {
-                mScrollState = ShelvesScrollManager.SCROLL_STATE_IDLE;
-                postUpdateBookCovers();
-            }
         }
 
         public void onNothingSelected(AdapterView<?> adapterView) {

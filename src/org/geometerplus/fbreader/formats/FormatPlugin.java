@@ -25,6 +25,7 @@ import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
+import org.socool.socoolreader.reader.R;
 
 public abstract class FormatPlugin {
 	private final String myFileType;
@@ -58,6 +59,11 @@ public abstract class FormatPlugin {
 	public void readPercent(double percent)					// 读取文件百分比（部分读取）
 	{
 		
+	}
+
+	public int getDefaultCoverId()
+	{
+		return R.drawable.cover_default;
 	}
 
 	public abstract void readMetaInfo(Book book);				// 读取附加信息
