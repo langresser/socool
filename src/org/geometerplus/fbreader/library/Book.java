@@ -91,15 +91,15 @@ public class Book {
 	}
 
 	public final ZLFile File;
-	public String m_filePath = "";
+	public String m_filePath = "";		// 如果是单文件，则对应文件全路径；如果是一组文件，则对应文件夹路径
 	public int m_fileSize = 0;
 	public String m_bookAuthor = "";
 
-	private volatile long myId;
+	public volatile long myId;
 
-	private volatile String myEncoding;
-	private volatile String myLanguage;
-	private volatile String myTitle;
+	public volatile String myEncoding;
+	public volatile String myLanguage;
+	public volatile String myTitle;
 
 	private volatile boolean myIsSaved;
 
@@ -113,6 +113,7 @@ public class Book {
 		myEncoding = encoding;
 		myLanguage = language;
 		myIsSaved = true;
+		m_filePath = file.getPath();
 	}
 
 	public Book(ZLFile file) {
@@ -121,6 +122,7 @@ public class Book {
 		if (plugin != null) {
 			File = plugin.realBookFile(file);
 			readMetaInfo(plugin);
+			m_filePath = file.getPath();
 		} else {
 			File = null;
 		}
@@ -174,14 +176,6 @@ public class Book {
 
 	public String authors() {
 		return m_bookAuthor == null ? "" : m_bookAuthor;
-	}
-
-	public long getId() {
-		return myId;
-	}
-
-	public String getTitle() {
-		return myTitle;
 	}
 
 	public void setTitle(String title) {
@@ -343,6 +337,7 @@ public class Book {
 		}
 		ZLImage image = getPlugin().readCover(File);
 		myCover = image != null ? new WeakReference<ZLImage>(image) : NULL_IMAGE;
+		
 		return image;
 	}
 

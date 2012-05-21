@@ -83,7 +83,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 //		Collections.sort(AllBooksBookmarks, new Bookmark.ByTimeComparator());
 
 		if (FBReaderApp.Instance().Model != null) {
-			final long bookId = FBReaderApp.Instance().Model.Book.getId();
+			final long bookId = FBReaderApp.Instance().Model.Book.myId;
 			for (Bookmark bookmark : AllBooksBookmarks) {
 				if (bookmark.getBookId() == bookId) {
 					myThisBookBookmarks.add(bookmark);
@@ -229,7 +229,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 		bookmark.onOpen();
 		final FBReaderApp fbreader = (FBReaderApp)FBReaderApp.Instance();
 		final long bookId = bookmark.getBookId();
-		if ((fbreader.Model == null) || (fbreader.Model.Book.getId() != bookId)) {
+		if ((fbreader.Model == null) || (fbreader.Model.Book.myId != bookId)) {
 			final Book book = Book.getById(bookId);
 			if (book != null) {
 				finish();

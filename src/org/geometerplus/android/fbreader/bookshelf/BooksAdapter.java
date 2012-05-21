@@ -115,7 +115,7 @@ class BooksAdapter extends BaseAdapter {
         }
 
         Book book = mActivity.m_bookList.get(position);
-        holder.title.setText(book.getTitle());
+        holder.title.setText(book.myTitle);
 		return convertView;
 	}
 	

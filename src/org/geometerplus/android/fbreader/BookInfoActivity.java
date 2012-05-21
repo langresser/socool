@@ -218,7 +218,7 @@ public class BookInfoActivity extends Activity {
 	private void setupBookInfo(Book book) {
 		((TextView)findViewById(R.id.book_info_title)).setText(myResource.getResource("bookInfo").getValue());
 
-		setupInfoPair(R.id.book_title, "title", book.getTitle());
+		setupInfoPair(R.id.book_title, "title", book.myTitle);
 		setupInfoPair(R.id.book_authors, "authors", book.authors(), 1);
 
 		String language = book.getLanguage();

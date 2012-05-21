@@ -24,7 +24,7 @@ public final class TitleTree extends LibraryTree {
 		if (book == null) {
 			return null;
 		}
-		String title = book.getTitle();
+		String title = book.myTitle;
 		if (title == null) {
 			return null;
 		}

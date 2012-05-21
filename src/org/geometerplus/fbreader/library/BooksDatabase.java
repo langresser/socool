@@ -104,7 +104,7 @@ public class BooksDatabase {
 	}
 
 	protected void reloadBook(Book book) {
-		final Cursor cursor = myDatabase.rawQuery("SELECT title,encoding,language FROM Books WHERE book_id = " + book.getId(), null);
+		final Cursor cursor = myDatabase.rawQuery("SELECT title,encoding,language FROM Books WHERE book_id = " + book.myId, null);
 		if (cursor.moveToNext()) {
 			book.setTitle(cursor.getString(0));
 			book.setEncoding(cursor.getString(1));

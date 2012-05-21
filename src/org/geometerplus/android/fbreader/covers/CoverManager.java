@@ -277,29 +277,6 @@ public class CoverManager {
     }
 
     /**
-     * Loads an image from the specified URL.
-     *
-     * @param url The URL of the image to load.
-     *
-     * @return The image at the specified URL or null if an error occured.
-     */
-    public static ExpiringBitmap load(String url) {
-        return load(url, null);
-    }
-
-    /**
-     * Loads an image from the specified URL with the specified cookie.
-     *
-     * @param url The URL of the image to load.
-     * @param cookie The cookie to use to load the image.
-     *
-     * @return The image at the specified URL or null if an error occured.
-     */
-    public static ExpiringBitmap load(String url, String cookie) {
-        return null;
-    }
-
-    /**
      * Return the same image with a shadow, scaled by the specified amount..
      *
      * @param bitmap The bitmap to decor with a shadow

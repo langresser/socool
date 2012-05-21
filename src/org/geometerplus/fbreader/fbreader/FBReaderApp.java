@@ -1309,7 +1309,7 @@ public final class FBReaderApp {
 		final Map<Long,Book> savedBooksByFileId = m_booksDatabase.loadBooks();
 		final Map<Long,Book> savedBooksByBookId = new HashMap<Long,Book>();
 		for (Book b : savedBooksByFileId.values()) {
-			savedBooksByBookId.put(b.getId(), b);
+			savedBooksByBookId.put(b.myId, b);
 		}
 
 		// Step 1: set myDoGroupTitlesByFirstLetter value,
@@ -1453,7 +1453,7 @@ public final class FBReaderApp {
 
 	public void addBookToRecentList(Book book) {
 		final List<Long> ids = m_booksDatabase.loadRecentBookIds();
-		final Long bookId = book.getId();
+		final Long bookId = book.myId;
 		ids.remove(bookId);
 		ids.add(0, bookId);
 		if (ids.size() > 12) {
@@ -1491,12 +1491,12 @@ public final class FBReaderApp {
 		}
 		final LibraryTree rootFavorites = getFirstLevelTree(ROOT_FAVORITES);
 		rootFavorites.getBookSubTree(book, true);
-		m_booksDatabase.addToFavorites(book.getId());
+		m_booksDatabase.addToFavorites(book.myId);
 	}
 
 	public void removeBookFromFavorites(Book book) {
 		if (getFirstLevelTree(ROOT_FAVORITES).removeBook(book, false)) {
-			m_booksDatabase.removeFromFavorites(book.getId());
+			m_booksDatabase.removeFromFavorites(book.myId);
 			fireModelChangedEvent(ChangeListener.Code.BookRemoved);
 		}
 	}
@@ -1522,7 +1522,7 @@ public final class FBReaderApp {
 		myBooks.remove(book);
 		if (getFirstLevelTree(ROOT_RECENT).removeBook(book, false)) {
 			final List<Long> ids = m_booksDatabase.loadRecentBookIds();
-			ids.remove(book.getId());
+			ids.remove(book.myId);
 			m_booksDatabase.saveRecentBookIds(ids);
 		}
 		getFirstLevelTree(ROOT_FAVORITES).removeBook(book, false);

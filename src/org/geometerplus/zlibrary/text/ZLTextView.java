@@ -121,7 +121,7 @@ public class ZLTextView {
 //		Collections.sort(m_allBooksBookmarks, new Bookmark.ByTimeComparator());
 
 		if (FBReaderApp.Instance().Model != null) {
-			final long bookId = FBReaderApp.Instance().Model.Book.getId();
+			final long bookId = FBReaderApp.Instance().Model.Book.myId;
 			List<Bookmark> bookmarks = FBReaderApp.Instance().getDatabase().loadBookmarks(bookId);
 			for (Bookmark bookmark : bookmarks) {
 				addBookmarkHighlight(bookmark);

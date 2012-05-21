@@ -91,8 +91,8 @@ public final class Bookmark {
 	public Bookmark(Book book, String modelId, String text,
 			ZLTextPosition page, ZLTextPosition begin, ZLTextPosition end, String comment) {
 		myId = -1;
-		myBookId = book.getId();
-		myBookTitle = book.getTitle();
+		myBookId = book.myId;
+		myBookTitle = book.myTitle;
 		myText = text;
 		myModificationDate = new Date();
 		ModelId = modelId;

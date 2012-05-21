@@ -145,7 +145,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
 		final ZLResource buttonResource = dialogResource.getResource("button");
 		final ZLResource boxResource = dialogResource.getResource("deleteBookBox");
 		new AlertDialog.Builder(this)
-			.setTitle(book.getTitle())
+			.setTitle(book.myTitle)
 			.setMessage(boxResource.getResource("message").getValue())
 			.setIcon(0)
 			.setPositiveButton(buttonResource.getResource("yes").getValue(), new BookDeleter(book, FBReaderApp.REMOVE_FROM_DISK))
@@ -285,7 +285,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
 		final Book book = null;//((LibraryTree)getListAdapter().getItem(position)).getBook();
 		if (book != null) {
 			final ZLResource resource = ZLResource.resource("library");
-			menu.setHeaderTitle(book.getTitle());
+			menu.setHeaderTitle(book.myTitle);
 			menu.add(0, OPEN_BOOK_ITEM_ID, 0, resource.getResource("openBook").getValue());
 			menu.add(0, SHOW_BOOK_INFO_ITEM_ID, 0, resource.getResource("showBookInfo").getValue());
 			if (book.File.getPhysicalFile() != null) {

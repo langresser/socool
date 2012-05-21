@@ -43,7 +43,7 @@ class BookTitlePreference extends ZLStringPreference {
 	BookTitlePreference(Context context, ZLResource rootResource, String resourceKey, Book book) {
 		super(context, rootResource, resourceKey);
 		myBook = book;
-		super.setValue(book.getTitle());
+		super.setValue(book.myTitle);
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class BookTree extends LibraryTree {
 
 	@Override
 	public String getName() {
-		return Book.getTitle();
+		return Book.myTitle;
 	}
 
 	@Override

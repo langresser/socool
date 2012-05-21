@@ -74,7 +74,7 @@ public class FileTree extends LibraryTree {
 
 		final Book book = getBook();
 		if (book != null) {
-			return book.getTitle();
+			return book.myTitle;
 		}
 
 		return null;
