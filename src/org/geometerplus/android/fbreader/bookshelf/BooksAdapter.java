@@ -77,7 +77,6 @@ class BooksAdapter extends BaseAdapter {
 	class BookViewHolder {
 	    BubbleTextView title;
 	    String bookId;
-	    boolean queryCover;
 	}
 
 	@Override
@@ -95,16 +94,18 @@ class BooksAdapter extends BaseAdapter {
         String bookId = "";
         holder.bookId = bookId;
 
-        if (mActivity.mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING ||
-        		mActivity.isPendingCoversUpdate()) {
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, mDefaultCover);
-            holder.queryCover = true;
-        } else {
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null,
-                    CoverManager.getCachedCover(bookId, mDefaultCover));
-            holder.queryCover = false;
-        }
+//        if (mActivity.mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING ||
+//        		mActivity.isPendingCoversUpdate()) {
+//            holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, mDefaultCover);
+//            holder.queryCover = true;
+//        } else {
+//            holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null,
+//                    CoverManager.getCachedCover(bookId, mDefaultCover));
+//            holder.queryCover = false;
+//        }
 
+//        mDefaultCover.setBounds(0, 0, 100, 100);
+        holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, CoverManager.getCachedCover(bookId, mDefaultCover));
         Book book = mActivity.m_bookList.get(position);
         holder.title.setText(book.myTitle);
 		return convertView;

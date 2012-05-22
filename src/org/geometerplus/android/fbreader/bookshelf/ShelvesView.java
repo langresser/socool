@@ -37,10 +37,6 @@ public class ShelvesView extends GridView {
     private int mShelfWidth;
     private int mShelfHeight;
 
-    private Bitmap mWebLeft;
-    private Bitmap mWebRight;
-    private int mWebRightWidth;
-
     public ShelvesView(Context context) {
         super(context);
         init(context);
@@ -66,12 +62,6 @@ public class ShelvesView extends GridView {
             mShelfHeight = shelfBackground.getHeight();
             mShelfBackground = shelfBackground;
         }
-
-        mWebLeft = BitmapFactory.decodeResource(resources, R.drawable.web_left);
-
-        final Bitmap webRight = BitmapFactory.decodeResource(resources, R.drawable.web_right);
-        mWebRightWidth = webRight.getWidth();
-        mWebRight = webRight;
     }
 
     private void init(Context context) {
@@ -109,11 +99,6 @@ public class ShelvesView extends GridView {
             for (int y = top; y < height; y += shelfHeight) {
                 canvas.drawBitmap(background, x, y, null);
             }
-        }
-
-        if (count == 0) {
-            canvas.drawBitmap(mWebLeft, 0.0f, top + 1, null);
-            canvas.drawBitmap(mWebRight, width - mWebRightWidth, top + shelfHeight + 1, null);
         }
 
         super.dispatchDraw(canvas);

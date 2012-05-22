@@ -104,6 +104,7 @@ public class BubbleTextView extends TextView {
             }
         }
 
+        // »­textµÄµ×¿ò
         final Layout layout = getLayout();
         final RectF rect = mRect;
         final int left = getCompoundPaddingLeft();

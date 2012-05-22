@@ -38,27 +38,9 @@ import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.socool.socoolreader.reader.R;
 
 public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListener {
-    private static final int COVER_TRANSITION_DURATION = 175;    
-
-    private static final int MESSAGE_UPDATE_BOOK_COVERS = 1;    
-    private static final int DELAY_SHOW_BOOK_COVERS = 550;
-
-    private static final int WINDOW_DISMISS_DELAY = 600;
-    private static final int WINDOW_SHOW_DELAY = 600;    
-
-    private final Handler mScrollHandler = new ScrollHandler();
-    public int mScrollState = ShelvesScrollManager.SCROLL_STATE_IDLE;
     private boolean mPendingCoversUpdate;
-    private boolean mFingerUp = true;
-    private PopupWindow mPopup;
-
-    private View mGridPosition;
-    private TextView mGridPositionText;
-
+ 
     // 导入和添加数据时的提示进度界面
-//    private ProgressBar mImportProgress;
-//    private View mImportPanel;
-//    private View mAddPanel;
     private ShelvesView mGrid;
     
     boolean m_realExit = false;
@@ -93,14 +75,9 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         final ShelvesView grid = mGrid;
         grid.setTextFilterEnabled(true);
         grid.setAdapter(adapter);
-        grid.setOnScrollListener(new ShelvesScrollManager());
-        grid.setOnItemSelectedListener(new SelectionTracker());
         grid.setOnItemClickListener(new BookViewer());
 
         registerForContextMenu(grid);
-
-        mGridPosition = getLayoutInflater().inflate(R.layout.grid_position, null);
-        mGridPositionText = (TextView) mGridPosition.findViewById(R.id.text);
     }
     
  // 当书籍信息改变时调用
@@ -162,21 +139,6 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         return mPendingCoversUpdate;
     }
 
-//    private void handleSearchQuery(Intent queryIntent) {
-//        final String queryAction = queryIntent.getAction();
-//        if (Intent.ACTION_SEARCH.equals(queryAction)) {
-//            onSearch(queryIntent);
-//        } else if (Intent.ACTION_VIEW.equals(queryAction)) {
-//            final Intent viewIntent = new Intent(Intent.ACTION_VIEW, queryIntent.getData());
-//	        startActivity(viewIntent);
-//	    }
-//    }
-//
-//    private void onSearch(Intent intent) {
-//        final String queryString = intent.getStringExtra(SearchManager.QUERY);
-//        mGrid.setFilterText(queryString);
-//    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -202,8 +164,6 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        dismissPopup();
 
         CoverManager.cleanupCache();
         FBReaderApp.Instance().removeChangeListener(this);
@@ -360,132 +320,6 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
-    }
-
-    // 动画显示和隐藏界面
-//    private void showPanel(View panel, boolean slideUp) {
-//        panel.startAnimation(AnimationUtils.loadAnimation(this,
-//                slideUp ? R.anim.slide_in : R.anim.slide_out_top));
-//        panel.setVisibility(View.VISIBLE);
-//    }
-//
-//    private void hidePanel(View panel, boolean slideDown) {
-//        panel.startAnimation(AnimationUtils.loadAnimation(this,
-//                slideDown ? R.anim.slide_out : R.anim.slide_in_top));
-//        panel.setVisibility(View.GONE);
-//    }
-
-    private void updateBookCovers() {
-        mPendingCoversUpdate = false;
-
-        final ShelvesView grid = mGrid;
-        final FastBitmapDrawable cover = null;// TODO 根据文件类型获取封面
-        final int count = grid.getChildCount();
-
-        for (int i = 0; i < count; i++) {
-            final View view = grid.getChildAt(i);
-            final BooksAdapter.BookViewHolder holder = (BooksAdapter.BookViewHolder) view.getTag();
-            if (holder.queryCover) {
-                final String bookId = holder.bookId;
-
-                FastBitmapDrawable cached = CoverManager.getCachedCover(bookId, cover);
-                holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                        null, cached);
-                holder.queryCover = false;
-            }
-        }
-
-        grid.invalidate();
-    }
-
-    private void dismissPopup() {
-        if (mPopup != null) {
-            mPopup.dismiss();
-        }
-    }
-
-    private void showPopup() {
-        if (mPopup == null) {
-            PopupWindow p = new PopupWindow(this);
-            p.setFocusable(false);
-            p.setContentView(mGridPosition);
-            p.setWidth(ViewGroup.LayoutParams.FILL_PARENT);
-            p.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-            p.setBackgroundDrawable(null);
-
-            p.setAnimationStyle(R.style.PopupAnimation);
-
-            mPopup = p;
-        }
-
-        if (mGrid.getWindowVisibility() == View.VISIBLE) {
-            mPopup.showAtLocation(mGrid, Gravity.CENTER, 0, 0);
-        }
-    }
-
-    private class ShelvesScrollManager implements AbsListView.OnScrollListener {
-        private String mPreviousPrefix;
-        private boolean mPopupWillShow;
-        private final Runnable mShowPopup = new Runnable() {
-            public void run() {
-                showPopup();
-            }
-        };
-        private final Runnable mDismissPopup = new Runnable() {
-            public void run() {
-                mScrollHandler.removeCallbacks(mShowPopup);
-                mPopupWillShow = false;
-                dismissPopup();
-            }
-        };
-
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
-            mScrollState = scrollState;
-        }
-
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                int totalItemCount) {
-
-//            if (mScrollState != SCROLL_STATE_FLING) return;
-//
-//            final int count = view.getChildCount();
-//            if (count == 0) return;
-//
-//
-//            // 显示混动到哪里的提示
-//            final String prefix = "";
-//            final Handler scrollHandler = mScrollHandler;
-//
-//            if (!mPopupWillShow && (mPopup == null || !mPopup.isShowing()) &&
-//                    !prefix.equals(mPreviousPrefix)) {
-//
-//                mPopupWillShow = true;
-//                final Runnable showPopup = mShowPopup;
-//                scrollHandler.removeCallbacks(showPopup);
-//                scrollHandler.postDelayed(showPopup, WINDOW_SHOW_DELAY);
-//            }
-//
-//            mGridPositionText.setText(prefix);
-//            mPreviousPrefix = prefix;
-//
-//            final Runnable dismissPopup = mDismissPopup;
-//            scrollHandler.removeCallbacks(dismissPopup);
-//            scrollHandler.postDelayed(dismissPopup, WINDOW_DISMISS_DELAY);            
-        }
-    }
-
-    private static class ScrollHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-        }
-    }
-
-    private class SelectionTracker implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        }
-
-        public void onNothingSelected(AdapterView<?> adapterView) {
-        }
     }
 
     private class BookViewer implements AdapterView.OnItemClickListener {
