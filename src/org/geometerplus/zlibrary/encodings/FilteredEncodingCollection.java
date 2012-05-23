@@ -21,6 +21,7 @@ package org.geometerplus.zlibrary.encodings;
 
 import java.util.*;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
@@ -31,7 +32,7 @@ abstract class FilteredEncodingCollection extends EncodingCollection {
 
 	FilteredEncodingCollection() {
 		new EncodingCollectionReader().readQuietly(
-			ZLResourceFile.createResourceFile("encodings/Encodings.xml")
+			FBReaderApp.Instance().createResourceFile("encodings/Encodings.xml")
 		);
 	}
 	

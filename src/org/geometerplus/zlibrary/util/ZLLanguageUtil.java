@@ -21,6 +21,7 @@ package org.geometerplus.zlibrary.util;
 
 import java.util.*;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.filesystem.*;
 
 public abstract class ZLLanguageUtil {
@@ -90,7 +91,7 @@ public abstract class ZLLanguageUtil {
 	}
 
 	public static ZLFile patternsFile() {
-		return ZLResourceFile.createResourceFile("languagePatterns");
+		return FBReaderApp.Instance().createResourceFile("languagePatterns");
 	}
 
 	public static String languageByIntCode(int languageCode, int subLanguageCode) {

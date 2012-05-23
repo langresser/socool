@@ -22,6 +22,8 @@ package org.geometerplus.zlibrary.filesystem;
 import java.io.*;
 import java.util.*;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+
 public abstract class ZLFile {
 	private final static HashMap<String,ZLFile> ourCachedFiles = new HashMap<String,ZLFile>();
 
@@ -63,7 +65,7 @@ public abstract class ZLFile {
 				return cached;
 			}
 			if (!name.startsWith("/")) {
-				return ZLResourceFile.createResourceFile(name);
+				return FBReaderApp.Instance().createResourceFile(name);
 			} else {
 				return new ZLPhysicalFile(name);
 			}
@@ -98,7 +100,7 @@ public abstract class ZLFile {
 			while (path.startsWith("./")) {
 				path = path.substring(2);
 			}
-			return ZLResourceFile.createResourceFile(path);
+			return FBReaderApp.Instance().createResourceFile(path);
 		}
 		int index = path.lastIndexOf(':');
 		if (index > 1) {

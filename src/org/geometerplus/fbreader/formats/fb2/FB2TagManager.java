@@ -25,6 +25,7 @@ import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.Tag;
 
 abstract class FB2TagManager {
@@ -33,7 +34,7 @@ abstract class FB2TagManager {
 	static ArrayList<Tag> humanReadableTags(String id) {
 		if (ourMap.isEmpty()) {
 			new FB2TagInfoReader().readQuietly(
-				ZLResourceFile.createResourceFile("formats/fb2/fb2genres.xml")
+				FBReaderApp.Instance().createResourceFile("formats/fb2/fb2genres.xml")
 			);
 		}
 		return ourMap.get(id);

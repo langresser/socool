@@ -336,6 +336,30 @@ public class CoverManager {
     }
 
     private static Bitmap loadCover(String id) {
+    //  Bitmap bitmap = book.loadCover(0);
+    //  if (bitmap != null) {
+//          bitmap = ImageUtilities.createBookCover(bitmap, BOOK_COVER_WIDTH, BOOK_COVER_HEIGHT);
+//          
+//          // 创建缓存文件夹 TODO 初始化的时候创建
+//          File cacheDirectory = new File(Paths.coverCacheDirectory());
+//          if (!cacheDirectory.exists()) {
+//              cacheDirectory.mkdirs();
+//          }
+    //
+//          File coverFile = new File(cacheDirectory, book.getInternalId());
+//          FileOutputStream out = null;
+//          try {
+//              out = new FileOutputStream(coverFile);
+//              bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+//          } catch (FileNotFoundException e) {
+//              return null;
+//          } finally {
+//          	try {
+//          		out.close();
+//              } catch (IOException e) {
+//              }
+//          }
+    //  }
         final File file = new File(Paths.coverCacheDirectory(), id);
         if (file.exists()) {
             InputStream stream = null;
@@ -354,7 +378,7 @@ public class CoverManager {
         return null;
     }
 
-    private static Bitmap createScaledBitmap(Bitmap src, int dstWidth, int dstHeight,
+    public static Bitmap createScaledBitmap(Bitmap src, int dstWidth, int dstHeight,
             float offset, boolean clipShadow, Paint paint) {
         
         Matrix m;

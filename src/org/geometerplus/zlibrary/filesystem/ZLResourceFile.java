@@ -23,10 +23,6 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 
 public abstract class ZLResourceFile extends ZLFile {
-	public static ZLResourceFile createResourceFile(String path) {
-		return FBReaderApp.Instance().createResourceFile(path);
-	}
-
 	static ZLResourceFile createResourceFile(ZLResourceFile parent, String name) {
 		return FBReaderApp.Instance().createResourceFile(parent, name);
 	}

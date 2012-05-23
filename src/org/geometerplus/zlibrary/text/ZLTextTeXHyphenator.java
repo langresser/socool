@@ -21,6 +21,7 @@ package org.geometerplus.zlibrary.text;
 
 import java.util.*;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.util.ZLLanguageUtil;
@@ -38,7 +39,7 @@ final class ZLTextTeXHyphenator extends ZLTextHyphenator {
 	public List<String> languageCodes() {
 		if (myLanguageCodes == null) {
 			final TreeSet<String> codes = new TreeSet<String>();
-			final ZLFile patternsFile = ZLResourceFile.createResourceFile("hyphenationPatterns");
+			final ZLFile patternsFile = FBReaderApp.Instance().createResourceFile("hyphenationPatterns");
 			for (ZLFile file : patternsFile.children()) {
 				final String name = file.getShortName();
 				if (name.endsWith(".pattern")) {
@@ -64,7 +65,7 @@ final class ZLTextTeXHyphenator extends ZLTextHyphenator {
 		unload();
 
 		if (language != null) {
-			new ZLTextHyphenationReader(this).readQuietly(ZLResourceFile.createResourceFile(
+			new ZLTextHyphenationReader(this).readQuietly(FBReaderApp.Instance().createResourceFile(
 		  		"hyphenationPatterns/" + language + ".pattern"
 			)); 
 		}

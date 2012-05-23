@@ -22,6 +22,7 @@ package org.geometerplus.zlibrary.xml;
 import java.io.*;
 import java.util.*;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.filesystem.*;
 
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
@@ -190,7 +191,7 @@ final class ZLXMLParser {
 			entityMap.put("lt", new char[] { '<' });
 			entityMap.put("quot", new char[] { '\"' });
 			for (String fileName : dtdList) {
-				final InputStream stream = ZLResourceFile.createResourceFile(fileName).getInputStream();
+				final InputStream stream = FBReaderApp.Instance().createResourceFile(fileName).getInputStream();
 				if (stream != null) {
 					new ZLDTDParser().doIt(stream, entityMap);
 				}

@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
 
@@ -150,8 +151,8 @@ public class ZLResource {
     }
 	
 	private static void loadData(ResourceTreeReader reader, String fileName) {
-		reader.readDocument(ourRoot, ZLResourceFile.createResourceFile("resources/zlibrary/" + fileName));
-		reader.readDocument(ourRoot, ZLResourceFile.createResourceFile("resources/application/" + fileName));
+		reader.readDocument(ourRoot, FBReaderApp.Instance().createResourceFile("resources/zlibrary/" + fileName));
+		reader.readDocument(ourRoot, FBReaderApp.Instance().createResourceFile("resources/application/" + fileName));
 	}
 
 	private static void loadData() {

@@ -213,7 +213,8 @@ public final class FBReaderApp {
 			if (Model == null) {
 				book = getRecentBook();
 				if (book == null || !book.File.exists()) {
-					book = Book.getByFile(getHelpFile());
+//					book = Book.getByFile(getHelpFile());
+					return;
 				}
 			}
 			if (book == null) {
@@ -1205,24 +1206,20 @@ public final class FBReaderApp {
 		return parentTree != null ? (LibraryTree)parentTree.getSubTree(key.Id) : null;
 	}
 
-	public static ZLResourceFile getHelpFile() {
+	public ZLResourceFile getHelpFile() {
 		final Locale locale = Locale.getDefault();
 
-		ZLResourceFile file = ZLResourceFile.createResourceFile(
-			"data/help/MiniHelp." + locale.getLanguage() + "_" + locale.getCountry() + ".fb2"
-		);
+		ZLResourceFile file = createResourceFile("data/help/MiniHelp." + locale.getLanguage() + "_" + locale.getCountry() + ".fb2");
 		if (file.exists()) {
 			return file;
 		}
 
-		file = ZLResourceFile.createResourceFile(
-			"data/help/MiniHelp." + locale.getLanguage() + ".fb2"
-		);
+		file = createResourceFile("data/help/MiniHelp." + locale.getLanguage() + ".fb2");
 		if (file.exists()) {
 			return file;
 		}
 
-		return ZLResourceFile.createResourceFile("data/help/MiniHelp.en.fb2");
+		return createResourceFile("data/help/MiniHelp.en.fb2");
 	}
 
 	private List<ZLPhysicalFile> collectPhysicalFiles() {

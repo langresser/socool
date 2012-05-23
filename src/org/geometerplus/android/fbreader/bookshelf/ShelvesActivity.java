@@ -58,12 +58,16 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         FBReaderApp.Instance().addChangeListener(this);
         FBReaderApp.Instance().startBuild();
         
-        final Map<Long,Book> books = FBReaderApp.Instance().getDatabase().loadBooks();
         m_bookList = new ArrayList<Book>();
         
-        for (Book book : books.values()) {
-        	m_bookList.add(book);
-        }
+        Book book1 = Book.getByFile(FBReaderApp.Instance().createResourceFile("data/wxkb1.txt"));
+        book1.myTitle = "无限恐怖 上";
+        		
+        Book book2 = Book.getByFile(FBReaderApp.Instance().createResourceFile("data/wxkb2.txt"));
+        book2.myTitle = "无限恐怖 下";
+
+        m_bookList.add(book1);
+        m_bookList.add(book2);
 
         setContentView(R.layout.screen_shelves);
         getWindow().setBackgroundDrawable(null);

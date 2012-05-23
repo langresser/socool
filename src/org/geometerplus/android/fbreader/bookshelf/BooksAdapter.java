@@ -4,11 +4,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AbsListView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 
 import org.geometerplus.android.fbreader.covers.CoverManager;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -22,41 +25,30 @@ import org.socool.socoolreader.reader.R;
 class BooksAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private final ShelvesActivity mActivity;
-    private final Bitmap mDefaultCoverBitmap;
-    private final FastBitmapDrawable mDefaultCover;
+    
+    public static final int COVER_MAC_COUNT = 2;
+    private final int[] m_coverResId = {R.drawable.wxkb1_cover, R.drawable.wxkb2_cover};
 
-//  Bitmap bitmap = book.loadCover(0);
-//  if (bitmap != null) {
-//      bitmap = ImageUtilities.createBookCover(bitmap, BOOK_COVER_WIDTH, BOOK_COVER_HEIGHT);
-//      
-//      // 创建缓存文件夹 TODO 初始化的时候创建
-//      File cacheDirectory = new File(Paths.coverCacheDirectory());
-//      if (!cacheDirectory.exists()) {
-//          cacheDirectory.mkdirs();
-//      }
-//
-//      File coverFile = new File(cacheDirectory, book.getInternalId());
-//      FileOutputStream out = null;
-//      try {
-//          out = new FileOutputStream(coverFile);
-//          bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-//      } catch (FileNotFoundException e) {
-//          return null;
-//      } finally {
-//      	try {
-//      		out.close();
-//          } catch (IOException e) {
-//          }
-//      }
-//  }
+    private final FastBitmapDrawable[] mDefaultCoverSet = new FastBitmapDrawable[COVER_MAC_COUNT];
+    
     BooksAdapter(ShelvesActivity activity) {
     	mActivity = activity;
         mInflater = LayoutInflater.from(activity);
+        
+        for (int i = 0; i < COVER_MAC_COUNT; ++i) {
+    		Bitmap bitmap = BitmapFactory.decodeResource(mActivity.getResources(), m_coverResId[i]);
+    		final int width = bitmap.getWidth();
+        	final int height = bitmap.getHeight();
+        	Log.d("Bitmap:" + i, String.format("width:%1d  height:%2d", width, height));
 
-        mDefaultCoverBitmap = BitmapFactory.decodeResource(activity.getResources(),
-                //R.drawable.shelf_default_cover);
-        		R.drawable.unknown_cover);
-        mDefaultCover = new FastBitmapDrawable(mDefaultCoverBitmap);
+    		Matrix matrix = new Matrix();   
+    	    matrix.postScale(120.0f / width, 160.0f / height);   
+    	  
+    	    // create the new Bitmap object   
+    	    Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);   
+
+    		mDefaultCoverSet[i] = new FastBitmapDrawable(resizedBitmap);
+    	}
     }
 
 	@Override
@@ -94,18 +86,7 @@ class BooksAdapter extends BaseAdapter {
         String bookId = "";
         holder.bookId = bookId;
 
-//        if (mActivity.mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING ||
-//        		mActivity.isPendingCoversUpdate()) {
-//            holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, mDefaultCover);
-//            holder.queryCover = true;
-//        } else {
-//            holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null,
-//                    CoverManager.getCachedCover(bookId, mDefaultCover));
-//            holder.queryCover = false;
-//        }
-
-//        mDefaultCover.setBounds(0, 0, 100, 100);
-        holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, CoverManager.getCachedCover(bookId, mDefaultCover));
+        holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, mDefaultCoverSet[position % 4]);
         Book book = mActivity.m_bookList.get(position);
         holder.title.setText(book.myTitle);
 		return convertView;
