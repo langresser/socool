@@ -34,11 +34,7 @@ public class ShowLibraryAction extends FBAndroidAction {
 
 	@Override
 	protected void run(Object ... params) {
-		final BookModel model = Reader.Model;
 		Intent intent = new Intent(BaseActivity.getApplicationContext(), LibraryActivity.class);
-		if (model != null && model.Book != null) {
-			intent.putExtra(LibraryActivity.SELECTED_BOOK_PATH_KEY, model.Book.File.getPath());
-		}
 		BaseActivity.startActivity(intent);
 	}
 }

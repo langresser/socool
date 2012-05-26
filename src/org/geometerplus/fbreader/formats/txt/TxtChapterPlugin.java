@@ -12,17 +12,18 @@ import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
-public class TxtPlugin extends JavaFormatPlugin {
-	private TxtReader m_reader;
-	public TxtPlugin() {
+public class TxtChapterPlugin extends JavaFormatPlugin {
+	private TxtChapterReader m_reader;
+	public TxtChapterPlugin() {
 		super("plain text");
 		
-		m_reader = new TxtReader(null);
+		m_reader = new TxtChapterReader();
 	}
 
 	@Override
 	public void readMetaInfo(Book book){
 		// txt格式没有附加信息
+		book.myTitle = "无限恐怖";
 	}
 	
 	@Override
@@ -73,7 +74,7 @@ public class TxtPlugin extends JavaFormatPlugin {
 	@Override
 	public void detectLanguageAndEncoding(Book book) {
 		java.nio.charset.Charset charset = null;   
-		try {
+		try {   
 			ZLFile file = ZLFile.createFileByPath(book.m_filePath);
 		  charset = CodepageDetectorProxy.getInstance().detectCodepage(
 				  new BufferedInputStream(file.getInputStream()), 200);   

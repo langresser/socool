@@ -231,7 +231,7 @@ public class BookInfoActivity extends Activity {
 	private void setupAnnotation(Book book) {
 		final TextView titleView = (TextView)findViewById(R.id.book_info_annotation_title);
 		final TextView bodyView = (TextView)findViewById(R.id.book_info_annotation_body);
-		final String annotation = book.getPlugin().readAnnotation(book.File);	
+		final String annotation = book.getPlugin().readAnnotation(book);	
 		if (annotation == null) {
 			titleView.setVisibility(View.GONE);
 			bodyView.setVisibility(View.GONE);
@@ -246,19 +246,19 @@ public class BookInfoActivity extends Activity {
 	private void setupFileInfo(Book book) {
 		((TextView)findViewById(R.id.file_info_title)).setText(myResource.getResource("fileInfo").getValue());
 
-		setupInfoPair(R.id.file_name, "name", book.File.getPath());
+		setupInfoPair(R.id.file_name, "name", book.m_filePath);
 		if (ENABLE_EXTENDED_FILE_INFO) {
-			setupInfoPair(R.id.file_type, "type", book.File.getExtension());
+//			setupInfoPair(R.id.file_type, "type", book.File.getExtension());
         
-			final ZLPhysicalFile physFile = book.File.getPhysicalFile();
-			final File file = physFile == null ? null : physFile.javaFile();
-			if (file != null && file.exists() && file.isFile()) {
-				setupInfoPair(R.id.file_size, "size", formatSize(file.length()));
-				setupInfoPair(R.id.file_time, "time", formatDate(file.lastModified()));
-			} else {
-				setupInfoPair(R.id.file_size, "size", null);
-				setupInfoPair(R.id.file_time, "time", null);
-			}
+//			final ZLPhysicalFile physFile = book.File.getPhysicalFile();
+//			final File file = physFile == null ? null : physFile.javaFile();
+//			if (file != null && file.exists() && file.isFile()) {
+//				setupInfoPair(R.id.file_size, "size", formatSize(file.length()));
+//				setupInfoPair(R.id.file_time, "time", formatDate(file.lastModified()));
+//			} else {
+//				setupInfoPair(R.id.file_size, "size", null);
+//				setupInfoPair(R.id.file_time, "time", null);
+//			}
 		} else {
 			setupInfoPair(R.id.file_type, "type", null);
 			setupInfoPair(R.id.file_size, "size", null);

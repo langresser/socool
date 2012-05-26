@@ -119,9 +119,9 @@ public class FileTree extends LibraryTree {
 			if (!prefix.endsWith("/")) {
 				prefix += "/";
 			}
-			return book.File.getPath().startsWith(prefix);
+			return book.m_filePath.startsWith(prefix);
 		} else if (myFile.isArchive()) {
-			return book.File.getPath().startsWith(myFile.getPath() + ":");
+			return book.m_filePath.startsWith(myFile.getPath() + ":");
 		} else {
 			return book.equals(getBook());
 		}

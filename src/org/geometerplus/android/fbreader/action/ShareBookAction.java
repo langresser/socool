@@ -30,7 +30,7 @@ public class ShareBookAction extends FBAndroidAction {
 
 	@Override
 	public boolean isVisible() {
-		return Reader.Model != null && Reader.Model.Book.File.getPhysicalFile() != null;
+		return Reader.Model != null;
 	}
 
 	@Override

@@ -58,22 +58,26 @@ public class OEBPlugin extends JavaFormatPlugin {
 
 	@Override
 	public void readMetaInfo(Book book){
-		new OEBMetaInfoReader(book).readMetaInfo(getOpfFile(book.File));
+		final ZLFile file = ZLFile.createFileByPath(book.m_filePath);
+		new OEBMetaInfoReader(book).readMetaInfo(getOpfFile(file));
 	}
 	
 	@Override
 	public void readModel(BookModel model) {
-		model.Book.File.setCached(true);
-		new OEBBookReader(model).readBook(getOpfFile(model.Book.File));
+		final ZLFile file = ZLFile.createFileByPath(model.Book.m_filePath);
+		file.setCached(true);
+		new OEBBookReader(model).readBook(getOpfFile(file));
 	}
 
 	@Override
-	public ZLImage readCover(ZLFile file) {
+	public ZLImage readCover(Book book) {
+		final ZLFile file = ZLFile.createFileByPath(book.m_filePath);
 		return new OEBCoverReader().readCover(getOpfFile(file)); 
 	}
 
 	@Override
-	public String readAnnotation(ZLFile file) {
+	public String readAnnotation(Book book) {
+		final ZLFile file = ZLFile.createFileByPath(book.m_filePath);
 		return new OEBAnnotationReader().readAnnotation(getOpfFile(file)); 
 	}
 

@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.formats.fb2;
 
 import java.io.IOException;
 
+import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
@@ -40,7 +41,8 @@ public class FB2AnnotationReader extends ZLXMLReaderAdapter {
 		return true;
 	}
 	
-	public String readAnnotation(ZLFile file) {
+	public String readAnnotation(Book book) {
+		ZLFile file = ZLFile.createFileByPath(book.m_filePath);
 		myReadState = READ_NOTHING;
 		myBuffer.delete(0, myBuffer.length());
 		if (readDocument(file)) {

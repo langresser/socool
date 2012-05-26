@@ -43,10 +43,6 @@ public abstract class FormatPlugin {
 		return myFileType;
 	}
 
-	public ZLFile realBookFile(ZLFile file) {
-		return file;
-	}
-
 	public boolean supportStreamRead()						// 是否支持文件部分读取(暂时只有txt读取支持)
 	{
 		return false;
@@ -69,8 +65,8 @@ public abstract class FormatPlugin {
 	public abstract void readMetaInfo(Book book);				// 读取附加信息
 	public abstract void readModel(BookModel model);			// 读取文本信息（完整读取）	
 	public abstract void detectLanguageAndEncoding(Book book);	// 监测编码和语言
-	public abstract ZLImage readCover(ZLFile file);						// 读取封面信息
-	public abstract String readAnnotation(ZLFile file);					// 读取简介信息
+	public abstract ZLImage readCover(Book book);						// 读取封面信息
+	public abstract String readAnnotation(Book book);					// 读取简介信息
 
 	public abstract int type();
 

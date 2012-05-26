@@ -212,7 +212,7 @@ public final class FBReaderApp {
 		if (book == null) {
 			if (Model == null) {
 				book = getRecentBook();
-				if (book == null || !book.File.exists()) {
+				if (book == null) {
 //					book = Book.getByFile(getHelpFile());
 					return;
 				}
@@ -222,7 +222,7 @@ public final class FBReaderApp {
 			}
 		}
 		if (Model != null) {
-			if (bookmark == null & book.File.getPath().equals(Model.Book.File.getPath())) {
+			if (bookmark == null & book.m_filePath.equals(Model.Book.m_filePath)) {
 				return;
 			}
 		}
@@ -846,6 +846,19 @@ public final class FBReaderApp {
 		}
 		return myMetrics.heightPixels;
 	}
+	
+	public InputStream getBookFile(String path)
+	{
+		try {
+			final InputStream stream = myApplication.getAssets().open(path);
+			return stream;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	public Collection<String> defaultLanguageCodes() {
 		final TreeSet<String> set = new TreeSet<String>();
@@ -1261,9 +1274,9 @@ public final class FBReaderApp {
 
 		final SearchResultsTree found =
 			(SearchResultsTree)getFirstLevelTree(ROOT_FOUND);
-		if (found != null && book.matches(found.getPattern())) {
-			found.getBookSubTree(book, true);
-		}
+//		if (found != null && book.matches(found.getPattern())) {
+//			found.getBookSubTree(book, true);
+//		}
 	}
 
 	private void removeFromTree(String rootId, Book book) {
@@ -1326,9 +1339,6 @@ public final class FBReaderApp {
 			Book book = savedBooksByBookId.get(id);
 			if (book == null) {
 				book = Book.getById(id);
-				if (book != null && !book.File.exists()) {
-					book = null;
-				}
 			}
 			if (book != null) {
 				new BookTree(getFirstLevelTree(ROOT_RECENT), book, true);
@@ -1339,9 +1349,6 @@ public final class FBReaderApp {
 			Book book = savedBooksByBookId.get(id);
 			if (book == null) {
 				book = Book.getById(id);
-				if (book != null && !book.File.exists()) {
-					book = null;
-				}
 			}
 			if (book != null) {
 				getFirstLevelTree(ROOT_FAVORITES).getBookSubTree(book, true);
@@ -1352,7 +1359,7 @@ public final class FBReaderApp {
 
 		// Step 4: add help file
 		final ZLFile helpFile = getHelpFile();
-		Book helpBook = new Book(helpFile);
+		Book helpBook = new Book(helpFile.getPath());
 		addBookToLibrary(helpBook);
 		fireModelChangedEvent(ChangeListener.Code.BookAdded);
 	}
@@ -1428,21 +1435,6 @@ public final class FBReaderApp {
 		synchronized (myBooks) {
 			booksCopy = new ArrayList<Book>(myBooks);
 		}
-		for (Book book : booksCopy) {
-			if (book.matches(pattern)) {
-				synchronized (this) {
-					if (newSearchResults == null) {
-						if (oldSearchResults != null) {
-							oldSearchResults.removeSelf();
-						}
-						newSearchResults = new SearchResultsTree(myRootTree, ROOT_FOUND, pattern);
-						fireModelChangedEvent(ChangeListener.Code.Found);
-					}
-					newSearchResults.getBookSubTree(book, true);
-					fireModelChangedEvent(ChangeListener.Code.BookAdded);
-				}
-			}
-		}
 		if (newSearchResults == null) {
 			fireModelChangedEvent(ChangeListener.Code.NotFound);
 		}
@@ -1462,7 +1454,7 @@ public final class FBReaderApp {
 		getFirstLevelTree(ROOT_RECENT).clear();
 		for (long id : m_booksDatabase.loadRecentBookIds()) {
 			Book book1 = Book.getById(id);
-			if (book1 == null || !book1.File.exists()) {
+			if (book1 == null) {
 				continue;
 			}
 			new BookTree(getFirstLevelTree(ROOT_RECENT), book1, true);
@@ -1499,7 +1491,7 @@ public final class FBReaderApp {
 	}
 
 	public boolean canRemoveBookFile(Book book) {
-		ZLFile file = book.File;
+		ZLFile file = ZLFile.createFileByPath(book.m_filePath);
 		if (file.getPhysicalFile() == null) {
 			return false;
 		}
@@ -1526,7 +1518,8 @@ public final class FBReaderApp {
 		myRootTree.removeBook(book, true);
 
 		if ((removeMode & REMOVE_FROM_DISK) != 0) {
-			book.File.getPhysicalFile().delete();
+			ZLFile file = ZLFile.createFileByPath(book.m_filePath);
+			file.getPhysicalFile().delete();
 		}
 	}
 	

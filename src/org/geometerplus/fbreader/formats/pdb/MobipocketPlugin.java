@@ -43,7 +43,8 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 	public void readMetaInfo(Book book) {
 		InputStream stream = null;
 		try {
-			stream = book.File.getInputStream();
+			ZLFile file = ZLFile.createFileByPath(book.m_filePath);
+			stream = file.getInputStream();
 			final PdbHeader header = new PdbHeader(stream);
 			PdbUtil.skip(stream, header.Offsets[0] + 16 - header.length());
 			if (PdbUtil.readInt(stream) != 0x4D4F4249) /* "MOBI" */ {
@@ -131,7 +132,8 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public ZLImage readCover(final ZLFile file) {
+	public ZLImage readCover(Book book) {
+		final ZLFile file = ZLFile.createFileByPath(book.m_filePath);
 		return new ZLLoadableImage(MimeType.IMAGE_AUTO) {
 			@Override
 			public String getId() {
@@ -241,7 +243,7 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public String readAnnotation(ZLFile file) {
+	public String readAnnotation(Book book) {
 		return null;
 	}
 
@@ -254,7 +256,8 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 	public void detectLanguageAndEncoding(Book book) {
 		InputStream stream = null;
 		try {
-			stream = book.File.getInputStream();
+			ZLFile file = ZLFile.createFileByPath(book.m_filePath);
+			stream =file.getInputStream();
 			final PdbHeader header = new PdbHeader(stream);
 			PdbUtil.skip(stream, header.Offsets[0] + 16 - header.length());
 			if (PdbUtil.readInt(stream) != 0x4D4F4249) /* "MOBI" */ {

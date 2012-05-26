@@ -29,6 +29,7 @@ import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
 
+import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.html.ZLHtmlAttributeMap;
 import org.geometerplus.zlibrary.html.ZLHtmlProcessor;
 import org.geometerplus.zlibrary.html.ZLHtmlReader;
@@ -91,7 +92,8 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 	}
 
 	public InputStream getInputStream() throws IOException {
-		return m_bookModel.Book.File.getInputStream();
+		final ZLFile file = ZLFile.createFileByPath(m_bookModel.Book.m_filePath);
+		return file.getInputStream();
 	}
 
 	public void startDocumentHandler() {

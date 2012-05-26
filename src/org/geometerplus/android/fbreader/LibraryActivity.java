@@ -115,7 +115,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 	protected void showBookInfo(Book book) {
 		startActivityForResult(
 			new Intent(getApplicationContext(), BookInfoActivity.class)
-				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, book.File.getPath()),
+				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, book.m_filePath),
 			BOOK_INFO_REQUEST
 		);
 	}
@@ -175,9 +175,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 		menu.setHeaderTitle(book.myTitle);
 		menu.add(0, OPEN_BOOK_ITEM_ID, 0, resource.getResource("openBook").getValue());
 		menu.add(0, SHOW_BOOK_INFO_ITEM_ID, 0, resource.getResource("showBookInfo").getValue());
-		if (book.File.getPhysicalFile() != null) {
-			menu.add(0, SHARE_BOOK_ITEM_ID, 0, resource.getResource("shareBook").getValue());
-		}
+		menu.add(0, SHARE_BOOK_ITEM_ID, 0, resource.getResource("shareBook").getValue());
 		if (FBReaderApp.Instance().isBookInFavorites(book)) {
 			menu.add(0, REMOVE_FROM_FAVORITES_ITEM_ID, 0, resource.getResource("removeFromFavorites").getValue());
 		} else {
@@ -227,7 +225,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 		startActivity(
 			new Intent(getApplicationContext(), SCReaderActivity.class)
 				.setAction(Intent.ACTION_VIEW)
-				.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.File.getPath())
+				.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.m_filePath)
 				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 		);
 	}
@@ -294,7 +292,8 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 		FBReaderApp.Instance().removeBook(book, mode);
 
 		if (getCurrentTree() instanceof FileTree) {
-			getListAdapter().remove(new FileTree((FileTree)getCurrentTree(), book.File));
+			ZLFile file = ZLFile.createFileByPath(book.m_filePath);
+			getListAdapter().remove(new FileTree((FileTree)getCurrentTree(), file));
 		} else {
 			getListAdapter().replaceAll(getCurrentTree().subTrees());
 		}

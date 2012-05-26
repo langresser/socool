@@ -166,19 +166,5 @@ public abstract class UIUtil {
 	}
 	
 	public static void shareBook(Activity activity, Book book) {
-		try {
-			final ZLPhysicalFile file = book.File.getPhysicalFile();
-			if (file == null) {
-				// That should be impossible
-				return;
-			}
-			activity.startActivity(
-				new Intent(Intent.ACTION_SEND)
-					.setType(FileTypeCollection.Instance.mimeType(book.File).Name)
-					.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.javaFile()))
-			);
-		} catch (ActivityNotFoundException e) {
-			// TODO: show toast
-		}
 	}
 }

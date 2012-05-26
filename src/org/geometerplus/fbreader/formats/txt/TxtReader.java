@@ -34,10 +34,8 @@ public final class TxtReader extends BookReader {
 		super(model);
 		
 		if (model != null) {
-			String path = model.Book.File.getPath();
-			
 			try {
-				m_streamReader = new RandomAccessFile(path, "r").getChannel();
+				m_streamReader = new RandomAccessFile(model.Book.m_filePath, "r").getChannel();
 				initParagraphData();
 			} catch (Exception e) {
 				
@@ -48,7 +46,7 @@ public final class TxtReader extends BookReader {
 	public void setModel(BookModel model)
 	{
 		// 如果换文件，则关闭原文件
-		if (m_streamReader != null && !m_bookModel.Book.File.getPath().equalsIgnoreCase(model.Book.File.getPath())) {
+		if (m_streamReader != null && !m_bookModel.Book.m_filePath.equalsIgnoreCase(model.Book.m_filePath)) {
 			try {
 				m_streamReader.close();
 			} catch (IOException e) {
@@ -59,10 +57,8 @@ public final class TxtReader extends BookReader {
 		m_bookModel = model;
 		myCurrentContentsTree = model.TOCTree;
 		
-		String path = m_bookModel.Book.File.getPath();
-
 		try {
-			m_streamReader = new RandomAccessFile(path, "r").getChannel();
+			m_streamReader = new RandomAccessFile(m_bookModel.Book.m_filePath, "r").getChannel();
 			initParagraphData();
 		} catch (IOException e) {
 			e.printStackTrace();

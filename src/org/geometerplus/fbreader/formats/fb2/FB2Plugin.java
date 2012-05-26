@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.formats.fb2;
 
+import java.util.List;
+
 import org.geometerplus.zlibrary.encodings.AutoEncodingCollection;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
@@ -33,11 +35,6 @@ public class FB2Plugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public ZLFile realBookFile(ZLFile file) {
-		return FB2Util.getRealFB2File(file);
-	}
-
-	@Override
 	public void readMetaInfo(Book book) {
 		new FB2MetaInfoReader(book).readMetaInfo();
 	}
@@ -48,13 +45,13 @@ public class FB2Plugin extends JavaFormatPlugin {
 	}
 
 	@Override
-	public ZLImage readCover(ZLFile file) {
-		return new FB2CoverReader().readCover(file);
+	public ZLImage readCover(Book book) {
+		return new FB2CoverReader().readCover(book);
 	}
 
 	@Override
-	public String readAnnotation(ZLFile file) {
-		return new FB2AnnotationReader().readAnnotation(file);
+	public String readAnnotation(Book book) {
+		return new FB2AnnotationReader().readAnnotation(book);
 	}
 
 	@Override

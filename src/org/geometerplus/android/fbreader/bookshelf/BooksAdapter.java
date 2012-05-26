@@ -26,7 +26,7 @@ class BooksAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private final ShelvesActivity mActivity;
     
-    public static final int COVER_MAC_COUNT = 2;
+    public static final int COVER_MAC_COUNT = 1;
     private final int[] m_coverResId = {R.drawable.wxkb1_cover, R.drawable.wxkb2_cover};
 
     private final FastBitmapDrawable[] mDefaultCoverSet = new FastBitmapDrawable[COVER_MAC_COUNT];
@@ -104,11 +104,6 @@ class BooksAdapter extends BaseAdapter {
 	  	}
 	
 	  	Book book = mActivity.m_bookList.get(index);
-	  	
-	  	if (!FBReaderApp.Instance().hasCustomCover(book.File)) {
-	  		button.setImageResource(FBReaderApp.Instance().getCoverResourceId(book.File));
-	  		return;
-	  	}
 
 		final ZLImage image = book.getCover();
 

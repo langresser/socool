@@ -42,8 +42,8 @@ import android.database.sqlite.SQLiteStatement;
 public class BooksDatabase {
 	private final SQLiteDatabase myDatabase;
 
-	public Book createBook(long id, ZLFile file, String title, String encoding, String language) {
-		return (file != null) ? new Book(id, file, title, encoding, language) : null;
+	public Book createBook(long id, String filePath, String title, String encoding, String language) {
+		return (filePath != null) ? new Book(id, filePath, title, encoding, language) : null;
 	}
 
 	public BooksDatabase(Context context) {
@@ -96,7 +96,7 @@ public class BooksDatabase {
 		final Cursor cursor = myDatabase.rawQuery("SELECT file_path,title,encoding,language FROM Books WHERE book_id = " + bookId, null);
 		if (cursor.moveToNext()) {
 			book = createBook(
-				bookId, ZLFile.createFileByPath(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3)
+				bookId, cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)
 			);
 		}
 		cursor.close();
@@ -113,14 +113,14 @@ public class BooksDatabase {
 		cursor.close();
 	}
 
-	protected Book loadBookByFile(ZLFile file) {
+	protected Book loadBookByFile(String filePath) {
 		Book book = null;
-		final Cursor cursor = myDatabase.rawQuery("SELECT book_id,title,encoding,language,author,file_size FROM Books WHERE file_path = '" + file.getPath() + "'", null);
+		final Cursor cursor = myDatabase.rawQuery("SELECT book_id,title,encoding,language,author,file_size FROM Books WHERE file_path = '" + filePath + "'", null);
 		if (cursor.moveToNext()) {
 			book = createBook(
-				cursor.getLong(0), file, cursor.getString(1), cursor.getString(2), cursor.getString(3)
+				cursor.getLong(0), filePath, cursor.getString(1), cursor.getString(2), cursor.getString(3)
 			);
-			book.m_filePath = file.getPath();
+			book.m_filePath = filePath;
 			book.m_bookAuthor = cursor.getString(4);
 			book.m_fileSize = (int)cursor.getLong(5);
 		}
@@ -135,7 +135,7 @@ public class BooksDatabase {
 		final HashMap<Long,Book> booksById = new HashMap<Long,Book>();
 		while (cursor.moveToNext()) {
 			final long id = cursor.getLong(0);
-			final Book book = createBook(id, ZLFile.createFileByPath(cursor.getString(5)),
+			final Book book = createBook(id, cursor.getString(5),
 					cursor.getString(1), cursor.getString(2), cursor.getString(3));
 			book.m_filePath = cursor.getString(5);
 			book.m_fileSize = (int)cursor.getLong(6);
@@ -149,13 +149,13 @@ public class BooksDatabase {
 	}
 
 	private SQLiteStatement myUpdateBookInfoStatement;
-	protected void updateBookInfo(long bookId, ZLFile file, String encoding, String language, String title) {
+	protected void updateBookInfo(long bookId, String filePath, String encoding, String language, String title) {
 		if (myUpdateBookInfoStatement == null) {
 			myUpdateBookInfoStatement = myDatabase.compileStatement(
 				"UPDATE Books SET file_path = ?, encoding = ?, language = ?, title = ? WHERE book_id = ?"
 			);
 		}
-		myUpdateBookInfoStatement.bindString(1, file.getPath());
+		myUpdateBookInfoStatement.bindString(1, filePath);
 		SQLiteUtil.bindString(myUpdateBookInfoStatement, 2, encoding);
 		SQLiteUtil.bindString(myUpdateBookInfoStatement, 3, language);
 		myUpdateBookInfoStatement.bindString(4, title);
@@ -164,7 +164,7 @@ public class BooksDatabase {
 	}
 
 	private SQLiteStatement myInsertBookInfoStatement;
-	protected long insertBookInfo(ZLFile file, String encoding, String language, String title) {
+	protected long insertBookInfo(String filePath, String encoding, String language, String title) {
 		if (myInsertBookInfoStatement == null) {
 			myInsertBookInfoStatement = myDatabase.compileStatement(
 				"INSERT OR IGNORE INTO Books (author,encoding,language,title,access_time,"+
@@ -179,7 +179,7 @@ public class BooksDatabase {
 		myInsertBookInfoStatement.bindLong(5, 0);
 		myInsertBookInfoStatement.bindLong(6, 0);
 		myInsertBookInfoStatement.bindLong(7, 0);
-		myInsertBookInfoStatement.bindString(8, file.getPath());
+		myInsertBookInfoStatement.bindString(8, filePath);
 		myInsertBookInfoStatement.bindLong(9, 0);
 		long bookId = myInsertBookInfoStatement.executeInsert();
 		return bookId;

@@ -19,10 +19,12 @@
 
 package org.geometerplus.fbreader.formats.fb2;
 
+import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 public class FB2CoverReader {
-	public FB2CoverImage readCover(ZLFile file) {
+	public FB2CoverImage readCover(Book book) {
+		ZLFile file = ZLFile.createFileByPath(book.m_filePath);
 		return new FB2CoverImage(file);
 	}
 }

@@ -26,6 +26,7 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.fbreader.formats.fb2.FB2Plugin;
 import org.geometerplus.fbreader.formats.oeb.OEBPlugin;
 import org.geometerplus.fbreader.formats.pdb.MobipocketPlugin;
+import org.geometerplus.fbreader.formats.txt.TxtChapterPlugin;
 import org.geometerplus.fbreader.formats.txt.TxtPlugin;
 import org.geometerplus.fbreader.filetype.*;
 
@@ -33,6 +34,8 @@ public class PluginCollection {
 	private static PluginCollection ourInstance;
 
 	private final Map<Integer, List<FormatPlugin>> myPlugins = new HashMap<Integer, List<FormatPlugin>>();
+	
+	private TxtChapterPlugin m_txtPlugin;
 
 	public static PluginCollection Instance() {
 		if (ourInstance == null) {
@@ -52,6 +55,9 @@ public class PluginCollection {
 		addPlugin(new MobipocketPlugin());
 		addPlugin(new OEBPlugin());
 		addPlugin(new TxtPlugin());
+
+		m_txtPlugin = new TxtChapterPlugin();
+		addPlugin(m_txtPlugin);
 	}
 
 	private void addPlugin(FormatPlugin plugin) {
@@ -62,6 +68,11 @@ public class PluginCollection {
 			myPlugins.put(type, list);
 		}
 		list.add(plugin);
+	}
+	
+	public TxtChapterPlugin getPlugin()
+	{
+		return m_txtPlugin;
 	}
 
 	public FormatPlugin getPlugin(FileType fileType, int formatType) {

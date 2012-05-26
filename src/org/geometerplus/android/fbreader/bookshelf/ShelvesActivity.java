@@ -60,14 +60,11 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         
         m_bookList = new ArrayList<Book>();
         
-        Book book1 = Book.getByFile(FBReaderApp.Instance().createResourceFile("data/wxkb1.txt"));
-        book1.myTitle = "无限恐怖 上";
+        Book book1 = Book.getByPath("data/wxkb");
+        book1.myTitle = "无限恐怖 ";
         		
-        Book book2 = Book.getByFile(FBReaderApp.Instance().createResourceFile("data/wxkb2.txt"));
-        book2.myTitle = "无限恐怖 下";
 
         m_bookList.add(book1);
-        m_bookList.add(book2);
 
         setContentView(R.layout.screen_shelves);
         getWindow().setBackgroundDrawable(null);
@@ -251,13 +248,8 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
 			menu.setHeaderTitle(book.myTitle);
 			menu.add(0, OPEN_BOOK_ITEM_ID, 0, resource.getResource("openBook").getValue());
 			menu.add(0, SHOW_BOOK_INFO_ITEM_ID, 0, resource.getResource("showBookInfo").getValue());
-			if (book.File.getPhysicalFile() != null) {
-				menu.add(0, SHARE_BOOK_ITEM_ID, 0, resource.getResource("shareBook").getValue());
-			}
-
-			if (FBReaderApp.Instance().canRemoveBookFile(book)) {
-				menu.add(0, DELETE_BOOK_ITEM_ID, 0, resource.getResource("deleteBook").getValue());
-			}
+			menu.add(0, SHARE_BOOK_ITEM_ID, 0, resource.getResource("shareBook").getValue());
+			menu.add(0, DELETE_BOOK_ITEM_ID, 0, resource.getResource("deleteBook").getValue());
 		}
 
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -299,7 +291,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
 	protected void showBookInfo(Book book) {
 		startActivityForResult(
 			new Intent(getApplicationContext(), BookInfoActivity.class)
-				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, book.File.getPath()),
+				.putExtra(BookInfoActivity.CURRENT_BOOK_PATH_KEY, book.m_filePath),
 			BOOK_INFO_REQUEST
 		);
 	}
@@ -308,7 +300,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
 		startActivity(
 			new Intent(getApplicationContext(), SCReaderActivity.class)
 				.setAction(Intent.ACTION_VIEW)
-				.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.File.getPath())
+				.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.m_filePath)
 				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 		);
 	}
@@ -330,7 +322,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         	Book book = m_bookList.get(position);
     		 startActivity(new Intent(getApplicationContext(), SCReaderActivity.class)
-    		 			.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.File.getPath())
+    		 			.putExtra(SCReaderActivity.BOOK_PATH_KEY, book.m_filePath)
         				.setAction(Intent.ACTION_VIEW));
         }
     }

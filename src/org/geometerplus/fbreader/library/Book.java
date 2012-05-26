@@ -47,7 +47,7 @@ public class Book {
 			return null;
 		}
 
-		final ZLFile bookFile = book.File;
+		final ZLFile bookFile = ZLFile.createFileByPath(book.m_filePath);
 		final ZLPhysicalFile physicalFile = bookFile.getPhysicalFile();
 		if (physicalFile == null) {
 			return book;
@@ -78,10 +78,10 @@ public class Book {
 			return null;
 		}
 
-		Book book = FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
+		Book book = FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile.getPath());
 
 		if (book == null) {
-			book = new Book(bookFile);
+			book = new Book(bookFile.getPath());
 		} else {
 			book.readMetaInfo();
 		}
@@ -89,8 +89,24 @@ public class Book {
 		book.save();
 		return book;
 	}
+	
+	public static Book getByPath(String path) {
+		if (path == null) {
+			return null;
+		}
 
-	public final ZLFile File;
+		Book book = new Book(path);;//FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
+
+//		if (book == null) {
+//			book = new Book(path);
+//		} else {
+//			book.readMetaInfo();
+//		}
+
+		book.save();
+		return book;
+	}
+
 	public String m_filePath = "";		// 如果是单文件，则对应文件全路径；如果是一组文件，则对应文件夹路径
 	public int m_fileSize = 0;
 	public String m_bookAuthor = "";
@@ -106,28 +122,24 @@ public class Book {
 	private static final WeakReference<ZLImage> NULL_IMAGE = new WeakReference<ZLImage>(null);
 	private WeakReference<ZLImage> myCover;
 
-	Book(long id, ZLFile file, String title, String encoding, String language) {
+	Book(long id, String filePath, String title, String encoding, String language) {
 		myId = id;
-		File = file;
 		myTitle = title;
 		myEncoding = encoding;
 		myLanguage = language;
 		myIsSaved = true;
-		m_filePath = file.getPath();
+		m_filePath = filePath;
 	}
 
-	public Book(ZLFile file) {
+	public Book(String filePath) {
 		myId = -1;
-		final FormatPlugin plugin = getPlugin(file);
+		final FormatPlugin plugin = getPlugin(filePath);
 		if (plugin != null) {
-			File = plugin.realBookFile(file);
 			readMetaInfo(plugin);
-			m_filePath = file.getPath();
-		} else {
-			File = null;
+			m_filePath = filePath;
 		}
 	}
-
+	
 	public void reloadInfoFromFile() {
 		readMetaInfo();
 		save();
@@ -139,7 +151,8 @@ public class Book {
 		myIsSaved = true;
 	}
 
-	private FormatPlugin getPlugin(ZLFile file) {
+	private FormatPlugin getPlugin(String filePath) {
+		final ZLFile file = ZLFile.createFileByPath(filePath);
 		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
 				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.ANY);
 		if (plugin == null) {
@@ -150,7 +163,7 @@ public class Book {
 	}
 
 	public FormatPlugin getPlugin() {
-		return getPlugin(File);
+		return PluginCollection.Instance().getPlugin();
 	}
 
 	public void readMetaInfo() {
@@ -168,7 +181,7 @@ public class Book {
 		plugin.readMetaInfo(this);
 
 		if (myTitle == null || myTitle.length() == 0) {
-			final String fileName = File.getShortName();
+			final String fileName = m_filePath.substring(m_filePath.lastIndexOf('/'));
 			final int index = fileName.lastIndexOf('.');
 			setTitle(index > 0 ? fileName.substring(0, index) : fileName);
 		}
@@ -217,17 +230,6 @@ public class Book {
 		}
 	}
 
-	public boolean matches(String pattern) {
-		if (myTitle != null && ZLMiscUtil.matchesIgnoreCase(myTitle, pattern)) {
-			return true;
-		}
-
-		if (ZLMiscUtil.matchesIgnoreCase(File.getLongName(), pattern)) {
-			return true;
-		}
-		return false;
-	}
-
 	public boolean save() {
 		if (myIsSaved) {
 			return false;
@@ -236,9 +238,9 @@ public class Book {
 		database.executeAsATransaction(new Runnable() {
 			public void run() {
 				if (myId >= 0) {
-					database.updateBookInfo(myId, File, myEncoding, myLanguage, myTitle);
+					database.updateBookInfo(myId, m_filePath, myEncoding, myLanguage, myTitle);
 				} else {
-					myId = database.insertBookInfo(File, myEncoding, myLanguage, myTitle);
+					myId = database.insertBookInfo(m_filePath, myEncoding, myLanguage, myTitle);
 					storeAllVisitedHyperinks();
 				}
 			}
@@ -296,7 +298,8 @@ public class Book {
 
 		try {
 			final MessageDigest hash = MessageDigest.getInstance("SHA-256");
-			stream = File.getInputStream();
+			ZLFile file = ZLFile.createFileByPath(m_filePath);
+			stream = file.getInputStream();
 
 			final byte[] buffer = new byte[2048];
 			while (true) {
@@ -335,7 +338,7 @@ public class Book {
 				return image;
 			}
 		}
-		ZLImage image = getPlugin().readCover(File);
+		ZLImage image = getPlugin().readCover(this);
 		myCover = image != null ? new WeakReference<ZLImage>(image) : NULL_IMAGE;
 		
 		return image;
@@ -354,6 +357,6 @@ public class Book {
 		if (!(o instanceof Book)) {
 			return false;
 		}
-		return File.equals(((Book)o).File);
+		return m_filePath.equals(((Book)o).m_filePath);
 	}
 }
