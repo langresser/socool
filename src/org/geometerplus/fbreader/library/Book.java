@@ -71,13 +71,6 @@ public class Book {
 			return null;
 		}
 
-		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
-				FileTypeCollection.Instance.typeForFile(bookFile), FormatPlugin.ANY);
-
-		if (plugin == null) {
-			return null;
-		}
-
 		Book book = FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile.getPath());
 
 		if (book == null) {
@@ -94,6 +87,8 @@ public class Book {
 		if (path == null) {
 			return null;
 		}
+		
+		
 
 		Book book = new Book(path);;//FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
 
@@ -114,7 +109,6 @@ public class Book {
 	public volatile long myId;
 
 	public volatile String myEncoding;
-	public volatile String myLanguage;
 	public volatile String myTitle;
 
 	private volatile boolean myIsSaved;
@@ -122,22 +116,21 @@ public class Book {
 	private static final WeakReference<ZLImage> NULL_IMAGE = new WeakReference<ZLImage>(null);
 	private WeakReference<ZLImage> myCover;
 
+	// 从数据库创建
 	Book(long id, String filePath, String title, String encoding, String language) {
 		myId = id;
 		myTitle = title;
 		myEncoding = encoding;
-		myLanguage = language;
 		myIsSaved = true;
 		m_filePath = filePath;
 	}
 
+	// 新文件，从文件创建
 	public Book(String filePath) {
 		myId = -1;
-		final FormatPlugin plugin = getPlugin(filePath);
-		if (plugin != null) {
-			readMetaInfo(plugin);
-			m_filePath = filePath;
-		}
+		m_filePath = filePath;
+		myEncoding = "gbk";
+		readMetaInfo();
 	}
 	
 	public void reloadInfoFromFile() {
@@ -150,35 +143,30 @@ public class Book {
 		database.reloadBook(this);
 		myIsSaved = true;
 	}
-
-	private FormatPlugin getPlugin(String filePath) {
-		final ZLFile file = ZLFile.createFileByPath(filePath);
-		final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
-				FileTypeCollection.Instance.typeForFile(file), FormatPlugin.ANY);
-		if (plugin == null) {
-			// TODO logmsg
-			return null;
-		}
-		return plugin;
+	
+	public boolean isSingleFile()
+	{
+		return m_filePath.lastIndexOf('.') != -1;
 	}
 
 	public FormatPlugin getPlugin() {
-		return PluginCollection.Instance().getPlugin();
+		if (isSingleFile()) {
+			final FormatPlugin plugin = PluginCollection.Instance().getPlugin(
+					FileTypeCollection.Instance.typeForFile(m_filePath));
+			return plugin;
+		} else {
+			return PluginCollection.Instance().getPlugin();
+		}	
 	}
 
-	public void readMetaInfo() {
-		readMetaInfo(getPlugin());
-	}
-
-	private void readMetaInfo(FormatPlugin plugin) {
+	private void readMetaInfo() {
 		myEncoding = null;
-		myLanguage = null;
 		myTitle = null;
 		m_bookAuthor = null;
 
 		myIsSaved = false;
 
-		plugin.readMetaInfo(this);
+		PluginCollection.Instance().getPlugin().readMetaInfo(this);
 
 		if (myTitle == null || myTitle.length() == 0) {
 			final String fileName = m_filePath.substring(m_filePath.lastIndexOf('/'));
@@ -198,22 +186,11 @@ public class Book {
 		}
 	}
 
-	public String getLanguage() {
-		return myLanguage;
-	}
-
-	public void setLanguage(String language) {
-		if (!ZLMiscUtil.equals(myLanguage, language)) {
-			myLanguage = language;
-			myIsSaved = false;
-		}
-	}
-
 	public String getEncoding() {
 		if (myEncoding == null) {
 			getPlugin().detectLanguageAndEncoding(this);
 			if (myEncoding == null) {
-				setEncoding("utf-8");
+				setEncoding("gbk");
 			}
 		}
 		return myEncoding;
@@ -238,9 +215,9 @@ public class Book {
 		database.executeAsATransaction(new Runnable() {
 			public void run() {
 				if (myId >= 0) {
-					database.updateBookInfo(myId, m_filePath, myEncoding, myLanguage, myTitle);
+					database.updateBookInfo(myId, m_filePath, myEncoding, "", myTitle);
 				} else {
-					myId = database.insertBookInfo(m_filePath, myEncoding, myLanguage, myTitle);
+					myId = database.insertBookInfo(m_filePath, myEncoding, "", myTitle);
 					storeAllVisitedHyperinks();
 				}
 			}

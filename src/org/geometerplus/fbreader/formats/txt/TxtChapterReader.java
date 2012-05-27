@@ -27,7 +27,7 @@ public final class TxtChapterReader extends BookReader {
 	public final int BUFFER_SIZE = 1024 * 20;		// 假定文件缓存区有10k
 
 	public FileChannel m_streamReader = null;
-	public HashSet<Integer> m_paraOfFile = new HashSet<Integer>();
+	public Vector<Integer> m_paraOfFile = new Vector<Integer>();
 	public String m_currentPath = null;
 		
 	public TxtChapterReader()
@@ -56,11 +56,16 @@ public final class TxtChapterReader extends BookReader {
 			String infoBook = reader.readLine();
 			String infoAuthor = reader.readLine();
 
+			int paraCount = 0;
 			while ((line = reader.readLine()) != null) {
 				String[] infos = line.split("@@");
-				Log.d("wxkb", infos[0] + infos[1] + infos[2] + infos[3]);
+				m_paraOfFile.add(paraCount);
+				paraCount += Integer.parseInt(infos[1]); 
 			}
 			input.close();
+			
+			m_bookModel.m_allParagraphNumber = paraCount;
+			m_bookModel.m_allTextSize = 1024 * 1024;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -69,7 +74,15 @@ public final class TxtChapterReader extends BookReader {
 	
 	private int getFileByParagraph(int para)
 	{
-		return 0;
+		int i = 1;
+		for (Integer each : m_paraOfFile) {
+			if (para >= each) {
+				break;
+			}
+			
+			++i;
+		}
+		return i;
 	}
 
 	public void readDocument(int paragraph)

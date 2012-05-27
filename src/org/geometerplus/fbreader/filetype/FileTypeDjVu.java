@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.filetype;
 
 import java.util.List;
 
+import org.geometerplus.fbreader.FileUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.util.MimeType;
 
@@ -30,8 +31,8 @@ class FileTypeDjVu extends FileType {
 	}
 
 	@Override
-	public boolean acceptsFile(ZLFile file) {
-		final String extension = file.getExtension();
+	public boolean acceptsFile(String filePath) {
+		final String extension = FileUtil.getExtension(filePath);
 		return "djvu".equalsIgnoreCase(extension) || "djv".equalsIgnoreCase(extension);
 	}
 
@@ -48,7 +49,7 @@ class FileTypeDjVu extends FileType {
 	}
 
 	@Override
-	public MimeType mimeType(ZLFile file) {
-		return acceptsFile(file) ? MimeType.IMAGE_VND_DJVU : MimeType.NULL;
+	public MimeType mimeType(String filePath) {
+		return acceptsFile(filePath) ? MimeType.IMAGE_VND_DJVU : MimeType.NULL;
 	}
 }

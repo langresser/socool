@@ -29,7 +29,7 @@ import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
-public class FB2Plugin extends JavaFormatPlugin {
+public class FB2Plugin extends FormatPlugin {
 	public FB2Plugin() {
 		super("fb2");
 	}

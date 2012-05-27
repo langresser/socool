@@ -22,6 +22,7 @@ package org.geometerplus.fbreader.filetype;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.geometerplus.fbreader.FileUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.util.MimeType;
 
@@ -31,8 +32,8 @@ class FileTypeFB2 extends FileType {
 	}
 
 	@Override
-	public boolean acceptsFile(ZLFile file) {
-		final String lName = file.getShortName().toLowerCase();
+	public boolean acceptsFile(String filePath) {
+		final String lName = FileUtil.getFullFileName(filePath).toLowerCase();
 		return lName.endsWith(".fb2") || lName.endsWith(".fb2.zip");
 	}
 
@@ -55,8 +56,8 @@ class FileTypeFB2 extends FileType {
 	}
 
 	@Override
-	public MimeType mimeType(ZLFile file) {
-		final String lName = file.getShortName().toLowerCase();
+	public MimeType mimeType(String filePath) {
+		final String lName = FileUtil.getFullFileName(filePath).toLowerCase();
 		if (lName.endsWith(".fb2")) {
 			return MimeType.TEXT_FB2;
 		} else if (lName.endsWith(".fb2.zip")) {
@@ -67,8 +68,8 @@ class FileTypeFB2 extends FileType {
 	}
 
 	@Override
-	public MimeType simplifiedMimeType(ZLFile file) {
-		final String lName = file.getShortName().toLowerCase();
+	public MimeType simplifiedMimeType(String filePath) {
+		final String lName = FileUtil.getFullFileName(filePath).toLowerCase();
 		if (lName.endsWith(".fb2")) {
 			return MimeType.TEXT_XML;
 		} else if (lName.endsWith(".fb2.zip")) {

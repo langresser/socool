@@ -29,11 +29,6 @@ import org.socool.socoolreader.reader.R;
 
 public abstract class FormatPlugin {
 	private final String myFileType;
-	public final static int ANY = 0;
-	public final static int JAVA = 1;
-	public final static int NATIVE = 2;
-	public final static int EXTERNAL = 3;
-	public final static int NONE = 4;
 
 	protected FormatPlugin(String fileType) {
 		myFileType = fileType;
@@ -67,8 +62,6 @@ public abstract class FormatPlugin {
 	public abstract void detectLanguageAndEncoding(Book book);	// 监测编码和语言
 	public abstract ZLImage readCover(Book book);						// 读取封面信息
 	public abstract String readAnnotation(Book book);					// 读取简介信息
-
-	public abstract int type();
 
 	public abstract EncodingCollection supportedEncodings();
 }

@@ -108,7 +108,6 @@ public class BooksDatabase {
 		if (cursor.moveToNext()) {
 			book.setTitle(cursor.getString(0));
 			book.setEncoding(cursor.getString(1));
-			book.setLanguage(cursor.getString(2));
 		}
 		cursor.close();
 	}

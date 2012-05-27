@@ -100,9 +100,6 @@ public class BookModel {
 
 	public static BookModel createModel(Book book) {
 		final FormatPlugin plugin = book.getPlugin();
-
-		System.err.println("using plugin: " + plugin.supportedFileType() + "/" + plugin.type());
-
 		final BookModel model = new BookModel(book);
 
 //		Debug.startMethodTracing("socoolreader.trace");//calc为文件生成名
@@ -114,7 +111,6 @@ public class BookModel {
 	protected BookModel(Book book) {
 		Book = book;
 		myId = null;
-		myLanguage = book.getLanguage();
 		
 		m_paragraphStartIndex = new int[1024];
 		myParagraphLengths = new int[1024];
@@ -126,7 +122,6 @@ public class BookModel {
 	public final TOCTree TOCTree = new TOCTree();
 	protected final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
 	public final String myId;
-	public final String myLanguage;
 	
 	public boolean m_isStreamRead = false;			// 当前文件是否支持流读取(txt支持)
 	public boolean m_supportRichText = true;		// 当前文件是否支持富文本显示(txt不支持)

@@ -433,7 +433,7 @@ public final class SCReaderActivity extends Activity {
 					final Book book = model.Book;
 					if (book != null) {
 						book.reloadInfoFromDatabase();
-						ZLTextHyphenator.Instance().load(book.getLanguage());
+						ZLTextHyphenator.Instance().load("zh");
 					}
 				}
 				fbReader.clearTextCaches();

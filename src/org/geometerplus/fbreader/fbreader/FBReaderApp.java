@@ -340,7 +340,7 @@ public final class FBReaderApp {
 			System.gc();
 
 			Model = BookModel.createModel(book);
-			ZLTextHyphenator.Instance().load(book.getLanguage());
+			ZLTextHyphenator.Instance().load("zh");
 			BookTextView.setModel(Model);
 			BookTextView.gotoPosition(book.getStoredPosition());
 			if (bookmark == null) {

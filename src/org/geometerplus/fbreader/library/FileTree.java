@@ -149,7 +149,7 @@ public class FileTree extends LibraryTree {
 		for (ZLFile file : myFile.children()) {
 			if (file.isDirectory() || file.isArchive() ||
 				PluginCollection.Instance().getPlugin(
-						FileTypeCollection.Instance.typeForFile(file), FormatPlugin.ANY) != null) {
+						FileTypeCollection.Instance.typeForFile(file.getPath())) != null) {
 				set.add(file);
 			}
 		}

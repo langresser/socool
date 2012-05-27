@@ -31,12 +31,12 @@ public abstract class FileType {
 		Id = id;
 	}
 
-	public abstract boolean acceptsFile(ZLFile file);
+	public abstract boolean acceptsFile(String filePath);
 
 	//public abstract String extension(MimeType mimeType);
 	public abstract List<MimeType> mimeTypes();
-	public abstract MimeType mimeType(ZLFile file);
-	public MimeType simplifiedMimeType(ZLFile file) {
-		return mimeType(file);
+	public abstract MimeType mimeType(String filePath);
+	public MimeType simplifiedMimeType(String filePath) {
+		return mimeType(filePath);
 	}
 }

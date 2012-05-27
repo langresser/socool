@@ -50,7 +50,6 @@ public class FB2MetaInfoReader extends ZLXMLReaderAdapter {
 	public FB2MetaInfoReader(Book book) {
 		myBook = book;
 		myBook.setTitle(null);
-		myBook.setLanguage(null);
 	}
 	
 	public boolean dontCacheAttributeValues() {
@@ -157,7 +156,7 @@ public class FB2MetaInfoReader extends ZLXMLReaderAdapter {
 				break;
 			case FB2Tag.LANG:
 				if (myReadState == READ_LANGUAGE) {
-					myBook.setLanguage(myBuffer.toString().trim());
+					myBuffer.toString().trim();
 					myReadState = READ_SOMETHING;
 				}
 				break;

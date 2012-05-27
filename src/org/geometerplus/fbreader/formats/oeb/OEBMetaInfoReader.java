@@ -39,7 +39,6 @@ class OEBMetaInfoReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 	OEBMetaInfoReader(Book book) {
 		myBook = book;
 		myBook.setTitle(null);
-		myBook.setLanguage(null);
 	}
 
 	void readMetaInfo(ZLFile file) {
@@ -172,7 +171,6 @@ class OEBMetaInfoReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 					if (index >= 0) {
 						bufferContent = bufferContent.substring(0, index);
 					}
-					myBook.setLanguage("cz".equals(bufferContent) ? "cs" : bufferContent);
 					break;
 				}
 			}

@@ -12,7 +12,7 @@ import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
-public class TxtChapterPlugin extends JavaFormatPlugin {
+public class TxtChapterPlugin extends FormatPlugin {
 	private TxtChapterReader m_reader;
 	public TxtChapterPlugin() {
 		super("plain text");
@@ -73,18 +73,5 @@ public class TxtChapterPlugin extends JavaFormatPlugin {
 
 	@Override
 	public void detectLanguageAndEncoding(Book book) {
-		java.nio.charset.Charset charset = null;   
-		try {   
-			ZLFile file = ZLFile.createFileByPath(book.m_filePath);
-		  charset = CodepageDetectorProxy.getInstance().detectCodepage(
-				  new BufferedInputStream(file.getInputStream()), 200);   
-		} catch (Exception ex) {	
-		}
-
-		if(charset!=null){   
-			book.setEncoding(charset.name());
-		}else{
-			book.setEncoding("auto");
-		}
 	}
 }

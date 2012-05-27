@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.filetype;
 
 import java.io.*;
 
+import org.geometerplus.fbreader.FileUtil;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 
@@ -55,11 +56,12 @@ abstract class FileTypePalm extends FileType {
 	}
 
 	@Override
-	public boolean acceptsFile(ZLFile file) {
-		final String extension = file.getExtension();
+	public boolean acceptsFile(String filePath) {
+		final String extension = FileUtil.getExtension(filePath);
 		return
-			("pdb".equalsIgnoreCase(extension) || "prc".equalsIgnoreCase(extension)) &&
-			myPalmId.equals(palmFileType(file));
+//			("pdb".equalsIgnoreCase(extension) || "prc".equalsIgnoreCase(extension)) &&
+//			myPalmId.equals(palmFileType(file));
+			("pdb".equalsIgnoreCase(extension) || "prc".equalsIgnoreCase(extension));
 	}
 
 	/*

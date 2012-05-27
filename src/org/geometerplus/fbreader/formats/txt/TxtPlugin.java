@@ -12,7 +12,7 @@ import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
-public class TxtPlugin extends JavaFormatPlugin {
+public class TxtPlugin extends FormatPlugin {
 	private TxtReader m_reader;
 	public TxtPlugin() {
 		super("plain text");

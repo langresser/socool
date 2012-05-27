@@ -33,7 +33,7 @@ import org.geometerplus.fbreader.filetype.*;
 public class PluginCollection {
 	private static PluginCollection ourInstance;
 
-	private final Map<Integer, List<FormatPlugin>> myPlugins = new HashMap<Integer, List<FormatPlugin>>();
+	private final ArrayList<FormatPlugin> myPlugins = new ArrayList<FormatPlugin>();
 	
 	private TxtChapterPlugin m_txtPlugin;
 
@@ -51,52 +51,30 @@ public class PluginCollection {
 	}
 
 	private PluginCollection() {
-		addPlugin(new FB2Plugin());
-		addPlugin(new MobipocketPlugin());
-		addPlugin(new OEBPlugin());
-		addPlugin(new TxtPlugin());
+		myPlugins.add(new FB2Plugin());
+		myPlugins.add(new MobipocketPlugin());
+		myPlugins.add(new OEBPlugin());
+		myPlugins.add(new TxtPlugin());
 
 		m_txtPlugin = new TxtChapterPlugin();
-		addPlugin(m_txtPlugin);
+		myPlugins.add(m_txtPlugin);
 	}
 
-	private void addPlugin(FormatPlugin plugin) {
-		final int type = plugin.type();
-		List<FormatPlugin> list = myPlugins.get(type);
-		if (list == null) {
-			list = new ArrayList<FormatPlugin>();
-			myPlugins.put(type, list);
-		}
-		list.add(plugin);
-	}
-	
 	public TxtChapterPlugin getPlugin()
 	{
 		return m_txtPlugin;
 	}
 
-	public FormatPlugin getPlugin(FileType fileType, int formatType) {
+	public FormatPlugin getPlugin(FileType fileType) {
 		if (fileType == null) {
 			return null;
 		}
 
-		if (formatType == FormatPlugin.ANY) {
-			FormatPlugin p = getPlugin(fileType, FormatPlugin.NATIVE);
-			if (p == null) {
-				p = getPlugin(fileType, FormatPlugin.JAVA);
+		for (FormatPlugin p : myPlugins) {
+			if (fileType.Id.equalsIgnoreCase(p.supportedFileType())) {
+				return p;
 			}
-			return p;
-		} else {
-			final List<FormatPlugin> list = myPlugins.get(formatType);
-			if (list == null) {
-				return null;
-			}
-			for (FormatPlugin p : list) {
-				if (fileType.Id.equalsIgnoreCase(p.supportedFileType())) {
-					return p;
-				}
-			}
-			return null;
 		}
+		return null;
 	}
 }

@@ -53,18 +53,18 @@ public class FileTypeCollection {
 		return myTypes.get(id.toLowerCase());
 	}
 
-	public FileType typeForFile(ZLFile file) {
+	public FileType typeForFile(String filePath) {
 		for (FileType type : types()) {
-			if (type.acceptsFile(file)) {
+			if (type.acceptsFile(filePath)) {
 				return type;
 			}
 		}
 		return null;
 	}
 
-	public MimeType mimeType(ZLFile file) {
+	public MimeType mimeType(String filePath) {
 		for (FileType type : types()) {
-			final MimeType mime = type.mimeType(file);
+			final MimeType mime = type.mimeType(filePath);
 			if (mime != MimeType.NULL) {
 				return mime;
 			}
@@ -72,9 +72,9 @@ public class FileTypeCollection {
 		return MimeType.UNKNOWN;
 	}
 	
-	public MimeType simplifiedMimeType(ZLFile file) {
+	public MimeType simplifiedMimeType(String filePath) {
 		for (FileType type : types()) {
-			final MimeType mime = type.simplifiedMimeType(file);
+			final MimeType mime = type.simplifiedMimeType(filePath);
 			if (mime != MimeType.NULL) {
 				return mime;
 			}

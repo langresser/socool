@@ -32,9 +32,9 @@ import org.geometerplus.zlibrary.util.ZLLanguageUtil;
 
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.formats.JavaFormatPlugin;
+import org.geometerplus.fbreader.formats.FormatPlugin;
 
-public class MobipocketPlugin extends JavaFormatPlugin {
+public class MobipocketPlugin extends FormatPlugin {
 	public MobipocketPlugin() {
 		super("Mobipocket");
 	}
@@ -61,7 +61,6 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 			final int fullNameOffset = (int)PdbUtil.readInt(stream);
 			final int fullNameLength = (int)PdbUtil.readInt(stream);
 			final int languageCode = (int)PdbUtil.readInt(stream);
-			book.setLanguage(ZLLanguageUtil.languageByIntCode(languageCode & 0xFF, (languageCode >> 8) & 0xFF));
 			PdbUtil.skip(stream, 32);
 			int offset = 132;
 			if ((PdbUtil.readInt(stream) & 0x40) != 0) {
@@ -273,7 +272,6 @@ public class MobipocketPlugin extends JavaFormatPlugin {
 			final int fullNameOffset = (int)PdbUtil.readInt(stream);
 			final int fullNameLength = (int)PdbUtil.readInt(stream);
 			final int languageCode = (int)PdbUtil.readInt(stream);
-			book.setLanguage(ZLLanguageUtil.languageByIntCode(languageCode & 0xFF, (languageCode >> 8) & 0xFF));
 		} catch (IOException e) {
 		} finally {
 			if (stream != null) {

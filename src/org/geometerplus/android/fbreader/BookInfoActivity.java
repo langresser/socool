@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
 
@@ -34,8 +33,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.*;
 
-import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.image.ZLImage;
 import org.geometerplus.zlibrary.image.ZLImageData;
@@ -48,18 +45,11 @@ import org.socool.socoolreader.reader.R;
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.network.HtmlUtil;
 
-import org.geometerplus.android.fbreader.preferences.EditBookInfoActivity;
-
 public class BookInfoActivity extends Activity {
-	private static final boolean ENABLE_EXTENDED_FILE_INFO = false;
-
 	public static final String CURRENT_BOOK_PATH_KEY = "CurrentBookPath";
-	public static final String FROM_READING_MODE_KEY = "fromReadingMode";
 
 	private final ZLResource myResource = ZLResource.resource("bookInfo");
-	private ZLFile myFile;
-	private int myResult;
-	private boolean myDontReloadBook;
+	private String m_currentBookPath;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -68,27 +58,22 @@ public class BookInfoActivity extends Activity {
 			new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this)
 		);
 
-		final String path = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
-		myDontReloadBook = getIntent().getBooleanExtra(FROM_READING_MODE_KEY, false);
-		myFile = ZLFile.createFileByPath(path);
+		m_currentBookPath = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
+		if (m_currentBookPath == null) {
+			m_currentBookPath = "data/wxkb";
+		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
-
-		myResult = SCReaderActivity.RESULT_DO_NOTHING;
-		setResult(myResult, getIntent());
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 
-		final Book book = Book.getByFile(myFile);
+		final Book book = Book.getByPath(m_currentBookPath);
 
 		if (book != null) {
-			// we do force language & encoding detection
-			book.getEncoding();
-
 			setupCover(book);
 			setupBookInfo(book);
 			setupAnnotation(book);
@@ -97,52 +82,18 @@ public class BookInfoActivity extends Activity {
 
 		setupButton(R.id.book_info_button_open, "openBook", new View.OnClickListener() {
 			public void onClick(View view) {
-				if (myDontReloadBook) {
-					finish();
-				} else {
-					startActivity(
+				startActivity(
 						new Intent(getApplicationContext(), SCReaderActivity.class)
 							.setAction(Intent.ACTION_VIEW)
-							.putExtra(SCReaderActivity.BOOK_PATH_KEY, myFile.getPath())
+							.putExtra(SCReaderActivity.BOOK_PATH_KEY, m_currentBookPath)
 							.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 					);
-				}
-			}
-		});
-		setupButton(R.id.book_info_button_edit, "editInfo", new View.OnClickListener() {
-			public void onClick(View view) {
-				startActivityForResult(
-					new Intent(getApplicationContext(), EditBookInfoActivity.class)
-						.putExtra(CURRENT_BOOK_PATH_KEY, myFile.getPath()),
-					1
-				);
-			}
-		});
-		setupButton(R.id.book_info_button_reload, "reloadInfo", new View.OnClickListener() {
-			public void onClick(View view) {
-				if (book != null) {
-					book.reloadInfoFromFile();
-					setupBookInfo(book);
-					myDontReloadBook = false;
-				}
 			}
 		});
 
 		final View root = findViewById(R.id.book_info_root);
 		root.invalidate();
 		root.requestLayout();
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		final Book book = Book.getByFile(myFile);
-		if (book != null) {
-			setupBookInfo(book);
-			myDontReloadBook = false;
-		}
-
-		myResult = Math.max(myResult, resultCode);
-		setResult(myResult);
 	}
 
 	private Button findButton(int buttonId) {
@@ -157,17 +108,13 @@ public class BookInfoActivity extends Activity {
 	}
 
 	private void setupInfoPair(int id, String key, CharSequence value) {
-		setupInfoPair(id, key, value, 0);
-	}
-
-	private void setupInfoPair(int id, String key, CharSequence value, int param) {
 		final LinearLayout layout = (LinearLayout)findViewById(id);
 		if (value == null || value.length() == 0) {
 			layout.setVisibility(View.GONE);
 			return;
 		}
 		layout.setVisibility(View.VISIBLE);
-		((TextView)layout.findViewById(R.id.book_info_key)).setText(myResource.getResource(key).getValue(param));
+		((TextView)layout.findViewById(R.id.book_info_key)).setText(myResource.getResource(key).getValue(0));
 		((TextView)layout.findViewById(R.id.book_info_value)).setText(value);
 	}
 
@@ -219,13 +166,7 @@ public class BookInfoActivity extends Activity {
 		((TextView)findViewById(R.id.book_info_title)).setText(myResource.getResource("bookInfo").getValue());
 
 		setupInfoPair(R.id.book_title, "title", book.myTitle);
-		setupInfoPair(R.id.book_authors, "authors", book.authors(), 1);
-
-		String language = book.getLanguage();
-		if (!ZLLanguageUtil.languageCodes().contains(language)) {
-			language = ZLLanguageUtil.OTHER_LANGUAGE_CODE;
-		}
-		setupInfoPair(R.id.book_language, "language", ZLLanguageUtil.languageName(language));
+		setupInfoPair(R.id.book_authors, "authors", book.authors());
 	}
 
 	private void setupAnnotation(Book book) {
@@ -247,23 +188,9 @@ public class BookInfoActivity extends Activity {
 		((TextView)findViewById(R.id.file_info_title)).setText(myResource.getResource("fileInfo").getValue());
 
 		setupInfoPair(R.id.file_name, "name", book.m_filePath);
-		if (ENABLE_EXTENDED_FILE_INFO) {
-//			setupInfoPair(R.id.file_type, "type", book.File.getExtension());
-        
-//			final ZLPhysicalFile physFile = book.File.getPhysicalFile();
-//			final File file = physFile == null ? null : physFile.javaFile();
-//			if (file != null && file.exists() && file.isFile()) {
-//				setupInfoPair(R.id.file_size, "size", formatSize(file.length()));
-//				setupInfoPair(R.id.file_time, "time", formatDate(file.lastModified()));
-//			} else {
-//				setupInfoPair(R.id.file_size, "size", null);
-//				setupInfoPair(R.id.file_time, "time", null);
-//			}
-		} else {
-			setupInfoPair(R.id.file_type, "type", null);
-			setupInfoPair(R.id.file_size, "size", null);
-			setupInfoPair(R.id.file_time, "time", null);
-		}
+		setupInfoPair(R.id.file_type, "type", null);
+		setupInfoPair(R.id.file_size, "size", null);
+		setupInfoPair(R.id.file_time, "time", null);
 	}
 
 	private String formatSize(long size) {

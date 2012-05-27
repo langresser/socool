@@ -27,7 +27,7 @@ import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.*;
 
-public class OEBPlugin extends JavaFormatPlugin {
+public class OEBPlugin extends FormatPlugin {
 	public OEBPlugin() {
 		super("ePub");
 	}
