@@ -104,7 +104,10 @@ public class Book {
 
 	public String m_filePath = "";		// 如果是单文件，则对应文件全路径；如果是一组文件，则对应文件夹路径
 	public int m_fileSize = 0;
-	public String m_bookAuthor = "";
+	public String m_bookAuthor = "";		// 作者名字
+	public String m_bookAuthorIntro = "";	// 作者简介
+	public String m_bookIntro = "";			// 书籍简介
+	public int m_coverId = 0;
 
 	public volatile long myId;
 
@@ -129,10 +132,10 @@ public class Book {
 	public Book(String filePath) {
 		myId = -1;
 		m_filePath = filePath;
-		myEncoding = "gbk";
+		myEncoding = null;
 		readMetaInfo();
 	}
-	
+		
 	public void reloadInfoFromFile() {
 		readMetaInfo();
 		save();
@@ -180,10 +183,8 @@ public class Book {
 	}
 
 	public void setTitle(String title) {
-		if (!ZLMiscUtil.equals(myTitle, title)) {
-			myTitle = title;
-			myIsSaved = false;
-		}
+		myTitle = title;
+		myIsSaved = false;
 	}
 
 	public String getEncoding() {
@@ -196,15 +197,9 @@ public class Book {
 		return myEncoding;
 	}
 
-	public String getEncodingNoDetection() {
-		return myEncoding;
-	}
-
 	public void setEncoding(String encoding) {
-		if (!ZLMiscUtil.equals(myEncoding, encoding)) {
-			myEncoding = encoding;
-			myIsSaved = false;
-		}
+		myEncoding = encoding;
+		myIsSaved = false;
 	}
 
 	public boolean save() {

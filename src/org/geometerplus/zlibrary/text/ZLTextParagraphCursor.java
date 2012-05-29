@@ -106,7 +106,7 @@ public final class ZLTextParagraphCursor {
 			if (ourBreaks.length < length) {
 				ourBreaks = new byte[length];
 			}
-			String text = new String(data, offset, length);
+//			String text = new String(data, offset, length);
 //			Log.d("processTextEntry", text);
 			final byte[] breaks = ourBreaks;
 			myLineBreaker.setLineBreaks(data, offset, length, breaks);
@@ -221,10 +221,30 @@ public final class ZLTextParagraphCursor {
 	}
 
 	public boolean isLast() {
-		if (Model.m_isStreamRead) {
+		if (Model.m_readType == BookModel.READ_TYPE_STREAM) {
 			return (Index + 1 >= Model.m_allParagraphNumber);
 		} else {
 			return (Index + 1 >= Model.myParagraphsNumber);
+		}
+	}
+	
+	// 多文件书籍专用，是否是书籍的开始
+	public boolean isBeginOfBook()
+	{
+		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
+			return (Model.m_currentBookIndex == 1 && isFirst());
+		} else {
+			return isFirst();
+		}
+	}
+	
+	// 多文件书籍专用，是否是书籍的结束
+	public boolean isEndOfBook()
+	{
+		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
+			return (Model.m_currentBookIndex == Model.m_fileCount && isLast());
+		} else {
+			return isLast();
 		}
 	}
 

@@ -45,7 +45,7 @@ public class TxtPlugin extends FormatPlugin {
 
 	@Override
 	public void readModel(BookModel model) {
-		model.m_isStreamRead = true;
+		model.m_readType = BookModel.READ_TYPE_STREAM;
 		model.m_supportRichText = false;
 
 		detectLanguageAndEncoding(model.Book);

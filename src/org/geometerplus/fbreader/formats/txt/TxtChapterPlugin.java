@@ -1,6 +1,10 @@
 package org.geometerplus.fbreader.formats.txt;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
 
@@ -8,8 +12,10 @@ import org.geometerplus.zlibrary.encodings.AutoEncodingCollection;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 
+import org.geometerplus.android.fbreader.covers.CoverManager;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.formats.*;
 
 public class TxtChapterPlugin extends FormatPlugin {
@@ -23,7 +29,26 @@ public class TxtChapterPlugin extends FormatPlugin {
 	@Override
 	public void readMetaInfo(Book book){
 		// txt格式没有附加信息
-		book.myTitle = "无限恐怖";
+		detectLanguageAndEncoding(book);
+
+		try {
+			InputStream input = FBReaderApp.Instance().getBookFile(book.m_filePath + "/info.txt");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input, book.getEncoding()));
+			String line = reader.readLine();
+			String[] infos = line.split("@@");
+			book.myTitle = infos[0];
+			book.m_bookAuthor = infos[1];
+			if (infos.length >= 3) {
+				book.m_coverId = CoverManager.getCoverResIdByIndex(Integer.valueOf(infos[2]));
+			}
+			
+			book.m_bookIntro = reader.readLine();
+			book.m_bookAuthorIntro = reader.readLine();
+
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -35,7 +60,22 @@ public class TxtChapterPlugin extends FormatPlugin {
 	@Override
 	public void readParagraph(int paragraph)				// 读取某一段落（部分读取）
 	{
-		m_reader.readDocument(paragraph);
+		if (paragraph < 0) {
+			return;
+		}
+
+		final int fileNum = m_reader.getFileByParagraph(paragraph);
+		m_reader.readDocument(fileNum, false);
+	}
+	
+	@Override
+	public void readChapter(int chapter)
+	{
+		if (chapter < 0 || chapter >= m_reader.getFileCount()) {
+			return;
+		}
+
+		m_reader.readDocument(chapter + 1, false);
 	}
 	
 	@Override
@@ -46,12 +86,11 @@ public class TxtChapterPlugin extends FormatPlugin {
 
 	@Override
 	public void readModel(BookModel model) {
-		model.m_isStreamRead = true;
+		model.m_readType = BookModel.READ_TYPE_CHAPTER;
 		model.m_supportRichText = false;
 
-		detectLanguageAndEncoding(model.Book);
 		m_reader.setModel(model);
-		m_reader.readDocument(0);
+		m_reader.readDocument(1, true);
 	}
 
 	@Override
@@ -73,5 +112,14 @@ public class TxtChapterPlugin extends FormatPlugin {
 
 	@Override
 	public void detectLanguageAndEncoding(Book book) {
+		try {
+			InputStream input = FBReaderApp.Instance().getBookFile(book.m_filePath + "/encoding.txt");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input, "gb18030"));
+			String encoding = reader.readLine();
+			book.setEncoding(encoding);
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

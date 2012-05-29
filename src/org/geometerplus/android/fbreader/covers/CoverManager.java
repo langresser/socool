@@ -52,6 +52,7 @@ import org.geometerplus.zlibrary.image.ZLLoadableImage;
 import org.geometerplus.android.fbreader.bookshelf.FastBitmapDrawable;
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.Paths;
+import org.socool.socoolreader.reader.R;
 
 public class CoverManager {
 	final CoverCache Cache = new CoverCache();
@@ -153,6 +154,15 @@ public class CoverManager {
 	}
 	
 	
+	static private final int[] m_coverResId = {R.drawable.wxkb1_cover, R.drawable.wxkb2_cover};
+	static public int getCoverResIdByIndex(int index)
+	{
+		if (index < 0 || index > m_coverResId.length) {
+			return 0;
+		}
+		
+		return m_coverResId[index];
+	}
 	
 
     private static final float EDGE_START = 0.0f;

@@ -146,7 +146,6 @@ public final class TxtReader extends BookReader {
 		} while (currentOffset < size);
 
 		m_bookModel.m_allParagraphNumber = paraCount;
-		m_bookModel.m_allTextSize = (int)size;
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -24,11 +24,7 @@ public final class TxtChapterReader extends BookReader {
 	public int myIgnoredIndent = 1;
 	public int myEmptyLinesBeforeNewSection = 1;
 	
-	public final int BUFFER_SIZE = 1024 * 20;		// 假定文件缓存区有10k
-
-	public FileChannel m_streamReader = null;
 	public Vector<Integer> m_paraOfFile = new Vector<Integer>();
-	public String m_currentPath = null;
 		
 	public TxtChapterReader()
 	{
@@ -37,10 +33,8 @@ public final class TxtChapterReader extends BookReader {
 	
 	public void setModel(BookModel model)
 	{
-		// 如果换文件，则关闭原文件
 		m_bookModel = model;
 		myCurrentContentsTree = model.TOCTree;
-		m_currentPath = m_bookModel.Book.m_filePath;
 		
 		initData();
 	}
@@ -48,51 +42,98 @@ public final class TxtChapterReader extends BookReader {
 	private void initData()
 	{
 		try {
-			InputStream input = FBReaderApp.Instance().getBookFile(m_currentPath + "/data.txt");
+			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(input, "gb18030"));
 			
 			String line = "";
-			String titleAuthor = reader.readLine();
-			String infoBook = reader.readLine();
-			String infoAuthor = reader.readLine();
 
 			int paraCount = 0;
 			while ((line = reader.readLine()) != null) {
 				String[] infos = line.split("@@");
-				m_paraOfFile.add(paraCount);
 				paraCount += Integer.parseInt(infos[1]); 
+				m_paraOfFile.add(paraCount);
 			}
 			input.close();
 			
 			m_bookModel.m_allParagraphNumber = paraCount;
-			m_bookModel.m_allTextSize = 1024 * 1024;
+			m_bookModel.m_fileCount = m_paraOfFile.size() + 1;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 	}
 	
-	private int getFileByParagraph(int para)
+	public int getFileCount()
 	{
+		return m_paraOfFile.size();
+	}
+	
+	public int getFileByParagraph(int para)
+	{
+		if (para == 0) {
+			return 1;
+		}
+		
+		if (m_paraOfFile.size() == 1) {
+			return 1;
+		}
+
 		int i = 1;
+		int currentPara = 0;
 		for (Integer each : m_paraOfFile) {
-			if (para >= each) {
+			if (currentPara >= para) {
 				break;
 			}
 			
+			currentPara += each;
 			++i;
 		}
 		return i;
 	}
-
-	public void readDocument(int paragraph)
+	
+	private int getBeginParagraph(int fileNum)
 	{
-		Log.d("readDocument", "read:" + paragraph);
+		if (fileNum == 1) {
+			return 0;
+		}
+
+		int maxIndex = Math.min(fileNum - 1, m_paraOfFile.size());
+		int paraCount = 0;
+		for (int i = 0; i < maxIndex; ++i) {
+			int currentPara = m_paraOfFile.get(i);
+			paraCount += currentPara;
+		}
+		
+		return paraCount;
+	}
+	
+	private int getParagraphCount(int fileNum)
+	{
+		if (fileNum == 1) {
+			return m_paraOfFile.get(0) - 1;
+		}
+		
+		if (fileNum <= 0 || fileNum > m_paraOfFile.size()) {
+			return 0;
+		}
+		
+		return m_paraOfFile.get(fileNum - 1);
+	}
+
+	public void readDocument(int fileNum, boolean clearOldData)
+	{
+//		Log.d("readDocument", "read:" + paragraph);
+		if (clearOldData) {
+			m_bookModel.clearParagraphData();
+		}
+
 		startDocumentHandler();
 
 		try {
-		int fileNum = getFileByParagraph(paragraph);
-		String filePath = m_currentPath + "/" + fileNum + ".txt";
+		m_bookModel.m_allParagraphNumber = getParagraphCount(fileNum);
+		m_bookModel.m_currentBookIndex = fileNum;
+
+		String filePath = m_bookModel.Book.m_filePath + "/" + fileNum + ".txt";
 		InputStream input = FBReaderApp.Instance().getBookFile(filePath);
 
 		int size = input.available();
@@ -157,21 +198,22 @@ public final class TxtChapterReader extends BookReader {
 			characterDataHandler(text, parBegin, maxLength - parBegin);
 		}
 
+		if (clearOldData) {
+			m_bookModel.m_beginParagraph = getBeginParagraph(fileNum);
+		}
 
-		m_bookModel.m_beginParagraph = 0;
-		m_bookModel.m_endParagraph = 100;
+		m_bookModel.m_endParagraph = m_bookModel.m_beginParagraph + getParagraphCount(fileNum);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		endDocumentHandler();
-		Log.d("readDocument", String.format("readover:%1d    begin:%2d    end:%3d", paragraph, m_bookModel.m_beginParagraph, m_bookModel.m_endParagraph));
+//		Log.d("readDocument", String.format("readover:%1d    begin:%2d    end:%3d", paragraph, m_bookModel.m_beginParagraph, m_bookModel.m_endParagraph));
 	}
 
 	protected void startDocumentHandler()
 	{
-		m_bookModel.clearParagraphData();
 		pushKind(BookModel.REGULAR);
 		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
 		myInsideTitle = true;
@@ -181,6 +223,7 @@ public final class TxtChapterReader extends BookReader {
 	{
 		popKind();
 		endParagraph();
+//		insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 	}
 	
 	protected boolean characterDataHandler(char[] ch, int start, int length)

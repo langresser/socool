@@ -44,12 +44,14 @@ public abstract class FormatPlugin {
 	}
 
 	public void readParagraph(int paragraph)				// 读取某一段落（部分读取）
-	{
-		
+	{	
 	}
 	public void readPercent(double percent)					// 读取文件百分比（部分读取）
 	{
-		
+	}
+	
+	public void readChapter(int chapter)					// 按章节读取
+	{
 	}
 
 	public int getDefaultCoverId()

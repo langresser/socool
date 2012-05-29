@@ -279,6 +279,14 @@ public class ZLTextView {
 				myCurrentPage = myPreviousPage;
 				myPreviousPage = swap;
 				myPreviousPage.reset();
+				
+//				if (myModel.m_readType == BookModel.READ_TYPE_CHAPTER) {
+//					ZLTextParagraphCursor cursor = getStartCursor().getParagraphCursor();
+//					if (cursor.isFirst() && !cursor.isBeginOfBook()) {
+//						myModel.Book.getPlugin().readChapter(myModel.m_currentBookIndex - 1);
+//					}
+//				}
+
 				if (myCurrentPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myNextPage);
 					myCurrentPage.EndCursor.setCursor(myNextPage.StartCursor);
@@ -300,6 +308,14 @@ public class ZLTextView {
 				myCurrentPage = myNextPage;
 				myNextPage = swap;
 				myNextPage.reset();
+				
+//				if (myModel.m_readType == BookModel.READ_TYPE_CHAPTER) {
+//					ZLTextParagraphCursor cursor = getEndCursor().getParagraphCursor();
+//					if (cursor.isLast() && !cursor.isEndOfBook()) {
+//						myModel.Book.getPlugin().readChapter(myModel.m_currentBookIndex + 1);
+//					}
+//				}
+
 				if (myCurrentPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myPreviousPage);
 					myCurrentPage.StartCursor.setCursor(myPreviousPage.EndCursor);
@@ -1648,7 +1664,8 @@ public class ZLTextView {
 				return
 					cursor != null &&
 					!cursor.isNull() &&
-					(!cursor.isEndOfParagraph() || !cursor.getParagraphCursor().isLast());
+					(!cursor.isEndOfParagraph() || !cursor.getParagraphCursor().isLast()
+					|| (myModel.m_readType == BookModel.READ_TYPE_CHAPTER && !cursor.getParagraphCursor().isEndOfBook()));
 			}
 			case previous:
 			{
@@ -1656,7 +1673,8 @@ public class ZLTextView {
 				return
 					cursor != null &&
 					!cursor.isNull() &&
-					(!cursor.isStartOfParagraph() || !cursor.getParagraphCursor().isFirst());
+					(!cursor.isStartOfParagraph() || !cursor.getParagraphCursor().isFirst()
+					|| (myModel.m_readType == BookModel.READ_TYPE_CHAPTER && !cursor.getParagraphCursor().isBeginOfBook()));
 			}
 		}
 	}

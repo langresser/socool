@@ -123,12 +123,17 @@ public class BookModel {
 	protected final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
 	public final String myId;
 	
-	public boolean m_isStreamRead = false;			// 当前文件是否支持流读取(txt支持)
+	public static int READ_TYPE_NORMAL = 0;		// 正常读取方式，全文本读取
+	public static int READ_TYPE_STREAM = 1;		// 流读取，部分文件读取
+	public static int READ_TYPE_CHAPTER = 2;	// 书籍分为n章，章节读取
+
+	public int m_readType = READ_TYPE_NORMAL;
 	public boolean m_supportRichText = true;		// 当前文件是否支持富文本显示(txt不支持)
 	public int m_beginParagraph = 0;
 	public int m_endParagraph = 0;
 	public int m_allParagraphNumber = 0;
-	public int m_allTextSize = 0;
+	public int m_currentBookIndex = 0;			// 当前书籍序号，只有章节读取可用
+	public int m_fileCount = 0;					// 书籍总共由多少文件组成
 
 	protected int[] m_paragraphStartIndex;
 	protected int[] myParagraphLengths;
@@ -239,8 +244,12 @@ public class BookModel {
 
 	public final ZLTextParagraph getParagraph(int index) {
 		Log.d("getParagraph", String.format("para: %1d   begin:%2d    end:%3d", index, m_beginParagraph, m_endParagraph));
-		if (m_isStreamRead) {
-			if (index < m_allParagraphNumber && (index >= m_endParagraph || index < m_beginParagraph)) {
+		if (m_readType == READ_TYPE_STREAM) {
+			if (index < m_allParagraphNumber && (index > m_endParagraph || index < m_beginParagraph)) {
+				Book.getPlugin().readParagraph(index);
+			}
+		} else if (m_readType == READ_TYPE_CHAPTER) {
+			if (index > m_endParagraph || index < m_beginParagraph) {
 				Book.getPlugin().readParagraph(index);
 			}
 		}
@@ -281,7 +290,7 @@ public class BookModel {
 
 	public void createParagraph(byte kind) {
 		final int index = myParagraphsNumber++;
-		if (!m_isStreamRead) {
+		if (m_readType != READ_TYPE_STREAM) {
 			m_allParagraphNumber = myParagraphsNumber;
 		}
 
