@@ -27,7 +27,6 @@ class BooksAdapter extends BaseAdapter {
     private final ShelvesActivity mActivity;
     
     public static final int COVER_MAC_COUNT = 1;
-    private final int[] m_coverResId = {R.drawable.wxkb1_cover, R.drawable.wxkb2_cover};
 
     private final FastBitmapDrawable[] mDefaultCoverSet = new FastBitmapDrawable[COVER_MAC_COUNT];
     
@@ -36,7 +35,7 @@ class BooksAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(activity);
         
         for (int i = 0; i < COVER_MAC_COUNT; ++i) {
-    		Bitmap bitmap = BitmapFactory.decodeResource(mActivity.getResources(), m_coverResId[i]);
+    		Bitmap bitmap = BitmapFactory.decodeResource(mActivity.getResources(), 0);
     		final int width = bitmap.getWidth();
         	final int height = bitmap.getHeight();
         	Log.d("Bitmap:" + i, String.format("width:%1d  height:%2d", width, height));
