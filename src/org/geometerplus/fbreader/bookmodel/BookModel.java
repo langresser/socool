@@ -145,11 +145,26 @@ public class BookModel {
 	
 	public HashMap<String, Label> myInternalHyperlinks = new HashMap<String, Label>();
 	public Vector<Element> m_elements = new Vector<Element>();
+	public Vector<ParagraphData> m_paragraphs = new Vector<ParagraphData>();
+
+	public class ParagraphData
+	{
+		public int m_kind;
+		public Vector<Element> m_currentPara = null;
+		
+		private ParagraphData(int kind)
+		{
+			m_kind = kind;
+		}
+	}
+	
+	public ParagraphData m_currentParagraph = null;
 
 	public void clearParagraphData()
 	{
 		myParagraphsNumber = 0;
 		m_elements.clear();
+		m_paragraphs.clear();
 	}
 
 	public void addImage(String id, ZLImage image) {

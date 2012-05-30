@@ -86,17 +86,6 @@ final class NavigationPopup extends PopupPanel {
 		final TextView text = (TextView)layout.findViewById(R.id.book_position_text);
 
 		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			private void gotoPage(int page) {
-				final ZLTextView view = getReader().getCurrentView();
-				if (page == 1) {
-					view.gotoHome();
-				} else {
-					view.gotoPage(page);
-				}
-				FBReaderApp.Instance().resetWidget();
-				FBReaderApp.Instance().repaintWidget();
-			}
-
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				myIsInProgress = false;
 			}
@@ -110,7 +99,6 @@ final class NavigationPopup extends PopupPanel {
 					final int page = progress + 1;
 					final int pagesNumber = seekBar.getMax() + 1;
 					text.setText(makeProgressText(page, pagesNumber));
-					gotoPage(page);
 				}
 			}
 		});
@@ -121,7 +109,7 @@ final class NavigationPopup extends PopupPanel {
 			public void onClick(View v) {
 				final ZLTextWordCursor position = StartPosition;
 				if (v == btnCancel && position != null) {
-					getReader().getCurrentView().gotoPosition(position);
+					getReader().getCurrentView().gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
 				} else if (v == btnOk) {
 					storePosition();
 				}
@@ -145,13 +133,8 @@ final class NavigationPopup extends PopupPanel {
 		final TextView text = (TextView)panel.findViewById(R.id.book_position_text);
 
 		final ZLTextView textView = getReader().getCurrentView();
-		final ZLTextView.PagePosition pagePosition = textView.pagePosition();
-
-		if (slider.getMax() != pagePosition.Total - 1 || slider.getProgress() != pagePosition.Current - 1) {
-			slider.setMax(pagePosition.Total - 1);
-			slider.setProgress(pagePosition.Current - 1);
-			text.setText(makeProgressText(pagePosition.Current, pagePosition.Total));
-		}
+		
+		// 按百分比进行跳转
 	}
 
 	private String makeProgressText(int page, int pagesNumber) {

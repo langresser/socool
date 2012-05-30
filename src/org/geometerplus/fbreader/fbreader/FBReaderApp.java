@@ -44,6 +44,7 @@ import org.geometerplus.zlibrary.options.ZLEnumOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.text.ZLTextHyphenator;
+import org.geometerplus.zlibrary.text.ZLTextPosition;
 import org.geometerplus.zlibrary.text.ZLTextView;
 import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 import org.geometerplus.zlibrary.util.ZLBoolean3;
@@ -342,7 +343,11 @@ public final class FBReaderApp {
 			Model = BookModel.createModel(book);
 			ZLTextHyphenator.Instance().load("zh");
 			BookTextView.setModel(Model);
-			BookTextView.gotoPosition(book.getStoredPosition());
+			final ZLTextPosition position = book.getStoredPosition();
+			if (position != null) {
+				BookTextView.gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
+			}
+			
 			if (bookmark == null) {
 				setView(BookTextView);
 				resetWidget();
@@ -358,8 +363,9 @@ public final class FBReaderApp {
 
 	public void gotoBookmark(Bookmark bookmark) {
 		final String modelId = bookmark.ModelId;
-		if (modelId == null) {
-			BookTextView.gotoPosition(bookmark.m_posCurrentPage);
+		final ZLTextPosition position = bookmark.m_posCurrentPage;
+		if (modelId == null & position != null) {
+			BookTextView.gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
 			setView(BookTextView);
 			resetWidget();
 			repaintWidget(true);
