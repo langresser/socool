@@ -20,7 +20,6 @@
 package org.geometerplus.zlibrary.text;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.bookmodel.BookModel.EntryIterator;
 
 public final class ZLTextParagraph {
 	public interface Entry {
@@ -43,9 +42,9 @@ public final class ZLTextParagraph {
 		byte END_OF_TEXT_PARAGRAPH = 6;
 	};
 	
-	private final BookModel myModel;
-	private final int myIndex;
-	private final byte myKind;
+	public final BookModel myModel;
+	public final int myIndex;
+	public final byte myKind;
 	
 	public ZLTextParagraph(BookModel model, int index, byte kind) {
 		myModel = model;
@@ -53,10 +52,6 @@ public final class ZLTextParagraph {
 		myKind = kind;
 	}
 
-	public EntryIterator iterator() {
-		return myModel.new EntryIterator(myIndex);
-	}
-	
 	public byte getKind() {
 		return myKind;
 	}

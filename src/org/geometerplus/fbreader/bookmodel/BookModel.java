@@ -120,7 +120,7 @@ public class BookModel {
 	
 	public Book Book = null;
 	public final TOCTree TOCTree = new TOCTree();
-	protected final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
+	public final HashMap<String,ZLImage> myImageMap = new HashMap<String,ZLImage>();
 	public final String myId;
 	
 	public static int READ_TYPE_NORMAL = 0;		// 正常读取方式，全文本读取
@@ -150,7 +150,8 @@ public class BookModel {
 	public class ParagraphData
 	{
 		public int m_kind;
-		public Vector<Element> m_currentPara = null;
+		public int m_textSize = 0;
+		public Vector<Element> m_currentPara = new Vector<Element>();
 		
 		private ParagraphData(int kind)
 		{
@@ -213,37 +214,37 @@ public class BookModel {
 
 	public final int search(final String text, int startIndex, int endIndex, boolean ignoreCase) {
 		int count = 0;
-		ZLSearchPattern pattern = new ZLSearchPattern(text, ignoreCase);
-		myMarks = new ArrayList<ZLTextMark>();
-		if (startIndex > myParagraphsNumber) {
-			startIndex = myParagraphsNumber;
-		}
-		if (endIndex > myParagraphsNumber) {
-			endIndex = myParagraphsNumber;
-		}
-		int index = startIndex;
-		final EntryIterator it = new EntryIterator(index);
-		while (true) {
-			int offset = 0;
-			while (it.hasNext()) {
-				it.next();
-				if (it.myType == ZLTextParagraph.Entry.TEXT) {
-					char[] textData = it.myTextData;
-					int textOffset = it.myTextOffset;
-					int textLength = it.myTextLength;
-					for (int pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern); pos != -1;
-						pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern, pos + 1)) {
-						myMarks.add(new ZLTextMark(index, offset + pos, pattern.getLength()));
-						++count;
-					}
-					offset += textLength;
-				}
-			}
-			if (++index >= endIndex) {
-				break;
-			}
-			it.reset(index);
-		}
+//		ZLSearchPattern pattern = new ZLSearchPattern(text, ignoreCase);
+//		myMarks = new ArrayList<ZLTextMark>();
+//		if (startIndex > myParagraphsNumber) {
+//			startIndex = myParagraphsNumber;
+//		}
+//		if (endIndex > myParagraphsNumber) {
+//			endIndex = myParagraphsNumber;
+//		}
+//		int index = startIndex;
+//		final EntryIterator it = new EntryIterator(index);
+//		while (true) {
+//			int offset = 0;
+//			while (it.hasNext()) {
+//				it.next();
+//				if (it.myType == ZLTextParagraph.Entry.TEXT) {
+//					char[] textData = it.myTextData;
+//					int textOffset = it.myTextOffset;
+//					int textLength = it.myTextLength;
+//					for (int pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern); pos != -1;
+//						pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern, pos + 1)) {
+//						myMarks.add(new ZLTextMark(index, offset + pos, pattern.getLength()));
+//						++count;
+//					}
+//					offset += textLength;
+//				}
+//			}
+//			if (++index >= endIndex) {
+//				break;
+//			}
+//			it.reset(index);
+//		}
 		return count;
 	}
 
@@ -277,37 +278,17 @@ public class BookModel {
 		return myTextSizes[Math.max(Math.min(index - m_beginParagraph, myParagraphsNumber - 1), 0)];
 	}
 
-	private static int binarySearch(int[] array, int length, int value) {
-		int lowIndex = 0;
-		int highIndex = length - 1;
-
-		while (lowIndex <= highIndex) {
-			int midIndex = (lowIndex + highIndex) >>> 1;
-			int midValue = array[midIndex];
-			if (midValue > value) {
-				highIndex = midIndex - 1;
-			} else if (midValue < value) {
-				lowIndex = midIndex + 1;
-			} else {
-				return midIndex;
-			}
-		}
-		return -lowIndex - 1;
-	}
-
-	public final int findParagraphByTextLength(int length) {
-		int index = binarySearch(myTextSizes, myParagraphsNumber, length);
-		if (index >= 0) {
-			return index;
-		}
-		return Math.min(-index - 1, myParagraphsNumber - 1);
-	}
-
 	public void createParagraph(byte kind) {
 		final int index = myParagraphsNumber++;
 		if (m_readType != READ_TYPE_STREAM) {
 			m_allParagraphNumber = myParagraphsNumber;
 		}
+		
+		if (m_currentParagraph != null) {
+			m_paragraphs.add(m_currentParagraph);
+		}
+		
+		m_currentParagraph = new ParagraphData(kind);
 
 		if (index == myParagraphLengths.length) {
 			final int size = myParagraphLengths.length;
@@ -325,7 +306,7 @@ public class BookModel {
 		myParagraphKinds[index] = kind;
 	}
 	
-	class Element {
+	public class Element {
 		public int m_type;
 		public char[] m_text = null;
 
@@ -393,140 +374,36 @@ public class BookModel {
 	}
 
 	public void addText(char[] text, int offset, int length) {
-		++myParagraphLengths[myParagraphsNumber - 1];
-		myTextSizes[myParagraphsNumber - 1] += length;
-		m_elements.add(new Element(text, offset, length));
+		m_currentParagraph.m_textSize += length;
+		m_currentParagraph.m_currentPara.add(new Element(text, offset, length));
 	}
 
 	public void addImage(String id, short vOffset, boolean isCover) {
-		++myParagraphLengths[myParagraphsNumber - 1];
-		m_elements.add(new Element(id, vOffset, isCover));
+		m_currentParagraph.m_currentPara.add(new Element(id, vOffset, isCover));
 	}
 
 	public void addControl(byte textKind, boolean isStart) {
-		++myParagraphLengths[myParagraphsNumber - 1];
 		short kind = textKind;
 		if (isStart) {
 			kind += 0x0100;
 		}
-		m_elements.add(new Element(kind, isStart));
+		m_currentParagraph.m_currentPara.add(new Element(kind, isStart));
 	}
 
 	public void addHyperlinkControl(byte textKind, byte hyperlinkType, String label) {
-		++myParagraphLengths[myParagraphsNumber - 1];
-		m_elements.add(new Element(textKind, hyperlinkType, label));
+		m_currentParagraph.m_currentPara.add(new Element(textKind, hyperlinkType, label));
 	}
 
-	public void addStyleEntry(ZLTextStyleEntry entry) {
-		++myParagraphLengths[myParagraphsNumber - 1];		
-		m_elements.add(new Element(entry));
+	public void addStyleEntry(ZLTextStyleEntry entry) {	
+		m_currentParagraph.m_currentPara.add(new Element(entry));
 	}
 
 	public void addFixedHSpace(short length) {
-		++myParagraphLengths[myParagraphsNumber - 1];
-		m_elements.add(new Element(ZLTextParagraph.Entry.FIXED_HSPACE, length));
+		m_currentParagraph.m_currentPara.add(new Element(ZLTextParagraph.Entry.FIXED_HSPACE, length));
 	}	
 
 	public void addBidiReset() {
-		++myParagraphLengths[myParagraphsNumber - 1];
-		m_elements.add(new Element(ZLTextParagraph.Entry.RESET_BIDI));
-	}
-	
-	
-	public final class EntryIterator {
-		public int myCounter;
-		public int myLength;
-		public byte myType;
-		
-		public int m_index;
-
-		// TextEntry data
-		public char[] myTextData = null;
-		public int myTextOffset;
-		public int myTextLength;
-
-		// ControlEntry data
-		public byte myControlKind;
-		public boolean myControlIsStart;
-		// HyperlinkControlEntry data
-		public byte myHyperlinkType;
-		public String myHyperlinkId;
-
-		// ImageEntry
-		public ZLImageEntry myImageEntry;
-
-		// StyleEntry
-		public ZLTextStyleEntry myStyleEntry;
-
-		// FixedHSpaceEntry data
-		public short myFixedHSpaceLength;
-
-		public EntryIterator(int index) {
-			myLength = myParagraphLengths[index - m_beginParagraph];
-			m_index = m_paragraphStartIndex[index - m_beginParagraph];
-			myCounter = 0;
-			Log.d("EntryIterator", "length:" + myLength + "index:" +  m_index);
-		}
-
-		void reset(int index) {
-			myCounter = 0;
-			myLength = myParagraphLengths[index - m_beginParagraph];
-			m_index = m_paragraphStartIndex[index - m_beginParagraph];
-			Log.d("reset", "length:" + myLength + "index:" +  m_index);
-		}
-
-		public boolean hasNext() {
-			return myCounter < myLength;
-		}
-
-		public void next() {
-			Log.d("next", String.format("index:%1d   all:%1d", m_index, m_elements.size()));
-			Element element = m_elements.get(m_index);
-			myType = (byte)element.m_type;
-			switch (element.m_type) {
-				case ZLTextParagraph.Entry.TEXT:
-					myTextLength = element.m_text.length;
-					myTextData = element.m_text;
-					Log.d("next", new String(element.m_text));
-					myTextOffset = 0;
-					break;
-				case ZLTextParagraph.Entry.CONTROL:
-				{
-					short kind = (short)element.m_kind;
-					myControlKind = (byte)kind;
-					myControlIsStart = (kind & 0x0100) == 0x0100;
-					myHyperlinkType = 0;
-					break;
-				}
-				case ZLTextParagraph.Entry.HYPERLINK_CONTROL:
-				{
-					myControlKind = (byte)element.m_kind;
-					myControlIsStart = true;
-					myHyperlinkType = (byte)element.m_hyperlinkType;
-					myHyperlinkId = element.m_label;
-					break;
-				}
-				case ZLTextParagraph.Entry.IMAGE:
-				{
-					final short vOffset = (short)element.m_imagevOffset;
-					final String id = element.m_imageId;
-					final boolean isCover = element.m_isCover;
-					myImageEntry = new ZLImageEntry(myImageMap, id, vOffset, isCover);
-					break;
-				}
-				case ZLTextParagraph.Entry.FIXED_HSPACE:
-					myFixedHSpaceLength = (short)element.m_len;
-					break;
-				case ZLTextParagraph.Entry.STYLE:
-					myStyleEntry = element.m_textStyle;
-					break;
-				case ZLTextParagraph.Entry.RESET_BIDI:
-					// No data => skip
-					break;
-			}
-			++m_index;
-			++myCounter;
-		}
+		m_currentParagraph.m_currentPara.add(new Element(ZLTextParagraph.Entry.RESET_BIDI));
 	}
 	
 	public interface LabelResolver {

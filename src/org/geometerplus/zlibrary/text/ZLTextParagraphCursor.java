@@ -42,54 +42,54 @@ public final class ZLTextParagraphCursor {
 			ZLTextHyperlink hyperlink = null;
 
 			final ArrayList<ZLTextElement> elements = myElements;
-			for (BookModel.EntryIterator it = myParagraph.iterator(); it.hasNext(); ) {
-				it.next();
-				switch (it.myType) {
-					case ZLTextParagraph.Entry.TEXT:
-						processTextEntry(it.myTextData, it.myTextOffset, it.myTextLength, hyperlink);
-						break;
-					case ZLTextParagraph.Entry.CONTROL:
-						if (hyperlink != null) {
-							hyperlinkDepth += it.myControlIsStart ? 1 : -1;
-							if (hyperlinkDepth == 0) {
-								hyperlink = null;
-							}
+			final BookModel.ParagraphData paragraphData = myParagraph.myModel.m_paragraphs.get(myParagraph.myIndex);
+			final int elementCount = paragraphData.m_currentPara.size();
+			for (int i = 0; i < elementCount; ++i) {
+				BookModel.Element element = paragraphData.m_currentPara.get(i);
+				switch (element.m_type) {
+				case ZLTextParagraph.Entry.TEXT:
+					processTextEntry(element.m_text, 0, element.m_text.length, hyperlink);
+					break;
+				case ZLTextParagraph.Entry.CONTROL:
+					if (hyperlink != null) {
+						hyperlinkDepth += ((element.m_kind & 0x0100) == 0x0100) ? 1 : -1;
+						if (hyperlinkDepth == 0) {
+							hyperlink = null;
 						}
-						elements.add(ZLTextControlElement.get(it.myControlKind, it.myControlIsStart));
-						break;
-					case ZLTextParagraph.Entry.HYPERLINK_CONTROL:
-					{
-						final byte hyperlinkType = it.myHyperlinkType;
-						if (hyperlinkType != 0) {
-							final ZLTextHyperlinkControlElement control =
-								new ZLTextHyperlinkControlElement(
-									it.myControlKind, hyperlinkType, it.myHyperlinkId
-								);
-							elements.add(control);
-							hyperlink = control.Hyperlink;
-							hyperlinkDepth = 1;
-						}
-						break;
 					}
-					case ZLTextParagraph.Entry.IMAGE:
-						final ZLImageEntry imageEntry = it.myImageEntry;
-						final ZLImage image = imageEntry.getImage();
-						if (image != null) {
-							ZLImageData data = ZLImageManager.Instance().getImageData(image);
-							if (data != null) {
-								if (hyperlink != null) {
-									hyperlink.addElementIndex(elements.size());
-								}
-								elements.add(new ZLTextImageElement(imageEntry.Id, data, image.getURI(), imageEntry.IsCover));
+					elements.add(ZLTextControlElement.get((byte)element.m_kind, (element.m_kind & 0x0100) == 0x0100));
+					break;
+				case ZLTextParagraph.Entry.HYPERLINK_CONTROL:
+				{
+					final byte hyperlinkType = element.m_hyperlinkType;
+					if (hyperlinkType != 0) {
+						final ZLTextHyperlinkControlElement control =
+							new ZLTextHyperlinkControlElement((byte)element.m_kind, hyperlinkType, element.m_label);
+						elements.add(control);
+						hyperlink = control.Hyperlink;
+						hyperlinkDepth = 1;
+					}
+					break;
+				}
+				case ZLTextParagraph.Entry.IMAGE:
+					final ZLImageEntry imageEntry = new ZLImageEntry(myParagraph.myModel.myImageMap, element.m_imageId, (short)element.m_imagevOffset, element.m_isCover);
+					final ZLImage image = imageEntry.getImage();
+					if (image != null) {
+						ZLImageData data = ZLImageManager.Instance().getImageData(image);
+						if (data != null) {
+							if (hyperlink != null) {
+								hyperlink.addElementIndex(elements.size());
 							}
+							elements.add(new ZLTextImageElement(imageEntry.Id, data, image.getURI(), imageEntry.IsCover));
 						}
-						break;
-					case ZLTextParagraph.Entry.STYLE:
-						// TODO: implement
-						break;
-					case ZLTextParagraph.Entry.FIXED_HSPACE:
-						elements.add(ZLTextFixedHSpaceElement.getElement(it.myFixedHSpaceLength));
-						break;
+					}
+					break;
+				case ZLTextParagraph.Entry.STYLE:
+					// TODO: implement
+					break;
+				case ZLTextParagraph.Entry.FIXED_HSPACE:
+					elements.add(ZLTextFixedHSpaceElement.getElement((short)element.m_len));
+					break;
 				}
 			}
 		}
