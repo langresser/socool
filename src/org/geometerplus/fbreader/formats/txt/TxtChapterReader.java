@@ -23,8 +23,6 @@ public final class TxtChapterReader extends BookReader {
 	public boolean myInitialized = false;
 	public int myIgnoredIndent = 1;
 	public int myEmptyLinesBeforeNewSection = 1;
-	
-	public Vector<Integer> m_paraOfFile = new Vector<Integer>();
 		
 	public TxtChapterReader()
 	{
@@ -43,90 +41,30 @@ public final class TxtChapterReader extends BookReader {
 	{
 		try {
 			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.txt");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input, "gb18030"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
 			
 			String line = "";
 
 			int paraCount = 0;
 			while ((line = reader.readLine()) != null) {
 				String[] infos = line.split("@@");
-				paraCount += Integer.parseInt(infos[1]); 
-				m_paraOfFile.add(paraCount);
+				m_bookModel.m_chapter.addChapterData(infos[0], paraCount, Integer.parseInt(infos[1]), Integer.parseInt(infos[2]), infos[3]);
+				paraCount += Integer.parseInt(infos[1]);
 			}
 			input.close();
 			
 			m_bookModel.m_allParagraphNumber = paraCount;
-			m_bookModel.m_fileCount = m_paraOfFile.size();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 	}
-	
-	public int getFileCount()
-	{
-		return m_paraOfFile.size();
-	}
-	
-	public int getFileByParagraph(int para)
-	{
-		if (para == 0) {
-			return 1;
-		}
-		
-		if (m_paraOfFile.size() == 1) {
-			return 1;
-		}
 
-		int i = 1;
-		int currentPara = 0;
-		for (Integer each : m_paraOfFile) {
-			if (currentPara >= para) {
-				break;
-			}
-			
-			currentPara += each;
-			++i;
-		}
-		return i;
-	}
-	
-	private int getBeginParagraph(int fileNum)
-	{
-		if (fileNum == 1) {
-			return 0;
-		}
-
-		int maxIndex = Math.min(fileNum - 1, m_paraOfFile.size());
-		int paraCount = 0;
-		for (int i = 0; i < maxIndex; ++i) {
-			int currentPara = m_paraOfFile.get(i);
-			paraCount += currentPara;
-		}
-		
-		return paraCount;
-	}
-	
-	private int getParagraphCount(int fileNum)
-	{
-		if (fileNum == 1) {
-			return m_paraOfFile.get(0) - 1;
-		}
-		
-		if (fileNum <= 0 || fileNum > m_paraOfFile.size()) {
-			return 0;
-		}
-		
-		return m_paraOfFile.get(fileNum - 1);
-	}
-	
 	public void readChapter(int fileNum)
 	{
 		startDocumentHandler();
 
 		try {
-			m_bookModel.m_currentBookIndex = fileNum;
-
 			String filePath = m_bookModel.Book.m_filePath + "/" + fileNum + ".txt";
 			InputStream input = FBReaderApp.Instance().getBookFile(filePath);
 
@@ -206,18 +144,18 @@ public final class TxtChapterReader extends BookReader {
 	{
 //		Log.d("readDocument", "read:" + paragraph);
 		m_bookModel.clearParagraphData();
-		int fileNum = getFileByParagraph(paraNumber);
+		int fileNum = m_bookModel.m_chapter.getChapterIndexByParagraph(paraNumber);
 		
 		if (fileNum > 1) {
 			readChapter(fileNum - 1);
-			m_bookModel.m_beginParagraph = getBeginParagraph(fileNum - 1);
+			m_bookModel.m_beginParagraph = m_bookModel.m_chapter.getChapterOffset(fileNum - 1);
 		} else {
 			m_bookModel.m_beginParagraph = 0;
 		}
 
 		readChapter(fileNum);
 
-		final int lastFile = m_paraOfFile.size();
+		final int lastFile = m_bookModel.m_chapter.getChapterCount();
 		if (fileNum < lastFile) {
 			readChapter(fileNum + 1);
 		}

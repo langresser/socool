@@ -126,14 +126,13 @@ public class BookModel {
 	public boolean m_supportRichText = true;		// 当前文件是否支持富文本显示(txt不支持)
 	public int m_beginParagraph = 0;
 	public int m_allParagraphNumber = 0;
-	public int m_currentBookIndex = 0;			// 当前书籍序号，只有章节读取可用
-	public int m_fileCount = 0;					// 书籍总共由多少文件组成
 
 	public ArrayList<ZLTextMark> myMarks;
 	
 	public HashMap<String, Label> myInternalHyperlinks = new HashMap<String, Label>();
 	public Vector<Element> m_elements = new Vector<Element>();
 	public Vector<ParagraphData> m_paragraphs = new Vector<ParagraphData>();
+	public BookChapter m_chapter = new BookChapter();
 
 	public class ParagraphData
 	{

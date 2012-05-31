@@ -228,26 +228,6 @@ public final class ZLTextParagraphCursor {
 		}
 	}
 	
-	// 多文件书籍专用，是否是书籍的开始
-	public boolean isBeginOfBook()
-	{
-		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-			return (Model.m_currentBookIndex == 1 && isFirst());
-		} else {
-			return isFirst();
-		}
-	}
-	
-	// 多文件书籍专用，是否是书籍的结束
-	public boolean isEndOfBook()
-	{
-		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-			return (Model.m_currentBookIndex == Model.m_fileCount && isLast());
-		} else {
-			return isLast();
-		}
-	}
-
 	public boolean isEndOfSection() {
 		return (Model.getParagraphKind(Index) == ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
 	}
