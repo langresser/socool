@@ -56,7 +56,7 @@ public final class TxtChapterReader extends BookReader {
 			input.close();
 			
 			m_bookModel.m_allParagraphNumber = paraCount;
-			m_bookModel.m_fileCount = m_paraOfFile.size() + 1;
+			m_bookModel.m_fileCount = m_paraOfFile.size();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -125,7 +125,6 @@ public final class TxtChapterReader extends BookReader {
 		startDocumentHandler();
 
 		try {
-			m_bookModel.m_allParagraphNumber = getParagraphCount(fileNum);
 			m_bookModel.m_currentBookIndex = fileNum;
 
 			String filePath = m_bookModel.Book.m_filePath + "/" + fileNum + ".txt";
@@ -211,6 +210,9 @@ public final class TxtChapterReader extends BookReader {
 		
 		if (fileNum > 1) {
 			readChapter(fileNum - 1);
+			m_bookModel.m_beginParagraph = getBeginParagraph(fileNum - 1);
+		} else {
+			m_bookModel.m_beginParagraph = 0;
 		}
 
 		readChapter(fileNum);
@@ -219,10 +221,7 @@ public final class TxtChapterReader extends BookReader {
 		if (fileNum < lastFile) {
 			readChapter(fileNum + 1);
 		}
-
-		m_bookModel.m_beginParagraph = getBeginParagraph(fileNum);
-		m_bookModel.m_endParagraph = m_bookModel.m_beginParagraph + getParagraphCount(fileNum);
-		
+	
 //		Log.d("readDocument", String.format("readover:%1d    begin:%2d    end:%3d", paragraph, m_bookModel.m_beginParagraph, m_bookModel.m_endParagraph));
 	}
 

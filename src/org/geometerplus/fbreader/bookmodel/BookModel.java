@@ -125,7 +125,6 @@ public class BookModel {
 	public int m_readType = READ_TYPE_NORMAL;
 	public boolean m_supportRichText = true;		// 当前文件是否支持富文本显示(txt不支持)
 	public int m_beginParagraph = 0;
-	public int m_endParagraph = 0;
 	public int m_allParagraphNumber = 0;
 	public int m_currentBookIndex = 0;			// 当前书籍序号，只有章节读取可用
 	public int m_fileCount = 0;					// 书籍总共由多少文件组成
@@ -242,11 +241,12 @@ public class BookModel {
 	
 	public final int getParagraphNumber()
 	{
-		return m_paragraphs.size();
+		return m_allParagraphNumber;
 	}
 
 	public final byte getParagraphKind(int index)
 	{
+		index = index - m_beginParagraph;
 		if (index < 0) {
 			index = 0;
 		}
@@ -260,22 +260,19 @@ public class BookModel {
 	}
 
 	public final ZLTextParagraph getParagraph(int index) {
-		Log.d("getParagraph", String.format("para: %1d   begin:%2d    end:%3d", index, m_beginParagraph, m_endParagraph));
-		if (m_readType == READ_TYPE_STREAM) {
-			if (index < m_allParagraphNumber && (index > m_endParagraph || index < m_beginParagraph)) {
-				Book.getPlugin().readParagraph(index);
-			}
-		} else if (m_readType == READ_TYPE_CHAPTER) {
-			if (index > m_endParagraph || index < m_beginParagraph) {
+		Log.d("getParagraph", String.format("para: %1d   begin:%2d    size:%3d", index, m_beginParagraph, m_paragraphs.size()));
+		if (m_readType == READ_TYPE_STREAM || m_readType == READ_TYPE_CHAPTER) {
+			if (index < m_allParagraphNumber && (index >= m_beginParagraph + m_paragraphs.size() || index < m_beginParagraph)) {
 				Book.getPlugin().readParagraph(index);
 			}
 		}
 
-		ParagraphData paragraph = m_paragraphs.get(index);
+		ParagraphData paragraph = m_paragraphs.get(index - m_beginParagraph);
 		return new ZLTextParagraph(this, index, (byte)paragraph.m_kind);
 	}
 
 	public final int getTextLength(int index) {
+		index = index - m_beginParagraph;
 		if (index < 0) {
 			index = 0;
 		}
@@ -289,7 +286,7 @@ public class BookModel {
 	}
 
 	public void createParagraph(byte kind) {
-		if (m_readType != READ_TYPE_STREAM) {
+		if (m_readType != READ_TYPE_STREAM && m_readType != READ_TYPE_CHAPTER) {
 			m_allParagraphNumber = getParagraphNumber();
 		}
 		

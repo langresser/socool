@@ -42,7 +42,7 @@ public final class ZLTextParagraphCursor {
 			ZLTextHyperlink hyperlink = null;
 
 			final ArrayList<ZLTextElement> elements = myElements;
-			final BookModel.ParagraphData paragraphData = myParagraph.myModel.m_paragraphs.get(myParagraph.myIndex);
+			final BookModel.ParagraphData paragraphData = myParagraph.myModel.m_paragraphs.get(myParagraph.myIndex - myParagraph.myModel.m_beginParagraph);
 			final int elementCount = paragraphData.m_currentPara.size();
 			for (int i = 0; i < elementCount; ++i) {
 				BookModel.Element element = paragraphData.m_currentPara.get(i);
@@ -221,7 +221,7 @@ public final class ZLTextParagraphCursor {
 	}
 
 	public boolean isLast() {
-		if (Model.m_readType == BookModel.READ_TYPE_STREAM) {
+		if (Model.m_readType == BookModel.READ_TYPE_STREAM || Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
 			return (Index + 1 >= Model.m_allParagraphNumber);
 		} else {
 			return (Index + 1 >= Model.getParagraphNumber());

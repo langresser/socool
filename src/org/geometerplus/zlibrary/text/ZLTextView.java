@@ -1472,8 +1472,7 @@ public class ZLTextView {
 				return
 					cursor != null &&
 					!cursor.isNull() &&
-					(!cursor.isEndOfParagraph() || !cursor.getParagraphCursor().isLast()
-					|| (myModel.m_readType == BookModel.READ_TYPE_CHAPTER && !cursor.getParagraphCursor().isEndOfBook()));
+					(!cursor.isEndOfParagraph() || !cursor.getParagraphCursor().isLast());
 			}
 			case previous:
 			{
@@ -1481,8 +1480,7 @@ public class ZLTextView {
 				return
 					cursor != null &&
 					!cursor.isNull() &&
-					(!cursor.isStartOfParagraph() || !cursor.getParagraphCursor().isFirst()
-					|| (myModel.m_readType == BookModel.READ_TYPE_CHAPTER && !cursor.getParagraphCursor().isBeginOfBook()));
+					(!cursor.isStartOfParagraph() || !cursor.getParagraphCursor().isFirst());
 			}
 		}
 	}

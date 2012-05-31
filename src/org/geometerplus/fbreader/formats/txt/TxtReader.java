@@ -351,14 +351,12 @@ public final class TxtReader extends BookReader {
 
 
 		m_bookModel.m_beginParagraph = getParagraphByOffset(ii + readOffset);
-		m_bookModel.m_endParagraph = getParagraphByOffset(jj + readOffset);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		endDocumentHandler();
-		Log.d("readDocument", String.format("readover:%1d    begin:%2d    end:%3d", paragraph, m_bookModel.m_beginParagraph, m_bookModel.m_endParagraph));
 	}
 
 	protected void startDocumentHandler()
