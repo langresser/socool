@@ -324,7 +324,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 
 			case FB2Tag.BODY:
 				++myBodyCounter;
-				myParagraphsBeforeBodyNumber = myBookReader.m_bookModel.myParagraphsNumber;
+				myParagraphsBeforeBodyNumber = myBookReader.m_bookModel.getParagraphNumber();
 				final String name = attributes.getValue("name");
 				if (myBodyCounter == 1 || !"notes".equals(name)) {
 					if (name != null) {
@@ -374,7 +374,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 					imgRef = imgRef.substring(1);
 					final boolean isCoverImage =
 						myParagraphsBeforeBodyNumber ==
-						myBookReader.m_bookModel.myParagraphsNumber;
+						myBookReader.m_bookModel.getParagraphNumber();
 					if (!imgRef.equals(myCoverImageReference) || !isCoverImage) {
 						myBookReader.addImageReference(imgRef, offset, myInsideCoverpage || isCoverImage);
 					}

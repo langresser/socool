@@ -224,7 +224,7 @@ public final class ZLTextParagraphCursor {
 		if (Model.m_readType == BookModel.READ_TYPE_STREAM) {
 			return (Index + 1 >= Model.m_allParagraphNumber);
 		} else {
-			return (Index + 1 >= Model.myParagraphsNumber);
+			return (Index + 1 >= Model.getParagraphNumber());
 		}
 	}
 	

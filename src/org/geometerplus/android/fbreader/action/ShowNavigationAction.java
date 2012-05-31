@@ -31,7 +31,7 @@ public class ShowNavigationAction extends FBAndroidAction {
 	@Override
 	public boolean isVisible() {
 		final BookModel textModel = Reader.getCurrentView().getModel();
-		return textModel != null && textModel.myParagraphsNumber != 0;
+		return textModel != null && textModel.getParagraphNumber() != 0;
 	}
 
 	@Override

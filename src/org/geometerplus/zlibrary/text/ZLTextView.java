@@ -100,7 +100,7 @@ public class ZLTextView {
 		if (myModel != null) {
 			resetTextStyle();
 
-			final int paragraphsNumber = myModel.myParagraphsNumber;
+			final int paragraphsNumber = myModel.getParagraphNumber();
 			if (paragraphsNumber > 0) {
 				myCurrentPage.moveStartCursor(ZLTextParagraphCursor.cursor(myModel, 0));
 			}
@@ -210,7 +210,7 @@ public class ZLTextView {
 			return 0;
 		}
 		int startIndex = 0;
-		int endIndex = myModel.myParagraphsNumber;
+		int endIndex = myModel.getParagraphNumber();
 		if (thisSectionOnly) {
 			// TODO: implement
 		}
@@ -279,13 +279,6 @@ public class ZLTextView {
 				myCurrentPage = myPreviousPage;
 				myPreviousPage = swap;
 				myPreviousPage.reset();
-				
-//				if (myModel.m_readType == BookModel.READ_TYPE_CHAPTER) {
-//					ZLTextParagraphCursor cursor = getStartCursor().getParagraphCursor();
-//					if (cursor.isFirst() && !cursor.isBeginOfBook()) {
-//						myModel.Book.getPlugin().readChapter(myModel.m_currentBookIndex - 1);
-//					}
-//				}
 
 				if (myCurrentPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myNextPage);
@@ -308,13 +301,6 @@ public class ZLTextView {
 				myCurrentPage = myNextPage;
 				myNextPage = swap;
 				myNextPage.reset();
-				
-//				if (myModel.m_readType == BookModel.READ_TYPE_CHAPTER) {
-//					ZLTextParagraphCursor cursor = getEndCursor().getParagraphCursor();
-//					if (cursor.isLast() && !cursor.isEndOfBook()) {
-//						myModel.Book.getPlugin().readChapter(myModel.m_currentBookIndex + 1);
-//					}
-//				}
 
 				if (myCurrentPage.PaintState == NOTHING_TO_PAINT) {
 					preparePaintInfo(myPreviousPage);
@@ -453,7 +439,7 @@ public class ZLTextView {
 			context.clear(getBackgroundColor());
 		}
 
-		if (myModel == null || myModel.myParagraphsNumber == 0) {
+		if (myModel == null || myModel.getParagraphNumber() == 0) {
 			return;
 		}
 
@@ -540,14 +526,14 @@ public class ZLTextView {
 	}
 
 	protected final synchronized int sizeOfFullText() {
-		if (myModel == null || myModel.myParagraphsNumber == 0) {
+		if (myModel == null || myModel.getParagraphNumber() == 0) {
 			return 1;
 		}
-		return myModel.getTextLength(myModel.myParagraphsNumber - 1);
+		return myModel.getTextLength(myModel.getParagraphNumber() - 1);
 	}
 
 	protected final synchronized int getCurrentCharNumber(PageIndex pageIndex, boolean startNotEndOfPage) {
-		if (myModel == null || myModel.myParagraphsNumber == 0) {
+		if (myModel == null || myModel.getParagraphNumber() == 0) {
 			return 0;
 		}
 		final ZLTextPage page = getPage(pageIndex);
@@ -557,7 +543,7 @@ public class ZLTextView {
 		} else {
 			int end = sizeOfTextBeforeCursor(page.EndCursor);
 			if (end == -1) {
-				end = myModel.getTextLength(myModel.myParagraphsNumber - 1) - 1;
+				end = myModel.getTextLength(myModel.getParagraphNumber() - 1) - 1;
 			}
 			return Math.max(1, end);
 		}
@@ -1108,7 +1094,7 @@ public class ZLTextView {
 	}
 
 	private final synchronized void gotoPositionByEnd(int paragraphIndex, int wordIndex, int charIndex) {
-		if (myModel != null && myModel.myParagraphsNumber > 0) {
+		if (myModel != null && myModel.getParagraphNumber() > 0) {
 			myCurrentPage.moveEndCursor(paragraphIndex, wordIndex, charIndex);
 			myPreviousPage.reset();
 			myNextPage.reset();

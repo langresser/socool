@@ -64,7 +64,7 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 
 	@Override
 	public void startElementHandler(byte tag, int offset, ZLHtmlAttributeMap attributes) {
-		final int paragraphIndex = m_bookModel.myParagraphsNumber;
+		final int paragraphIndex = m_bookModel.getParagraphNumber();
 		myPositionToParagraph.put(offset, paragraphIsOpen() ? paragraphIndex - 1 : paragraphIndex);
 		switch (tag) {
 			case HtmlTag.IMG:

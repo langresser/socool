@@ -64,24 +64,17 @@ public class TxtChapterPlugin extends FormatPlugin {
 			return;
 		}
 
-		final int fileNum = m_reader.getFileByParagraph(paragraph);
-		m_reader.readDocument(fileNum, false);
+		m_reader.readDocument(paragraph);
 	}
 	
 	@Override
 	public void readChapter(int chapter)
 	{
-		if (chapter < 0 || chapter >= m_reader.getFileCount()) {
-			return;
-		}
-
-		m_reader.readDocument(chapter + 1, false);
 	}
 	
 	@Override
 	public void readPercent(double percent)					// 读取文件百分比（部分读取）
 	{
-		
 	}
 
 	@Override
@@ -90,7 +83,7 @@ public class TxtChapterPlugin extends FormatPlugin {
 		model.m_supportRichText = false;
 
 		m_reader.setModel(model);
-		m_reader.readDocument(1, true);
+		m_reader.readDocument(0);
 	}
 
 	@Override

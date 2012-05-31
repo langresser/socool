@@ -119,96 +119,110 @@ public final class TxtChapterReader extends BookReader {
 		
 		return m_paraOfFile.get(fileNum - 1);
 	}
-
-	public void readDocument(int fileNum, boolean clearOldData)
+	
+	public void readChapter(int fileNum)
 	{
-//		Log.d("readDocument", "read:" + paragraph);
-		if (clearOldData) {
-			m_bookModel.clearParagraphData();
-		}
-
 		startDocumentHandler();
 
 		try {
-		m_bookModel.m_allParagraphNumber = getParagraphCount(fileNum);
-		m_bookModel.m_currentBookIndex = fileNum;
+			m_bookModel.m_allParagraphNumber = getParagraphCount(fileNum);
+			m_bookModel.m_currentBookIndex = fileNum;
 
-		String filePath = m_bookModel.Book.m_filePath + "/" + fileNum + ".txt";
-		InputStream input = FBReaderApp.Instance().getBookFile(filePath);
+			String filePath = m_bookModel.Book.m_filePath + "/" + fileNum + ".txt";
+			InputStream input = FBReaderApp.Instance().getBookFile(filePath);
 
-		int size = input.available();
+			int size = input.available();
 
-		byte[] buffer = new byte[size];
-		input.read(buffer);
-		input.close();
-		final String encoding = m_bookModel.Book.getEncoding();
-		char[] text = (new String(buffer, encoding)).toCharArray();
+			byte[] buffer = new byte[size];
+			input.read(buffer);
+			input.close();
+			final String encoding = m_bookModel.Book.getEncoding();
+			char[] text = (new String(buffer, encoding)).toCharArray();
 
-		int maxLength = text.length;
-		int parBegin = 0;
-		
-		// 过滤最开始的空格
-		for (int i = 0; i < maxLength; ++i) {
-			final char c = text[i];
-			if (c == ' ' || c == '\t' || c == '　' || c == '	') {
-				++parBegin;
-			} else {
-				break;
+			int maxLength = text.length;
+			int parBegin = 0;
+			
+			// 过滤最开始的空格
+			for (int i = 0; i < maxLength; ++i) {
+				final char c = text[i];
+				if (c == ' ' || c == '\t' || c == '　' || c == '	') {
+					++parBegin;
+				} else {
+					break;
+				}
 			}
-		}
 
-		for (int i = parBegin; i < maxLength; ++i) {
-			final char c = text[i];
-			if (c == '\n' || c == '\r') {
-				boolean skipNewLine = false;
-				if (c == '\r' && (i + 1) != maxLength && text[i + 1] == '\n') {
-					skipNewLine = true;
-					text[i] = '\n';
-				}
-				if (parBegin != i) {			
-					characterDataHandler(text, parBegin, i - parBegin);
-				}
-				// 跳过'\n'(\r\n的情况)
-				if (skipNewLine) {
-					++i; // 0d 0a
-				}
-				
-				// 过滤掉段首空格
-				if ((i + 1 < maxLength)) {
-					final char css = text[i + 1];
-					// 分别对应半角和全角的空格
-					if (css == ' ' || css == '\t' || css == '　' || css == '	') {
-						++i;
+			for (int i = parBegin; i < maxLength; ++i) {
+				final char c = text[i];
+				if (c == '\n' || c == '\r') {
+					boolean skipNewLine = false;
+					if (c == '\r' && (i + 1) != maxLength && text[i + 1] == '\n') {
+						skipNewLine = true;
+						text[i] = '\n';
 					}
-				}
-				
-				if ((i + 1 < maxLength)) {
-					final char css = text[i + 1];
-					if (css == ' ' || css == '\t' || css == '　' || css == '	') {
-						++i;
+					if (parBegin != i) {			
+						characterDataHandler(text, parBegin, i - parBegin);
 					}
-				}
+					// 跳过'\n'(\r\n的情况)
+					if (skipNewLine) {
+						++i; // 0d 0a
+					}
+					
+					// 过滤掉段首空格
+					if ((i + 1 < maxLength)) {
+						final char css = text[i + 1];
+						// 分别对应半角和全角的空格
+						if (css == ' ' || css == '\t' || css == '　' || css == '	') {
+							++i;
+						}
+					}
+					
+					if ((i + 1 < maxLength)) {
+						final char css = text[i + 1];
+						if (css == ' ' || css == '\t' || css == '　' || css == '	') {
+							++i;
+						}
+					}
 
-				parBegin = i + 1;
-				newLineHandler();
+					parBegin = i + 1;
+					newLineHandler();
+				}
 			}
-		}
-		
-		if (parBegin != maxLength) {
-			characterDataHandler(text, parBegin, maxLength - parBegin);
-		}
+			
+			if (parBegin != maxLength) {
+				characterDataHandler(text, parBegin, maxLength - parBegin);
+			}
 
-		if (clearOldData) {
-			m_bookModel.m_beginParagraph = getBeginParagraph(fileNum);
-		}
 
-		m_bookModel.m_endParagraph = m_bookModel.m_beginParagraph + getParagraphCount(fileNum);
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		endDocumentHandler();
+	}
+
+	public void readDocument(int paraNumber)
+	{
+//		Log.d("readDocument", "read:" + paragraph);
+		m_bookModel.clearParagraphData();
+		int fileNum = getFileByParagraph(paraNumber);
+		
+		if (fileNum > 1) {
+			readChapter(fileNum - 1);
+		}
+
+		readChapter(fileNum);
+
+		final int lastFile = m_paraOfFile.size();
+		if (fileNum < lastFile) {
+			readChapter(fileNum + 1);
+		}
+
+		m_bookModel.m_beginParagraph = getBeginParagraph(fileNum);
+		m_bookModel.m_endParagraph = m_bookModel.m_beginParagraph + getParagraphCount(fileNum);
+		
 //		Log.d("readDocument", String.format("readover:%1d    begin:%2d    end:%3d", paragraph, m_bookModel.m_beginParagraph, m_bookModel.m_endParagraph));
 	}
 

@@ -111,11 +111,6 @@ public class BookModel {
 	protected BookModel(Book book) {
 		Book = book;
 		myId = null;
-		
-		m_paragraphStartIndex = new int[1024];
-		myParagraphLengths = new int[1024];
-		myTextSizes = new int[1024];
-		myParagraphKinds = new byte[1024];
 	}
 	
 	public Book Book = null;
@@ -135,12 +130,6 @@ public class BookModel {
 	public int m_currentBookIndex = 0;			// 当前书籍序号，只有章节读取可用
 	public int m_fileCount = 0;					// 书籍总共由多少文件组成
 
-	protected int[] m_paragraphStartIndex;
-	protected int[] myParagraphLengths;
-	protected int[] myTextSizes;
-	protected byte[] myParagraphKinds;
-
-	public int myParagraphsNumber;
 	public ArrayList<ZLTextMark> myMarks;
 	
 	public HashMap<String, Label> myInternalHyperlinks = new HashMap<String, Label>();
@@ -163,7 +152,6 @@ public class BookModel {
 
 	public void clearParagraphData()
 	{
-		myParagraphsNumber = 0;
 		m_elements.clear();
 		m_paragraphs.clear();
 	}
@@ -216,11 +204,11 @@ public class BookModel {
 		int count = 0;
 //		ZLSearchPattern pattern = new ZLSearchPattern(text, ignoreCase);
 //		myMarks = new ArrayList<ZLTextMark>();
-//		if (startIndex > myParagraphsNumber) {
-//			startIndex = myParagraphsNumber;
+//		if (startIndex > getParagraphNumber()) {
+//			startIndex = getParagraphNumber();
 //		}
-//		if (endIndex > myParagraphsNumber) {
-//			endIndex = myParagraphsNumber;
+//		if (endIndex > getParagraphNumber()) {
+//			endIndex = getParagraphNumber();
 //		}
 //		int index = startIndex;
 //		final EntryIterator it = new EntryIterator(index);
@@ -252,10 +240,23 @@ public class BookModel {
 		return (myMarks != null) ? myMarks : Collections.<ZLTextMark>emptyList();
 	}
 	
+	public final int getParagraphNumber()
+	{
+		return m_paragraphs.size();
+	}
+
 	public final byte getParagraphKind(int index)
 	{
-		final byte kind = myParagraphKinds[index - m_beginParagraph];
-		return kind;
+		if (index < 0) {
+			index = 0;
+		}
+		
+		if (index >= m_paragraphs.size() - 1) {
+			index = m_paragraphs.size() - 1;
+		}
+
+		final ParagraphData paragraph = m_paragraphs.get(index);
+		return (byte)paragraph.m_kind;
 	}
 
 	public final ZLTextParagraph getParagraph(int index) {
@@ -270,18 +271,26 @@ public class BookModel {
 			}
 		}
 
-		final byte kind = myParagraphKinds[index - m_beginParagraph];
-		return new ZLTextParagraph(this, index, kind);
+		ParagraphData paragraph = m_paragraphs.get(index);
+		return new ZLTextParagraph(this, index, (byte)paragraph.m_kind);
 	}
 
 	public final int getTextLength(int index) {
-		return myTextSizes[Math.max(Math.min(index - m_beginParagraph, myParagraphsNumber - 1), 0)];
+		if (index < 0) {
+			index = 0;
+		}
+		
+		if (index >= m_paragraphs.size() - 1) {
+			index = m_paragraphs.size() - 1;
+		}
+
+		ParagraphData paragraph = m_paragraphs.get(index);
+		return paragraph.m_textSize;
 	}
 
 	public void createParagraph(byte kind) {
-		final int index = myParagraphsNumber++;
 		if (m_readType != READ_TYPE_STREAM) {
-			m_allParagraphNumber = myParagraphsNumber;
+			m_allParagraphNumber = getParagraphNumber();
 		}
 		
 		if (m_currentParagraph != null) {
@@ -289,21 +298,6 @@ public class BookModel {
 		}
 		
 		m_currentParagraph = new ParagraphData(kind);
-
-		if (index == myParagraphLengths.length) {
-			final int size = myParagraphLengths.length;
-			m_paragraphStartIndex = ZLArrayUtils.createCopy(m_paragraphStartIndex, size, size << 1);
-			myParagraphLengths = ZLArrayUtils.createCopy(myParagraphLengths, size, size << 1);
-			myTextSizes = ZLArrayUtils.createCopy(myTextSizes, size, size << 1);
-			myParagraphKinds = ZLArrayUtils.createCopy(myParagraphKinds, size, size << 1);
-		}
-		if (index > 0) {
-			myTextSizes[index] = myTextSizes[index - 1];
-		}
-
-		m_paragraphStartIndex[index] = m_elements.size();
-		myParagraphLengths[index] = 0;
-		myParagraphKinds[index] = kind;
 	}
 	
 	public class Element {
@@ -334,7 +328,6 @@ public class BookModel {
 			m_type = ZLTextParagraph.Entry.TEXT;
 			m_text = new char[length];
 			System.arraycopy(text, offset, m_text, 0, length);
-//			Log.d("holi", m_text);
 		}
 		
 		Element(String id, short vOffset, boolean isCover)

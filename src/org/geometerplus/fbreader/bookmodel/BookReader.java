@@ -133,7 +133,7 @@ public class BookReader {
 
 	public final void insertEndParagraph(byte kind) {
 		if (m_bookModel != null && mySectionContainsRegularContents) {
-			int size = m_bookModel.myParagraphsNumber;
+			int size = m_bookModel.getParagraphNumber();
 			if (size > 0 && m_bookModel.getParagraphKind(size - 1) != kind) {
 				m_bookModel.createParagraph(kind);
 				mySectionContainsRegularContents = false;
@@ -246,7 +246,7 @@ public class BookReader {
 
 	public final void addHyperlinkLabel(String label) {
 		if (m_bookModel != null) {
-			int paragraphNumber = m_bookModel.myParagraphsNumber;
+			int paragraphNumber = m_bookModel.getParagraphNumber();
 			if (myTextParagraphExists) {
 				--paragraphNumber;
 			}
@@ -274,7 +274,7 @@ public class BookReader {
 
 	public final void beginContentsParagraph(int referenceNumber) {
 		if (referenceNumber == -1) {
-			referenceNumber = m_bookModel.myParagraphsNumber;
+			referenceNumber = m_bookModel.getParagraphNumber();
 		}
 		TOCTree parentTree = myCurrentContentsTree;
 		if (parentTree.Level > 0) {

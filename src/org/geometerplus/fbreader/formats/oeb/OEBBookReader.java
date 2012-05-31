@@ -103,7 +103,7 @@ class OEBBookReader extends ZLXMLReaderAdapter implements XMLNamespaces {
 			final String referenceName = reader.getFileAlias(MiscUtil.archiveEntryName(xhtmlFile.getPath()));
 
 			myModelReader.addHyperlinkLabel(referenceName);
-			myTOCLabels.put(referenceName, myModelReader.m_bookModel.myParagraphsNumber);
+			myTOCLabels.put(referenceName, myModelReader.m_bookModel.getParagraphNumber());
 			try {
 				reader.readFile(xhtmlFile, referenceName + '#');
 			} catch (IOException e) {
