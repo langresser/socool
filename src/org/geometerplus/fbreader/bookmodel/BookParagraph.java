@@ -81,8 +81,11 @@ public class BookParagraph {
 		
 		ParagraphData paragraph = m_paragraphs.get(index);
 		if (paragraph.m_textSize > 0) {
-			Element element = paragraph.m_paragraphElement.get(1);
-			return new String(element.m_text);
+			for (Element each :  paragraph.m_paragraphElement) {
+				if (each.m_kind == BookParagraph.PARAGRAPH_ELEMENT_TEXT) {
+					return new String(each.m_text); 
+				}
+			}
 		}
 		
 		return "";

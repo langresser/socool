@@ -164,6 +164,7 @@ public final class TxtChapterReader extends BookReader {
 	protected void startDocumentHandler()
 	{
 		pushKind(BookModel.REGULAR);
+		pushKind(BookModel.TITLE);
 		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 		myInsideTitle = true;
 	}
@@ -186,6 +187,11 @@ public final class TxtChapterReader extends BookReader {
 	
 	protected boolean newLineHandler()
 	{
+		if (myInsideTitle) {
+			myInsideTitle = false;
+			popKind();
+		}
+
 		endParagraph();
 		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 
