@@ -2,6 +2,7 @@ package org.geometerplus.fbreader.bookmodel;
 
 import java.util.Vector;
 
+// 维护了章节信息，与data.txt配置相关
 public class BookChapter {
 	public class BookChapterData
 	{
@@ -86,7 +87,7 @@ public class BookChapter {
 			final int loffset = m_chapterData.get(high).m_startOffset;
 			final int roffset = m_chapterData.get(low).m_startOffset;
 			if (para >= loffset && para < roffset) {
-				return high;
+				return high + 1;
 			}
 		}
 		

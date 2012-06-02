@@ -23,23 +23,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.text.ZLImageEntry;
 import org.geometerplus.zlibrary.text.ZLTextMark;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
-import org.geometerplus.zlibrary.text.ZLTextStyleEntry;
-import org.geometerplus.zlibrary.util.ZLArrayUtils;
-import org.geometerplus.zlibrary.util.ZLSearchPattern;
-import org.geometerplus.zlibrary.util.ZLSearchUtil;
 
-import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.fbreader.formats.FormatPlugin;
-
-import android.util.Log;
-
 
 public class BookModel {
 	public final static byte NONE = 0;
@@ -96,8 +85,6 @@ public class BookModel {
 	public static final byte ALIGN_JUSTIFY = 4;
 	public static final byte ALIGN_LINESTART = 5; // left for LTR languages and right for RTL
 	
-	
-
 	public static BookModel createModel(Book book) {
 		final FormatPlugin plugin = book.getPlugin();
 		final BookModel model = new BookModel(book);
@@ -123,36 +110,13 @@ public class BookModel {
 	public static int READ_TYPE_CHAPTER = 2;	// 书籍分为n章，章节读取
 
 	public int m_readType = READ_TYPE_NORMAL;
-	public boolean m_supportRichText = true;		// 当前文件是否支持富文本显示(txt不支持)
-	public int m_beginParagraph = 0;
-	public int m_allParagraphNumber = 0;
 
 	public ArrayList<ZLTextMark> myMarks;
 	
 	public HashMap<String, Label> myInternalHyperlinks = new HashMap<String, Label>();
-	public Vector<Element> m_elements = new Vector<Element>();
-	public Vector<ParagraphData> m_paragraphs = new Vector<ParagraphData>();
+
 	public BookChapter m_chapter = new BookChapter();
-
-	public class ParagraphData
-	{
-		public int m_kind;
-		public int m_textSize = 0;
-		public Vector<Element> m_currentPara = new Vector<Element>();
-		
-		private ParagraphData(int kind)
-		{
-			m_kind = kind;
-		}
-	}
-	
-	public ParagraphData m_currentParagraph = null;
-
-	public void clearParagraphData()
-	{
-		m_elements.clear();
-		m_paragraphs.clear();
-	}
+	public BookParagraph m_paragraph = new BookParagraph();
 
 	public void addImage(String id, ZLImage image) {
 		myImageMap.put(id, image);
@@ -200,37 +164,6 @@ public class BookModel {
 
 	public final int search(final String text, int startIndex, int endIndex, boolean ignoreCase) {
 		int count = 0;
-//		ZLSearchPattern pattern = new ZLSearchPattern(text, ignoreCase);
-//		myMarks = new ArrayList<ZLTextMark>();
-//		if (startIndex > getParagraphNumber()) {
-//			startIndex = getParagraphNumber();
-//		}
-//		if (endIndex > getParagraphNumber()) {
-//			endIndex = getParagraphNumber();
-//		}
-//		int index = startIndex;
-//		final EntryIterator it = new EntryIterator(index);
-//		while (true) {
-//			int offset = 0;
-//			while (it.hasNext()) {
-//				it.next();
-//				if (it.myType == ZLTextParagraph.Entry.TEXT) {
-//					char[] textData = it.myTextData;
-//					int textOffset = it.myTextOffset;
-//					int textLength = it.myTextLength;
-//					for (int pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern); pos != -1;
-//						pos = ZLSearchUtil.find(textData, textOffset, textLength, pattern, pos + 1)) {
-//						myMarks.add(new ZLTextMark(index, offset + pos, pattern.getLength()));
-//						++count;
-//					}
-//					offset += textLength;
-//				}
-//			}
-//			if (++index >= endIndex) {
-//				break;
-//			}
-//			it.reset(index);
-//		}
 		return count;
 	}
 
@@ -240,159 +173,7 @@ public class BookModel {
 	
 	public final int getParagraphNumber()
 	{
-		return m_allParagraphNumber;
-	}
-
-	public final byte getParagraphKind(int index)
-	{
-		index = index - m_beginParagraph;
-		if (index < 0) {
-			index = 0;
-		}
-		
-		if (index >= m_paragraphs.size() - 1) {
-			index = m_paragraphs.size() - 1;
-		}
-
-		final ParagraphData paragraph = m_paragraphs.get(index);
-		return (byte)paragraph.m_kind;
-	}
-
-	public final ZLTextParagraph getParagraph(int index) {
-		Log.d("getParagraph", String.format("para: %1d   begin:%2d    size:%3d", index, m_beginParagraph, m_paragraphs.size()));
-		if (m_readType == READ_TYPE_STREAM || m_readType == READ_TYPE_CHAPTER) {
-			if (index < m_allParagraphNumber && (index >= m_beginParagraph + m_paragraphs.size() || index < m_beginParagraph)) {
-				Book.getPlugin().readParagraph(index);
-			}
-		}
-
-		ParagraphData paragraph = m_paragraphs.get(index - m_beginParagraph);
-		return new ZLTextParagraph(this, index, (byte)paragraph.m_kind);
-	}
-
-	public final int getTextLength(int index) {
-		index = index - m_beginParagraph;
-		if (index < 0) {
-			index = 0;
-		}
-		
-		if (index >= m_paragraphs.size() - 1) {
-			index = m_paragraphs.size() - 1;
-		}
-
-		ParagraphData paragraph = m_paragraphs.get(index);
-		return paragraph.m_textSize;
-	}
-
-	public void createParagraph(byte kind) {
-		if (m_readType != READ_TYPE_STREAM && m_readType != READ_TYPE_CHAPTER) {
-			m_allParagraphNumber = getParagraphNumber();
-		}
-		
-		if (m_currentParagraph != null) {
-			m_paragraphs.add(m_currentParagraph);
-		}
-		
-		m_currentParagraph = new ParagraphData(kind);
-	}
-	
-	public class Element {
-		public int m_type;
-		public char[] m_text = null;
-
-		public String m_imageId = null;
-		public short m_imagevOffset = 0;
-		public boolean m_isCover = false;
-
-		public short m_kind = 0;
-		public boolean m_isStart = false;
-		
-		public byte m_hyperlinkType = 0;
-		public String m_label = null;
-		
-		public ZLTextStyleEntry m_textStyle = null;
-		
-		public int m_len = 0;
-		
-		Element(int type)
-		{
-			m_type = type;
-		}
-
-		Element(char[] text, int offset, int length)
-		{
-			m_type = ZLTextParagraph.Entry.TEXT;
-			m_text = new char[length];
-			System.arraycopy(text, offset, m_text, 0, length);
-		}
-		
-		Element(String id, short vOffset, boolean isCover)
-		{
-			m_type = ZLTextParagraph.Entry.IMAGE;
-			m_imageId = id;
-			m_imagevOffset = vOffset;
-			m_isCover = isCover;
-		}
-		
-		Element(short textKind, boolean isStart)
-		{
-			m_type = ZLTextParagraph.Entry.CONTROL;
-			m_kind = textKind;
-			m_isStart = isStart;
-		}
-		
-		Element(byte textKind, byte hyperlinkType, String label)
-		{
-			m_type = ZLTextParagraph.Entry.HYPERLINK_CONTROL;
-			m_kind = textKind;
-			m_hyperlinkType = hyperlinkType;
-			m_label = label;
-		}
-		
-		Element(ZLTextStyleEntry entry)
-		{
-			m_type = ZLTextParagraph.Entry.STYLE;
-			m_textStyle = entry;
-		}
-		
-		Element(int type, int len)
-		{
-			m_type = type;
-			m_len = len;
-		}
-	}
-
-	public void addText(char[] text, int offset, int length) {
-		m_currentParagraph.m_textSize += length;
-		m_currentParagraph.m_currentPara.add(new Element(text, offset, length));
-	}
-
-	public void addImage(String id, short vOffset, boolean isCover) {
-		m_currentParagraph.m_currentPara.add(new Element(id, vOffset, isCover));
-	}
-
-	public void addControl(byte textKind, boolean isStart) {
-		short kind = textKind;
-		if (isStart) {
-			kind += 0x0100;
-		}
-		m_currentParagraph.m_currentPara.add(new Element(kind, isStart));
-	}
-
-	public void addHyperlinkControl(byte textKind, byte hyperlinkType, String label) {
-		m_currentParagraph.m_currentPara.add(new Element(textKind, hyperlinkType, label));
-	}
-
-	public void addStyleEntry(ZLTextStyleEntry entry) {	
-		m_currentParagraph.m_currentPara.add(new Element(entry));
-	}
-
-	public void addFixedHSpace(short length) {
-		m_currentParagraph.m_currentPara.add(new Element(ZLTextParagraph.Entry.FIXED_HSPACE, length));
-	}	
-
-	public void addBidiReset() {
-		m_currentParagraph.m_currentPara.add(new Element(ZLTextParagraph.Entry.RESET_BIDI));
+		return m_paragraph.m_allParagraphNumber;
 	}
 	
 	public interface LabelResolver {

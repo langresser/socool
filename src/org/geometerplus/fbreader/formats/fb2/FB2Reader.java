@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.xml.XMLNamespaces;
@@ -147,9 +146,9 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				break;
 
 			case FB2Tag.STANZA:
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.AFTER_SKIP_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_AFTER_SKIP_PARAGRAPH);
 				myBookReader.endParagraph();
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.EMPTY_LINE_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_EMPTY_LINE_PARAGRAPH);
 				myBookReader.endParagraph();
 				myBookReader.popKind();
 				break;
@@ -166,7 +165,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 			case FB2Tag.ANNOTATION:
 				myBookReader.popKind();
 				if (myBodyCounter == 0) {
-					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+					myBookReader.insertEndParagraph(BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 				}
 				break;
 
@@ -180,7 +179,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				myBookReader.popKind();
 				myReadMainText = false;
 				if (myReadMainText) {
-					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+					myBookReader.insertEndParagraph(BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 				}
 				if (mySectionDepth > 0) {
 					myBookReader.endContentsParagraph();
@@ -195,7 +194,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 			case FB2Tag.COVERPAGE:
 				if (myBodyCounter == 0) {
 					myInsideCoverpage = false;
-					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+					myBookReader.insertEndParagraph(BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 				}
 				break;
 
@@ -231,7 +230,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				} else if (myInsideTitle) {
 					myBookReader.addContentsData(SPACE);
 				}
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				break;
 
 			case FB2Tag.SUB:
@@ -255,25 +254,25 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 
 			case FB2Tag.V:
 				myBookReader.pushKind(BookModel.VERSE);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				break;
 
 			case FB2Tag.TEXT_AUTHOR:
 				myBookReader.pushKind(BookModel.AUTHOR);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				break;
 
 			case FB2Tag.SUBTITLE:
 				myBookReader.pushKind(BookModel.SUBTITLE);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				break;
 			case FB2Tag.DATE:
 				myBookReader.pushKind(BookModel.DATE);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				break;
 
 			case FB2Tag.EMPTY_LINE:
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.EMPTY_LINE_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_EMPTY_LINE_PARAGRAPH);
 				myBookReader.endParagraph();
 				break;
 
@@ -290,13 +289,13 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 
 			case FB2Tag.STANZA:
 				myBookReader.pushKind(BookModel.STANZA);
-				myBookReader.beginParagraph(ZLTextParagraph.Kind.BEFORE_SKIP_PARAGRAPH);
+				myBookReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_BEFORE_SKIP_PARAGRAPH);
 				myBookReader.endParagraph();
 				break;
 
 			case FB2Tag.SECTION:
 				if (myReadMainText) {
-					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+					myBookReader.insertEndParagraph(BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 					++mySectionDepth;
 					myBookReader.beginContentsParagraph();
 					mySectionStarted = true;
@@ -311,7 +310,7 @@ public final class FB2Reader extends ZLXMLReaderAdapter {
 				if (myInsidePoem) {
 					myBookReader.pushKind(BookModel.POEM_TITLE);
 				} else if (mySectionDepth == 0) {
-					myBookReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+					myBookReader.insertEndParagraph(BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 					myBookReader.pushKind(BookModel.TITLE);
 				} else {
 					myBookReader.pushKind(BookModel.SECTION_TITLE);

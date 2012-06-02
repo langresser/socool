@@ -19,12 +19,12 @@
 
 package org.geometerplus.fbreader.formats.xhtml;
 
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 class XHTMLTagParagraphAction extends XHTMLTagAction {
 	protected void doAtStart(XHTMLReader reader, ZLStringMap xmlattributes) {
-		reader.getModelReader().beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		reader.getModelReader().beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 	}
 
 	protected void doAtEnd(XHTMLReader reader) {

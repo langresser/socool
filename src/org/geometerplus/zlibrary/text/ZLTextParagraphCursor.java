@@ -3,7 +3,10 @@ package org.geometerplus.zlibrary.text;
 import java.util.*;
 
 
+import org.geometerplus.fbreader.bookmodel.BookChapter;
 import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.image.*;
 import org.geometerplus.zlibrary.util.LineBreaker;
 
@@ -11,7 +14,7 @@ import android.util.Log;
 
 public final class ZLTextParagraphCursor {
 	private static final class Processor {
-		private final ZLTextParagraph myParagraph;
+		private final BookParagraph.ParagraphData myParagraph;
 		private final LineBreaker myLineBreaker;
 		private final ArrayList<ZLTextElement> myElements;
 		private int myOffset;
@@ -19,7 +22,7 @@ public final class ZLTextParagraphCursor {
 		private int myLastMark;
 		private final List<ZLTextMark> myMarks;
 
-		private Processor(ZLTextParagraph paragraph, LineBreaker lineBreaker, List<ZLTextMark> marks, int paragraphIndex, ArrayList<ZLTextElement> elements) {
+		private Processor(BookParagraph.ParagraphData paragraph, LineBreaker lineBreaker, List<ZLTextMark> marks, int paragraphIndex, ArrayList<ZLTextElement> elements) {
 			myParagraph = paragraph;
 			myLineBreaker = lineBreaker;
 			myElements = elements;
@@ -42,15 +45,15 @@ public final class ZLTextParagraphCursor {
 			ZLTextHyperlink hyperlink = null;
 
 			final ArrayList<ZLTextElement> elements = myElements;
-			final BookModel.ParagraphData paragraphData = myParagraph.myModel.m_paragraphs.get(myParagraph.myIndex - myParagraph.myModel.m_beginParagraph);
-			final int elementCount = paragraphData.m_currentPara.size();
+			final BookParagraph.ParagraphData paragraphData = myParagraph;
+			final int elementCount = paragraphData.m_paragraphElement.size();
 			for (int i = 0; i < elementCount; ++i) {
-				BookModel.Element element = paragraphData.m_currentPara.get(i);
+				BookParagraph.Element element = paragraphData.m_paragraphElement.get(i);
 				switch (element.m_type) {
-				case ZLTextParagraph.Entry.TEXT:
+				case BookParagraph.PARAGRAPH_ELEMENT_TEXT:
 					processTextEntry(element.m_text, 0, element.m_text.length, hyperlink);
 					break;
-				case ZLTextParagraph.Entry.CONTROL:
+				case BookParagraph.PARAGRAPH_ELEMENT_CONTROL:
 					if (hyperlink != null) {
 						hyperlinkDepth += ((element.m_kind & 0x0100) == 0x0100) ? 1 : -1;
 						if (hyperlinkDepth == 0) {
@@ -59,7 +62,7 @@ public final class ZLTextParagraphCursor {
 					}
 					elements.add(ZLTextControlElement.get((byte)element.m_kind, (element.m_kind & 0x0100) == 0x0100));
 					break;
-				case ZLTextParagraph.Entry.HYPERLINK_CONTROL:
+				case BookParagraph.PARAGRAPH_ELEMENT_HYPERLINK_CONTROL:
 				{
 					final byte hyperlinkType = element.m_hyperlinkType;
 					if (hyperlinkType != 0) {
@@ -71,8 +74,8 @@ public final class ZLTextParagraphCursor {
 					}
 					break;
 				}
-				case ZLTextParagraph.Entry.IMAGE:
-					final ZLImageEntry imageEntry = new ZLImageEntry(myParagraph.myModel.myImageMap, element.m_imageId, (short)element.m_imagevOffset, element.m_isCover);
+				case BookParagraph.PARAGRAPH_ELEMENT_IMAGE:
+					final ZLImageEntry imageEntry = new ZLImageEntry(FBReaderApp.Instance().Model.myImageMap, element.m_imageId, (short)element.m_imagevOffset, element.m_isCover);
 					final ZLImage image = imageEntry.getImage();
 					if (image != null) {
 						ZLImageData data = ZLImageManager.Instance().getImageData(image);
@@ -84,10 +87,10 @@ public final class ZLTextParagraphCursor {
 						}
 					}
 					break;
-				case ZLTextParagraph.Entry.STYLE:
+				case BookParagraph.PARAGRAPH_ELEMENT_STYLE:
 					// TODO: implement
 					break;
-				case ZLTextParagraph.Entry.FIXED_HSPACE:
+				case BookParagraph.PARAGRAPH_ELEMENT_FIXED_HSPACE:
 					elements.add(ZLTextFixedHSpaceElement.getElement((short)element.m_len));
 					break;
 				}
@@ -199,12 +202,12 @@ public final class ZLTextParagraphCursor {
 
 	private static final char[] SPACE_ARRAY = { ' ' };
 	void fill() {
-		ZLTextParagraph	paragraph = Model.getParagraph(Index);
-		switch (paragraph.getKind()) {
-			case ZLTextParagraph.Kind.TEXT_PARAGRAPH:
+		BookParagraph.ParagraphData	paragraph = Model.m_paragraph.getParagraph(Index);
+		switch (paragraph.m_kind) {
+			case BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH:
 				new Processor(paragraph, new LineBreaker("zh"), Model.getMarks(), Index, myElements).fill();
 				break;
-			case ZLTextParagraph.Kind.EMPTY_LINE_PARAGRAPH:
+			case BookParagraph.PARAGRAPH_KIND_EMPTY_LINE_PARAGRAPH:
 				myElements.add(new ZLTextWord(SPACE_ARRAY, 0, 1, 0));
 				break;
 			default:
@@ -222,14 +225,39 @@ public final class ZLTextParagraphCursor {
 
 	public boolean isLast() {
 		if (Model.m_readType == BookModel.READ_TYPE_STREAM || Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-			return (Index + 1 >= Model.m_allParagraphNumber);
+			return (Index + 1 >= Model.m_paragraph.m_allParagraphNumber);
 		} else {
 			return (Index + 1 >= Model.getParagraphNumber());
 		}
 	}
 	
+	public boolean isBeginOfChapter()
+	{
+		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
+			return false;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isEndOfChapter()
+	{
+		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
+			final byte kind = Model.m_paragraph.getParagraphKind(Index);
+			final int fileNum = Model.m_chapter.getChapterIndexByParagraph(Index);
+			final BookChapter chapter = Model.m_chapter;
+			Log.d("isEndOfChapter", String.format("%1d  %2d  %3d       %4d   %5d   %6d", Index, kind, Model.m_paragraph.getTextLength(Index)
+					,Model.m_chapter.getChapterOffset(fileNum), Model.m_chapter.getParagraphCount(fileNum), fileNum));
+			return (Model.m_paragraph.getParagraphKind(Index) == BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
+		} else {
+			return false;
+		}
+	}
+	
 	public boolean isEndOfSection() {
-		return (Model.getParagraphKind(Index) == ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+		final byte kind = Model.m_paragraph.getParagraphKind(Index);
+//		Log.d("isEndOfSection", String.format("%1d  %2d  %3d", kind, Index, BookModel.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH));
+		return (Model.m_paragraph.getParagraphKind(Index) == BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 	}
 
 	int getParagraphLength() {
@@ -252,8 +280,8 @@ public final class ZLTextParagraphCursor {
 		}
 	}
 
-	ZLTextParagraph getParagraph() {
-		return Model.getParagraph(Index);
+	BookParagraph.ParagraphData getParagraph() {
+		return Model.m_paragraph.getParagraph(Index);
 	}
 
 	@Override

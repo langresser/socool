@@ -522,14 +522,14 @@ public class ZLTextView {
 	}
 
 	protected final synchronized int sizeOfTextBeforeParagraph(int paragraphIndex) {
-		return myModel != null ? myModel.getTextLength(paragraphIndex - 1) : 0;
+		return myModel != null ? myModel.m_paragraph.getTextLength(paragraphIndex - 1) : 0;
 	}
 
 	protected final synchronized int sizeOfFullText() {
 		if (myModel == null || myModel.getParagraphNumber() == 0) {
 			return 1;
 		}
-		return myModel.getTextLength(myModel.getParagraphNumber() - 1);
+		return myModel.m_paragraph.getTextLength(myModel.getParagraphNumber() - 1);
 	}
 
 	protected final synchronized int getCurrentCharNumber(PageIndex pageIndex, boolean startNotEndOfPage) {
@@ -543,7 +543,7 @@ public class ZLTextView {
 		} else {
 			int end = sizeOfTextBeforeCursor(page.EndCursor);
 			if (end == -1) {
-				end = myModel.getTextLength(myModel.getParagraphNumber() - 1) - 1;
+				end = myModel.m_paragraph.getTextLength(myModel.getParagraphNumber() - 1) - 1;
 			}
 			return Math.max(1, end);
 		}
@@ -574,11 +574,11 @@ public class ZLTextView {
 			return 0;
 		}
 
-		int sizeOfText = myModel.getTextLength(paragraphIndex - 1);
+		int sizeOfText = myModel.m_paragraph.getTextLength(paragraphIndex - 1);
 		final int paragraphLength = paragraphCursor.getParagraphLength();
 		if (paragraphLength > 0) {
 			sizeOfText +=
-				(myModel.getTextLength(paragraphIndex) - sizeOfText)
+				(myModel.m_paragraph.getTextLength(paragraphIndex) - sizeOfText)
 				* wordCursor.getElementIndex()
 				/ paragraphLength;
 		}
@@ -720,18 +720,10 @@ public class ZLTextView {
 		int textAreaHeight = getTextAreaHeight();
 		page.LineInfos.clear();
 		int counter = 0;
-		// 纯txt显示，只需要在每页开始的时候初始化格式
-		if (!myModel.m_supportRichText) {
-			final ZLTextStyleDecoration decoration =
-					ZLTextStyleCollection.Instance().getDecoration(BookModel.NONE);
-			setTextStyle(decoration.createDecoratedStyle(ZLTextStyleCollection.Instance().getBaseStyle()));
-		}
 
 		do {
 			// 富文本显示每个段落都进行格式初始化
-			if (myModel.m_supportRichText) {
-				resetTextStyle();
-			}
+			resetTextStyle();
 			
 			final ZLTextParagraphCursor paragraphCursor = result.getParagraphCursor();
 			final int wordIndex = result.getElementIndex();
@@ -755,7 +747,7 @@ public class ZLTextView {
 				}
 				counter++;
 			}
-		} while (result.isEndOfParagraph() && result.nextParagraph() && !result.getParagraphCursor().isEndOfSection() && (textAreaHeight >= 0));
+		} while (result.isEndOfParagraph() && result.nextParagraph() && !result.getParagraphCursor().isEndOfChapter() && !result.getParagraphCursor().isEndOfSection() && (textAreaHeight >= 0));
 		
 		// 排版完毕，进行段落初始化
 		resetTextStyle();
@@ -943,9 +935,7 @@ public class ZLTextView {
 			info.SpaceCounter--;
 		}
 
-		if (myModel.m_supportRichText) {
-			setTextStyle(storedStyle);
-		}
+		setTextStyle(storedStyle);
 
 		if (isFirstLine) {
 			info.Height += info.StartStyle.getSpaceBefore();
@@ -1233,11 +1223,6 @@ public class ZLTextView {
 				break;
 			case END_IS_KNOWN:
 				// 先设置好字体，然后才能找到正确的起始字符
-				if (!myModel.m_supportRichText) {
-					final ZLTextStyleDecoration decoration =
-							ZLTextStyleCollection.Instance().getDecoration(BookModel.NONE);
-					setTextStyle(decoration.createDecoratedStyle(ZLTextStyleCollection.Instance().getBaseStyle()));
-				}
 				page.StartCursor.setCursor(findStart(page.EndCursor, SizeUnit.PIXEL_UNIT, getTextAreaHeight()));
 				buildInfos(page, page.StartCursor, page.EndCursor);
 				break;
@@ -1546,9 +1531,6 @@ public class ZLTextView {
 	}
 
 	final void resetTextStyle() {
-		if (!myModel.m_supportRichText) {
-			return;
-		}
 		setTextStyle(ZLTextStyleCollection.Instance().getBaseStyle());
 	}
 

@@ -1,15 +1,11 @@
 package org.geometerplus.fbreader.formats.txt;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
-
 import org.geometerplus.zlibrary.encodings.AutoEncodingCollection;
-import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLImage;
 
 import org.geometerplus.android.fbreader.covers.CoverManager;
@@ -80,7 +76,6 @@ public class TxtChapterPlugin extends FormatPlugin {
 	@Override
 	public void readModel(BookModel model) {
 		model.m_readType = BookModel.READ_TYPE_CHAPTER;
-		model.m_supportRichText = false;
 
 		m_reader.setModel(model);
 		m_reader.readDocument(0);

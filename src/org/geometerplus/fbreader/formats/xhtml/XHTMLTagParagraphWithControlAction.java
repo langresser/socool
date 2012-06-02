@@ -19,7 +19,6 @@
 
 package org.geometerplus.fbreader.formats.xhtml;
 
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.bookmodel.*;
@@ -38,13 +37,13 @@ class XHTMLTagParagraphWithControlAction extends XHTMLTagAction {
 			case BookModel.H1:
 			case BookModel.H2:
 				if (modelReader.m_bookModel.getParagraphNumber() > 1) {
-					modelReader.insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+					modelReader.insertEndParagraph(BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 				}
 				modelReader.myInsideTitle = true;
 				break;
 		}
 		modelReader.pushKind(myControl);
-		modelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		modelReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 	}
 
 	protected void doAtEnd(XHTMLReader reader) {

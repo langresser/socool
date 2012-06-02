@@ -21,11 +21,12 @@ package org.geometerplus.fbreader.formats.xhtml;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.image.ZLFileImage;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.MimeType;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.formats.html.MiscUtil;
+import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
 import org.geometerplus.fbreader.bookmodel.BookReader;
 
 class XHTMLTagImageAction extends XHTMLTagAction {
@@ -44,7 +45,7 @@ class XHTMLTagImageAction extends XHTMLTagAction {
 			final ZLFile imageFile = ZLFile.createFileByPath(reader.myPathPrefix + fileName);
 			if (imageFile != null) {
 				final BookReader modelReader = reader.getModelReader();
-				boolean flag = modelReader.paragraphIsOpen() && !modelReader.paragraphIsNonEmpty();
+				boolean flag = modelReader.myTextParagraphExists && !modelReader.myTextParagraphIsNonEmpty;
 				if (flag) {
 					modelReader.endParagraph();
 				}
@@ -52,7 +53,7 @@ class XHTMLTagImageAction extends XHTMLTagAction {
 				modelReader.addImageReference(imageName, (short)0, false);
 				modelReader.addImage(imageName, new ZLFileImage(MimeType.IMAGE_AUTO, imageFile));
 				if (flag) {
-					modelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+					modelReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				}
 			}
 		}

@@ -19,7 +19,6 @@
 
 package org.geometerplus.fbreader.formats.xhtml;
 
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
 import org.geometerplus.fbreader.bookmodel.*;
@@ -28,7 +27,7 @@ class XHTMLTagPreAction extends XHTMLTagAction {
 	protected void doAtStart(XHTMLReader reader, ZLStringMap xmlattributes) {
 		reader.myPreformatted = true;
 		final BookReader modelReader = reader.getModelReader();
-		modelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		modelReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 		modelReader.addControl(BookModel.CODE, true);
 	}
 

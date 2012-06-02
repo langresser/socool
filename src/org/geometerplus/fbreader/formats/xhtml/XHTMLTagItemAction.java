@@ -18,10 +18,9 @@
  */
 
 package org.geometerplus.fbreader.formats.xhtml;
-
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
 import org.geometerplus.fbreader.bookmodel.BookReader;
 
 class XHTMLTagItemAction extends XHTMLTagAction {
@@ -31,7 +30,7 @@ class XHTMLTagItemAction extends XHTMLTagAction {
 		final BookReader modelReader = reader.getModelReader();
 		modelReader.endParagraph();
 		// TODO: increase left indent
-		modelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		modelReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 		// TODO: replace bullet sign by number inside OL tag
 		modelReader.addData(BULLET);
 	}

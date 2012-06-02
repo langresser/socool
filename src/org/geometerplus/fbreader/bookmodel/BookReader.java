@@ -24,14 +24,13 @@ import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 
 import org.geometerplus.zlibrary.image.ZLImage;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 
 public class BookReader {
 	public BookModel m_bookModel;
 
-	private boolean myTextParagraphExists = false;
-	private boolean myTextParagraphIsNonEmpty = false;
+	public boolean myTextParagraphExists = false;
+	public boolean myTextParagraphIsNonEmpty = false;
 
 	private char[] myTextBuffer = new char[4096];
 	private int myTextBufferLength;
@@ -66,7 +65,7 @@ public class BookReader {
 
 	private final void flushTextBufferToParagraph() {
 		if (myTextBufferLength > 0) {
-			m_bookModel.addText(myTextBuffer, 0, myTextBufferLength);
+			m_bookModel.m_paragraph.addText(myTextBuffer, 0, myTextBufferLength);
 			myTextBufferLength = 0;
 			if (myByteDecoder != null) {
 				myByteDecoder.reset();
@@ -77,7 +76,7 @@ public class BookReader {
 	public final void addControl(byte kind, boolean start) {
 		if (myTextParagraphExists) {
 			flushTextBufferToParagraph();
-			m_bookModel.addControl(kind, start);
+			m_bookModel.m_paragraph.addControl(kind, start);
 		}
 		if (!start && myHyperlinkReference.length() != 0 && kind == myHyperlinkKind) {
 			myHyperlinkReference = "";
@@ -101,22 +100,19 @@ public class BookReader {
 		return false;
 	}
 
-	public final void beginParagraph(byte kind) {
+	public final void beginParagraph(int kind) {
 		endParagraph();
 		final BookModel textModel = m_bookModel;
 		if (textModel != null) {
-			textModel.createParagraph(kind);
+			textModel.m_paragraph.createParagraph((byte)kind);
 			
-			// 只有富文本显示需要这些控制
-			if (m_bookModel.m_supportRichText) {
-				final byte[] stack = myKindStack;
-				final int size = myKindStackSize;
-				for (int i = 0; i < size; ++i) {
-					textModel.addControl(stack[i], true);
-				}
-				if (myHyperlinkReference.length() != 0) {
-					textModel.addHyperlinkControl(myHyperlinkKind, hyperlinkType(myHyperlinkKind), myHyperlinkReference);
-				}
+			final byte[] stack = myKindStack;
+			final int size = myKindStackSize;
+			for (int i = 0; i < size; ++i) {
+				textModel.m_paragraph.addControl(stack[i], true);
+			}
+			if (myHyperlinkReference.length() != 0) {
+				textModel.m_paragraph.addHyperlinkControl(myHyperlinkKind, hyperlinkType(myHyperlinkKind), myHyperlinkReference);
 			}
 			
 			myTextParagraphExists = true;
@@ -131,11 +127,11 @@ public class BookReader {
 		}
 	}
 
-	public final void insertEndParagraph(byte kind) {
+	public final void insertEndParagraph(int kind) {
 		if (m_bookModel != null && mySectionContainsRegularContents) {
 			int size = m_bookModel.getParagraphNumber();
-			if (size > 0 && m_bookModel.getParagraphKind(size - 1) != kind) {
-				m_bookModel.createParagraph(kind);
+			if (size > 0 && m_bookModel.m_paragraph.getParagraphKind(size - 1) != kind) {
+				m_bookModel.m_paragraph.createParagraph((byte)kind);
 				mySectionContainsRegularContents = false;
 			}
 		}
@@ -162,7 +158,7 @@ public class BookReader {
 		myTextParagraphIsNonEmpty = true;
 
 		if (direct && myTextBufferLength == 0 && !myInsideTitle) {
-			m_bookModel.addText(data, offset, length);
+			m_bookModel.m_paragraph.addText(data, offset, length);
 		} else {
 			final int oldLength = myTextBufferLength;
 			final int newLength = oldLength + length;
@@ -238,7 +234,7 @@ public class BookReader {
 	public final void addHyperlinkControl(byte kind, String label) {
 		if (myTextParagraphExists) {
 			flushTextBufferToParagraph();
-			m_bookModel.addHyperlinkControl(kind, hyperlinkType(kind), label);
+			m_bookModel.m_paragraph.addHyperlinkControl(kind, hyperlinkType(kind), label);
 		}
 		myHyperlinkKind = kind;
 		myHyperlinkReference = label;
@@ -307,14 +303,6 @@ public class BookReader {
 		myCurrentContentsTree = tree.Parent;
 	}
 
-	public final boolean paragraphIsOpen() {
-		return myTextParagraphExists;
-	}
-
-	public boolean paragraphIsNonEmpty() {
-		return myTextParagraphIsNonEmpty;
-	}
-
 	public final boolean contentsParagraphIsOpen() {
 		return myCurrentContentsTree.Level > 0;
 	}
@@ -332,12 +320,12 @@ public class BookReader {
 			mySectionContainsRegularContents = true;
 			if (myTextParagraphExists) {
 				flushTextBufferToParagraph();
-				m_bookModel.addImage(ref, vOffset, isCover);
+				m_bookModel.m_paragraph.addImage(ref, vOffset, isCover);
 			} else {
-				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
-				m_bookModel.addControl(BookModel.IMAGE, true);
-				m_bookModel.addImage(ref, vOffset, isCover);
-				m_bookModel.addControl(BookModel.IMAGE, false);
+				beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
+				m_bookModel.m_paragraph.addControl(BookModel.IMAGE, true);
+				m_bookModel.m_paragraph.addImage(ref, vOffset, isCover);
+				m_bookModel.m_paragraph.addControl(BookModel.IMAGE, false);
 				endParagraph();
 			}
 		}
@@ -349,7 +337,7 @@ public class BookReader {
 
 	public final void addFixedHSpace(short length) {
 		if (myTextParagraphExists) {
-			m_bookModel.addFixedHSpace(length);
+			m_bookModel.m_paragraph.addFixedHSpace(length);
 		}
 	}
 }

@@ -1,19 +1,14 @@
 package org.geometerplus.fbreader.formats.txt;
 
-import java.util.*;
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
 import org.geometerplus.fbreader.bookmodel.BookReader;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 
 import android.util.Log;
+
 
 public final class TxtChapterReader extends BookReader {
 	public final static int BREAK_PARAGRAPH_AT_NEW_LINE = 1;
@@ -48,12 +43,13 @@ public final class TxtChapterReader extends BookReader {
 			int paraCount = 0;
 			while ((line = reader.readLine()) != null) {
 				String[] infos = line.split("@@");
-				m_bookModel.m_chapter.addChapterData(infos[0], paraCount, Integer.parseInt(infos[1]), Integer.parseInt(infos[2]), infos[3]);
-				paraCount += Integer.parseInt(infos[1]);
+				final int count = Integer.parseInt(infos[1]) + 1;
+				m_bookModel.m_chapter.addChapterData(infos[0], paraCount, count, Integer.parseInt(infos[2]), infos[3]);
+				paraCount += count;
 			}
 			input.close();
 			
-			m_bookModel.m_allParagraphNumber = paraCount;
+			m_bookModel.m_paragraph.m_allParagraphNumber = paraCount;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -122,17 +118,19 @@ public final class TxtChapterReader extends BookReader {
 					}
 
 					parBegin = i + 1;
-					newLineHandler();
+					
+					// 最后一个回车不需要重启段落
+					if (i == maxLength - 1) {
+						endParagraph();
+					} else {
+						newLineHandler();
+					}
 				}
 			}
 			
 			if (parBegin != maxLength) {
 				characterDataHandler(text, parBegin, maxLength - parBegin);
 			}
-
-
-			
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -143,14 +141,14 @@ public final class TxtChapterReader extends BookReader {
 	public void readDocument(int paraNumber)
 	{
 //		Log.d("readDocument", "read:" + paragraph);
-		m_bookModel.clearParagraphData();
+		m_bookModel.m_paragraph.clearParagraphData();
 		int fileNum = m_bookModel.m_chapter.getChapterIndexByParagraph(paraNumber);
 		
 		if (fileNum > 1) {
 			readChapter(fileNum - 1);
-			m_bookModel.m_beginParagraph = m_bookModel.m_chapter.getChapterOffset(fileNum - 1);
+			m_bookModel.m_paragraph.m_beginParagraph = m_bookModel.m_chapter.getChapterOffset(fileNum - 1);
 		} else {
-			m_bookModel.m_beginParagraph = 0;
+			m_bookModel.m_paragraph.m_beginParagraph = 0;
 		}
 
 		readChapter(fileNum);
@@ -166,7 +164,7 @@ public final class TxtChapterReader extends BookReader {
 	protected void startDocumentHandler()
 	{
 		pushKind(BookModel.REGULAR);
-		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 		myInsideTitle = true;
 	}
 
@@ -174,11 +172,14 @@ public final class TxtChapterReader extends BookReader {
 	{
 		popKind();
 		endParagraph();
-//		insertEndParagraph(ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH);
+
+		m_bookModel.m_paragraph.insertEndOfChapter();
 	}
 	
 	protected boolean characterDataHandler(char[] ch, int start, int length)
 	{
+		String text = new String(ch, start, length);
+		Log.d("characterDataHandler", String.format(" %1d  %2d   %3s", start, length, text));
 		addData(ch, start, length, false);
 		return true;
 	}
@@ -186,7 +187,7 @@ public final class TxtChapterReader extends BookReader {
 	protected boolean newLineHandler()
 	{
 		endParagraph();
-		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 
 		return true;
 	}

@@ -9,8 +9,8 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
 import org.geometerplus.fbreader.bookmodel.BookReader;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 
 import android.util.Log;
 
@@ -145,7 +145,7 @@ public final class TxtReader extends BookReader {
 			currentOffset += readSize;
 		} while (currentOffset < size);
 
-		m_bookModel.m_allParagraphNumber = paraCount;
+		m_bookModel.m_paragraph.m_allParagraphNumber = paraCount;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -160,9 +160,9 @@ public final class TxtReader extends BookReader {
 	public int getParagraphByOffset(int offset)
 	{
 		final int size = m_paraOffset.size();
-		final int lastOffset = m_paraOffset.get(m_bookModel.m_allParagraphNumber - 1);
+		final int lastOffset = m_paraOffset.get(m_bookModel.m_paragraph.m_allParagraphNumber - 1);
 		if (offset >= lastOffset) {
-			return m_bookModel.m_allParagraphNumber - 1;
+			return m_bookModel.m_paragraph.m_allParagraphNumber - 1;
 		}
 
 		for (int i = 0; i < size; ++i) {
@@ -350,7 +350,7 @@ public final class TxtReader extends BookReader {
 		}
 
 
-		m_bookModel.m_beginParagraph = getParagraphByOffset(ii + readOffset);
+		m_bookModel.m_paragraph.m_beginParagraph = getParagraphByOffset(ii + readOffset);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -361,9 +361,9 @@ public final class TxtReader extends BookReader {
 
 	protected void startDocumentHandler()
 	{
-		m_bookModel.clearParagraphData();
+		m_bookModel.m_paragraph.clearParagraphData();
 		pushKind(BookModel.REGULAR);
-		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 		myInsideTitle = true;
 	}
 
@@ -382,7 +382,7 @@ public final class TxtReader extends BookReader {
 	protected boolean newLineHandler()
 	{
 		endParagraph();
-		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 
 		return true;
 	}

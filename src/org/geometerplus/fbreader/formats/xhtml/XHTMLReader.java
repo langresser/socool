@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
 import org.geometerplus.zlibrary.xml.ZLXMLReaderAdapter;
@@ -226,7 +225,7 @@ public class XHTMLReader extends ZLXMLReaderAdapter {
 			if ((first == '\r') || (first == '\n')) {
 				myModelReader.addControl(BookModel.CODE, false);
 				myModelReader.endParagraph();
-				myModelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				myModelReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				myModelReader.addControl(BookModel.CODE, true);
 			}
 			int spaceCounter = 0;
@@ -251,8 +250,8 @@ cycle:
 			len -= spaceCounter;
 		}
 		if (len > 0) {
-			if (myInsideBody && !myModelReader.paragraphIsOpen()) {
-				myModelReader.beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+			if (myInsideBody && !myModelReader.myTextParagraphExists) {
+				myModelReader.beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 			}
 			myModelReader.addData(data, start, len, false);
 		}

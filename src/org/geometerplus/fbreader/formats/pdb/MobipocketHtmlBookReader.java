@@ -27,12 +27,12 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.html.ZLByteBuffer;
 import org.geometerplus.zlibrary.html.ZLHtmlAttributeMap;
 import org.geometerplus.zlibrary.image.ZLFileImage;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.MimeType;
 
 import org.geometerplus.fbreader.formats.html.HtmlReader;
 import org.geometerplus.fbreader.formats.html.HtmlTag;
 import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
 
 public class MobipocketHtmlBookReader extends HtmlReader {
 	private final CharsetDecoder myTocDecoder;
@@ -65,7 +65,7 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 	@Override
 	public void startElementHandler(byte tag, int offset, ZLHtmlAttributeMap attributes) {
 		final int paragraphIndex = m_bookModel.getParagraphNumber();
-		myPositionToParagraph.put(offset, paragraphIsOpen() ? paragraphIndex - 1 : paragraphIndex);
+		myPositionToParagraph.put(offset, myTextParagraphExists ? paragraphIndex - 1 : paragraphIndex);
 		switch (tag) {
 			case HtmlTag.IMG:
 			{
@@ -73,10 +73,10 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 				if (recIndex != null) {
 					try {
 						final int index = Integer.parseInt(recIndex.toString());
-						if (paragraphIsOpen()) {
+						if (myTextParagraphExists) {
 							endParagraph();
 							addImageReference("" + index, false);
-							beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+							beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 						} else {
 							addImageReference("" + index, false);
 						}

@@ -24,8 +24,8 @@ import java.io.*;
 import java.nio.charset.*;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookParagraph;
 import org.geometerplus.fbreader.bookmodel.BookReader;
-import org.geometerplus.zlibrary.text.ZLTextParagraph;
 import org.geometerplus.zlibrary.util.ZLArrayUtils;
 import org.geometerplus.zlibrary.xml.ZLXMLProcessor;
 
@@ -166,7 +166,7 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 	
 	private void startNewParagraph() {
 		endParagraph();
-		beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 	}
 	
 	public final void endElementHandler(String tagName) {
@@ -242,7 +242,7 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 
 			case HtmlTag.BODY:
 				pushKind(BookModel.REGULAR);
-				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				break;
 
 			case HtmlTag.P:
@@ -251,7 +251,7 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 				} else if (myInsideTitle) {
 					addContentsData(SPACE);
 				}
-				beginParagraph(ZLTextParagraph.Kind.TEXT_PARAGRAPH);
+				beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 				break;
 
 			case HtmlTag.A:{
