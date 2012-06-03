@@ -15,16 +15,14 @@ import android.util.Log;
 public final class ZLTextParagraphCursor {
 	private static final class Processor {
 		private final BookParagraph.ParagraphData myParagraph;
-		private final LineBreaker myLineBreaker;
 		private final ArrayList<ZLTextElement> myElements;
 		private int myOffset;
 		private int myFirstMark;
 		private int myLastMark;
 		private final List<ZLTextMark> myMarks;
 
-		private Processor(BookParagraph.ParagraphData paragraph, LineBreaker lineBreaker, List<ZLTextMark> marks, int paragraphIndex, ArrayList<ZLTextElement> elements) {
+		private Processor(BookParagraph.ParagraphData paragraph, List<ZLTextMark> marks, int paragraphIndex, ArrayList<ZLTextElement> elements) {
 			myParagraph = paragraph;
-			myLineBreaker = lineBreaker;
 			myElements = elements;
 			myMarks = marks;
 			final ZLTextMark mark = new ZLTextMark(paragraphIndex, 0, 0);
@@ -112,7 +110,7 @@ public final class ZLTextParagraphCursor {
 //			String text = new String(data, offset, length);
 //			Log.d("processTextEntry", text);
 			final byte[] breaks = ourBreaks;
-			myLineBreaker.setLineBreaks(data, offset, length, breaks);
+			LineBreaker.setLineBreaks(data, offset, length, breaks);
 			
 			final ZLTextElement hSpace = ZLTextElement.HSpace;
 			final ArrayList<ZLTextElement> elements = myElements;
@@ -205,7 +203,7 @@ public final class ZLTextParagraphCursor {
 		BookParagraph.ParagraphData	paragraph = Model.m_paragraph.getParagraph(Index);
 		switch (paragraph.m_kind) {
 			case BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH:
-				new Processor(paragraph, new LineBreaker("zh"), Model.getMarks(), Index, myElements).fill();
+				new Processor(paragraph, Model.getMarks(), Index, myElements).fill();
 				break;
 			case BookParagraph.PARAGRAPH_KIND_EMPTY_LINE_PARAGRAPH:
 				myElements.add(new ZLTextWord(SPACE_ARRAY, 0, 1, 0));

@@ -43,7 +43,6 @@ import org.geometerplus.zlibrary.options.ZLColorOption;
 import org.geometerplus.zlibrary.options.ZLEnumOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
-import org.geometerplus.zlibrary.text.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.ZLTextPosition;
 import org.geometerplus.zlibrary.text.ZLTextView;
 import org.geometerplus.zlibrary.text.ZLTextWordCursor;
@@ -277,11 +276,7 @@ public final class FBReaderApp {
 
 	public int getLeftMargin() {
 		if (LeftMarginOption == null) {
-			final int dpi = getDisplayDPI();
-			final int x = getPixelWidth();
-			final int y = getPixelHeight();
-			final int horMargin = Math.min(dpi / 5, Math.min(x, y) / 30);
-			LeftMarginOption = new ZLIntegerRangeOption("Options", "LeftMargin", 0, 100, horMargin);
+			LeftMarginOption = new ZLIntegerRangeOption("Options", "LeftMargin", 0, 100, 15);
 		}
 
 		return LeftMarginOption.getValue();
@@ -289,11 +284,7 @@ public final class FBReaderApp {
 
 	public int getRightMargin() {
 		if (RightMarginOption == null) {
-			final int dpi = getDisplayDPI();
-			final int x = getPixelWidth();
-			final int y = getPixelHeight();
-			final int horMargin = Math.min(dpi / 5, Math.min(x, y) / 30);
-			RightMarginOption = new ZLIntegerRangeOption("Options", "RightMargin", 0, 100, horMargin);
+			RightMarginOption = new ZLIntegerRangeOption("Options", "RightMargin", 0, 100, 15);
 		}
 		return RightMarginOption.getValue();
 	}
@@ -345,7 +336,6 @@ public final class FBReaderApp {
 			System.gc();
 
 			Model = BookModel.createModel(book);
-			ZLTextHyphenator.Instance().load("zh");
 			BookTextView.setModel(Model);
 			final ZLTextPosition position = book.getStoredPosition();
 			if (position != null) {
@@ -1232,17 +1222,17 @@ public final class FBReaderApp {
 	public ZLResourceFile getHelpFile() {
 		final Locale locale = Locale.getDefault();
 
-		ZLResourceFile file = createResourceFile("data/help/MiniHelp." + locale.getLanguage() + "_" + locale.getCountry() + ".fb2");
+		ZLResourceFile file = createResourceFile("book/help/MiniHelp." + locale.getLanguage() + "_" + locale.getCountry() + ".fb2");
 		if (file.exists()) {
 			return file;
 		}
 
-		file = createResourceFile("data/help/MiniHelp." + locale.getLanguage() + ".fb2");
+		file = createResourceFile("book/help/MiniHelp." + locale.getLanguage() + ".fb2");
 		if (file.exists()) {
 			return file;
 		}
 
-		return createResourceFile("data/help/MiniHelp.en.fb2");
+		return createResourceFile("book/help/MiniHelp.en.fb2");
 	}
 
 	private List<ZLPhysicalFile> collectPhysicalFiles() {

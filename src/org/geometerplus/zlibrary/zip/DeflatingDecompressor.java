@@ -3,10 +3,6 @@ package org.geometerplus.zlibrary.zip;
 import java.io.*;
 
 class DeflatingDecompressor extends Decompressor {
-	static {
-		System.loadLibrary("DeflatingDecompressor-v3");
-	}
-
 	// common variables
 	private MyBufferedInputStream myStream;
 	private int myCompressedAvailable;
@@ -160,7 +156,8 @@ class DeflatingDecompressor extends Decompressor {
 		}
 	}
 
-	private native int startInflating();
-	private native void endInflating(int inflatorId);
-	private native long inflate(int inflatorId, byte[] in, int inOffset, int inLength, byte[] out);
+	// TODO:imple it
+	private int startInflating() {return 0;};
+	private void endInflating(int inflatorId) {};
+	private long inflate(int inflatorId, byte[] in, int inOffset, int inLength, byte[] out) {return 0;};
 }

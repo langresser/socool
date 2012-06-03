@@ -28,8 +28,6 @@ public abstract class ZLLanguageUtil {
 	public static final String OTHER_LANGUAGE_CODE = "other";
 	public static final String MULTI_LANGUAGE_CODE = "multi";
 
-	private static ArrayList<String> ourLanguageCodes = new ArrayList<String>();
-
 	private ZLLanguageUtil() {
 	}
 	
@@ -64,34 +62,8 @@ public abstract class ZLLanguageUtil {
 		return Locale.getDefault().getLanguage();
 	}
 
-	public static List<String> languageCodes() {
-		if (ourLanguageCodes.isEmpty()) {
-			TreeSet<String> codes = new TreeSet<String>();
-			for (ZLFile file : patternsFile().children()) {
-				String name = file.getShortName();
-				final int index = name.indexOf("_");
-				if (index != -1) {
-					String str = name.substring(0, index);
-					if (!codes.contains(str)) {
-					    codes.add(str);
-					}
-				}
-			}
-			codes.add("id");
-			codes.add("de-traditional");
-
-			ourLanguageCodes.addAll(codes);
-		}
-
-		return Collections.unmodifiableList(ourLanguageCodes);
-	}
-	
 	public static String languageName(String code) {
 		return ZLResource.resource("language").getResource(code).getValue();
-	}
-
-	public static ZLFile patternsFile() {
-		return FBReaderApp.Instance().createResourceFile("languagePatterns");
 	}
 
 	public static String languageByIntCode(int languageCode, int subLanguageCode) {

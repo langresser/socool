@@ -33,7 +33,6 @@ import android.widget.RelativeLayout;
 import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
-import org.geometerplus.zlibrary.text.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.ZLTextView;
 import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
@@ -430,7 +429,6 @@ public final class SCReaderActivity extends Activity {
 					final Book book = model.Book;
 					if (book != null) {
 						book.reloadInfoFromDatabase();
-						ZLTextHyphenator.Instance().load("zh");
 					}
 				}
 				fbReader.clearTextCaches();

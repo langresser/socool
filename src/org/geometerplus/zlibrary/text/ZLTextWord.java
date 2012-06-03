@@ -21,6 +21,8 @@ package org.geometerplus.zlibrary.text;
 
 import org.geometerplus.zlibrary.view.ZLPaintContext;
 
+import android.util.Log;
+
 public final class ZLTextWord extends ZLTextElement { 
 	public final char[] Data;
 	public final int Offset;
@@ -94,6 +96,9 @@ public final class ZLTextWord extends ZLTextElement {
 			width = context.getStringWidth(Data, Offset, Length);	
 			myWidth = width;
 		}
+		
+//		String text = new String(Data, Offset, Length);
+//		Log.d("word width", String.format("word:%1s   width:%d", text, myWidth));
 		return width;
 	}
 

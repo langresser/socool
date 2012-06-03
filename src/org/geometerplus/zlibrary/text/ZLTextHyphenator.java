@@ -19,33 +19,26 @@
 
 package org.geometerplus.zlibrary.text;
 
-import java.util.List;
-import org.geometerplus.zlibrary.util.*;
-
 import org.geometerplus.zlibrary.util.ZLCharacterUtil;
 
-public abstract class ZLTextHyphenator {
+public class ZLTextHyphenator {
 	private static ZLTextHyphenator ourInstance;
 	
 	public static ZLTextHyphenator Instance() {
 		if (ourInstance == null) {
-			ourInstance = new ZLTextTeXHyphenator();
+			ourInstance = new ZLTextHyphenator();
 		}
 		return ourInstance;
 	}
 
 	public static void deleteInstance() {
 		if (ourInstance != null) {
-			ourInstance.unload();
 			ourInstance = null;
 		}
 	}
 
 	protected ZLTextHyphenator() {
 	}
-
-	public abstract void load(final String languageCode);
-	public abstract void unload();
 
 	public ZLTextHyphenationInfo getInfo(final ZLTextWord word) {
 		final int len = word.Length;
@@ -66,7 +59,6 @@ public abstract class ZLTextHyphenator {
 
 		final ZLTextHyphenationInfo info = new ZLTextHyphenationInfo(len + 2);
 		final boolean[] mask = info.Mask;
-		hyphenate(pattern, mask, len + 2);
 		for (int i = 0, j = word.Offset - 1; i <= len; ++i, ++j) {
 			if ((i < 2) || (i > len - 2)) {
 				mask[i] = false;
@@ -95,6 +87,4 @@ public abstract class ZLTextHyphenator {
 
 		return info;
 	}
-
-	protected abstract void hyphenate(char[] stringToHyphenate, boolean[] mask, int length);
 }

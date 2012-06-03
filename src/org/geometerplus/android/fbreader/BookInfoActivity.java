@@ -60,7 +60,7 @@ public class BookInfoActivity extends Activity {
 
 		m_currentBookPath = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
 		if (m_currentBookPath == null) {
-			m_currentBookPath = "data/wxkb";
+			m_currentBookPath = "book/wxkb";
 		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

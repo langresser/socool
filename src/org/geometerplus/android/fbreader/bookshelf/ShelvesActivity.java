@@ -60,9 +60,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
         
         m_bookList = new ArrayList<Book>();
         
-        Book book1 = Book.getByPath("data/wxkb");
-        book1.myTitle = "ÎÞÏÞ¿Ö²À ";
-        		
+        Book book1 = Book.getByPath("book/wxkb");		
 
         m_bookList.add(book1);
 
