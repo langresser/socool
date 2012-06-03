@@ -242,7 +242,8 @@
 			<node name="previousTOCSection" value="Go to Previous TOC Item"/>
 			<node name="undo" value="Go Back"/>
 			<node name="redo" value="Go Forward"/>
-		</node>
+        </node>
+        <node name="showfont" value="font"/>
 		<node name="shareBook" value="Share book"/>
 		<node name="search" value="Search"/>
 		<node name="rotate" value="Rotate screen"/>

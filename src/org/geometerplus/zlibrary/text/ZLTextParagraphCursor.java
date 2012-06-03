@@ -241,11 +241,11 @@ public final class ZLTextParagraphCursor {
 	public boolean isEndOfChapter()
 	{
 		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-			final byte kind = Model.m_paragraph.getParagraphKind(Index);
-			final int fileNum = Model.m_chapter.getChapterIndexByParagraph(Index);
-			final BookChapter chapter = Model.m_chapter;
-			Log.d("isEndOfChapter", String.format("%1d  %2d  %3d       %4d   %5d   %6d", Index, kind, Model.m_paragraph.getTextLength(Index)
-					,Model.m_chapter.getChapterOffset(fileNum), Model.m_chapter.getParagraphCount(fileNum), fileNum));
+//			final byte kind = Model.m_paragraph.getParagraphKind(Index);
+//			final int fileNum = Model.m_chapter.getChapterIndexByParagraph(Index);
+//			final BookChapter chapter = Model.m_chapter;
+//			Log.d("isEndOfChapter", String.format("%1d  %2d  %3d       %4d   %5d   %6d", Index, kind, Model.m_paragraph.getTextLength(Index)
+//					,Model.m_chapter.getChapterOffset(fileNum), Model.m_chapter.getParagraphCount(fileNum), fileNum));
 			return (Model.m_paragraph.getParagraphKind(Index) == BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 		} else {
 			return false;

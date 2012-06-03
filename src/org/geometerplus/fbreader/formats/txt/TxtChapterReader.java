@@ -44,7 +44,7 @@ public final class TxtChapterReader extends BookReader {
 			while ((line = reader.readLine()) != null) {
 				String[] infos = line.split("@@");
 				final int count = Integer.parseInt(infos[1]) + 1;
-				m_bookModel.m_chapter.addChapterData(infos[0], paraCount, count, Integer.parseInt(infos[2]), infos[3]);
+				m_bookModel.m_chapter.addChapterData(infos[0], paraCount, count, Integer.parseInt(infos[2]), infos[3], infos[4]);
 				paraCount += count;
 			}
 			input.close();
@@ -144,7 +144,7 @@ public final class TxtChapterReader extends BookReader {
 		m_bookModel.m_paragraph.clearParagraphData();
 		int fileNum = m_bookModel.m_chapter.getChapterIndexByParagraph(paraNumber);
 		
-		if (fileNum > 1) {
+		if (fileNum >= 1) {
 			readChapter(fileNum - 1);
 			m_bookModel.m_paragraph.m_beginParagraph = m_bookModel.m_chapter.getChapterOffset(fileNum - 1);
 		} else {
@@ -154,7 +154,7 @@ public final class TxtChapterReader extends BookReader {
 		readChapter(fileNum);
 
 		final int lastFile = m_bookModel.m_chapter.getChapterCount();
-		if (fileNum < lastFile) {
+		if (fileNum < lastFile - 1) {
 			readChapter(fileNum + 1);
 		}
 	
@@ -179,8 +179,8 @@ public final class TxtChapterReader extends BookReader {
 	
 	protected boolean characterDataHandler(char[] ch, int start, int length)
 	{
-		String text = new String(ch, start, length);
-		Log.d("characterDataHandler", String.format(" %1d  %2d   %3s", start, length, text));
+//		String text = new String(ch, start, length);
+//		Log.d("characterDataHandler", String.format(" %1d  %2d   %3s", start, length, text));
 		addData(ch, start, length, false);
 		return true;
 	}

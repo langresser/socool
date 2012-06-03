@@ -11,14 +11,16 @@ public class BookChapter {
 		public int m_paragraphCount;
 		public int m_textSize;
 		public String m_title;
+		public String m_juanName;
 		
-		public BookChapterData(String fileName, int startOffset, int paragraphCount, int textSize, String title)
+		public BookChapterData(String fileName, int startOffset, int paragraphCount, int textSize, String title, String juanName)
 		{
 			m_fileName = fileName;
 			m_startOffset = startOffset;
 			m_paragraphCount = paragraphCount;
 			m_textSize = textSize;
 			m_title = title;
+			m_juanName = juanName;
 		}
 	}
 	
@@ -27,9 +29,9 @@ public class BookChapter {
 		
 	}
 	
-	public void addChapterData(String fileName, int startOffset, int paragraphCount, int textSize, String title)
+	public void addChapterData(String fileName, int startOffset, int paragraphCount, int textSize, String title, String juanName)
 	{
-		m_chapterData.add(new BookChapterData(fileName, startOffset, paragraphCount, textSize, title));
+		m_chapterData.add(new BookChapterData(fileName, startOffset, paragraphCount, textSize, title, juanName));
 	}
 	
 	public int getChapterCount()
@@ -39,32 +41,32 @@ public class BookChapter {
 	
 	public int getChapterOffset(int fileNum)
 	{
-		if (fileNum <= 0 || fileNum > m_chapterData.size()) {
+		if (fileNum < 0 || fileNum >= m_chapterData.size()) {
 			return 0;
 		}
 
-		return m_chapterData.get(fileNum - 1).m_startOffset;
+		return m_chapterData.get(fileNum).m_startOffset;
 	}
 	
 	public int getParagraphCount(int fileNum)
 	{
-		if (fileNum <= 0 || fileNum > m_chapterData.size()) {
+		if (fileNum < 0 || fileNum >= m_chapterData.size()) {
 			return 0;
 		}
 
-		return m_chapterData.get(fileNum - 1).m_paragraphCount;
+		return m_chapterData.get(fileNum).m_paragraphCount;
 	}
 	
 	public int getChapterIndexByParagraph(int para)
 	{
 		if (para <= 1) {
-			return 1;
+			return 0;
 		}
 		
 		final int amount = m_chapterData.size();
 		int lastPara = m_chapterData.get(amount - 1).m_startOffset;
 		if (para >= lastPara) {
-			return amount;
+			return amount - 1;
 		}
 
 		int low = 0;
@@ -75,7 +77,7 @@ public class BookChapter {
 			mid = low + (high - low) / 2;
 			final int midOffset = m_chapterData.get(mid).m_startOffset;
 			if (midOffset == para) {
-				return mid + 1;
+				return mid;
 			} else if (midOffset > para) {
 				high = mid - 1;
 			} else {
@@ -87,11 +89,11 @@ public class BookChapter {
 			final int loffset = m_chapterData.get(high).m_startOffset;
 			final int roffset = m_chapterData.get(low).m_startOffset;
 			if (para >= loffset && para < roffset) {
-				return high + 1;
+				return high;
 			}
 		}
 		
-		return 1;
+		return 0;
 	}
 	
 	public Vector<BookChapterData> m_chapterData = new Vector<BookChapterData>();

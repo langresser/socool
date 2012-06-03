@@ -160,12 +160,10 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.SHOW_BOOK_INFO, new ShowBookInfoAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_TOC, new ShowTOCAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_BOOKMARKS, new ShowBookmarksAction(this, fbReader));
-		fbReader.addAction(ActionCode.SHOW_NETWORK_LIBRARY, new ShowNetworkLibraryAction(this, fbReader));
 		
 		fbReader.addAction(ActionCode.SHOW_MENU, new ShowMenuAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_NAVIGATION, new ShowNavigationAction(this, fbReader));
 		fbReader.addAction(ActionCode.SEARCH, new SearchAction(this, fbReader));
-		fbReader.addAction(ActionCode.SHARE_BOOK, new ShareBookAction(this, fbReader));
 
 		fbReader.addAction(ActionCode.SELECTION_SHOW_PANEL, new SelectionShowPanelAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_HIDE_PANEL, new SelectionHidePanelAction(this, fbReader));
@@ -176,16 +174,10 @@ public final class SCReaderActivity extends Activity {
 
 		fbReader.addAction(ActionCode.PROCESS_HYPERLINK, new ProcessHyperlinkAction(this, fbReader));
 
-		fbReader.addAction(ActionCode.SHOW_CANCEL_MENU, new ShowCancelMenuAction(this, fbReader));
+		fbReader.addAction(ActionCode.SHOW_FONT, new ShowFontAction(this, fbReader));
 
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_SYSTEM));
-		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_SENSOR));
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_PORTRAIT));
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE));
-		if (FBReaderApp.Instance().supportsAllOrientations()) {
-			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
-			fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
-		}
 	}
 	
 	public void createBookView()
@@ -476,22 +468,17 @@ public final class SCReaderActivity extends Activity {
 		super.onCreateOptionsMenu(menu);
 		addMenuItem(menu, ActionCode.SHOW_TOC, R.drawable.ic_menu_toc);
 		addMenuItem(menu, ActionCode.SHOW_BOOKMARKS, R.drawable.ic_menu_bookmarks);
+		addMenuItem(menu, ActionCode.SHOW_FONT, R.drawable.cartoon_fontsize);
 		addMenuItem(menu, ActionCode.SWITCH_TO_NIGHT_PROFILE, R.drawable.ic_menu_night);
 		addMenuItem(menu, ActionCode.SWITCH_TO_DAY_PROFILE, R.drawable.ic_menu_day);
 //		addMenuItem(menu, ActionCode.SEARCH, R.drawable.ic_menu_search);
-		addMenuItem(menu, ActionCode.SHOW_PREFERENCES);
-		final Menu subMenu = addSubMenu(menu, "screenOrientation");
-		addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_SYSTEM);
-		addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_SENSOR);
-		addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT);
-		addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE);
-		if (FBReaderApp.Instance().supportsAllOrientations()) {
-			addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-			addMenuItem(subMenu, ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-		}
-		addMenuItem(menu, ActionCode.INCREASE_FONT);
-		addMenuItem(menu, ActionCode.DECREASE_FONT);
-		addMenuItem(menu, ActionCode.SHOW_NAVIGATION);
+
+		addMenuItem(menu, ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, R.drawable.menu_icon_portrait);
+		addMenuItem(menu, ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, R.drawable.menu_icon_landscape);
+
+		
+		addMenuItem(menu, ActionCode.SHOW_NAVIGATION, R.drawable.menu_icon_jump);
+		addMenuItem(menu, ActionCode.SHOW_PREFERENCES, R.drawable.menu_icon_setting);
 
 		FBReaderApp.Instance().refresh();
 

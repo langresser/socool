@@ -166,9 +166,6 @@ public final class FBReaderApp {
 		new FirstLevelTree(myRootTree, ROOT_BY_TAG);
 		new FileFirstLevelTree(myRootTree, ROOT_FILE_TREE);
 
-		addAction(ActionCode.INCREASE_FONT, new ChangeFontSizeAction(this, +2));
-		addAction(ActionCode.DECREASE_FONT, new ChangeFontSizeAction(this, -2));
-
 		addAction(ActionCode.FIND_NEXT, new FindNextAction(this));
 		addAction(ActionCode.FIND_PREVIOUS, new FindPreviousAction(this));
 		addAction(ActionCode.CLEAR_FIND_RESULTS, new ClearFindResultsAction(this));
@@ -658,16 +655,7 @@ public final class FBReaderApp {
 	public final ZLStringOption OrientationOption = new ZLStringOption("LookNFeel", "Orientation", "auto");
 
 	public String[] allOrientations() {
-		return supportsAllOrientations()
-			? new String[] {
-				SCREEN_ORIENTATION_SYSTEM,
-				SCREEN_ORIENTATION_SENSOR,
-				SCREEN_ORIENTATION_PORTRAIT,
-				SCREEN_ORIENTATION_LANDSCAPE,
-				SCREEN_ORIENTATION_REVERSE_PORTRAIT,
-				SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-			}
-			: new String[] {
+		return new String[] {
 				SCREEN_ORIENTATION_SYSTEM,
 				SCREEN_ORIENTATION_SENSOR,
 				SCREEN_ORIENTATION_PORTRAIT,
@@ -884,14 +872,6 @@ public final class FBReaderApp {
 		}
 		set.add("multi");
 		return set;
-	}
-
-	public boolean supportsAllOrientations() {
-		try {
-			return ActivityInfo.class.getField("SCREEN_ORIENTATION_REVERSE_PORTRAIT") != null;
-		} catch (NoSuchFieldException e) {
-			return false;
-		}
 	}
 
 	private final class AndroidAssetsFile extends ZLResourceFile {

@@ -59,11 +59,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
 
 		final Screen appearanceScreen = createPreferenceScreen("appearance");
-		appearanceScreen.addPreference(new ZLStringChoicePreference(
-			this, appearanceScreen.Resource, "screenOrientation",
-			fbReader.OrientationOption, fbReader.allOrientations()
-		));
-
 		appearanceScreen.addPreference(new BatteryLevelToTurnScreenOffPreference(
 			this,
 			fbReader.BatteryLevelToTurnScreenOffOption,
@@ -72,12 +67,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		));
 
 		final Screen textScreen = createPreferenceScreen("text");
-
-		final Screen fontPropertiesScreen = textScreen.createPreferenceScreen("fontProperties");
-		fontPropertiesScreen.addOption(ZLPaintContext.AntiAliasOption, "antiAlias");
-		fontPropertiesScreen.addOption(ZLPaintContext.DeviceKerningOption, "deviceKerning");
-		fontPropertiesScreen.addOption(ZLPaintContext.DitheringOption, "dithering");
-		fontPropertiesScreen.addOption(ZLPaintContext.SubpixelOption, "subpixel");
 
 		final ZLTextStyleCollection collection = ZLTextStyleCollection.Instance();
 		final ZLTextBaseStyle baseStyle = collection.getBaseStyle();
@@ -110,7 +99,66 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		));
 		textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
 
+		final ZLPreferenceSet bgPreferences = new ZLPreferenceSet();
+
+		final Screen colorsScreen = createPreferenceScreen("colors");
+		colorsScreen.addPreference(new WallpaperPreference(
+			this, profile, colorsScreen.Resource, "background"
+		) {
+			@Override
+			protected void onDialogClosed(boolean result) {
+				super.onDialogClosed(result);
+				bgPreferences.setEnabled("".equals(getValue()));
+			}
+		});
+		bgPreferences.add(
+			colorsScreen.addOption(profile.BackgroundOption, "backgroundColor")
+		);
+		bgPreferences.setEnabled("".equals(profile.WallpaperOption.getValue()));
+
+		colorsScreen.addOption(profile.HighlightingOption, "highlighting");
+		colorsScreen.addOption(profile.RegularTextOption, "text");
+		colorsScreen.addOption(profile.HyperlinkTextOption, "hyperlink");
+		colorsScreen.addOption(profile.VisitedHyperlinkTextOption, "hyperlinkVisited");
+		colorsScreen.addOption(profile.FooterFillOption, "footer");
+		colorsScreen.addOption(profile.SelectionBackgroundOption, "selectionBackground");
+		colorsScreen.addOption(profile.SelectionForegroundOption, "selectionForeground");
+
+		final Screen marginsScreen = createPreferenceScreen("margins");
+		marginsScreen.addPreference(new ZLIntegerRangePreference(
+			this, marginsScreen.Resource.getResource("left"),
+			fbReader.LeftMarginOption
+		));
+		marginsScreen.addPreference(new ZLIntegerRangePreference(
+			this, marginsScreen.Resource.getResource("right"),
+			fbReader.RightMarginOption
+		));
+		marginsScreen.addPreference(new ZLIntegerRangePreference(
+			this, marginsScreen.Resource.getResource("top"),
+			fbReader.TopMarginOption
+		));
+		marginsScreen.addPreference(new ZLIntegerRangePreference(
+			this, marginsScreen.Resource.getResource("bottom"),
+			fbReader.BottomMarginOption
+		));
+
+		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
+
+		final Screen scrollingScreen = createPreferenceScreen("scrolling");
+
+		scrollingScreen.addOption(scrollingPreferences.AnimationOption, "animation");
+		scrollingScreen.addPreference(new AnimationSpeedPreference(
+			this,
+			scrollingScreen.Resource,
+			"animationSpeed",
+			scrollingPreferences.AnimationSpeedOption
+		));
+	}
+	
+	void initFormat(Screen textScreen)
+	{
 		final Screen moreStylesScreen = textScreen.createPreferenceScreen("more");
+		final ZLTextStyleCollection collection = ZLTextStyleCollection.Instance();
 
 		byte styles[] = {
 			BookModel.REGULAR,
@@ -225,124 +273,5 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			}
 		}
 
-		final ZLPreferenceSet footerPreferences = new ZLPreferenceSet();
-		final ZLPreferenceSet bgPreferences = new ZLPreferenceSet();
-
-		final Screen colorsScreen = createPreferenceScreen("colors");
-		colorsScreen.addPreference(new WallpaperPreference(
-			this, profile, colorsScreen.Resource, "background"
-		) {
-			@Override
-			protected void onDialogClosed(boolean result) {
-				super.onDialogClosed(result);
-				bgPreferences.setEnabled("".equals(getValue()));
-			}
-		});
-		bgPreferences.add(
-			colorsScreen.addOption(profile.BackgroundOption, "backgroundColor")
-		);
-		bgPreferences.setEnabled("".equals(profile.WallpaperOption.getValue()));
-
-		colorsScreen.addOption(profile.HighlightingOption, "highlighting");
-		colorsScreen.addOption(profile.RegularTextOption, "text");
-		colorsScreen.addOption(profile.HyperlinkTextOption, "hyperlink");
-		colorsScreen.addOption(profile.VisitedHyperlinkTextOption, "hyperlinkVisited");
-		colorsScreen.addOption(profile.FooterFillOption, "footer");
-		colorsScreen.addOption(profile.SelectionBackgroundOption, "selectionBackground");
-		colorsScreen.addOption(profile.SelectionForegroundOption, "selectionForeground");
-
-		final Screen marginsScreen = createPreferenceScreen("margins");
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("left"),
-			fbReader.LeftMarginOption
-		));
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("right"),
-			fbReader.RightMarginOption
-		));
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("top"),
-			fbReader.TopMarginOption
-		));
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("bottom"),
-			fbReader.BottomMarginOption
-		));
-
-		final Screen statusLineScreen = createPreferenceScreen("scrollBar");
-		footerPreferences.add(statusLineScreen.addPreference(new ZLIntegerRangePreference(
-			this, statusLineScreen.Resource.getResource("footerHeight"),
-			fbReader.FooterHeightOption
-		)));
-		footerPreferences.add(statusLineScreen.addOption(fbReader.FooterShowTOCMarksOption, "tocMarks"));
-		footerPreferences.add(statusLineScreen.addPreference(new FontOption(
-			this, statusLineScreen.Resource, "font",
-			fbReader.FooterFontOption, false
-		)));
-
-		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
-
-		final ZLKeyBindings keyBindings = fbReader.keyBindings();
-
-		final Screen scrollingScreen = createPreferenceScreen("scrolling");
-		scrollingScreen.addOption(scrollingPreferences.FingerScrollingOption, "fingerScrolling");
-		scrollingScreen.addOption(fbReader.EnableDoubleTapOption, "enableDoubleTapDetection");
-
-		final ZLPreferenceSet volumeKeysPreferences = new ZLPreferenceSet();
-		scrollingScreen.addPreference(new ZLCheckBoxPreference(
-			this, scrollingScreen.Resource, "volumeKeys") {
-			{
-				setChecked(fbReader.hasActionForKey(KeyEvent.KEYCODE_VOLUME_UP, false));
-			}
-
-			@Override
-			protected void onClick() {
-				super.onClick();
-				if (isChecked()) {
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
-				} else {
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, FBReaderApp.NoAction);
-					keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, FBReaderApp.NoAction);
-				}
-				volumeKeysPreferences.setEnabled(isChecked());
-			}
-		});
-		volumeKeysPreferences.setEnabled(fbReader.hasActionForKey(KeyEvent.KEYCODE_VOLUME_UP, false));
-
-		scrollingScreen.addOption(scrollingPreferences.AnimationOption, "animation");
-		scrollingScreen.addPreference(new AnimationSpeedPreference(
-			this,
-			scrollingScreen.Resource,
-			"animationSpeed",
-			scrollingPreferences.AnimationSpeedOption
-		));
-
-		final Screen dictionaryScreen = createPreferenceScreen("dictionary");
-		dictionaryScreen.addPreference(new DictionaryPreference(
-			this,
-			dictionaryScreen.Resource,
-			"dictionary",
-			DictionaryUtil.singleWordTranslatorOption(),
-			DictionaryUtil.dictionaryInfos(this, true)
-		));
-		dictionaryScreen.addPreference(new DictionaryPreference(
-			this,
-			dictionaryScreen.Resource,
-			"translator",
-			DictionaryUtil.multiWordTranslatorOption(),
-			DictionaryUtil.dictionaryInfos(this, false)
-		));
-		dictionaryScreen.addPreference(new ZLBooleanPreference(
-			this,
-			fbReader.NavigateAllWordsOption,
-			dictionaryScreen.Resource,
-			"navigateOverAllWords"
-		));
-		dictionaryScreen.addOption(fbReader.WordTappingActionOption, "tappingAction");
-
-		final Screen imagesScreen = createPreferenceScreen("images");
-		imagesScreen.addOption(fbReader.ImageTappingActionOption, "tappingAction");
-		imagesScreen.addOption(fbReader.ImageViewBackgroundOption, "backgroundColor");
 	}
 }

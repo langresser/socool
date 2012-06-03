@@ -63,4 +63,10 @@ public class SetOrientationAction extends FBAndroidAction {
 		FBReaderApp.Instance().OrientationOption.setValue(myOptionValue);
 		Reader.onRepaintFinished();
 	}
+	
+	@Override
+	public boolean isVisible() {
+		return myOptionValue.equals(FBReaderApp.Instance().OrientationOption.getValue())
+				? false : true;
+	}
 }

@@ -51,9 +51,8 @@ class WallpaperPreference extends ZLStringListPreference {
 		for (ZLFile f : predefined) {
 			values[index] = f.getPath();
 			final String name = f.getShortName();
-			texts[index] = optionResource.getResource(
-				name.substring(0, name.indexOf("."))
-			).getValue();
+			final String key = name.substring(0, name.indexOf("."));
+			texts[index] = optionResource.getResource(key).getValue();
 			++index;
 		}
 		for (ZLFile f : external) {
