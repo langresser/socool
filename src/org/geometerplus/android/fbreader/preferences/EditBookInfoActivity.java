@@ -53,29 +53,6 @@ class BookTitlePreference extends ZLStringPreference {
 	}
 }
 
-class LanguagePreference extends ZLStringListPreference {
-	private final Book myBook;
-
-	LanguagePreference(Context context, ZLResource rootResource, String resourceKey, Book book) {
-		super(context, rootResource, resourceKey);
-		myBook = book;
-		final TreeSet<String> set = new TreeSet<String>(new ZLLanguageUtil.CodeComparator());
-		set.addAll(ZLTextHyphenator.Instance().languageCodes());
-		set.add(ZLLanguageUtil.OTHER_LANGUAGE_CODE);
-
-		final int size = set.size();
-		String[] codes = new String[size];
-		String[] names = new String[size];
-		int index = 0;
-		for (String code : set) {
-			codes[index] = code;
-			names[index] = ZLLanguageUtil.languageName(code);
-			++index;
-		}
-		setLists(codes, names);
-	}
-}
-
 class EncodingPreference extends ZLStringListPreference {
 	private final Book myBook;
 
@@ -145,7 +122,6 @@ public class EditBookInfoActivity extends ZLPreferenceActivity {
 		}
 
 		addPreference(new BookTitlePreference(this, Resource, "title", myBook));
-		addPreference(new LanguagePreference(this, Resource, "language", myBook));
 		addPreference(new EncodingPreference(this, Resource, "encoding", myBook));
 	}
 

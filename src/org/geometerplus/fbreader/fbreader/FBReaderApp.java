@@ -80,8 +80,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public final class FBReaderApp {
-	public final ZLBooleanOption AllowScreenBrightnessAdjustmentOption =
-		new ZLBooleanOption("LookNFeel", "AllowScreenBrightnessAdjustment", true);
 	public final ZLStringOption TextSearchPatternOption =
 		new ZLStringOption("TextSearch", "Pattern", "");
 
@@ -227,22 +225,28 @@ public final class FBReaderApp {
 				return;
 			}
 		}
-		final Book bookToOpen = book;
-		runWithMessage("loadingBook", new Runnable() {
-			public void run() {
-				openBookInternal(bookToOpen, bookmark);
-			}
-		}, postAction);
+//		final Book bookToOpen = book;
+//		runWithMessage("loadingBook", new Runnable() {
+//			public void run() {
+//				openBookInternal(bookToOpen, bookmark);
+//			}
+//		}, postAction);
+		openBookInternal(book, bookmark);
 	}
  
 	public void reloadBook() {
 		if (Model != null && Model.Book != null) {
 			Model.Book.reloadInfoFromDatabase();
-			runWithMessage("loadingBook", new Runnable() {
-				public void run() {
-					openBookInternal(Model.Book, null);
-				}
-			}, null);
+			
+			if (Model.m_readType == BookModel.READ_TYPE_NORMAL) {
+				runWithMessage("loadingBook", new Runnable() {
+					public void run() {
+						openBookInternal(Model.Book, null);
+					}
+				}, null);
+			} else {
+				openBookInternal(Model.Book, null);
+			}
 		}
 	}
 

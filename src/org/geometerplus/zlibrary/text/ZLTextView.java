@@ -1774,8 +1774,6 @@ public class ZLTextView {
 	}
 
 	private int myStartY;
-	private boolean myIsBrightnessAdjustmentInProgress;
-	private int myStartBrightness;
 
 	private String myZoneMapId;
 	private TapZoneMap myZoneMap;
@@ -1813,13 +1811,6 @@ public class ZLTextView {
 			return true;
 		}
 
-		if (FBReaderApp.Instance().AllowScreenBrightnessAdjustmentOption.getValue() && x < myContext.getWidth() / 10) {
-			myIsBrightnessAdjustmentInProgress = true;
-			myStartY = y;
-			myStartBrightness = FBReaderApp.Instance().getScreenBrightness();
-			return true;
-		}
-
 		startManualScrolling(x, y);
 		return true;
 	}
@@ -1852,24 +1843,11 @@ public class ZLTextView {
 			return true;
 		}
 
-		synchronized (this) {
-			if (myIsBrightnessAdjustmentInProgress) {
-				if (x >= myContext.getWidth() / 5) {
-					myIsBrightnessAdjustmentInProgress = false;
-					startManualScrolling(x, y);
-				} else {
-					final int delta = (myStartBrightness + 30) * (myStartY - y) / myContext.getHeight();
-					FBReaderApp.Instance().setScreenBrightness(myStartBrightness + delta);
-					return true;
-				}
-			}
-
-			if (isFlickScrollingEnabled()) {
-				if (FBReaderApp.Instance().isUseGLView()) {
-					FBReaderApp.Instance().getWidgetGL().scrollManuallyTo(x, y);
-				} else {
-					FBReaderApp.Instance().getWidget().scrollManuallyTo(x, y);
-				}
+		if (isFlickScrollingEnabled()) {
+			if (FBReaderApp.Instance().isUseGLView()) {
+				FBReaderApp.Instance().getWidgetGL().scrollManuallyTo(x, y);
+			} else {
+				FBReaderApp.Instance().getWidget().scrollManuallyTo(x, y);
 			}
 		}
 		return true;
@@ -1879,11 +1857,6 @@ public class ZLTextView {
 		final ZLTextSelectionCursor cursor = getSelectionCursorInMovement();
 		if (cursor != ZLTextSelectionCursor.None) {
 			releaseSelectionCursor();
-			return true;
-		}
-
-		if (myIsBrightnessAdjustmentInProgress) {
-			myIsBrightnessAdjustmentInProgress = false;
 			return true;
 		}
 

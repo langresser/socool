@@ -44,7 +44,6 @@ public abstract class ZLTextHyphenator {
 	protected ZLTextHyphenator() {
 	}
 
-	public abstract List<String> languageCodes();
 	public abstract void load(final String languageCode);
 	public abstract void unload();
 

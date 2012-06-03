@@ -63,20 +63,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			this, appearanceScreen.Resource, "screenOrientation",
 			fbReader.OrientationOption, fbReader.allOrientations()
 		));
-		appearanceScreen.addPreference(new ZLBooleanPreference(
-			this,
-			fbReader.AllowScreenBrightnessAdjustmentOption,
-			appearanceScreen.Resource,
-			"allowScreenBrightnessAdjustment"
-		) {
-			private final int myLevel = fbReader.ScreenBrightnessLevelOption.getValue();
 
-			@Override
-			protected void onClick() {
-				super.onClick();
-				fbReader.ScreenBrightnessLevelOption.setValue(isChecked() ? myLevel : 0);
-			}
-		});
 		appearanceScreen.addPreference(new BatteryLevelToTurnScreenOffPreference(
 			this,
 			fbReader.BatteryLevelToTurnScreenOffOption,
