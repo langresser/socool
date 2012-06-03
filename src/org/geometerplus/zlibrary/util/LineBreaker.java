@@ -27,14 +27,14 @@ public final class LineBreaker {
 			if (isAsciiLetter(c)) {
 				final char cn = data[i + 1];
 				if (isAsciiLetter(cn)) {
-					Log.d("line nobreak", String.format("char:%1c  next:%2c   nobreak", c, cn));
+//					Log.d("line nobreak", String.format("char:%1c  next:%2c   nobreak", c, cn));
 					breaks[i] = NOBREAK;
 					continue;
 				}
 			}
 			
-			final char cn = data[i + 1];
-			Log.d("break", String.format("char:%1c next:%2c", c, cn));
+//			final char cn = data[i + 1];
+//			Log.d("break", String.format("char:%1c next:%2c", c, cn));
 		}
 	}
 }

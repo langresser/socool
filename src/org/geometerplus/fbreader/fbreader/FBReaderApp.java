@@ -112,7 +112,7 @@ public final class FBReaderApp {
 	public final ZLIntegerRangeOption ScrollbarTypeOption =
 		new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 3, ZLTextView.SCROLLBAR_SHOW_AS_FOOTER);
 	public final ZLIntegerRangeOption FooterHeightOption =
-		new ZLIntegerRangeOption("Options", "FooterHeight", 8, 20, 9);
+		new ZLIntegerRangeOption("Options", "FooterHeight", 8, 20, 14);
 	public final ZLBooleanOption FooterShowTOCMarksOption =
 		new ZLBooleanOption("Options", "FooterShowTOCMarks", true);
 	public final ZLBooleanOption FooterShowClockOption =

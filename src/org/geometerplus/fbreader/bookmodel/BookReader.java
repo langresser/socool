@@ -145,15 +145,15 @@ public class BookReader {
 		if (!myTextParagraphExists || length == 0) {
 			return;
 		}
-		if (!myInsideTitle && !mySectionContainsRegularContents) {
-			while (length > 0 && Character.isWhitespace(data[offset])) {
-				--length;
-				++offset;
-			}
-			if (length == 0) {
-				return;
-			}
-		}
+//		if (!myInsideTitle && !mySectionContainsRegularContents) {
+//			while (length > 0 && Character.isWhitespace(data[offset])) {
+//				--length;
+//				++offset;
+//			}
+//			if (length == 0) {
+//				return;
+//			}
+//		}
 
 		myTextParagraphIsNonEmpty = true;
 

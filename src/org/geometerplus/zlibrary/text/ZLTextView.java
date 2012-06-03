@@ -736,7 +736,7 @@ public class ZLTextView {
 			while (info.EndElementIndex != endIndex) {
 				info = processTextLine(paragraphCursor, info.EndElementIndex, info.EndCharIndex, endIndex);
 				textAreaHeight -= info.Height + info.Descent;
-				if (textAreaHeight < 0 && counter > 0) {
+				if (textAreaHeight <= 0 && counter > 0) {
 					break;
 				}
 				textAreaHeight -= info.VSpaceAfter;
@@ -747,7 +747,7 @@ public class ZLTextView {
 				}
 				counter++;
 			}
-		} while (result.isEndOfParagraph() && result.nextParagraph() && !result.getParagraphCursor().isEndOfChapter() && !result.getParagraphCursor().isEndOfSection() && (textAreaHeight >= 0));
+		} while (result.isEndOfParagraph() && result.nextParagraph() && !result.getParagraphCursor().isEndOfSection() && (textAreaHeight >= 0));
 		
 		// 排版完毕，进行段落初始化
 		resetTextStyle();
@@ -2121,66 +2121,48 @@ public class ZLTextView {
 				height > 10, false, false, false
 			);
 
-			int pageNumber = 0;//getCurrentCharNumber(pageIndex, true);
-			int totalPageNumber = 1;//sizeOfFullText(); TODO impl it
-			float percent = (float)pageNumber / totalPageNumber;
+			int currentParagraph = 0;
+			int totalParagraph = Math.max(myModel.m_paragraph.m_allParagraphNumber, 1);
+			float percent = (float)currentParagraph / totalParagraph;
+			
+			switch (pageIndex) {
+				case current:
+					currentParagraph = myCurrentPage.StartCursor.getParagraphIndex();
+					break;
+				case previous:
+					currentParagraph = myPreviousPage.StartCursor.getParagraphIndex();
+					break;
+				case next:
+					currentParagraph = myNextPage.StartCursor.getParagraphIndex();
+					break;
+				default:
+					break;
+			}
 
+			// 补上不显示的章节结束段落标识
+			currentParagraph += 1;
+			final int currentChapter = myModel.m_chapter.getChapterIndexByParagraph(currentParagraph);
+			final int chapterCount = myModel.m_chapter.getChapterCount();
+			final String title = myModel.m_chapter.getChapterTitle(currentChapter);
+			
+			// 显示章节进度
+			context.setTextColor(fgColor);
+			context.drawString(left, offsetY + height - delta, String.format("%1d/%2d", currentChapter + 1, chapterCount));
+
+			// 显示章节名称
+			final int titleWidth = context.getStringWidth(title);
+			context.drawString(context.getWidth() / 2 - titleWidth / 2, offsetY + height - delta, title);
+			
+			// 显示电池和时间
 			final StringBuilder info = new StringBuilder();
-			if (FBReaderApp.Instance().FooterShowProgressOption.getValue()) {
-				info.append(String.format("%.2f%%", percent * 100));
-			}
-			if (FBReaderApp.Instance().FooterShowBatteryOption.getValue()) {
-				if (info.length() > 0) {
-					info.append(" ");
-				}
-				info.append(FBReaderApp.Instance().getBatteryLevel());
-				info.append("%");
-			}
-			if (FBReaderApp.Instance().FooterShowClockOption.getValue()) {
-				if (info.length() > 0) {
-					info.append(" ");
-				}
-				info.append(FBReaderApp.Instance().getCurrentTimeString());
-			}
+			info.append(FBReaderApp.Instance().getBatteryLevel());
+			info.append("%");
+			info.append(" ");
+			info.append(FBReaderApp.Instance().getCurrentTimeString());
 			final String infoString = info.toString();
-
 			final int infoWidth = context.getStringWidth(infoString);
 
-			// draw info text
-			context.setTextColor(fgColor);
 			context.drawString(right - infoWidth, offsetY + height - delta, infoString);
-
-			// draw gauge
-			final int gaugeRight = right - (infoWidth == 0 ? 0 : infoWidth + 10);
-			myGaugeWidth = gaugeRight - left - 2 * lineWidth;
-
-			context.setLineColor(fgColor);
-			context.setLineWidth(lineWidth);
-			context.drawLine(left, offsetY + lineWidth, left, offsetY + height - lineWidth);
-			context.drawLine(left, offsetY + height - lineWidth, gaugeRight, offsetY + height - lineWidth);
-			context.drawLine(gaugeRight, offsetY + height - lineWidth, gaugeRight, offsetY + lineWidth);
-			context.drawLine(gaugeRight, offsetY + lineWidth, left, offsetY + lineWidth);
-
-			final int gaugeInternalRight =
-				left + lineWidth + (int)(1.0 * myGaugeWidth * percent);
-
-			context.setFillColor(fillColor);
-			context.fillRectangle(left + 1, offsetY + height - 2 * lineWidth, gaugeInternalRight, offsetY + lineWidth + 1);
-
-			if (FBReaderApp.Instance().FooterShowTOCMarksOption.getValue()) {
-				if (myTOCMarks == null) {
-					updateTOCMarks(model);
-				}
-				final int fullLength = 1;//sizeOfFullText(); TODO impl it
-				for (TOCTree tocItem : myTOCMarks) {
-					TOCTree.Reference reference = tocItem.getReference();
-					if (reference != null) {
-						final int refCoord = sizeOfTextBeforeParagraph(reference.ParagraphIndex);
-						final int xCoord = left + 2 * lineWidth + (int)(1.0 * myGaugeWidth * refCoord / fullLength);
-						context.drawLine(xCoord, offsetY + height - lineWidth, xCoord, offsetY + lineWidth);
-					}
-				}
-			}
 		}
 
 		// TODO: remove

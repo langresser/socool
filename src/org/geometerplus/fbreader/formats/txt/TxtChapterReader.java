@@ -164,7 +164,7 @@ public final class TxtChapterReader extends BookReader {
 	protected void startDocumentHandler()
 	{
 		pushKind(BookModel.REGULAR);
-		pushKind(BookModel.TITLE);
+		pushKind(BookModel.SECTION_TITLE);
 		beginParagraph(BookParagraph.PARAGRAPH_KIND_TEXT_PARAGRAPH);
 		myInsideTitle = true;
 	}

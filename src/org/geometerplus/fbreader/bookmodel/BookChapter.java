@@ -57,6 +57,15 @@ public class BookChapter {
 		return m_chapterData.get(fileNum).m_paragraphCount;
 	}
 	
+	public String getChapterTitle(int fileNum)
+	{
+		if (fileNum < 0 || fileNum >= m_chapterData.size()) {
+			return "";
+		}
+
+		return m_chapterData.get(fileNum).m_title;
+	}
+	
 	public int getChapterIndexByParagraph(int para)
 	{
 		if (para <= 1) {
@@ -97,4 +106,5 @@ public class BookChapter {
 	}
 	
 	public Vector<BookChapterData> m_chapterData = new Vector<BookChapterData>();
+	public int m_allParagraphNumber = 0;
 }

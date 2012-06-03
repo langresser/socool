@@ -103,6 +103,11 @@ public final class ZLTextParagraphCursor {
 			if (length == 0) {
 				return;
 			}
+			
+			if (length == 1 && data[0] == ' ') {
+				addWord(data, 0, 1, 0, hyperlink);
+				return;
+			}
 
 			if (ourBreaks.length < length) {
 				ourBreaks = new byte[length];
@@ -163,8 +168,8 @@ public final class ZLTextParagraphCursor {
 		}
 
 		private final void addWord(char[] data, int offset, int len, int paragraphOffset, ZLTextHyperlink hyperlink) {
-//			String text = new String(data, offset, len);
-//			Log.d("addWord", text);
+			String text = new String(data, offset, len);
+			Log.d("addWord", text);
 			ZLTextWord word = new ZLTextWord(data, offset, len, paragraphOffset);
 			for (int i = myFirstMark; i < myLastMark; ++i) {
 				final ZLTextMark mark = (ZLTextMark)myMarks.get(i);
@@ -229,31 +234,8 @@ public final class ZLTextParagraphCursor {
 		}
 	}
 	
-	public boolean isBeginOfChapter()
-	{
-		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-			return false;
-		} else {
-			return false;
-		}
-	}
-	
-	public boolean isEndOfChapter()
-	{
-		if (Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-//			final byte kind = Model.m_paragraph.getParagraphKind(Index);
-//			final int fileNum = Model.m_chapter.getChapterIndexByParagraph(Index);
-//			final BookChapter chapter = Model.m_chapter;
-//			Log.d("isEndOfChapter", String.format("%1d  %2d  %3d       %4d   %5d   %6d", Index, kind, Model.m_paragraph.getTextLength(Index)
-//					,Model.m_chapter.getChapterOffset(fileNum), Model.m_chapter.getParagraphCount(fileNum), fileNum));
-			return (Model.m_paragraph.getParagraphKind(Index) == BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
-		} else {
-			return false;
-		}
-	}
-	
 	public boolean isEndOfSection() {
-		final byte kind = Model.m_paragraph.getParagraphKind(Index);
+//		final byte kind = Model.m_paragraph.getParagraphKind(Index);
 //		Log.d("isEndOfSection", String.format("%1d  %2d  %3d", kind, Index, BookModel.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH));
 		return (Model.m_paragraph.getParagraphKind(Index) == BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 	}
