@@ -2098,12 +2098,10 @@ public class ZLTextView {
 			//final ZLColor bgColor = getBackgroundColor();
 			// TODO: separate color option for footer color
 			final ZLColor fgColor = getTextColor(ZLTextHyperlink.NO_LINK);
-			final ZLColor fillColor = FBReaderApp.Instance().getColorProfile().FooterFillOption.getValue();
 
 			final int left = FBReaderApp.Instance().getLeftMargin();
 			final int right = context.getWidth() - FBReaderApp.Instance().getRightMargin();
 			final int height = getHeight();
-			final int lineWidth = height <= 10 ? 1 : 2;
 			final int delta = height <= 10 ? 0 : 1;
 			int offsetY = 0;
 			
@@ -2118,7 +2116,7 @@ public class ZLTextView {
 			context.setFont(
 					FBReaderApp.Instance().FooterFontOption.getValue(),
 				height <= 10 ? height + 3 : height + 1,
-				height > 10, false, false, false
+				false, false, false, false
 			);
 
 			int currentParagraph = 0;
