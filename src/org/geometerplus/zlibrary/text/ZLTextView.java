@@ -109,10 +109,6 @@ public class ZLTextView {
 		}
 
 		FBReaderApp.Instance().resetWidget();
-		
-		if (myFooter != null) {
-			myFooter.resetTOCMarks();
-		}
 	}
 	
 	private void loadBookMark()
@@ -513,14 +509,6 @@ public class ZLTextView {
 		}
 	}
 
-	public static final int SCROLLBAR_HIDE = 0;
-	public static final int SCROLLBAR_SHOW = 1;
-	public static final int SCROLLBAR_SHOW_AS_PROGRESS = 2;
-
-	public final boolean isScrollbarShown() {
-		return scrollbarType() == SCROLLBAR_SHOW || scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS;
-	}
-
 	protected final synchronized int sizeOfTextBeforeParagraph(int paragraphIndex) {
 		return myModel != null ? myModel.m_paragraph.getTextLength(paragraphIndex - 1) : 0;
 	}
@@ -547,21 +535,6 @@ public class ZLTextView {
 			}
 			return Math.max(1, end);
 		}
-	}
-
-	public final synchronized int getScrollbarFullSize() {
-		return sizeOfFullText();
-	}
-
-	public final synchronized int getScrollbarThumbPosition(PageIndex pageIndex) {
-		return scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS ? 0 : getCurrentCharNumber(pageIndex, true);
-	}
-
-	public final synchronized int getScrollbarThumbLength(PageIndex pageIndex) {
-		int start = scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS
-			? 0 : getCurrentCharNumber(pageIndex, true);
-		int end = getCurrentCharNumber(pageIndex, false);
-		return Math.max(1, end - start);
 	}
 
 	private int sizeOfTextBeforeCursor(ZLTextWordCursor wordCursor) {
@@ -717,7 +690,7 @@ public class ZLTextView {
 
 	private void buildInfos(ZLTextPage page, ZLTextWordCursor start, ZLTextWordCursor result) {
 		result.setCursor(start);
-		int textAreaHeight = getTextAreaHeight();
+		int textAreaHeight = getTextAreaHeight() - myFooter.getHeight();
 		page.LineInfos.clear();
 		int counter = 0;
 
@@ -1773,8 +1746,6 @@ public class ZLTextView {
 		none, shift, curl, curl3d
 	}
 
-	private int myStartY;
-
 	private String myZoneMapId;
 	private TapZoneMap myZoneMap;
 
@@ -2040,48 +2011,14 @@ public class ZLTextView {
 				FBReaderApp.Instance().repaintStatusBar();
 			}
 		};
-
-		private ArrayList<TOCTree> myTOCMarks;
-
-		public int getHeight() {
-			return FBReaderApp.Instance().FooterHeightOption.getValue();
-		}
-
-		public synchronized void resetTOCMarks() {
-			myTOCMarks = null;
-		}
-
-		private final int MAX_TOC_MARKS_NUMBER = 100;
-		private synchronized void updateTOCMarks(BookModel model) {
-			myTOCMarks = new ArrayList<TOCTree>();
-			TOCTree toc = model.TOCTree;
-			if (toc == null) {
-				return;
-			}
-			int maxLevel = Integer.MAX_VALUE;
-			if (toc.getSize() >= MAX_TOC_MARKS_NUMBER) {
-				final int[] sizes = new int[10];
-				for (TOCTree tocItem : toc) {
-					if (tocItem.Level < 10) {
-						++sizes[tocItem.Level];
-					}
-				}
-				for (int i = 1; i < sizes.length; ++i) {
-					sizes[i] += sizes[i - 1];
-				}
-				for (maxLevel = sizes.length - 1; maxLevel >= 0; --maxLevel) {
-					if (sizes[maxLevel] < MAX_TOC_MARKS_NUMBER) {
-						break;
-					}
-				}
-			}
-			for (TOCTree tocItem : toc.allSubTrees(maxLevel)) {
-				myTOCMarks.add(tocItem);
-			}
+		
+		public int getHeight()
+		{
+			return ZLTextStyleCollection.Instance().getBaseStyle().getFontSize();
 		}
 
 		public synchronized void paint(ZLPaintContext context, PageIndex pageIndex, boolean update) {
-			final BookModel model = FBReaderApp.Instance().Model;
+			final BookModel model = myModel;
 			if (model == null) {
 				return;
 			}
@@ -2101,27 +2038,26 @@ public class ZLTextView {
 
 			final int left = FBReaderApp.Instance().getLeftMargin();
 			final int right = context.getWidth() - FBReaderApp.Instance().getRightMargin();
-			final int height = getHeight();
-			final int delta = height <= 10 ? 0 : 1;
-			int offsetY = 0;
+
+			final ZLTextStyle baseStyle = ZLTextStyleCollection.Instance().getBaseStyle();
+			final String fontFamily = baseStyle.getFontFamily();
+			final int textFontSize = baseStyle.getFontSize() - 3;
+			final int height = FBReaderApp.Instance().FooterHeightOption.getValue();
+			final int footFontSize = Math.min(textFontSize, height);
 			
+			// foot字体选择文本字体，字号是foot高度，但是最大不超过文本字号
+			context.setFont(fontFamily, footFontSize, false, false, false, false);
+
+			int offsetY = 0;			
 			if (FBReaderApp.Instance().isUseGLView()) {
 				final ZLGLWidget widget = FBReaderApp.Instance().getWidgetGL();
-				offsetY = widget.getHeight() - getHeight() * 2;
+				offsetY = widget.getHeight() - height * 2;
 			} else {
 				final ZLViewWidget widget = FBReaderApp.Instance().getWidget();
-				offsetY = widget.getHeight() - getHeight() * 2;
+				offsetY = widget.getHeight() - height * 2;
 			}
 
-			context.setFont(
-					FBReaderApp.Instance().FooterFontOption.getValue(),
-				height <= 10 ? height + 3 : height + 1,
-				false, false, false, false
-			);
-
 			int currentParagraph = 0;
-			int totalParagraph = Math.max(myModel.m_paragraph.m_allParagraphNumber, 1);
-			float percent = (float)currentParagraph / totalParagraph;
 			
 			switch (pageIndex) {
 				case current:
@@ -2141,15 +2077,12 @@ public class ZLTextView {
 			currentParagraph += 1;
 			final int currentChapter = myModel.m_chapter.getChapterIndexByParagraph(currentParagraph);
 			final int chapterCount = myModel.m_chapter.getChapterCount();
-			final String title = myModel.m_chapter.getChapterTitle(currentChapter);
+			final String chapterInfo = String.format("%1d/%2d", currentChapter + 1, chapterCount);
 			
 			// 显示章节进度
+			final int chapterWidth = context.getStringWidth(chapterInfo);
 			context.setTextColor(fgColor);
-			context.drawString(left, offsetY + height - delta, String.format("%1d/%2d", currentChapter + 1, chapterCount));
-
-			// 显示章节名称
-			final int titleWidth = context.getStringWidth(title);
-			context.drawString(context.getWidth() / 2 - titleWidth / 2, offsetY + height - delta, title);
+			context.drawString(left, offsetY + height, chapterInfo);
 			
 			// 显示电池和时间
 			final StringBuilder info = new StringBuilder();
@@ -2160,7 +2093,32 @@ public class ZLTextView {
 			final String infoString = info.toString();
 			final int infoWidth = context.getStringWidth(infoString);
 
-			context.drawString(right - infoWidth, offsetY + height - delta, infoString);
+			context.drawString(right - infoWidth, offsetY + height, infoString);
+
+			// 显示章节名称
+			final String title = myModel.m_chapter.getChapterTitle(currentChapter);
+			final int titleWidth = context.getStringWidth(title);
+			final int maxTitleWidth = right - left - infoWidth - chapterWidth - 6;
+			if (titleWidth < maxTitleWidth) {
+				context.drawString(left + chapterWidth + 3 + Math.max((maxTitleWidth - titleWidth) / 2, 0), offsetY + height, title);
+			} else {
+				final int dotWidth = context.getStringWidth("...");
+				char[] charArray = title.toCharArray();
+				final int len = charArray.length;
+				int currentWidth = 0;
+				for (int i = 0; i < len; ++i) {
+					int curCharWidth = context.getStringWidth(charArray, i, 1);
+					
+					if (currentWidth + curCharWidth < maxTitleWidth - dotWidth) {
+						context.drawString(left + chapterWidth + 3 + currentWidth, offsetY + height, charArray, i, 1);
+					} else {
+						context.drawString(left + chapterWidth + 3 + currentWidth, offsetY + height, "...");
+						break;
+					}
+					
+					currentWidth += curCharWidth;
+				}
+			}
 		}
 
 		// TODO: remove
@@ -2169,16 +2127,9 @@ public class ZLTextView {
 
 	private Footer myFooter;
 	public Footer getFooterArea() {
-		if (FBReaderApp.Instance().ScrollbarTypeOption.getValue() == SCROLLBAR_SHOW_AS_FOOTER) {
-			if (myFooter == null) {
-				myFooter = new Footer();
-				FBReaderApp.Instance().addTimerTask(myFooter.UpdateTask, 30000);
-			}
-		} else {
-			if (myFooter != null) {
-				FBReaderApp.Instance().removeTimerTask(myFooter.UpdateTask);
-				myFooter = null;
-			}
+		if (myFooter == null) {
+			myFooter = new Footer();
+			FBReaderApp.Instance().addTimerTask(myFooter.UpdateTask, 30000);
 		}
 		return myFooter;
 	}
@@ -2197,11 +2148,5 @@ public class ZLTextView {
 			traverser.traverse(getSelectionStartPosition(), getSelectionEndPosition());
 		}
 		return traverser.getCount();
-	}
-
-	public static final int SCROLLBAR_SHOW_AS_FOOTER = 3;
-
-	public int scrollbarType() {
-		return FBReaderApp.Instance().ScrollbarTypeOption.getValue();
 	}
 }

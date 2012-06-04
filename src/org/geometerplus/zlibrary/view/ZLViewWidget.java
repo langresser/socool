@@ -264,7 +264,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			new Canvas(bitmap),
 			getWidth(),
 			getMainAreaHeight(),
-			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
+			getVerticalScrollbarWidth()
 		);
 		view.paint(context, index);
 		
@@ -279,7 +279,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			new Canvas(bitmap),
 			getWidth(),
 			footer.getHeight(),
-			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
+			getVerticalScrollbarWidth()
 		);
 		footer.paint(contextFooter, index, false);
 	}
