@@ -111,9 +111,7 @@ public class ZLResource {
 	static volatile ZLResource ourRoot;
 	private static final Object ourLock = new Object();
 
-    private static long ourTimeStamp = 0;
     private static String ourLanguage = null;
-    private static String ourCountry = null;
 
 	private boolean myHasValue;
 	private	String myValue;
@@ -124,32 +122,13 @@ public class ZLResource {
 		synchronized (ourLock) {
 			if (ourRoot == null) {
 				ourRoot = new ZLResource("", null);
-				ourLanguage = "en";
-				ourCountry = "UK";
+				ourLanguage = "zh";
+//				ourLanguage = Locale.getDefault().getLanguage();
 				loadData();
 			}
 		}
 	}
 
-    private static void updateLanguage() {
-        final long timeStamp = System.currentTimeMillis();
-        if (timeStamp > ourTimeStamp + 1000) {
-            synchronized (ourLock) {
-                if (timeStamp > ourTimeStamp + 1000) {
-					ourTimeStamp = timeStamp;
-        			final String language = Locale.getDefault().getLanguage();
-        			final String country = Locale.getDefault().getCountry();
-					if ((language != null && !language.equals(ourLanguage)) ||
-						(country != null && !country.equals(ourCountry))) {
-						ourLanguage = language;
-						ourCountry = country;
-						loadData();
-					}
-				}
-			}
-		}
-    }
-	
 	private static void loadData(ResourceTreeReader reader, String fileName) {
 		reader.readDocument(ourRoot, FBReaderApp.Instance().createResourceFile("resources/zlibrary/" + fileName));
 		reader.readDocument(ourRoot, FBReaderApp.Instance().createResourceFile("resources/application/" + fileName));
@@ -158,7 +137,6 @@ public class ZLResource {
 	private static void loadData() {
 		ResourceTreeReader reader = new ResourceTreeReader();
 		loadData(reader, ourLanguage + ".xml");
-		loadData(reader, ourLanguage + "_" + ourCountry + ".xml");
 	}
 
 	private	ZLResource(String name, String value) {
@@ -176,12 +154,10 @@ public class ZLResource {
 	}
 	
 	public String getValue() {
-		updateLanguage();
 		return myHasValue ? myValue : null;
 	}
 
 	public String getValue(int number) {
-		updateLanguage();
 		if (myConditionalValues != null) {
 			for (Map.Entry<Condition,String> entry: myConditionalValues.entrySet()) {
 				if (entry.getKey().accepts(number)) {
