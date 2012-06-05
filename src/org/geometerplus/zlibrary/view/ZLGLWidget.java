@@ -223,21 +223,8 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 		// draw text
 		final ZLPaintContext context = new ZLPaintContext(new Canvas(bitmap),
-			mPageBitmapWidth, getMainAreaHeight(), 0);
+			mPageBitmapWidth, getHeight());
 		view.paint(context, index);
-
-		// draw footer
-		final ZLTextView.Footer footer = view.getFooterArea();
-
-		if (footer == null) {
-			return;
-		}
-
-		final ZLPaintContext contextFooter = new ZLPaintContext(
-			new Canvas(bitmap),
-			mPageBitmapWidth, footer.getHeight(), 0
-		);
-		footer.paint(contextFooter, index, false);
 	}
 
 	@Override
@@ -388,11 +375,6 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 				FBReaderApp.Instance().hasActionForKey(keyCode, false) ||
 				FBReaderApp.Instance().hasActionForKey(keyCode, true);
 		}
-	}
-
-	private int getMainAreaHeight() {
-		final ZLTextView.Footer footer = FBReaderApp.Instance().getCurrentView().getFooterArea();
-		return footer != null ? getHeight() - footer.getHeight() : getHeight();
 	}
 
 	@Override

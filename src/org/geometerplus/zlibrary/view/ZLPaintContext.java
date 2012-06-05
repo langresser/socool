@@ -55,7 +55,6 @@ public class ZLPaintContext {
 
 	private final int myWidth;
 	private final int myHeight;
-	private final int myScrollbarWidth;
 
 	private ZLColor myBackgroundColor = new ZLColor(0, 0, 0);
 
@@ -81,11 +80,10 @@ public class ZLPaintContext {
 		int HALF_FILL = 1;
 	};
 	
-	protected ZLPaintContext(Canvas canvas, int width, int height, int scrollbarWidth) {
+	protected ZLPaintContext(Canvas canvas, int width, int height) {
 		myCanvas = canvas;
-		myWidth = width - scrollbarWidth;
+		myWidth = width;
 		myHeight = height;
-		myScrollbarWidth = scrollbarWidth;
 
 		myTextPaint.setLinearText(false);
 		myTextPaint.setAntiAlias(AntiAliasOption.getValue());
@@ -275,7 +273,7 @@ public class ZLPaintContext {
 	public void clear(ZLColor color) {
 		myBackgroundColor = color;
 		myFillPaint.setColor(ZLAndroidColorUtil.rgb(color));
-		myCanvas.drawRect(0, 0, myWidth + myScrollbarWidth, myHeight, myFillPaint);
+		myCanvas.drawRect(0, 0, myWidth, myHeight, myFillPaint);
 	}
 
 	public ZLColor getBackgroundColor() {
@@ -444,8 +442,8 @@ public class ZLPaintContext {
 		}
 		if (!containsSoftHyphen) {
 //			// TODO delete it  wangjia
-//			String word = new String(string, offset, length);
-//			Log.e("drawString", String.format("word: %1s   x: %1d  y:%1d", word, x, y));
+			String word = new String(string, offset, length);
+			Log.e("drawString", String.format("word: %1s   x: %1d  y:%1d", word, x, y));
 			myCanvas.drawText(string, offset, length, x, y, myTextPaint);
 		} else {
 			final char[] corrected = new char[length];

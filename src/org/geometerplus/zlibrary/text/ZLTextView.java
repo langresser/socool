@@ -83,6 +83,12 @@ public class ZLTextView {
 
 	protected ZLPaintContext myContext = null;
 	ArrayList<ZLTextHighlighting> m_bookMarkHighlighting;
+	
+	private Runnable UpdateTask = new Runnable() {
+		public void run() {
+			FBReaderApp.Instance().repaintStatusBar();
+		}
+	};
 
 	public ZLTextView() {
 		mySelection = new ZLTextSelection(this);
@@ -109,6 +115,8 @@ public class ZLTextView {
 		}
 
 		FBReaderApp.Instance().resetWidget();
+		
+		FBReaderApp.Instance().addTimerTask(UpdateTask, 30000);
 	}
 	
 	private void loadBookMark()
@@ -495,6 +503,97 @@ public class ZLTextView {
 		
 		drawSelectionCursor(context, getSelectionCursorPoint(page, ZLTextSelectionCursor.Left));
 		drawSelectionCursor(context, getSelectionCursorPoint(page, ZLTextSelectionCursor.Right));
+		
+		drawFooter(context, pageIndex);
+	}
+	
+	public synchronized void drawFooter(ZLPaintContext context, PageIndex pageIndex)
+	{
+		final BookModel model = myModel;
+		if (model == null) {
+			return;
+		}
+
+		//final ZLColor bgColor = getBackgroundColor();
+		// TODO: separate color option for footer color
+		final ZLColor fgColor = getTextColor(ZLTextHyperlink.NO_LINK);
+
+		final int left = FBReaderApp.Instance().getLeftMargin();
+		final int right = context.getWidth() - FBReaderApp.Instance().getRightMargin();
+
+		final ZLTextStyle baseStyle = ZLTextStyleCollection.Instance().getBaseStyle();
+		final String fontFamily = baseStyle.getFontFamily();
+		final int textFontSize = baseStyle.getFontSize() - 3;
+		final int footHeight = FBReaderApp.Instance().getBottomMargin();
+		final int footFontSize = Math.min(textFontSize, footHeight);
+		
+		// foot字体选择文本字体，字号是foot高度-5，但是最大不超过文本字号-3
+		context.setFont(fontFamily, footFontSize, false, false, false, false);
+
+		// 状态栏文本在最底部显示，留3个像素的空白区域
+		int offsetY = context.getHeight();
+		if (footHeight > footFontSize) {
+			offsetY -= Math.max(3, footHeight - footFontSize);
+		}
+
+		int currentParagraph = 0;
+		
+		switch (pageIndex) {
+			case current:
+				currentParagraph = myCurrentPage.StartCursor.getParagraphIndex();
+				break;
+			case previous:
+				currentParagraph = myPreviousPage.StartCursor.getParagraphIndex();
+				break;
+			case next:
+				currentParagraph = myNextPage.StartCursor.getParagraphIndex();
+				break;
+			default:
+				break;
+		}
+
+		// 补上不显示的章节结束段落标识
+		currentParagraph += 1;
+		final int currentChapter = myModel.m_chapter.getChapterIndexByParagraph(currentParagraph);
+		final int chapterCount = myModel.m_chapter.getChapterCount();
+		final String chapterInfo = String.format("%1d/%2d", currentChapter + 1, chapterCount);
+		
+		// 显示章节进度
+		final int chapterWidth = context.getStringWidth(chapterInfo);
+		context.setTextColor(fgColor);
+		context.drawString(left, offsetY, chapterInfo);
+		
+		// 显示电池和时间
+		final String infoString = String.format("%1d%% %2s", FBReaderApp.Instance().getBatteryLevel(),
+									FBReaderApp.Instance().getCurrentTimeString());
+		final int infoWidth = context.getStringWidth(infoString);
+
+		context.drawString(right - infoWidth, offsetY, infoString);
+
+		// 显示章节名称
+		final String title = myModel.m_chapter.getChapterTitle(currentChapter);
+		final int titleWidth = context.getStringWidth(title);
+		final int maxTitleWidth = right - left - infoWidth - chapterWidth - 6;
+		if (titleWidth < maxTitleWidth) {
+			context.drawString(left + chapterWidth + 3 + Math.max((maxTitleWidth - titleWidth) / 2, 0), offsetY, title);
+		} else {
+			final int dotWidth = context.getStringWidth("...");
+			char[] charArray = title.toCharArray();
+			final int len = charArray.length;
+			int currentWidth = 0;
+			for (int i = 0; i < len; ++i) {
+				int curCharWidth = context.getStringWidth(charArray, i, 1);
+				
+				if (currentWidth + curCharWidth < maxTitleWidth - dotWidth) {
+					context.drawString(left + chapterWidth + 3 + currentWidth, offsetY, charArray, i, 1);
+				} else {
+					context.drawString(left + chapterWidth + 3 + currentWidth, offsetY, "...");
+					break;
+				}
+				
+				currentWidth += curCharWidth;
+			}
+		}
 	}
 	
 	private ZLTextPage getPage(PageIndex pageIndex) {
@@ -690,7 +789,7 @@ public class ZLTextView {
 
 	private void buildInfos(ZLTextPage page, ZLTextWordCursor start, ZLTextWordCursor result) {
 		result.setCursor(start);
-		int textAreaHeight = getTextAreaHeight() - myFooter.getHeight();
+		int textAreaHeight = getTextAreaHeight();
 		page.LineInfos.clear();
 		int counter = 0;
 
@@ -709,7 +808,7 @@ public class ZLTextView {
 			while (info.EndElementIndex != endIndex) {
 				info = processTextLine(paragraphCursor, info.EndElementIndex, info.EndCharIndex, endIndex);
 				textAreaHeight -= info.Height + info.Descent;
-				if (textAreaHeight <= 0 && counter > 0) {
+				if (textAreaHeight < 0 && counter > 0) {
 					break;
 				}
 				textAreaHeight -= info.VSpaceAfter;
@@ -2003,135 +2102,6 @@ public class ZLTextView {
 
 	public ZLColor getHighlightingColor() {
 		return FBReaderApp.Instance().getColorProfile().HighlightingOption.getValue();
-	}
-
-	public class Footer {
-		private Runnable UpdateTask = new Runnable() {
-			public void run() {
-				FBReaderApp.Instance().repaintStatusBar();
-			}
-		};
-		
-		public int getHeight()
-		{
-			return ZLTextStyleCollection.Instance().getBaseStyle().getFontSize();
-		}
-
-		public synchronized void paint(ZLPaintContext context, PageIndex pageIndex, boolean update) {
-			final BookModel model = myModel;
-			if (model == null) {
-				return;
-			}
-			
-			if (update) {
-				final ZLFile wallpaper = getWallpaperFile();
-				if (wallpaper != null) {
-					context.clear(wallpaper, wallpaper instanceof ZLResourceFile);
-				} else {
-					context.clear(getBackgroundColor());
-				}
-			}
-
-			//final ZLColor bgColor = getBackgroundColor();
-			// TODO: separate color option for footer color
-			final ZLColor fgColor = getTextColor(ZLTextHyperlink.NO_LINK);
-
-			final int left = FBReaderApp.Instance().getLeftMargin();
-			final int right = context.getWidth() - FBReaderApp.Instance().getRightMargin();
-
-			final ZLTextStyle baseStyle = ZLTextStyleCollection.Instance().getBaseStyle();
-			final String fontFamily = baseStyle.getFontFamily();
-			final int textFontSize = baseStyle.getFontSize() - 3;
-			final int height = FBReaderApp.Instance().FooterHeightOption.getValue();
-			final int footFontSize = Math.min(textFontSize, height);
-			
-			// foot字体选择文本字体，字号是foot高度，但是最大不超过文本字号
-			context.setFont(fontFamily, footFontSize, false, false, false, false);
-
-			int offsetY = 0;			
-			if (FBReaderApp.Instance().isUseGLView()) {
-				final ZLGLWidget widget = FBReaderApp.Instance().getWidgetGL();
-				offsetY = widget.getHeight() - height * 2;
-			} else {
-				final ZLViewWidget widget = FBReaderApp.Instance().getWidget();
-				offsetY = widget.getHeight() - height * 2;
-			}
-
-			int currentParagraph = 0;
-			
-			switch (pageIndex) {
-				case current:
-					currentParagraph = myCurrentPage.StartCursor.getParagraphIndex();
-					break;
-				case previous:
-					currentParagraph = myPreviousPage.StartCursor.getParagraphIndex();
-					break;
-				case next:
-					currentParagraph = myNextPage.StartCursor.getParagraphIndex();
-					break;
-				default:
-					break;
-			}
-
-			// 补上不显示的章节结束段落标识
-			currentParagraph += 1;
-			final int currentChapter = myModel.m_chapter.getChapterIndexByParagraph(currentParagraph);
-			final int chapterCount = myModel.m_chapter.getChapterCount();
-			final String chapterInfo = String.format("%1d/%2d", currentChapter + 1, chapterCount);
-			
-			// 显示章节进度
-			final int chapterWidth = context.getStringWidth(chapterInfo);
-			context.setTextColor(fgColor);
-			context.drawString(left, offsetY + height, chapterInfo);
-			
-			// 显示电池和时间
-			final StringBuilder info = new StringBuilder();
-			info.append(FBReaderApp.Instance().getBatteryLevel());
-			info.append("%");
-			info.append(" ");
-			info.append(FBReaderApp.Instance().getCurrentTimeString());
-			final String infoString = info.toString();
-			final int infoWidth = context.getStringWidth(infoString);
-
-			context.drawString(right - infoWidth, offsetY + height, infoString);
-
-			// 显示章节名称
-			final String title = myModel.m_chapter.getChapterTitle(currentChapter);
-			final int titleWidth = context.getStringWidth(title);
-			final int maxTitleWidth = right - left - infoWidth - chapterWidth - 6;
-			if (titleWidth < maxTitleWidth) {
-				context.drawString(left + chapterWidth + 3 + Math.max((maxTitleWidth - titleWidth) / 2, 0), offsetY + height, title);
-			} else {
-				final int dotWidth = context.getStringWidth("...");
-				char[] charArray = title.toCharArray();
-				final int len = charArray.length;
-				int currentWidth = 0;
-				for (int i = 0; i < len; ++i) {
-					int curCharWidth = context.getStringWidth(charArray, i, 1);
-					
-					if (currentWidth + curCharWidth < maxTitleWidth - dotWidth) {
-						context.drawString(left + chapterWidth + 3 + currentWidth, offsetY + height, charArray, i, 1);
-					} else {
-						context.drawString(left + chapterWidth + 3 + currentWidth, offsetY + height, "...");
-						break;
-					}
-					
-					currentWidth += curCharWidth;
-				}
-			}
-		}
-
-		// TODO: remove
-		int myGaugeWidth = 1;
-	}
-
-	private Footer myFooter;
-	public Footer getFooterArea() {
-		if (myFooter == null) {
-			myFooter = new Footer();
-			FBReaderApp.Instance().addTimerTask(myFooter.UpdateTask, 30000);
-		}
-		return myFooter;
 	}
 
 	public String getSelectedText() {

@@ -138,9 +138,9 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			fbReader.TopMarginOption
 		));
 		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("bottom"),
-			fbReader.BottomMarginOption
-		));
+				this, marginsScreen.Resource.getResource("bottom"),
+				fbReader.BottomMarginOption
+			));
 
 		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
 

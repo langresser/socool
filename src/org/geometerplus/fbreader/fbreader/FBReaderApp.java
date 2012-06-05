@@ -109,9 +109,6 @@ public final class FBReaderApp {
 	public ZLIntegerRangeOption TopMarginOption = null;
 	public ZLIntegerRangeOption BottomMarginOption = null;
 
-	public final ZLIntegerRangeOption FooterHeightOption =
-		new ZLIntegerRangeOption("Options", "FooterHeight", 8, 20, 14);
-
 	final ZLStringOption ColorProfileOption =
 		new ZLStringOption("Options", "ColorProfile", ColorProfile.DAY);
 
@@ -261,7 +258,7 @@ public final class FBReaderApp {
 
 	public int getLeftMargin() {
 		if (LeftMarginOption == null) {
-			LeftMarginOption = new ZLIntegerRangeOption("Options", "LeftMargin", 0, 100, 15);
+			LeftMarginOption = new ZLIntegerRangeOption("Options", "LeftMargin", 0, 20, 10);
 		}
 
 		return LeftMarginOption.getValue();
@@ -269,21 +266,21 @@ public final class FBReaderApp {
 
 	public int getRightMargin() {
 		if (RightMarginOption == null) {
-			RightMarginOption = new ZLIntegerRangeOption("Options", "RightMargin", 0, 100, 15);
+			RightMarginOption = new ZLIntegerRangeOption("Options", "RightMargin", 0, 20, 10);
 		}
 		return RightMarginOption.getValue();
 	}
 	
 	public int getTopMargin() {
 		if (TopMarginOption == null) {
-			TopMarginOption = new ZLIntegerRangeOption("Options", "TopMargin", 0, 100, 0);
+			TopMarginOption = new ZLIntegerRangeOption("Options", "TopMargin", 0, 20, 0);
 		}
 		return TopMarginOption.getValue();
 	}
 
 	public int getBottomMargin() {
 		if (BottomMarginOption == null) {
-			BottomMarginOption = new ZLIntegerRangeOption("Options", "BottomMargin", 0, 100, 4);
+			BottomMarginOption = new ZLIntegerRangeOption("Options", "BottomMargin", 10, 30, 12);
 		}
 		return BottomMarginOption.getValue();
 	}
@@ -640,7 +637,7 @@ public final class FBReaderApp {
 	public static final String SCREEN_ORIENTATION_REVERSE_PORTRAIT = "reversePortrait";
 	public static final String SCREEN_ORIENTATION_REVERSE_LANDSCAPE = "reverseLandscape";
 
-	public final ZLStringOption OrientationOption = new ZLStringOption("LookNFeel", "Orientation", "auto");
+	public final ZLStringOption OrientationOption = new ZLStringOption("LookNFeel", "Orientation", "portrait");
 
 	public String[] allOrientations() {
 		return new String[] {

@@ -211,7 +211,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 
 	public void startManualScrolling(int x, int y) {
 		final AnimationProvider animator = getAnimationProvider();
-		animator.setup(getWidth(), getMainAreaHeight());
+		animator.setup(getWidth(), getHeight());
 		animator.startManualScrolling(x, y);
 	}
 
@@ -230,7 +230,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			return;
 		}
 		final AnimationProvider animator = getAnimationProvider();
-		animator.setup(getWidth(), getMainAreaHeight());
+		animator.setup(getWidth(), getHeight());
 		
 		if (x == -1 && y == -1) {
 			animator.startAnimatedScrolling(pageIndex, null, null, speed);
@@ -263,29 +263,13 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 		final ZLPaintContext context = new ZLPaintContext(
 			new Canvas(bitmap),
 			getWidth(),
-			getMainAreaHeight(),
-			getVerticalScrollbarWidth()
+			getHeight()
 		);
 		view.paint(context, index);
-		
-		// draw footer
-		final ZLTextView.Footer footer = view.getFooterArea();
-
-		if (footer == null) {
-			return;
-		}
-
-		final ZLPaintContext contextFooter = new ZLPaintContext(
-			new Canvas(bitmap),
-			getWidth(),
-			footer.getHeight(),
-			getVerticalScrollbarWidth()
-		);
-		footer.paint(contextFooter, index, false);
 	}
 
 	private void onDrawStatic(Canvas canvas) {
-		setBitmapSize(getWidth(), getMainAreaHeight());
+		setBitmapSize(getWidth(), getHeight());
 		canvas.drawBitmap(getBitmap(ZLTextView.PageIndex.current), 0, 0, myPaint);
 	}
 
@@ -436,10 +420,5 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 				application.hasActionForKey(keyCode, false) ||
 				application.hasActionForKey(keyCode, true);
 		}
-	}
-
-	private int getMainAreaHeight() {
-		final ZLTextView.Footer footer = FBReaderApp.Instance().getCurrentView().getFooterArea();
-		return footer != null ? getHeight() - footer.getHeight() : getHeight();
 	}
 }
