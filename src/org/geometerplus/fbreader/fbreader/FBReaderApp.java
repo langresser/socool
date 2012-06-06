@@ -51,7 +51,13 @@ import org.geometerplus.zlibrary.util.ZLColor;
 import org.geometerplus.zlibrary.view.ZLGLWidget;
 import org.geometerplus.zlibrary.view.ZLViewWidget;
 
+import org.geometerplus.android.fbreader.ChangeFontSizePopup;
+import org.geometerplus.android.fbreader.ChangeLightPopup;
+import org.geometerplus.android.fbreader.NavigationPopup;
+import org.geometerplus.android.fbreader.PopupPanel;
 import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.android.fbreader.SelectionPopup;
+import org.geometerplus.android.fbreader.TextSearchPopup;
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.Paths;
@@ -535,21 +541,7 @@ public final class FBReaderApp {
 		abstract protected void run(Object ... params);
 	}
 
-	public static abstract class PopupPanel {
-		protected final FBReaderApp Application;
-
-		protected PopupPanel(FBReaderApp application) {
-			application.myPopups.put(getId(), this);
-			Application = application;
-		}
-
-		abstract public String getId();
-		abstract protected void update();
-		abstract protected void hide_();
-		abstract protected void show_();
-	}
-
-	private final HashMap<String,PopupPanel> myPopups = new HashMap<String,PopupPanel>();
+	public final HashMap<String, PopupPanel> myPopups = new HashMap<String, PopupPanel>();
 	private PopupPanel myActivePopup;
 	public final Collection<PopupPanel> popupPanels() {
 		return myPopups.values();
@@ -558,7 +550,22 @@ public final class FBReaderApp {
 		return myActivePopup;
 	}
 	public final PopupPanel getPopupById(String id) {
-		return myPopups.get(id);
+		final PopupPanel panel = myPopups.get(id);
+		if (panel == null) {
+			if (id == TextSearchPopup.ID) {
+				return new TextSearchPopup();
+			} else if (id == NavigationPopup.ID) {
+				return new NavigationPopup();
+			} else if (id == SelectionPopup.ID) {
+				return new SelectionPopup();
+			} else if (id == ChangeFontSizePopup.ID) {
+				return new ChangeFontSizePopup();
+			} else if (id == ChangeLightPopup.ID) {
+				return new ChangeLightPopup();
+			}
+		}
+		
+		return panel;
 	}
 
 	private volatile Timer myTimer;
@@ -625,31 +632,31 @@ public final class FBReaderApp {
 		}
 	}
 	
-	
-	
-	
-
 
 	public static final String SCREEN_ORIENTATION_SYSTEM = "system";
-	public static final String SCREEN_ORIENTATION_SENSOR = "sensor";
 	public static final String SCREEN_ORIENTATION_PORTRAIT = "portrait";
 	public static final String SCREEN_ORIENTATION_LANDSCAPE = "landscape";
-	public static final String SCREEN_ORIENTATION_REVERSE_PORTRAIT = "reversePortrait";
-	public static final String SCREEN_ORIENTATION_REVERSE_LANDSCAPE = "reverseLandscape";
 
 	public final ZLStringOption OrientationOption = new ZLStringOption("LookNFeel", "Orientation", "portrait");
 
 	public String[] allOrientations() {
 		return new String[] {
 				SCREEN_ORIENTATION_SYSTEM,
-				SCREEN_ORIENTATION_SENSOR,
 				SCREEN_ORIENTATION_PORTRAIT,
 				SCREEN_ORIENTATION_LANDSCAPE
 			};
 	}
 	
+	public static final int TURN_OFF_TIME_DEFAULT = 0;
+	public static final int TURN_OFF_TIME_1 = 1;
+	public static final int TURN_OFF_TIME_3 = 2;
+	public static final int TURN_OFF_TIME_5 = 3;
+	public static final int TURN_OFF_TIME_10 = 4;
+	public static final int TURN_OFF_TIME_30 = 5;
+	public static final int TURN_OFF_TIME_NEVER = 6;
+	
 	public final ZLIntegerRangeOption BatteryLevelToTurnScreenOffOption = new ZLIntegerRangeOption("LookNFeel", "BatteryLevelToTurnScreenOff", 0, 100, 50);
-	public final ZLBooleanOption DontTurnScreenOffDuringChargingOption = new ZLBooleanOption("LookNFeel", "DontTurnScreenOffDuringCharging", true);
+	public final ZLStringOption TurnOffTimeOpion = new ZLStringOption("LookNFeel", "TurnOffTime", "default");
 	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 0);
 
 	private boolean hasNoHardwareMenuButton() {

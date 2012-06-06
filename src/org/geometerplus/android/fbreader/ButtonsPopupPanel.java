@@ -41,8 +41,8 @@ abstract class ButtonsPopupPanel extends PopupPanel implements View.OnClickListe
 
 	private final ArrayList<ActionButton> myButtons = new ArrayList<ActionButton>();
 
-	ButtonsPopupPanel(FBReaderApp fbReader) {
-		super(fbReader);
+	ButtonsPopupPanel() {
+		super();
 	}
 
 	protected void addButton(String actionId, boolean isCloseButton, int imageId) {
@@ -54,7 +54,7 @@ abstract class ButtonsPopupPanel extends PopupPanel implements View.OnClickListe
 	}
 
 	@Override
-	protected void update() {
+	public void update() {
 		for (ActionButton button : myButtons) {
 			button.setEnabled(FBReaderApp.Instance().isActionEnabled(button.ActionId));
 		}

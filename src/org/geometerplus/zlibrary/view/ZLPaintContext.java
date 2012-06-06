@@ -223,48 +223,28 @@ public class ZLPaintContext {
 		return myFamilies;
 	}	
 
-	public void clear(ZLFile wallpaperFile, boolean doMirror) {
+	public void clear(ZLFile wallpaperFile) {
 		if (!wallpaperFile.equals(ourWallpaperFile)) {
 			ourWallpaperFile = wallpaperFile;
 			ourWallpaper = null;
 			try {
-				final Bitmap fileBitmap =
-					BitmapFactory.decodeStream(wallpaperFile.getInputStream());
-				if (doMirror) {
-					final int w = fileBitmap.getWidth();
-					final int h = fileBitmap.getHeight();
-					final Bitmap wallpaper = Bitmap.createBitmap(2 * w, 2 * h, fileBitmap.getConfig());
-					final Canvas wallpaperCanvas = new Canvas(wallpaper);
-					final Paint wallpaperPaint = new Paint();
+				final Bitmap fileBitmap = BitmapFactory.decodeStream(wallpaperFile.getInputStream());
+				Matrix m = new Matrix();
+				final int width = fileBitmap.getWidth();
+		        final int height = fileBitmap.getHeight();
+		        final float sx = myWidth  / (float) width;
+		        final float sy = myHeight / (float) height;
+		        m.setScale(sx, sy);
 
-					Matrix m = new Matrix();
-					wallpaperCanvas.drawBitmap(fileBitmap, m, wallpaperPaint);
-					m.preScale(-1, 1);
-					m.postTranslate(2 * w, 0);
-					wallpaperCanvas.drawBitmap(fileBitmap, m, wallpaperPaint);
-					m.preScale(1, -1);
-					m.postTranslate(0, 2 * h);
-					wallpaperCanvas.drawBitmap(fileBitmap, m, wallpaperPaint);
-					m.preScale(-1, 1);
-					m.postTranslate(- 2 * w, 0);
-					wallpaperCanvas.drawBitmap(fileBitmap, m, wallpaperPaint);
-					ourWallpaper = wallpaper;
-				} else {
-					ourWallpaper = fileBitmap;
-				}
+		        Bitmap wallpaper = Bitmap.createBitmap(fileBitmap, 0, 0, width, height, m, true);
+				ourWallpaper = wallpaper;
 			} catch (Throwable t) {
 				t.printStackTrace();
 			}
 		}
 		if (ourWallpaper != null) {
 			myBackgroundColor = ZLAndroidColorUtil.getAverageColor(ourWallpaper);
-			final int w = ourWallpaper.getWidth();
-			final int h = ourWallpaper.getHeight();
-			for (int cw = 0, iw = 1; cw < myWidth; cw += w, ++iw) {
-				for (int ch = 0, ih = 1; ch < myHeight; ch += h, ++ih) {
-					myCanvas.drawBitmap(ourWallpaper, cw, ch, myFillPaint);
-				}
-			}
+			myCanvas.drawBitmap(ourWallpaper, 0, 0, myFillPaint);
 		} else {
 			clear(new ZLColor(128, 128, 128));
 		}
@@ -442,8 +422,8 @@ public class ZLPaintContext {
 		}
 		if (!containsSoftHyphen) {
 //			// TODO delete it  wangjia
-			String word = new String(string, offset, length);
-			Log.e("drawString", String.format("word: %1s   x: %1d  y:%1d", word, x, y));
+//			String word = new String(string, offset, length);
+//			Log.e("drawString", String.format("word: %1s   x: %1d  y:%1d", word, x, y));
 			myCanvas.drawText(string, offset, length, x, y, myTextPaint);
 		} else {
 			final char[] corrected = new char[length];

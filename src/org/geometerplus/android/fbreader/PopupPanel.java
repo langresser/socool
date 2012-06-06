@@ -27,23 +27,22 @@ import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-abstract class PopupPanel extends FBReaderApp.PopupPanel {
+public abstract class PopupPanel {
 	public ZLTextWordCursor StartPosition;
 
 	protected volatile PopupWindow myWindow;
 	private volatile SCReaderActivity myActivity;
 	private volatile RelativeLayout myRoot;
 
-	PopupPanel(FBReaderApp fbReader) {
-		super(fbReader);
+	PopupPanel() {
+		FBReaderApp.Instance().myPopups.put(getId(), this);
 	}
+	
+	public abstract String getId();
+	public abstract void run();
+	public abstract void update();
 
-	protected final FBReaderApp getReader() {
-		return (FBReaderApp)Application;
-	}
-
-	@Override
-	protected void show_() {
+	public void show_() {
 		if (myActivity != null) {
 			createControlPanel(myActivity, myRoot);
 		}
@@ -52,14 +51,13 @@ abstract class PopupPanel extends FBReaderApp.PopupPanel {
 		}
 	}
 
-	@Override
-	protected void hide_() {
+	public void hide_() {
 		if (myWindow != null) {
 			myWindow.hide();
 		}
 	}
 
-	private final void removeWindow(Activity activity) {
+	public final void removeWindow(Activity activity) {
 		if (myWindow != null && activity == myWindow.getActivity()) {
 			ViewGroup root = (ViewGroup)myWindow.getParent();
 			myWindow.hide();
@@ -69,7 +67,7 @@ abstract class PopupPanel extends FBReaderApp.PopupPanel {
 	}
 
 	public static void removeAllWindows(Activity activity) {
-		for (FBReaderApp.PopupPanel popup : FBReaderApp.Instance().popupPanels()) {
+		for (PopupPanel popup : FBReaderApp.Instance().popupPanels()) {
 			((PopupPanel)popup).removeWindow(activity);
 		}
 	}
@@ -83,13 +81,13 @@ abstract class PopupPanel extends FBReaderApp.PopupPanel {
 
 	public final void initPosition() {
 		if (StartPosition == null) {
-			StartPosition = new ZLTextWordCursor(getReader().getCurrentView().getStartCursor());
+			StartPosition = new ZLTextWordCursor(FBReaderApp.Instance().getCurrentView().getStartCursor());
 		}
 	}
 
 	public final void storePosition() {
 		if (StartPosition != null &&
-			!StartPosition.equals(getReader().getCurrentView().getStartCursor())) {
+			!StartPosition.equals(FBReaderApp.Instance().getCurrentView().getStartCursor())) {
 		}
 	}
 

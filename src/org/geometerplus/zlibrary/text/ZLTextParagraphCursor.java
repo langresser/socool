@@ -168,8 +168,8 @@ public final class ZLTextParagraphCursor {
 		}
 
 		private final void addWord(char[] data, int offset, int len, int paragraphOffset, ZLTextHyperlink hyperlink) {
-			String text = new String(data, offset, len);
-			Log.d("addWord", text);
+//			String text = new String(data, offset, len);
+//			Log.d("addWord", text);
 			ZLTextWord word = new ZLTextWord(data, offset, len, paragraphOffset);
 			for (int i = myFirstMark; i < myLastMark; ++i) {
 				final ZLTextMark mark = (ZLTextMark)myMarks.get(i);

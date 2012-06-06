@@ -51,21 +51,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		final ColorProfile profile = fbReader.getColorProfile();
 
-		final Screen directoriesScreen = createPreferenceScreen("directories");
-		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");
-		if (AndroidFontUtil.areExternalFontsSupported()) {
-			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
-		}
-		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
-
-		final Screen appearanceScreen = createPreferenceScreen("appearance");
-		appearanceScreen.addPreference(new BatteryLevelToTurnScreenOffPreference(
-			this,
-			fbReader.BatteryLevelToTurnScreenOffOption,
-			appearanceScreen.Resource,
-			"dontTurnScreenOff"
-		));
-
 		final Screen textScreen = createPreferenceScreen("text");
 
 		final ZLTextStyleCollection collection = ZLTextStyleCollection.Instance();
@@ -90,14 +75,37 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		}
 		textScreen.addPreference(new ZLChoicePreference(
 			this, textScreen.Resource, "lineSpacing",
-			spaceOption, spacings
-		));
+			spaceOption, spacings));
+		
+		textScreen.addPreference(new ZLIntegerRangePreference(
+				this, textScreen.Resource.getResource("left"),
+				fbReader.LeftMarginOption));
+		textScreen.addPreference(new ZLIntegerRangePreference(
+				this, textScreen.Resource.getResource("right"),
+				fbReader.RightMarginOption));
+		textScreen.addPreference(new ZLIntegerRangePreference(
+				this, textScreen.Resource.getResource("top"),
+				fbReader.TopMarginOption));
+		textScreen.addPreference(new ZLIntegerRangePreference(
+					this, textScreen.Resource.getResource("bottom"),
+					fbReader.BottomMarginOption));
+
 		final String[] alignments = { "left", "right", "center", "justify" };
 		textScreen.addPreference(new ZLChoicePreference(
 			this, textScreen.Resource, "alignment",
 			baseStyle.AlignmentOption, alignments
 		));
 		textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
+
+		final Screen appearanceScreen = createPreferenceScreen("appearance");
+
+		final String[] turnoffTimes = {"default", "1", "3", "5", "10", "30", "never"};
+		appearanceScreen.addPreference(new ZLStringChoicePreference(this, 
+				appearanceScreen.Resource, "turnOffTime", fbReader.TurnOffTimeOpion, turnoffTimes));
+		
+		final String[] screenOrientation = {"portrait", "landscape", "system"};
+		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
+				"screenOrientation", fbReader.OrientationOption, screenOrientation));
 
 		final ZLPreferenceSet bgPreferences = new ZLPreferenceSet();
 
@@ -124,24 +132,6 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		colorsScreen.addOption(profile.SelectionBackgroundOption, "selectionBackground");
 		colorsScreen.addOption(profile.SelectionForegroundOption, "selectionForeground");
 
-		final Screen marginsScreen = createPreferenceScreen("margins");
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("left"),
-			fbReader.LeftMarginOption
-		));
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("right"),
-			fbReader.RightMarginOption
-		));
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-			this, marginsScreen.Resource.getResource("top"),
-			fbReader.TopMarginOption
-		));
-		marginsScreen.addPreference(new ZLIntegerRangePreference(
-				this, marginsScreen.Resource.getResource("bottom"),
-				fbReader.BottomMarginOption
-			));
-
 		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
 
 		final Screen scrollingScreen = createPreferenceScreen("scrolling");
@@ -153,6 +143,13 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			"animationSpeed",
 			scrollingPreferences.AnimationSpeedOption
 		));
+		
+		final Screen directoriesScreen = createPreferenceScreen("directories");
+		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");
+		if (AndroidFontUtil.areExternalFontsSupported()) {
+			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
+		}
+		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
 	}
 	
 	void initFormat(Screen textScreen)

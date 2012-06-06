@@ -438,7 +438,7 @@ public class ZLTextView {
 		myContext = context;
 		final ZLFile wallpaper = getWallpaperFile();
 		if (wallpaper != null) {
-			context.clear(wallpaper, wallpaper instanceof ZLResourceFile);
+			context.clear(wallpaper);
 		} else {
 			context.clear(getBackgroundColor());
 		}
@@ -531,9 +531,9 @@ public class ZLTextView {
 		context.setFont(fontFamily, footFontSize, false, false, false, false);
 
 		// 状态栏文本在最底部显示，留3个像素的空白区域
-		int offsetY = context.getHeight();
+		int offsetY = context.getHeight() - 5;
 		if (footHeight > footFontSize) {
-			offsetY -= Math.max(3, footHeight - footFontSize);
+			offsetY -= (footHeight - footFontSize);
 		}
 
 		int currentParagraph = 0;
@@ -1678,6 +1678,10 @@ public class ZLTextView {
 	}
 
 	final int getElementDescent(ZLTextElement element) {
+		if (myContext == null) {
+			return 0;
+		}
+
 		return element instanceof ZLTextWord ? myContext.getDescent() : 0;
 	}
 
@@ -1858,6 +1862,11 @@ public class ZLTextView {
 	}
 
 	public boolean onFingerSingleTap(int x, int y) {
+		if (FBReaderApp.Instance().getActivePopup() != null) {
+			FBReaderApp.Instance().hideActivePopup();
+			return true;
+		}
+
 		final ZLTextRegion region = findRegion(x, y, MAX_SELECTION_DISTANCE, ZLTextRegion.HyperlinkFilter);
 		if (region != null) {
 			selectRegion(region);

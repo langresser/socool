@@ -30,16 +30,12 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 public class SetOrientationAction extends FBAndroidAction {
 	public static void setOrientation(Activity activity, String optionValue) {
 		int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-		if (FBReaderApp.SCREEN_ORIENTATION_SENSOR.equals(optionValue)) {
+		if (FBReaderApp.SCREEN_ORIENTATION_SYSTEM.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
 		} else if (FBReaderApp.SCREEN_ORIENTATION_PORTRAIT.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 		} else if (FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-		} else if (FBReaderApp.SCREEN_ORIENTATION_REVERSE_PORTRAIT.equals(optionValue)) {
-			orientation = 9;
-		} else if (FBReaderApp.SCREEN_ORIENTATION_REVERSE_LANDSCAPE.equals(optionValue)) {
-			orientation = 8;
 		}
 		activity.setRequestedOrientation(orientation);
 	}

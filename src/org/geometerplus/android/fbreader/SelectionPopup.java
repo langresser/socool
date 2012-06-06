@@ -26,11 +26,11 @@ import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.socool.socoolreader.reader.R;
 
-class SelectionPopup extends ButtonsPopupPanel {
-	final static String ID = "SelectionPopup";
+public class SelectionPopup extends ButtonsPopupPanel {
+	public final static String ID = "SelectionPopup";
 
-	SelectionPopup(FBReaderApp fbReader) {
-		super(fbReader);
+	public SelectionPopup() {
+		super();
 	}
 
 	@Override
@@ -79,4 +79,9 @@ class SelectionPopup extends ButtonsPopupPanel {
         layoutParams.addRule(verticalPosition);
         myWindow.setLayoutParams(layoutParams);
     }
+
+	@Override
+	public void run() {
+		
+	}
 }

@@ -26,11 +26,11 @@ import org.socool.socoolreader.reader.R;
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-final class TextSearchPopup extends ButtonsPopupPanel {
-	final static String ID = "TextSearchPopup";
+public final class TextSearchPopup extends ButtonsPopupPanel {
+	public final static String ID = "TextSearchPopup";
 
-	TextSearchPopup(FBReaderApp fbReader) {
-		super(fbReader);
+	public TextSearchPopup() {
+		super();
 	}
 
 	@Override
@@ -39,8 +39,8 @@ final class TextSearchPopup extends ButtonsPopupPanel {
 	}
 
 	@Override
-	protected void hide_() {
-		getReader().getCurrentView().clearFindResults();
+	public void hide_() {
+		FBReaderApp.Instance().getCurrentView().clearFindResults();
 		super.hide_();
 	}
 
@@ -55,5 +55,9 @@ final class TextSearchPopup extends ButtonsPopupPanel {
 		addButton(ActionCode.FIND_PREVIOUS, false, R.drawable.text_search_previous);
 		addButton(ActionCode.CLEAR_FIND_RESULTS, true, R.drawable.text_search_close);
 		addButton(ActionCode.FIND_NEXT, false, R.drawable.text_search_next);
+	}
+
+	@Override
+	public void run() {
 	}
 }
