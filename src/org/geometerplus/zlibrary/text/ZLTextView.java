@@ -531,7 +531,7 @@ public class ZLTextView {
 		context.setFont(fontFamily, footFontSize, false, false, false, false);
 
 		// 状态栏文本在最底部显示，留3个像素的空白区域
-		int offsetY = context.getHeight() - 5;
+		int offsetY = context.getHeight() - 2 * FBReaderApp.Instance().getDisplayDPI() / 120;
 		if (footHeight > footFontSize) {
 			offsetY -= (footHeight - footFontSize);
 		}

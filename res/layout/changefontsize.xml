@@ -21,6 +21,7 @@
     <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content">
         <Button android:id="@+id/btn_fontsize_decreases"
                 android:text=" T- "
+                android:textSize="14sp" 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
  
@@ -36,6 +37,7 @@
         
         <Button android:id="@+id/btn_fontsize_increase"
                 android:text=" T+ "
+                android:textSize="20sp" 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
  	</LinearLayout>

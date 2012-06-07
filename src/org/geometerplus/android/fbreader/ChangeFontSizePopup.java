@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 
 import org.geometerplus.zlibrary.filesystem.ZLResource;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
 import org.geometerplus.zlibrary.text.ZLTextView;
 import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 
@@ -77,12 +79,53 @@ public class ChangeFontSizePopup extends PopupPanel {
 
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				if (fromUser) {
-					final int page = progress + 1;
-					final int pagesNumber = seekBar.getMax() + 1;
-					text.setText(makeProgressText(page, pagesNumber));
+					if (progress >= 0 && progress <= 50) {
+						ZLIntegerRangeOption option = ZLTextStyleCollection.Instance().getBaseStyle().FontSizeOption;
+						option.setValue(progress + 5);
+						
+						FBReaderApp.Instance().clearTextCaches();
+						FBReaderApp.Instance().repaintWidget();
+						setupNavigation(myWindow);
+					}
 				}
 			}
 		});
+		
+		final Button btnPlus = (Button)layout.findViewById(R.id.btn_fontsize_increase);
+		final Button btnDec = (Button)layout.findViewById(R.id.btn_fontsize_decreases);
+		View.OnClickListener listener = new View.OnClickListener() {
+			public void onClick(View v) {
+				ZLIntegerRangeOption option = ZLTextStyleCollection.Instance().getBaseStyle().FontSizeOption;
+				final int value = option.getValue();
+	
+				if (v == btnPlus) {
+					if (value < 55) {
+						option.setValue(value + 1);
+						FBReaderApp.Instance().clearTextCaches();
+						FBReaderApp.Instance().repaintWidget();
+						
+						setupNavigation(myWindow);	
+					} else {
+						btnDec.setEnabled(value > 5);
+						btnPlus.setEnabled(value < 55);
+					}
+				} else if (v == btnDec) {
+					if (value > 5) {
+						option.setValue(value - 1);
+						FBReaderApp.Instance().clearTextCaches();
+						FBReaderApp.Instance().repaintWidget();
+						
+						setupNavigation(myWindow);
+					} else {
+						btnDec.setEnabled(value > 5);
+						btnPlus.setEnabled(value < 55);
+					}
+				}
+			}
+		};
+
+		btnPlus.setOnClickListener(listener);
+		btnDec.setOnClickListener(listener);
 
 		myWindow.addView(layout);
 	}
@@ -91,21 +134,14 @@ public class ChangeFontSizePopup extends PopupPanel {
 		final SeekBar slider = (SeekBar)panel.findViewById(R.id.bar_font_size);
 		final TextView text = (TextView)panel.findViewById(R.id.font_size_text);
 
-		final ZLTextView textView = FBReaderApp.Instance().getCurrentView();
-		
-		// 按百分比进行跳转
-	}
+		int value = ZLTextStyleCollection.Instance().getBaseStyle().FontSizeOption.getValue();
+		slider.setProgress(Math.max(value - 5, 0));
 
-	private String makeProgressText(int page, int pagesNumber) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(page);
-		builder.append("/");
-		builder.append(pagesNumber);
-		final TOCTree tocElement = FBReaderApp.Instance().getCurrentTOCElement();
-		if (tocElement != null) {
-			builder.append("  ");
-			builder.append(tocElement.getText());
-		}
-		return builder.toString();
+		text.setText(String.valueOf(value) + " P");
+		
+		final Button btnPlus = (Button)panel.findViewById(R.id.btn_fontsize_increase);
+		final Button btnDec = (Button)panel.findViewById(R.id.btn_fontsize_decreases);
+		btnDec.setEnabled(value > 5);
+		btnPlus.setEnabled(value < 55);
 	}
 }

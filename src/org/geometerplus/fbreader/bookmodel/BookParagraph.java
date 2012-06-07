@@ -64,7 +64,7 @@ public class BookParagraph {
 
 		ParagraphData paragraph = m_paragraphs.get(index - m_beginParagraph);
 		paragraph.m_index = index;
-		Log.d("getParagraph", String.format("index:%1d   text:%2s   kind:%3d    begin:%4d   size:%5d", paragraph.m_index, getText(index), paragraph.m_kind, m_beginParagraph, m_paragraphs.size()));
+//		Log.d("getParagraph", String.format("index:%1d   text:%2s   kind:%3d    begin:%4d   size:%5d", paragraph.m_index, getText(index), paragraph.m_kind, m_beginParagraph, m_paragraphs.size()));
 		return paragraph;
 	}
 	
