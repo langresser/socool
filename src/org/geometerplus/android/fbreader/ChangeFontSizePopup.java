@@ -1,7 +1,9 @@
 package org.geometerplus.android.fbreader;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -91,8 +93,8 @@ public class ChangeFontSizePopup extends PopupPanel {
 			}
 		});
 		
-		final Button btnPlus = (Button)layout.findViewById(R.id.btn_fontsize_increase);
-		final Button btnDec = (Button)layout.findViewById(R.id.btn_fontsize_decreases);
+		final ImageButton btnPlus = (ImageButton)layout.findViewById(R.id.btn_fontsize_increase);
+		final ImageButton btnDec = (ImageButton)layout.findViewById(R.id.btn_fontsize_decreases);
 		View.OnClickListener listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				ZLIntegerRangeOption option = ZLTextStyleCollection.Instance().getBaseStyle().FontSizeOption;
@@ -126,6 +128,30 @@ public class ChangeFontSizePopup extends PopupPanel {
 
 		btnPlus.setOnClickListener(listener);
 		btnDec.setOnClickListener(listener);
+		
+		View.OnTouchListener touchListener = new View.OnTouchListener() {
+			@Override 
+			public boolean onTouch(View v, MotionEvent event) { 
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					if (v instanceof ImageButton) {
+						ImageButton btn = (ImageButton)v;
+						btn.getDrawable().setAlpha(127);
+						btn.invalidate();
+					}
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					if (v instanceof ImageButton) {
+						ImageButton btn = (ImageButton)v;
+						btn.getDrawable().setAlpha(255);
+						btn.invalidate();
+					}
+				}
+				
+				return false;
+			}
+		};
+		
+		btnPlus.setOnTouchListener(touchListener);
+		btnDec.setOnTouchListener(touchListener);
 
 		myWindow.addView(layout);
 	}
@@ -139,8 +165,8 @@ public class ChangeFontSizePopup extends PopupPanel {
 
 		text.setText(String.valueOf(value) + " P");
 		
-		final Button btnPlus = (Button)panel.findViewById(R.id.btn_fontsize_increase);
-		final Button btnDec = (Button)panel.findViewById(R.id.btn_fontsize_decreases);
+		final ImageButton btnPlus = (ImageButton)panel.findViewById(R.id.btn_fontsize_increase);
+		final ImageButton btnDec = (ImageButton)panel.findViewById(R.id.btn_fontsize_decreases);
 		btnDec.setEnabled(value > 5);
 		btnPlus.setEnabled(value < 55);
 	}

@@ -26,6 +26,7 @@ import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
@@ -166,6 +167,7 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.PROCESS_HYPERLINK, new ProcessHyperlinkAction(this, fbReader));
 
 		fbReader.addAction(ActionCode.SHOW_FONT, new ShowFontAction(this, fbReader));
+		fbReader.addAction(ActionCode.SHOW_LIGHT, new ShowLightAction(this, fbReader));
 
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_PORTRAIT));
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE));
@@ -455,11 +457,10 @@ public final class SCReaderActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		addMenuItem(menu, ActionCode.SHOW_TOC, R.drawable.ic_menu_toc);
+		addMenuItem(menu, ActionCode.SELECTION_BOOKMARK, R.drawable.menu_icon_mark);
 		addMenuItem(menu, ActionCode.SHOW_BOOKMARKS, R.drawable.ic_menu_bookmarks);
 		addMenuItem(menu, ActionCode.SHOW_FONT, R.drawable.cartoon_fontsize);
-		addMenuItem(menu, ActionCode.SWITCH_TO_NIGHT_PROFILE, R.drawable.ic_menu_night);
-		addMenuItem(menu, ActionCode.SWITCH_TO_DAY_PROFILE, R.drawable.ic_menu_day);
+		addMenuItem(menu, ActionCode.SHOW_LIGHT, R.drawable.menu_icon_brightness);
 //		addMenuItem(menu, ActionCode.SEARCH, R.drawable.ic_menu_search);
 	
 		addMenuItem(menu, ActionCode.SHOW_NAVIGATION, R.drawable.menu_icon_jump);
@@ -477,15 +478,18 @@ public final class SCReaderActivity extends Activity {
 	}
 
 	public void setScreenBrightness(int percent) {
-		if (percent < 1) {
-			percent = 1;
-		} else if (percent > 100) {
+		if (percent <= 0) {
+			setScreenBrightnessAuto();
+			return;
+		}
+
+		if (percent > 100) {
 			percent = 100;
 		}
+
 		final WindowManager.LayoutParams attrs = getWindow().getAttributes();
 		attrs.screenBrightness = percent / 100.0f;
 		getWindow().setAttributes(attrs);
-		FBReaderApp.Instance().ScreenBrightnessLevelOption.setValue(percent);
 	}
 
 	final public int getScreenBrightness() {

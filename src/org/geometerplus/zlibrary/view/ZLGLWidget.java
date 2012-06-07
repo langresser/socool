@@ -360,7 +360,12 @@ public class ZLGLWidget extends GLSurfaceView implements View.OnLongClickListene
 
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			return super.onKeyUp(keyCode, event);
+			if (FBReaderApp.Instance().getActivePopup() != null) {
+				FBReaderApp.Instance().hideActivePopup();
+				return false;
+			} else {
+				return super.onKeyUp(keyCode, event);
+			}
 		}
 		if (myKeyUnderTracking != -1) {
 			if (myKeyUnderTracking == keyCode) {

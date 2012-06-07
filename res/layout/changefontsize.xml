@@ -19,9 +19,9 @@
 	/>
  
     <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <Button android:id="@+id/btn_fontsize_decreases"
-                android:text=" T- "
-                android:textSize="14sp" 
+        <ImageButton android:id="@+id/btn_fontsize_decreases"
+                android:src="@drawable/cartoon_fontsize_decrease"
+                android:background="#00000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
  
@@ -35,9 +35,9 @@
             android:minWidth="15.0dip" 
             android:layout_weight="1.0" />
         
-        <Button android:id="@+id/btn_fontsize_increase"
-                android:text=" T+ "
-                android:textSize="20sp" 
+        <ImageButton android:id="@+id/btn_fontsize_increase"
+                android:src="@drawable/cartoon_fontsize_increase"
+                android:background="#00000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
  	</LinearLayout>

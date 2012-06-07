@@ -1,19 +1,19 @@
 package org.geometerplus.android.fbreader;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-
-import org.geometerplus.zlibrary.filesystem.ZLResource;
-import org.geometerplus.zlibrary.text.ZLTextView;
-import org.geometerplus.zlibrary.text.ZLTextWordCursor;
+import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.fbreader.bookmodel.TOCTree;
+import org.geometerplus.fbreader.fbreader.ColorProfile;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ChangeLightPopup extends PopupPanel {
@@ -61,10 +61,9 @@ public class ChangeLightPopup extends PopupPanel {
 
 		myWindow = new PopupWindow(activity, root, PopupWindow.Location.Bottom, true);
 
-		final View layout = activity.getLayoutInflater().inflate(R.layout.navigate, myWindow, false);
+		final View layout = activity.getLayoutInflater().inflate(R.layout.changelight, myWindow, false);
 
-		final SeekBar slider = (SeekBar)layout.findViewById(R.id.book_position_slider);
-		final TextView text = (TextView)layout.findViewById(R.id.book_position_text);
+		final SeekBar slider = (SeekBar)layout.findViewById(R.id.bar_light);
 
 		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -77,57 +76,104 @@ public class ChangeLightPopup extends PopupPanel {
 
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				if (fromUser) {
-					final int page = progress + 1;
-					final int pagesNumber = seekBar.getMax() + 1;
-					text.setText(makeProgressText(page, pagesNumber));
+					progress = Math.min(Math.max(progress, 1), 100);
+
+					ZLIntegerRangeOption option = FBReaderApp.Instance().ScreenBrightnessLevelOption;
+					option.setValue(progress);
+					FBReaderApp.Instance().setScreenBrightness(progress);
+
+					setupNavigation(myWindow);
 				}
 			}
 		});
-
-		final Button btnOk = (Button)layout.findViewById(android.R.id.button1);
-		final Button btnCancel = (Button)layout.findViewById(android.R.id.button3);
+		
+		final ImageButton btnPlus = (ImageButton)layout.findViewById(R.id.btn_light_increase);
+		final ImageButton btnDec = (ImageButton)layout.findViewById(R.id.btn_light_decreases);
 		View.OnClickListener listener = new View.OnClickListener() {
 			public void onClick(View v) {
-				final ZLTextWordCursor position = StartPosition;
-				if (v == btnCancel && position != null) {
-					FBReaderApp.Instance().getCurrentView().gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
-				} else if (v == btnOk) {
-					storePosition();
+				ZLIntegerRangeOption option = FBReaderApp.Instance().ScreenBrightnessLevelOption;
+				final int value = option.getValue();
+	
+				if (v == btnPlus) {
+					if (value < 100) {
+						int nextValue = Math.min(Math.max(value + 5, 1), 100);
+						option.setValue(nextValue);
+						FBReaderApp.Instance().setScreenBrightness(nextValue);
+						setupNavigation(myWindow);	
+					} else {
+						btnDec.setEnabled(value > 1);
+						btnPlus.setEnabled(value < 100);
+					}
+				} else if (v == btnDec) {
+					if (value > 1) {
+						int nextValue = Math.min(Math.max(value - 5, 1), 100);
+						option.setValue(nextValue);
+						FBReaderApp.Instance().setScreenBrightness(nextValue);
+						
+						setupNavigation(myWindow);
+					} else {
+						btnDec.setEnabled(value > 1);
+						btnPlus.setEnabled(value < 100);
+					}
 				}
-				StartPosition = null;
-				FBReaderApp.Instance().hideActivePopup();
+			}
+		};
+
+		btnPlus.setOnClickListener(listener);
+		btnDec.setOnClickListener(listener);
+		
+		View.OnTouchListener touchListener = new View.OnTouchListener() {
+			@Override 
+			public boolean onTouch(View v, MotionEvent event) { 
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					if (v instanceof ImageButton) {
+						ImageButton btn = (ImageButton)v;
+						btn.getDrawable().setAlpha(127);
+						btn.invalidate();
+					}
+				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					if (v instanceof ImageButton) {
+						ImageButton btn = (ImageButton)v;
+						btn.getDrawable().setAlpha(255);
+						btn.invalidate();
+					}
+				}
+				
+				return false;
+			}
+		};
+		
+		btnPlus.setOnTouchListener(touchListener);
+		btnDec.setOnTouchListener(touchListener);
+		
+		final ImageButton btnNeight = (ImageButton)layout.findViewById(R.id.night_button);
+		btnNeight.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final boolean night = !btnNeight.isSelected();
+				btnNeight.setSelected(night);
+				FBReaderApp.Instance().setColorProfileName(night ? ColorProfile.NIGHT : ColorProfile.DAY);
 				FBReaderApp.Instance().resetWidget();
 				FBReaderApp.Instance().repaintWidget();
 			}
-		};
-		btnOk.setOnClickListener(listener);
-		btnCancel.setOnClickListener(listener);
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		btnOk.setText(buttonResource.getResource("ok").getValue());
-		btnCancel.setText(buttonResource.getResource("cancel").getValue());
+		});
 
 		myWindow.addView(layout);
 	}
 
 	private void setupNavigation(PopupWindow panel) {
-		final SeekBar slider = (SeekBar)panel.findViewById(R.id.book_position_slider);
-		final TextView text = (TextView)panel.findViewById(R.id.book_position_text);
+		final SeekBar slider = (SeekBar)panel.findViewById(R.id.bar_light);
 
-		final ZLTextView textView = FBReaderApp.Instance().getCurrentView();
+		int value = FBReaderApp.Instance().ScreenBrightnessLevelOption.getValue();
+		slider.setProgress(value);
 		
-		// 按百分比进行跳转
-	}
-
-	private String makeProgressText(int page, int pagesNumber) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(page);
-		builder.append("/");
-		builder.append(pagesNumber);
-		final TOCTree tocElement = FBReaderApp.Instance().getCurrentTOCElement();
-		if (tocElement != null) {
-			builder.append("  ");
-			builder.append(tocElement.getText());
-		}
-		return builder.toString();
+		final ImageButton btnPlus = (ImageButton)panel.findViewById(R.id.btn_light_increase);
+		final ImageButton btnDec = (ImageButton)panel.findViewById(R.id.btn_light_decreases);
+		btnDec.setEnabled(value > 1);
+		btnPlus.setEnabled(value < 100);
+		
+		final ImageButton btnNeight = (ImageButton)panel.findViewById(R.id.night_button);
+		
+		btnNeight.setSelected(FBReaderApp.Instance().getColorProfileName() == ColorProfile.NIGHT);
 	}
 }

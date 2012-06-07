@@ -788,6 +788,7 @@ public final class FBReaderApp {
 
 	public void setScreenBrightness(int percent) {
 		if (myActivity != null) {
+			ScreenBrightnessLevelOption.setValue(percent);
 			myActivity.setScreenBrightness(percent);
 		}
 	}
@@ -833,7 +834,6 @@ public final class FBReaderApp {
 			final InputStream stream = myApplication.getAssets().open(path);
 			return stream;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

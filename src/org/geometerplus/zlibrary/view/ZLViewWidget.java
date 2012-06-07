@@ -403,7 +403,12 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			return super.onKeyUp(keyCode, event);
+			if (FBReaderApp.Instance().getActivePopup() != null) {
+				FBReaderApp.Instance().hideActivePopup();
+				return true;
+			} else {
+				return super.onKeyUp(keyCode, event);
+			}
 		}
 
 		if (myKeyUnderTracking != -1) {

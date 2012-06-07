@@ -61,6 +61,7 @@ public interface ActionCode {
 	String SET_SCREEN_ORIENTATION_LANDSCAPE = "screenOrientationLandscape";
 
 	String SHOW_FONT = "showfont";
+	String SHOW_LIGHT ="showlight";
 
 	String PROCESS_HYPERLINK = "processHyperlink";
 
