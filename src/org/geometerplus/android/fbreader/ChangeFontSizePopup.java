@@ -2,22 +2,17 @@ package org.geometerplus.android.fbreader;
 
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 
-import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
-import org.geometerplus.zlibrary.text.ZLTextView;
-import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ChangeFontSizePopup extends PopupPanel {
