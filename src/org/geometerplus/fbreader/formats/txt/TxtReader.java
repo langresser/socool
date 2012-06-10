@@ -145,7 +145,7 @@ public final class TxtReader extends BookReader {
 			currentOffset += readSize;
 		} while (currentOffset < size);
 
-		m_bookModel.m_paragraph.m_allParagraphNumber = paraCount;
+		m_bookModel.m_chapter.m_allParagraphNumber = paraCount;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -160,9 +160,9 @@ public final class TxtReader extends BookReader {
 	public int getParagraphByOffset(int offset)
 	{
 		final int size = m_paraOffset.size();
-		final int lastOffset = m_paraOffset.get(m_bookModel.m_paragraph.m_allParagraphNumber - 1);
+		final int lastOffset = m_paraOffset.get(m_bookModel.m_chapter.m_allParagraphNumber - 1);
 		if (offset >= lastOffset) {
-			return m_bookModel.m_paragraph.m_allParagraphNumber - 1;
+			return m_bookModel.m_chapter.m_allParagraphNumber - 1;
 		}
 
 		for (int i = 0; i < size; ++i) {

@@ -1,7 +1,10 @@
 package org.geometerplus.fbreader.formats.txt;
 
 import java.io.*;
+import java.util.Vector;
 
+import org.geometerplus.fbreader.bookmodel.BookChapter;
+import org.geometerplus.fbreader.bookmodel.BookChapter.BookChapterData;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.BookParagraph;
 import org.geometerplus.fbreader.bookmodel.BookReader;
@@ -34,22 +37,166 @@ public final class TxtChapterReader extends BookReader {
 	
 	private void initData()
 	{
+		initDataTest();
 		try {
-			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.txt");
+			long startTime = System.currentTimeMillis();
+
+			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/chapter.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
 			
 			String line = "";
 
 			int paraCount = 0;
+			int textSize = 0;
+			int currentJuanIndex = -1;
+			final BookChapter chapter = m_bookModel.m_chapter;
 			while ((line = reader.readLine()) != null) {
-				String[] infos = line.split("@@");
-				final int count = Integer.parseInt(infos[1]) + 1;
-				m_bookModel.m_chapter.addChapterData(infos[0], paraCount, count, Integer.parseInt(infos[2]), infos[3], infos[4]);
-				paraCount += count;
+				if (line.charAt(0) == 'j') {
+					chapter.m_juanData.add(line);
+					++currentJuanIndex;
+				} else {
+					// 加1是补上隐藏的段落终结符
+					final int firstA = line.indexOf("@@");
+					final int count = Integer.parseInt(line.substring(0, firstA)) + 1;
+					BookChapter.BookChapterData data = new BookChapter.BookChapterData();
+					data.m_startOffset = paraCount;
+					data.m_paragraphCount = count;
+					final int secondA = line.indexOf("@@", firstA + 2);
+					data.m_textSize = Integer.parseInt(line.substring(firstA + 2, secondA));
+					data.m_startTxtOffset = textSize;
+					data.m_title = line.substring(secondA + 2);
+					data.m_juanIndex = currentJuanIndex;
+					chapter.addChapterData(data);
+					paraCount += count;
+					textSize += data.m_textSize;
+				}
 			}
 			input.close();
 			
-			m_bookModel.m_paragraph.m_allParagraphNumber = paraCount;
+			chapter.m_allParagraphNumber = paraCount;
+			chapter.m_allTextSize = textSize;
+			
+			long time1 = System.currentTimeMillis() - startTime;
+			
+			input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.txt");
+			reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
+
+			Vector<Integer> currentParagraphOffset = null;
+			int startTxtOffset = 0;
+			int paraTxtSize = 0;
+			while ((line = reader.readLine()) != null) {
+				if (line.charAt(0) == 'c') {
+					final int chapterIndex = Integer.parseInt(line.substring(1));
+					currentParagraphOffset = m_bookModel.m_chapter.getChapter(chapterIndex).paragraphOffset;
+					startTxtOffset = m_bookModel.m_chapter.getChapterTextOffset(chapterIndex);
+					paraTxtSize = 0;
+				} else {
+					if (currentParagraphOffset != null) {
+						currentParagraphOffset.add(startTxtOffset + paraTxtSize);
+						paraTxtSize += Integer.parseInt(line);
+					}
+				}
+			}
+			input.close();
+			
+			long time2 = System.currentTimeMillis() - startTime;
+			
+			Log.d("init cost:", String.format("%1d   %2d", time1, time2));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void initDataTest()
+	{
+		try {
+			long startTime = System.currentTimeMillis();
+
+			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/chapter.txt");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
+			
+			String line = "";
+
+			int paraCount = 0;
+			int textSize = 0;
+			long allTime = 0;
+			int currentJuanIndex = -1;
+			final BookChapter chapter = m_bookModel.m_chapter;
+			while ((line = reader.readLine()) != null) {
+				if (line.charAt(0) == 'j') {
+					chapter.m_juanData.add(line.substring(1));
+					++currentJuanIndex;
+				} else {
+					// 加1是补上隐藏的段落终结符
+					final int firstA = line.indexOf("@@");
+					final int count = Integer.parseInt(line.substring(0, firstA)) + 1;
+					BookChapter.BookChapterData data = new BookChapter.BookChapterData();
+					data.m_startOffset = paraCount;
+					data.m_paragraphCount = count;
+					final int secondA = line.indexOf("@@", firstA + 2);
+					data.m_textSize = Integer.parseInt(line.substring(firstA + 2, secondA));
+					data.m_startTxtOffset = textSize;
+					data.m_title = line.substring(secondA + 2);
+					data.m_juanIndex = currentJuanIndex;
+					m_bookModel.m_chapter.addChapterData(data);
+					paraCount += count;
+					textSize += data.m_textSize;
+				}
+			}
+			input.close();
+			
+
+			Log.d("split", "" + allTime);
+			chapter.m_allParagraphNumber = paraCount;
+			chapter.m_allTextSize = textSize;
+			
+			long time1 = System.currentTimeMillis() - startTime;
+			
+			input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.db");
+			int size = input.available();
+			byte[] buffer = new byte[size];
+			BufferedInputStream bis = new BufferedInputStream(input, size);
+			bis.read(buffer);
+			input.close();
+
+			Vector<Integer> currentParagraphOffset = null;
+			int startTxtOffset = 0;
+			int paraTxtSize = 0;
+			int currentChapterIndex = -1;
+			for (int i = 0; i < size; ++i) {
+				final int ps = buffer[i] & 0xff;
+				if (ps == 0) {
+					++currentChapterIndex;
+					final BookChapterData data = chapter.m_chapterData.get(currentChapterIndex);
+					currentParagraphOffset = data.paragraphOffset;
+					startTxtOffset = data.m_startTxtOffset;
+					paraTxtSize = 0;
+				} else if (ps == 255) {
+					int plus = ps;
+					for (int j = i + 1; j < size; ++j) {
+						final int ps2 = buffer[j] & 0xff;
+						plus += ps2;
+
+						if (ps2 != 255) {
+							i = j;
+							break;
+						}
+					}
+					
+					currentParagraphOffset.add(startTxtOffset + paraTxtSize);
+					paraTxtSize += plus;
+				} else {
+					if (currentParagraphOffset != null) {
+						currentParagraphOffset.add(startTxtOffset + paraTxtSize);
+						paraTxtSize += ps;
+					}
+				}
+			}
+			
+			long time2 = System.currentTimeMillis() - startTime;
+			
+			Log.d("Test init cost:", String.format("%1d   %2d", time1, time2));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

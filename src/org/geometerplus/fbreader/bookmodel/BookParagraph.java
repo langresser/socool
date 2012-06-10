@@ -41,7 +41,6 @@ public class BookParagraph {
 	public Vector<ParagraphData> m_paragraphs = new Vector<ParagraphData>();
 	public ParagraphData m_currentParagraph = null;
 	public int m_beginParagraph = 0;
-	public int m_allParagraphNumber = 0;
 
 	public void clearParagraphData()
 	{
@@ -57,7 +56,7 @@ public class BookParagraph {
 	public final ParagraphData getParagraph(int index) {
 		if (FBReaderApp.Instance().Model.m_readType == BookModel.READ_TYPE_STREAM 
 				|| FBReaderApp.Instance().Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-			if (index < m_allParagraphNumber && (index >= m_beginParagraph + m_paragraphs.size() || index < m_beginParagraph)) {
+			if (index >= m_beginParagraph + m_paragraphs.size() || index < m_beginParagraph) {
 				FBReaderApp.Instance().Model.Book.getPlugin().readParagraph(index);
 			}
 		}
@@ -97,7 +96,7 @@ public class BookParagraph {
 			index = 0;
 		}
 		
-		if (index >= m_paragraphs.size() - 1) {
+		if (index > m_paragraphs.size() - 1) {
 			index = m_paragraphs.size() - 1;
 		}
 

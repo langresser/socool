@@ -18,8 +18,13 @@
 	/>
 
 	<LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <ImageButton android:id="@+id/btn_fontsize_decreases"
-                android:src="@drawable/cartoon_fontsize_decrease"
+       <ImageButton android:id="@+id/btn_back_chapter"
+                android:src="@drawable/btn_backward_selector"
+                android:background="#00000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+	    <ImageButton android:id="@+id/btn_back"
+                android:src="@drawable/icon_backward_selector"
                 android:background="#00000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -34,8 +39,14 @@
             android:minWidth="15.0dip" 
             android:layout_weight="1.0" />
         
-        <ImageButton android:id="@+id/btn_fontsize_increase"
-                android:src="@drawable/cartoon_fontsize_increase"
+        <ImageButton android:id="@+id/btn_forward"
+                android:src="@drawable/icon_forward_selector"
+                android:background="#00000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        <ImageButton android:id="@+id/btn_forward_chapter"
+                android:src="@drawable/btn_forward_selector"
                 android:background="#00000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

@@ -151,7 +151,7 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 			onDrawInScrolling(canvas);
 		} else {
 			onDrawStatic(canvas);
-			FBReaderApp.Instance().onRepaintFinished();
+//			FBReaderApp.Instance().onRepaintFinished();
 		}
 	}
 

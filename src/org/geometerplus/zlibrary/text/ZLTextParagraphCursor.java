@@ -227,11 +227,7 @@ public final class ZLTextParagraphCursor {
 	}
 
 	public boolean isLast() {
-		if (Model.m_readType == BookModel.READ_TYPE_STREAM || Model.m_readType == BookModel.READ_TYPE_CHAPTER) {
-			return (Index + 1 >= Model.m_paragraph.m_allParagraphNumber);
-		} else {
-			return (Index + 1 >= Model.getParagraphNumber());
-		}
+		return (Index + 1 >= Model.getParagraphNumber());
 	}
 	
 	public boolean isEndOfSection() {

@@ -19,8 +19,10 @@
 
 package org.geometerplus.android.fbreader;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 
 import org.socool.socoolreader.reader.R;
 
+import org.geometerplus.fbreader.bookmodel.BookChapter;
+import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
@@ -83,11 +87,24 @@ public class NavigationPopup extends PopupPanel {
 		final View layout = activity.getLayoutInflater().inflate(R.layout.navigate, myWindow, false);
 
 		final SeekBar slider = (SeekBar)layout.findViewById(R.id.book_position_slider);
-		final TextView text = (TextView)layout.findViewById(R.id.book_position_text);
 
 		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				myIsInProgress = false;
+				int progress = seekBar.getProgress();
+				if (progress < 0) {
+					progress = 0;
+				}
+				
+				if (progress > 10000) {
+					progress = 10000;
+				}
+				
+				FBReaderApp.Instance().BookTextView.gotoPercent(progress);
+				setupNavigation(myWindow);
+
+				FBReaderApp.Instance().resetWidget();
+				FBReaderApp.Instance().repaintWidget();
 			}
 
 			public void onStartTrackingTouch(SeekBar seekBar) {
@@ -96,9 +113,31 @@ public class NavigationPopup extends PopupPanel {
 
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				if (fromUser) {
-					final int page = progress + 1;
-					final int pagesNumber = seekBar.getMax() + 1;
-					text.setText(makeProgressText(page, pagesNumber));
+					if (progress < 0) {
+						progress = 0;
+					}
+					
+					if (progress > 10000) {
+						progress = 10000;
+					}
+					
+					final SeekBar slider = (SeekBar)myWindow.findViewById(R.id.book_position_slider);
+					final TextView text = (TextView)myWindow.findViewById(R.id.book_position_text);
+
+					final BookChapter chapter = FBReaderApp.Instance().Model.m_chapter;
+					final int percent = progress;
+					final int txtOffset = chapter.m_allTextSize / 10000 * progress;
+					final int chapterIndex = chapter.getChapterByTxtOffset(txtOffset);
+					final String title = FBReaderApp.Instance().Model.m_chapter.getChapterTitle(chapterIndex);
+					slider.setProgress(percent);
+					text.setText(String.format("%1$.2f%%", percent / 100.0) + "  " + title);
+					Log.d("progress change", String.format("%1d %2d %3d %4s", progress, txtOffset, chapterIndex, title));
+					
+					final ImageButton btnLast = (ImageButton)myWindow.findViewById(R.id.btn_back);
+					final ImageButton btnNext = (ImageButton)myWindow.findViewById(R.id.btn_forward);
+					
+					btnLast.setEnabled(percent > 0);
+					btnNext.setEnabled(percent < 10000);
 				}
 			}
 		});
@@ -124,7 +163,44 @@ public class NavigationPopup extends PopupPanel {
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 		btnOk.setText(buttonResource.getResource("ok").getValue());
 		btnCancel.setText(buttonResource.getResource("cancel").getValue());
+		
 
+		final ImageButton btnLastChapter = (ImageButton)layout.findViewById(R.id.btn_back_chapter);
+		final ImageButton btnNextChapter = (ImageButton)layout.findViewById(R.id.btn_forward_chapter);
+		final ImageButton btnLast = (ImageButton)layout.findViewById(R.id.btn_back);
+		final ImageButton btnNext = (ImageButton)layout.findViewById(R.id.btn_forward);
+		
+		View.OnClickListener listenerJump = new View.OnClickListener() {
+			public void onClick(View v) {
+				final ZLTextView textView = FBReaderApp.Instance().BookTextView;
+				if (v == btnLastChapter) {
+					final int currentChapter = textView.getCurrentChapter();
+					textView.gotoChapter(currentChapter - 1);
+				} else if (v == btnNextChapter) {
+					final int currentChapter = textView.getCurrentChapter();
+					textView.gotoChapter(currentChapter + 1);
+				} else if (v == btnLast) {
+					int percent = textView.getCurrentPercent();
+					percent -= 1;
+					textView.gotoPercent(percent);
+				} else if (v == btnNext) {
+					int percent = textView.getCurrentPercent();
+					percent += 1;
+					textView.gotoPercent(percent);
+				}
+
+				setupNavigation(myWindow);
+				FBReaderApp.Instance().resetWidget();
+				FBReaderApp.Instance().repaintWidget();
+			}
+		};
+		
+		btnLastChapter.setOnClickListener(listenerJump);
+		btnNextChapter.setOnClickListener(listenerJump);
+		btnLast.setOnClickListener(listenerJump);
+		btnNext.setOnClickListener(listenerJump);
+		
+		
 		myWindow.addView(layout);
 	}
 
@@ -132,21 +208,19 @@ public class NavigationPopup extends PopupPanel {
 		final SeekBar slider = (SeekBar)panel.findViewById(R.id.book_position_slider);
 		final TextView text = (TextView)panel.findViewById(R.id.book_position_text);
 
-		final ZLTextView textView = FBReaderApp.Instance().getCurrentView();
+		final ZLTextView textView = FBReaderApp.Instance().BookTextView;
+		final int percent = (int)textView.getCurrentPercent();
+		final int chapterIndex = textView.getCurrentChapter();
+		final String title = FBReaderApp.Instance().Model.m_chapter.getChapterTitle(chapterIndex);
+		slider.setProgress(percent);
+		text.setText(String.format("%1$.2f%%", percent / 100.0) + "  " + title);
 		
-		// 按百分比进行跳转
-	}
+		Log.d("setupNavigation", String.format("%1d %2d %3s", percent, chapterIndex, title));
 
-	private String makeProgressText(int page, int pagesNumber) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(page);
-		builder.append("/");
-		builder.append(pagesNumber);
-		final TOCTree tocElement = FBReaderApp.Instance().getCurrentTOCElement();
-		if (tocElement != null) {
-			builder.append("  ");
-			builder.append(tocElement.getText());
-		}
-		return builder.toString();
+		final ImageButton btnLast = (ImageButton)panel.findViewById(R.id.btn_back);
+		final ImageButton btnNext = (ImageButton)panel.findViewById(R.id.btn_forward);
+		
+		btnLast.setEnabled(percent > 0);
+		btnNext.setEnabled(percent < 10000);
 	}
 }

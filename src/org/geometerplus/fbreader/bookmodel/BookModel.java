@@ -173,7 +173,7 @@ public class BookModel {
 	
 	public final int getParagraphNumber()
 	{
-		return m_paragraph.m_allParagraphNumber;
+		return m_chapter.m_allParagraphNumber;
 	}
 	
 	public interface LabelResolver {

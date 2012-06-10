@@ -21,6 +21,8 @@ package org.geometerplus.zlibrary.text;
 
 import java.util.*;
 
+import org.geometerplus.android.fbreader.util.UIUtil;
+import org.geometerplus.fbreader.bookmodel.BookChapter;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.ActionCode;
@@ -162,6 +164,89 @@ public class ZLTextView {
 			preparePaintInfo(myCurrentPage);
 		}
 		return myCurrentPage.StartCursor;
+	}
+	
+	// 0-10000
+	public int getCurrentPercent()
+	{
+		final ZLTextWordCursor startPosition = getStartCursor();
+		final int paragraph = startPosition.getParagraphIndex();
+		final int word = startPosition.getElementIndex();
+		final int chara = startPosition.getCharIndex();
+		
+		final BookChapter chapter = FBReaderApp.Instance().Model.m_chapter;
+		
+		final int endIndex = getEndCursor().getParagraphIndex();
+		if (endIndex == chapter.m_allParagraphNumber - 1) {
+			return 10000;
+		}
+
+		final int chapterIndex = chapter.getChapterIndexByParagraph(paragraph);
+		final int startTextOffset = chapter.getChapterTextOffset(chapterIndex);
+		final int startParagraph = chapter.getChapterOffset(chapterIndex);
+		final int textOffset = chapter.getParagraphTextOffset(paragraph) + word + chara;
+		final int percent = Math.round((float)textOffset / chapter.m_allTextSize * 10000);
+		if (percent == 0 && (paragraph != 0 || word != 0)) {
+			Log.d("getPercent1", String.format("%1d  %2d  %3d  percent:%4d  %5d  %6d", paragraph, word, textOffset, percent, startParagraph, startTextOffset));
+			return 1;
+		}
+		Log.d("getPercent", String.format("%1d  %2d  %3d  percent:%4d  %5d  %6d", paragraph, word, textOffset, percent, startParagraph, startTextOffset));
+		return percent;
+	}
+	
+	public int getCurrentChapter()
+	{
+		final int paragraph = getStartCursor().getParagraphIndex();
+		
+		final BookModel model = FBReaderApp.Instance().Model;
+		final int chapterIndex = model.m_chapter.getChapterIndexByParagraph(paragraph);
+		return chapterIndex;
+	}
+	
+	public synchronized void gotoChapter(int chapter)
+	{
+		final int chapterCount = myModel.m_chapter.getChapterCount();
+		
+		if (chapter < 0) {
+			final int start = getStartCursor().getParagraphIndex();
+			if (start > 0) {
+				gotoPosition(0, 0, 0);
+			} else {
+				UIUtil.showMessageText(FBReaderApp.Instance().getActivity(), "已到开头");
+			}
+			return;
+		}
+		
+		if (chapter >= chapterCount - 1) {
+			final int end = getEndCursor().getParagraphIndex();
+			if (end < myModel.m_chapter.m_allParagraphNumber - 1) {
+				gotoPositionByEnd(myModel.m_chapter.m_allParagraphNumber - 1, 0, 0);
+			} else {
+				UIUtil.showMessageText(FBReaderApp.Instance().getActivity(), "已到结尾");
+			}
+			
+			return;
+		}
+		
+		final int paragraph = myModel.m_chapter.getChapterOffset(chapter);
+		gotoPosition(paragraph, 0, 0);
+	}
+	
+	public synchronized void gotoPercent(int percent)
+	{
+		if (percent <= 0) {
+			gotoPosition(0, 0, 0);
+			return;
+		}
+
+		if (percent >= 10000) {
+			gotoPositionByEnd(myModel.m_chapter.m_allParagraphNumber - 1, 0, 0);
+			return;
+		}
+
+		int textOffset = (int)(myModel.m_chapter.m_allTextSize * (percent / 10000.0));
+		Log.d("gotoPercent", String.format("%1d  %2d  %3d", percent, textOffset, myModel.m_chapter.m_allTextSize));
+		myModel.m_chapter.gotoPositionByOffset(textOffset);
 	}
 
 	public ZLTextWordCursor getEndCursor() {
