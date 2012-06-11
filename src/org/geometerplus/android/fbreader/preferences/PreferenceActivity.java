@@ -19,32 +19,128 @@
 
 package org.geometerplus.android.fbreader.preferences;
 
+import java.util.HashMap;
+
 import android.content.Intent;
+import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceScreen;
 import android.view.KeyEvent;
 
 
+import org.geometerplus.zlibrary.filesystem.ZLResource;
+import org.geometerplus.zlibrary.options.ZLBooleanOption;
+import org.geometerplus.zlibrary.options.ZLColorOption;
+import org.geometerplus.zlibrary.options.ZLEnumOption;
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.text.ZLTextBaseStyle;
 import org.geometerplus.zlibrary.text.ZLTextFullStyleDecoration;
 import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
 import org.geometerplus.zlibrary.text.ZLTextStyleDecoration;
-import org.geometerplus.zlibrary.view.AndroidFontUtil;
-import org.geometerplus.zlibrary.view.ZLPaintContext;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.*;
-import org.geometerplus.fbreader.Paths;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
-import org.geometerplus.android.fbreader.DictionaryUtil;
 
-public class PreferenceActivity extends ZLPreferenceActivity {
+public class PreferenceActivity extends android.preference.PreferenceActivity {
 	public PreferenceActivity() {
-		super("Preferences");
+		Resource = ZLResource.resource("dialog").getResource("Preferences");
+	}
+	
+	public static String SCREEN_KEY = "screen";
+
+	private final HashMap<String,Screen> myScreenMap = new HashMap<String,Screen>();
+
+	protected class Screen {
+		public final ZLResource Resource;
+		private final PreferenceScreen myScreen;
+
+		private Screen(ZLResource root, String resourceKey) {
+			Resource = root.getResource(resourceKey);
+			myScreen = getPreferenceManager().createPreferenceScreen(PreferenceActivity.this);
+			myScreen.setTitle(Resource.getValue());
+			myScreen.setSummary(Resource.getResource("summary").getValue());
+		}
+
+		public void setSummary(CharSequence summary) {
+			myScreen.setSummary(summary);
+		}
+
+		public Screen createPreferenceScreen(String resourceKey) {
+			Screen screen = new Screen(Resource, resourceKey);
+			myScreen.addPreference(screen.myScreen);
+			return screen;
+		}
+
+		public Preference addPreference(Preference preference) {
+			myScreen.addPreference(preference);
+			return preference;
+		}
+
+		public Preference addOption(ZLBooleanOption option, String resourceKey) {
+			return addPreference(
+				new ZLBooleanPreference(PreferenceActivity.this, option, Resource, resourceKey)
+			);
+		}
+
+		public Preference addOption(ZLStringOption option, String resourceKey) {
+			return addPreference(
+				new ZLStringOptionPreference(PreferenceActivity.this, option, Resource, resourceKey)
+			);
+		}
+
+		public Preference addOption(ZLColorOption option, String resourceKey) {
+			return addPreference(
+				new ZLColorPreference(PreferenceActivity.this, Resource, resourceKey, option)
+			);
+		}
+
+		public <T extends Enum<T>> Preference addOption(ZLEnumOption<T> option, String resourceKey) {
+			return addPreference(
+				new ZLEnumPreference<T>(PreferenceActivity.this, option, Resource, resourceKey)
+			);
+		}
+	}
+
+	private PreferenceScreen myScreen;
+	final ZLResource Resource;
+
+	Screen createPreferenceScreen(String resourceKey) {
+		final Screen screen = new Screen(Resource, resourceKey);
+		myScreenMap.put(resourceKey, screen);
+		myScreen.addPreference(screen.myScreen);
+		return screen;
+	}
+
+	public Preference addPreference(Preference preference) {
+		myScreen.addPreference((Preference)preference);
+		return preference;
+	}
+
+	public Preference addOption(ZLBooleanOption option, String resourceKey) {
+		ZLBooleanPreference preference =
+			new ZLBooleanPreference(PreferenceActivity.this, option, Resource, resourceKey);
+		myScreen.addPreference(preference);
+		return preference;
 	}
 
 	@Override
+	protected void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
+
+		myScreen = getPreferenceManager().createPreferenceScreen(this);
+
+		final Intent intent = getIntent();
+		init(intent);
+		final Screen screen = myScreenMap.get(intent.getStringExtra(SCREEN_KEY));
+		setPreferenceScreen(screen != null ? screen.myScreen : myScreen);
+	}
+
 	protected void init(Intent intent) {
 		setResult(SCReaderActivity.RESULT_REPAINT);
 
@@ -144,12 +240,12 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			scrollingPreferences.AnimationSpeedOption
 		));
 		
-		final Screen directoriesScreen = createPreferenceScreen("directories");
-		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");
-		if (AndroidFontUtil.areExternalFontsSupported()) {
-			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
-		}
-		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
+//		final Screen directoriesScreen = createPreferenceScreen("directories");
+//		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");
+//		if (AndroidFontUtil.areExternalFontsSupported()) {
+//			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
+//		}
+//		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
 	}
 	
 	void initFormat(Screen textScreen)

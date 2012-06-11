@@ -174,6 +174,6 @@ public class ChangeLightPopup extends PopupPanel {
 		
 		final ImageButton btnNeight = (ImageButton)panel.findViewById(R.id.night_button);
 		
-		btnNeight.setSelected(FBReaderApp.Instance().getColorProfileName() == ColorProfile.NIGHT);
+		btnNeight.setSelected(FBReaderApp.Instance().ColorProfileOption.getValue() == ColorProfile.NIGHT);
 	}
 }

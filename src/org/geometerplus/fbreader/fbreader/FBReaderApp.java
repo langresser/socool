@@ -115,9 +115,6 @@ public final class FBReaderApp {
 	public ZLIntegerRangeOption TopMarginOption = null;
 	public ZLIntegerRangeOption BottomMarginOption = null;
 
-	final ZLStringOption ColorProfileOption =
-		new ZLStringOption("Options", "ColorProfile", ColorProfile.DAY);
-
 	public final ZLBooleanOption ShowLibraryInCancelMenuOption =
 			new ZLBooleanOption("CancelMenu", "library", true);
 	public final ZLBooleanOption ShowNetworkLibraryInCancelMenuOption =
@@ -237,17 +234,20 @@ public final class FBReaderApp {
 		}
 	}
 
+	public ZLStringOption ColorProfileOption = new ZLStringOption("Options", "ColorProfile", ColorProfile.DAY);
 	private ColorProfile myColorProfile;
+	
+	public HashMap<String, TextTheme> m_themes = new HashMap<String, TextTheme>();
+	public void initTheme()
+	{
+		
+	}
 
 	public ColorProfile getColorProfile() {
 		if (myColorProfile == null) {
-			myColorProfile = ColorProfile.get(getColorProfileName());
+			myColorProfile = ColorProfile.get(ColorProfileOption.getValue());
 		}
 		return myColorProfile;
-	}
-
-	public String getColorProfileName() {
-		return ColorProfileOption.getValue();
 	}
 
 	public void setColorProfileName(String name) {

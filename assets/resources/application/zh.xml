@@ -505,7 +505,7 @@
                     <node name="read_bg_6" value="咖啡时光" />
                     <node name="read_bg_7" value="水墨江南" />
 				</node>
-				<node name="backgroundColor" value="单色背景色" />
+				<node name="backgroundColor" value="背景颜色" />
 				<node name="selectionBackground" value="选择背景色" />
 				<node name="selectionForeground" value="选择的文本" />
 				<node name="text" value="普通文字" />

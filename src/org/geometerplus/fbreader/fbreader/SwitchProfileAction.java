@@ -30,7 +30,7 @@ class SwitchProfileAction extends FBAction {
 
 	@Override
 	public boolean isVisible() {
-		return !myProfileName.equals(Reader.getColorProfileName());
+		return !myProfileName.equals(Reader.ColorProfileOption.getValue());
 	}
 
 	@Override

@@ -65,18 +65,6 @@ public class ColorProfile {
 	public final ZLColorOption VisitedHyperlinkTextOption;
 	public final ZLColorOption FooterFillOption;
 
-	private ColorProfile(String name, ColorProfile base) {
-		this(name);
-		BackgroundOption.setValue(base.BackgroundOption.getValue());
-		SelectionBackgroundOption.setValue(base.SelectionBackgroundOption.getValue());
-		SelectionForegroundOption.setValue(base.SelectionForegroundOption.getValue());
-		HighlightingOption.setValue(base.HighlightingOption.getValue());
-		RegularTextOption.setValue(base.RegularTextOption.getValue());
-		HyperlinkTextOption.setValue(base.HyperlinkTextOption.getValue());
-		VisitedHyperlinkTextOption.setValue(base.VisitedHyperlinkTextOption.getValue());
-		FooterFillOption.setValue(base.FooterFillOption.getValue());
-	}
-
 	private static ZLColorOption createOption(String profileName, String optionName, int r, int g, int b) {
 		return new ZLColorOption("Colors", profileName + ':' + optionName, new ZLColor(r, g, b));
 	}
