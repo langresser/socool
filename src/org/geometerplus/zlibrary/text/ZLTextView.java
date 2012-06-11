@@ -217,7 +217,7 @@ public class ZLTextView {
 			return;
 		}
 		
-		if (chapter >= chapterCount - 1) {
+		if (chapter > chapterCount - 1) {
 			final int end = getEndCursor().getParagraphIndex();
 			if (end < myModel.m_chapter.m_allParagraphNumber - 1) {
 				gotoPositionByEnd(myModel.m_chapter.m_allParagraphNumber - 1, 0, 0);
@@ -2006,7 +2006,7 @@ public class ZLTextView {
 			moveSelectionCursorTo(cursor, x, y);
 			return true;
 		}
-
+		
 		if (isFlickScrollingEnabled()) {
 			if (FBReaderApp.Instance().isUseGLView()) {
 				FBReaderApp.Instance().getWidgetGL().scrollManuallyTo(x, y);
@@ -2014,6 +2014,7 @@ public class ZLTextView {
 				FBReaderApp.Instance().getWidget().scrollManuallyTo(x, y);
 			}
 		}
+		
 		return true;
 	}
 

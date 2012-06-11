@@ -126,7 +126,7 @@ public class NavigationPopup extends PopupPanel {
 
 					final BookChapter chapter = FBReaderApp.Instance().Model.m_chapter;
 					final int percent = progress;
-					final int txtOffset = chapter.m_allTextSize / 10000 * progress;
+					final int txtOffset = (int)(chapter.m_allTextSize * (percent / 10000.0));
 					final int chapterIndex = chapter.getChapterByTxtOffset(txtOffset);
 					final String title = FBReaderApp.Instance().Model.m_chapter.getChapterTitle(chapterIndex);
 					slider.setProgress(percent);

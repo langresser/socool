@@ -37,7 +37,6 @@ public final class TxtChapterReader extends BookReader {
 	
 	private void initData()
 	{
-		initDataTest();
 		try {
 			long startTime = System.currentTimeMillis();
 
@@ -73,81 +72,6 @@ public final class TxtChapterReader extends BookReader {
 			}
 			input.close();
 			
-			chapter.m_allParagraphNumber = paraCount;
-			chapter.m_allTextSize = textSize;
-			
-			long time1 = System.currentTimeMillis() - startTime;
-			
-			input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.txt");
-			reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
-
-			Vector<Integer> currentParagraphOffset = null;
-			int startTxtOffset = 0;
-			int paraTxtSize = 0;
-			while ((line = reader.readLine()) != null) {
-				if (line.charAt(0) == 'c') {
-					final int chapterIndex = Integer.parseInt(line.substring(1));
-					currentParagraphOffset = m_bookModel.m_chapter.getChapter(chapterIndex).paragraphOffset;
-					startTxtOffset = m_bookModel.m_chapter.getChapterTextOffset(chapterIndex);
-					paraTxtSize = 0;
-				} else {
-					if (currentParagraphOffset != null) {
-						currentParagraphOffset.add(startTxtOffset + paraTxtSize);
-						paraTxtSize += Integer.parseInt(line);
-					}
-				}
-			}
-			input.close();
-			
-			long time2 = System.currentTimeMillis() - startTime;
-			
-			Log.d("init cost:", String.format("%1d   %2d", time1, time2));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private void initDataTest()
-	{
-		try {
-			long startTime = System.currentTimeMillis();
-
-			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/chapter.txt");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
-			
-			String line = "";
-
-			int paraCount = 0;
-			int textSize = 0;
-			long allTime = 0;
-			int currentJuanIndex = -1;
-			final BookChapter chapter = m_bookModel.m_chapter;
-			while ((line = reader.readLine()) != null) {
-				if (line.charAt(0) == 'j') {
-					chapter.m_juanData.add(line.substring(1));
-					++currentJuanIndex;
-				} else {
-					// 加1是补上隐藏的段落终结符
-					final int firstA = line.indexOf("@@");
-					final int count = Integer.parseInt(line.substring(0, firstA)) + 1;
-					BookChapter.BookChapterData data = new BookChapter.BookChapterData();
-					data.m_startOffset = paraCount;
-					data.m_paragraphCount = count;
-					final int secondA = line.indexOf("@@", firstA + 2);
-					data.m_textSize = Integer.parseInt(line.substring(firstA + 2, secondA));
-					data.m_startTxtOffset = textSize;
-					data.m_title = line.substring(secondA + 2);
-					data.m_juanIndex = currentJuanIndex;
-					m_bookModel.m_chapter.addChapterData(data);
-					paraCount += count;
-					textSize += data.m_textSize;
-				}
-			}
-			input.close();
-			
-
-			Log.d("split", "" + allTime);
 			chapter.m_allParagraphNumber = paraCount;
 			chapter.m_allTextSize = textSize;
 			
@@ -196,7 +120,7 @@ public final class TxtChapterReader extends BookReader {
 			
 			long time2 = System.currentTimeMillis() - startTime;
 			
-			Log.d("Test init cost:", String.format("%1d   %2d", time1, time2));
+			Log.d("init cost:", String.format("%1d   %2d", time1, time2));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
