@@ -240,7 +240,41 @@ public final class FBReaderApp {
 	public HashMap<String, TextTheme> m_themes = new HashMap<String, TextTheme>();
 	public void initTheme()
 	{
+		if (m_themes.size() > 0) {
+			return;
+		}
+
+		final List<ZLFile> predefined = WallpapersUtil.predefinedWallpaperFiles();
 		
+		Properties props = new Properties();
+
+		try {
+			for (ZLFile f : predefined) {
+				String path = f.getPath();
+				// 主题是一个文件夹
+				if (path.indexOf('.') != -1) {
+					continue;
+				}
+				String configPath = path + "/config.cfg";
+				InputStream cfgInput = getBookFile(configPath);
+				if (cfgInput == null) {
+					continue;
+				}
+				
+				props.clear();
+				props.load(cfgInput);
+
+				TextTheme theme = new TextTheme();
+				theme.m_title = props.getProperty("title");
+				theme.m_imagePath = props.getProperty("image", "");
+				theme.m_thumbPath = props.getProperty("thumb", "");
+				theme.m_textColor = new ZLColor(props.getProperty("fontcolor", ""));
+				theme.m_bgColor = new ZLColor(props.getProperty("bgcolor", ""));
+				m_themes.put(path, theme);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ColorProfile getColorProfile() {

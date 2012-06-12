@@ -29,6 +29,7 @@ import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 
 import org.geometerplus.fbreader.fbreader.ColorProfile;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.fbreader.WallpapersUtil;
 
 class WallpaperPreference extends ListPreference {
@@ -73,6 +74,8 @@ class WallpaperPreference extends ListPreference {
 			++index;
 		}
 		setLists(values, texts);
+		
+		FBReaderApp.Instance().initTheme();
 
 		setInitialValue(myOption.getValue());
 	}

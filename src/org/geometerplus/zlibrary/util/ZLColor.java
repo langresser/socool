@@ -27,11 +27,24 @@ public final class ZLColor {
 	public final short Red;
 	public final short Green;
 	public final short Blue;
+	public short alpha = 255;
 	
 	public ZLColor(int r, int g, int b) {
 		Red = (short)(r & 0xFF);
 		Green = (short)(g & 0xFF);
 		Blue = (short)(b & 0xFF);
+	}
+	
+	public ZLColor(String text)
+	{
+		String[] infos = text.split(",");
+		Red = (short)Integer.parseInt(infos[0]);
+		Green = (short)Integer.parseInt(infos[1]);
+		Blue = (short)Integer.parseInt(infos[2]);
+		
+		if (infos.length == 4) {
+			alpha = (short)Integer.parseInt(infos[3]);
+		}	
 	}
 	
 	public ZLColor(int intValue) {
