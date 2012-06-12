@@ -21,22 +21,16 @@ package org.geometerplus.fbreader.fbreader;
 
 
 class SwitchProfileAction extends FBAction {
-	private String myProfileName;
-
-	SwitchProfileAction(FBReaderApp fbreader, String profileName) {
+	SwitchProfileAction(FBReaderApp fbreader) {
 		super(fbreader);
-		myProfileName = profileName;
-	}
-
-	@Override
-	public boolean isVisible() {
-		return !myProfileName.equals(Reader.ColorProfileOption.getValue());
 	}
 
 	@Override
 	public void run(Object ... params) {
-		Reader.setColorProfileName(myProfileName);
-		FBReaderApp.Instance().resetWidget();
-		FBReaderApp.Instance().repaintWidget();
+		FBReaderApp reader = FBReaderApp.Instance();
+		boolean isNight = reader.isNightModeOption.getValue();
+		reader.isNightModeOption.setValue(!isNight);
+		reader.resetWidget();
+		reader.repaintWidget();
 	}
 }

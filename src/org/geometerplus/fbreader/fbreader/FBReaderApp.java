@@ -24,10 +24,14 @@ import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
 import info.monitorenter.cpdetector.io.JChardetFacade;
 import info.monitorenter.cpdetector.io.UnicodeDetector;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.PushbackInputStream;
 import java.io.StringWriter;
 import java.util.*;
 
@@ -168,8 +172,8 @@ public final class FBReaderApp {
 		addAction(ActionCode.MOVE_CURSOR_LEFT, new MoveCursorAction(this, ZLTextView.Direction.rightToLeft));
 		addAction(ActionCode.MOVE_CURSOR_RIGHT, new MoveCursorAction(this, ZLTextView.Direction.leftToRight));
 
-		addAction(ActionCode.SWITCH_TO_DAY_PROFILE, new SwitchProfileAction(this, ColorProfile.DAY));
-		addAction(ActionCode.SWITCH_TO_NIGHT_PROFILE, new SwitchProfileAction(this, ColorProfile.NIGHT));
+		addAction(ActionCode.SWITCH_TO_DAY_PROFILE, new SwitchProfileAction(this));
+		addAction(ActionCode.SWITCH_TO_NIGHT_PROFILE, new SwitchProfileAction(this));
 
 		addAction(ActionCode.VOLUME_KEY_SCROLL_FORWARD, new VolumeKeyTurnPageAction(this, true));
 		addAction(ActionCode.VOLUME_KEY_SCROLL_BACK, new VolumeKeyTurnPageAction(this, false));
@@ -234,10 +238,20 @@ public final class FBReaderApp {
 		}
 	}
 
-	public ZLStringOption ColorProfileOption = new ZLStringOption("Options", "ColorProfile", ColorProfile.DAY);
+	public ZLBooleanOption isNightModeOption = new ZLBooleanOption("Options", "NightMode", false);
 	private ColorProfile myColorProfile;
+	private ColorProfile m_colorProfileNight;
 	
-	public HashMap<String, TextTheme> m_themes = new HashMap<String, TextTheme>();
+	public String getCurrentTheme()
+	{
+		if (isNightModeOption.getValue()) {
+			return m_colorProfileNight.BaseThemeOption.getValue();
+		} else {
+			return myColorProfile.BaseThemeOption.getValue();
+		}
+	}
+	
+	public ArrayList<TextTheme> m_themes = new ArrayList<TextTheme>();
 	public void initTheme()
 	{
 		if (m_themes.size() > 0) {
@@ -246,8 +260,6 @@ public final class FBReaderApp {
 
 		final List<ZLFile> predefined = WallpapersUtil.predefinedWallpaperFiles();
 		
-		Properties props = new Properties();
-
 		try {
 			for (ZLFile f : predefined) {
 				String path = f.getPath();
@@ -260,33 +272,112 @@ public final class FBReaderApp {
 				if (cfgInput == null) {
 					continue;
 				}
+							
+				BufferedReader reader = new BufferedReader(new InputStreamReader(cfgInput, "gbk"));
 				
-				props.clear();
-				props.load(cfgInput);
-
+				String line = null;
 				TextTheme theme = new TextTheme();
-				theme.m_title = props.getProperty("title");
-				theme.m_imagePath = props.getProperty("image", "");
-				theme.m_thumbPath = props.getProperty("thumb", "");
-				theme.m_textColor = new ZLColor(props.getProperty("fontcolor", ""));
-				theme.m_bgColor = new ZLColor(props.getProperty("bgcolor", ""));
-				m_themes.put(path, theme);
+				theme.m_path = path;
+				while ((line = reader.readLine()) != null) {
+					final int split = line.indexOf('=');
+					if (split == -1) {
+						continue;
+					}
+
+					String key = line.substring(0, split);
+					String value = line.substring(split + 1);
+					
+					if (key.compareToIgnoreCase("title") == 0) {
+						theme.m_title = value;
+					} else if (key.compareToIgnoreCase("image") == 0) {
+						theme.m_imagePath = path + '/' + value;
+					} else if (key.compareToIgnoreCase("thumb") == 0) {
+						theme.m_thumbPath = path + '/' + value;
+					} else if (key.compareToIgnoreCase("fontcolor") == 0) {
+						theme.m_textColor = new ZLColor(value);
+					} else if (key.compareToIgnoreCase("bgcolor") == 0) {
+						theme.m_bgColor = new ZLColor(value);
+					} else if (key.compareToIgnoreCase("night") == 0) {
+						theme.m_isNightMode = (Integer.parseInt(value) != 0);
+					}
+				}
+				
+				if (theme.m_title == null) {
+					theme.m_title = "Î´ÃüÃû";
+				}
+				
+				if (theme.m_imagePath == null) {
+					theme.m_imagePath = path + '/' + "image.jpg";
+				}
+						
+				if (theme.m_bgColor == null) {
+					theme.m_bgColor = new ZLColor("0.33,0.3,0.22,1");
+				}
+				
+				if (theme.m_textColor == null) {
+					theme.m_textColor = new ZLColor("0,0,0,1");
+				}
+				
+				if (theme.m_selectBgColor == null) {
+					if (theme.m_isNightMode) {
+						theme.m_selectBgColor = new ZLColor(82, 131, 194);
+					} else {
+						theme.m_selectBgColor = new ZLColor(82, 131, 194);
+					}
+				}
+				
+				if (theme.m_selectTextColor == null) {
+					if (theme.m_isNightMode) {
+						theme.m_selectTextColor = new ZLColor(255, 255, 220);
+					} else {
+						theme.m_selectTextColor = new ZLColor(255, 255, 220);
+					}
+				}
+							
+				m_themes.add(theme);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	public ColorProfile getColorProfile() {
-		if (myColorProfile == null) {
-			myColorProfile = ColorProfile.get(ColorProfileOption.getValue());
+	
+	public TextTheme getThemeByName(String name) {
+		if (m_themes.size() <= 0) {
+			initTheme();
 		}
-		return myColorProfile;
+
+		for (TextTheme each : m_themes) {
+			if (each.m_path.compareTo(name) == 0) {
+				return each;
+			}
+		}
+		
+		return null;
+	}
+	
+	public ColorProfile getColorProfile() {
+		if (isNightModeOption.getValue() == true) {
+			if (m_colorProfileNight == null) {
+				m_colorProfileNight = new ColorProfile("night");
+			}
+			return m_colorProfileNight;
+		} else {
+			if (myColorProfile == null) {
+				myColorProfile = new ColorProfile("day");
+			}
+			return myColorProfile;
+		}
 	}
 
-	public void setColorProfileName(String name) {
-		ColorProfileOption.setValue(name);
-		myColorProfile = null;
+	public void changeTheme(String name) {
+		TextTheme theme = getThemeByName(name);
+		if (theme == null) {
+			return;
+		}
+
+		isNightModeOption.setValue(theme.m_isNightMode);
+		final ColorProfile color = getColorProfile();
+		color.ChangeTheme(theme);
 	}
 
 	public ZLKeyBindings keyBindings() {

@@ -30,54 +30,34 @@ import org.geometerplus.zlibrary.options.ZLStringOption;
 
 import org.geometerplus.fbreader.fbreader.ColorProfile;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.fbreader.WallpapersUtil;
+import org.geometerplus.fbreader.fbreader.TextTheme;
 
 class WallpaperPreference extends ListPreference {
-	private final ZLStringOption myOption;
-	private final ZLResource myResource;
-
 	WallpaperPreference(Context context, ColorProfile profile, ZLResource resource, String resourceKey) {
 		super(context);
 
-		myOption = profile.WallpaperOption;
-		myResource = resource.getResource(resourceKey);
+		ZLResource myResource = resource.getResource(resourceKey);
 		setTitle(myResource.getValue());
-		final List<ZLFile> predefined = WallpapersUtil.predefinedWallpaperFiles();
-		final List<ZLFile> external = WallpapersUtil.externalWallpaperFiles();
 		
-		final int size = 1 + predefined.size() + external.size();
+		FBReaderApp.Instance().initTheme();
+		ArrayList<TextTheme> themes = FBReaderApp.Instance().m_themes;
+		
+		final int size = 1 + themes.size();
 		final String[] values = new String[size];
 		final String[] texts = new String[size];
 
-		// 第一个配置是单色
-		final ZLResource optionResource = resource.getResource(resourceKey);
 		values[0] = "";
-		texts[0] = optionResource.getResource("solidColor").getValue();
-		int index = 1;
-		for (ZLFile f : predefined) {
-			values[index] = f.getPath();
-			
-			final String name = f.getShortName();
-			if (name.indexOf(".") == -1) {
-				texts[index] = f.getPath();
-				++index;
-				continue;
-			}
-
-			final String key = name.substring(0, name.indexOf("."));
-			texts[index] = optionResource.getResource(key).getValue();
-			++index;
-		}
-		for (ZLFile f : external) {
-			values[index] = f.getPath();
-			texts[index] = f.getShortName();
-			++index;
-		}
-		setLists(values, texts);
+		texts[0] = resource.getResource(resourceKey).getResource("solidColor").getValue();
 		
-		FBReaderApp.Instance().initTheme();
+		int index = 1;
+		for (TextTheme each : themes) {
+			values[index] = each.m_path;
+			texts[index] = each.m_title;
+			index += 1;
+		}
 
-		setInitialValue(myOption.getValue());
+		setLists(values, texts);
+		setInitialValue(FBReaderApp.Instance().getCurrentTheme());
 	}
 
 	@Override
@@ -86,18 +66,9 @@ class WallpaperPreference extends ListPreference {
 		if (result) {
 			setSummary(getEntry());
 		}
-		myOption.setValue(getValue());
+		FBReaderApp.Instance().changeTheme(getValue());
 	}
 	
-	protected final void setList(String[] values) {
-		String[] texts = new String[values.length];
-		for (int i = 0; i < values.length; ++i) {
-			final ZLResource resource = myResource.getResource(values[i]);
-			texts[i] = (resource != null && resource.hasValue()) ? resource.getValue() : values[i];
-		}
-		setLists(values, texts);
-	}
-
 	protected final void setLists(String[] values, String[] texts) {
 		assert(values.length == texts.length);
 		setEntries(texts);
@@ -117,8 +88,17 @@ class WallpaperPreference extends ListPreference {
 				}
 			}
 		}
+		
+		if (found == false) {
+			index = 0;
+		}
+
 		setValueIndex(index);
-		setSummary(getEntry());
+		final CharSequence entry = getEntry();
+		if (entry != null) {
+			setSummary(entry);
+		}
+		
 		return found;
 	}
 }

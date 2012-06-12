@@ -38,13 +38,32 @@ public final class ZLColor {
 	public ZLColor(String text)
 	{
 		String[] infos = text.split(",");
-		Red = (short)Integer.parseInt(infos[0]);
-		Green = (short)Integer.parseInt(infos[1]);
-		Blue = (short)Integer.parseInt(infos[2]);
+
+		Red = getColorValue(infos[0]);
+		Green = getColorValue(infos[1]);
+		Blue = getColorValue(infos[2]);
 		
 		if (infos.length == 4) {
-			alpha = (short)Integer.parseInt(infos[3]);
+			alpha = getColorValue(infos[3]);
 		}	
+	}
+	
+	private short getColorValue(String value)
+	{
+		if (value.compareTo("0") == 0) {
+			return 0;
+		}
+		
+		if (value.compareTo("1") == 0) {
+			return 255;
+		}
+
+		double temp = Double.parseDouble(value);
+		if (temp > 0) {
+			return (short)temp;
+		} else {
+			return (short)(temp * 255);
+		}
 	}
 	
 	public ZLColor(int intValue) {

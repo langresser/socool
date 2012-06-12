@@ -152,7 +152,7 @@ public class ChangeLightPopup extends PopupPanel {
 			public void onClick(View v) {
 				final boolean night = !btnNeight.isSelected();
 				btnNeight.setSelected(night);
-				FBReaderApp.Instance().setColorProfileName(night ? ColorProfile.NIGHT : ColorProfile.DAY);
+				FBReaderApp.Instance().isNightModeOption.setValue(night);
 				FBReaderApp.Instance().resetWidget();
 				FBReaderApp.Instance().repaintWidget();
 			}
@@ -174,6 +174,6 @@ public class ChangeLightPopup extends PopupPanel {
 		
 		final ImageButton btnNeight = (ImageButton)panel.findViewById(R.id.night_button);
 		
-		btnNeight.setSelected(FBReaderApp.Instance().ColorProfileOption.getValue() == ColorProfile.NIGHT);
+		btnNeight.setSelected(FBReaderApp.Instance().isNightModeOption.getValue() == true);
 	}
 }

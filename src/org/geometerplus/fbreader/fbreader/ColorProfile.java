@@ -27,34 +27,10 @@ import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.util.ZLColor;
 
 public class ColorProfile {
-	public static final String DAY = "defaultLight";
-	public static final String NIGHT = "defaultDark";
+	public static final String DAY = "day";
+	public static final String NIGHT = "night";
 
-	private static final ArrayList<String> ourNames = new ArrayList<String>();
-	private static final HashMap<String,ColorProfile> ourProfiles = new HashMap<String,ColorProfile>();
-
-	public static List<String> names() {
-		if (ourNames.isEmpty()) {
-			final int size = new ZLIntegerOption("Colors", "NumberOfSchemes", 0).getValue();
-			if (size == 0) {
-				ourNames.add(DAY);
-				ourNames.add(NIGHT);
-			} else for (int i = 0; i < size; ++i) {
-				ourNames.add(new ZLStringOption("Colors", "Scheme" + i, "").getValue());
-			}
-		}
-		return Collections.unmodifiableList(ourNames);
-	}
-
-	public static ColorProfile get(String name) {
-		ColorProfile profile = ourProfiles.get(name);
-		if (profile == null) {
-			profile = new ColorProfile(name);
-			ourProfiles.put(name, profile);
-		}
-		return profile;
-	}
-
+	public final ZLStringOption BaseThemeOption;
 	public final ZLStringOption WallpaperOption;
 	public final ZLColorOption BackgroundOption;
 	public final ZLColorOption SelectionBackgroundOption;
@@ -69,45 +45,61 @@ public class ColorProfile {
 		return new ZLColorOption("Colors", profileName + ':' + optionName, new ZLColor(r, g, b));
 	}
 
-	private ColorProfile(String name) {
+	public ColorProfile(String name) {
 		if (NIGHT.equals(name)) {
-			WallpaperOption =
-				new ZLStringOption("Colors", name + ":Wallpaper", "");
-			BackgroundOption =
-				createOption(name, "Background", 0, 0, 0);
-			SelectionBackgroundOption =
-				createOption(name, "SelectionBackground", 82, 131, 194);
-			SelectionForegroundOption =
-				createOption(name, "SelectionForeground", 255, 255, 220);
-			HighlightingOption =
-				createOption(name, "Highlighting", 96, 96, 128);
-			RegularTextOption =
-				createOption(name, "Text", 192, 192, 192);
-			HyperlinkTextOption =
-				createOption(name, "Hyperlink", 60, 142, 224);
-			VisitedHyperlinkTextOption =
-				createOption(name, "VisitedHyperlink", 200, 139, 255);
-			FooterFillOption =
-				createOption(name, "FooterFillOption", 85, 85, 85);
+			BaseThemeOption = new ZLStringOption("Colors", name + ":Theme", "");
+			if (BaseThemeOption.getValue().length() <= 0) {
+				TextTheme theme = FBReaderApp.Instance().getThemeByName("wallpapers/2");
+				WallpaperOption = new ZLStringOption("Colors", name + ":Wallpaper", "");
+				BackgroundOption = createOption(name, "Background", 0, 0, 0);
+				SelectionBackgroundOption = createOption(name, "SelectionBackground", 82, 131, 194);
+				SelectionForegroundOption = createOption(name, "SelectionForeground", 255, 255, 220);
+				RegularTextOption = createOption(name, "Text", 192, 192, 192);
+				ChangeTheme(theme);
+			} else {
+				WallpaperOption = new ZLStringOption("Colors", name + ":Wallpaper", "");
+				BackgroundOption = createOption(name, "Background", 0, 0, 0);
+				SelectionBackgroundOption = createOption(name, "SelectionBackground", 82, 131, 194);
+				SelectionForegroundOption = createOption(name, "SelectionForeground", 255, 255, 220);
+				RegularTextOption = createOption(name, "Text", 192, 192, 192);
+			}
+			
+			HighlightingOption = createOption(name, "Highlighting", 96, 96, 128);
+			HyperlinkTextOption = createOption(name, "Hyperlink", 60, 142, 224);
+			VisitedHyperlinkTextOption = createOption(name, "VisitedHyperlink", 200, 139, 255);
+			FooterFillOption = createOption(name, "FooterFillOption", 85, 85, 85);
 		} else {
-			WallpaperOption =
-				new ZLStringOption("Colors", name + ":Wallpaper", "wallpapers/sepia.jpg");
-			BackgroundOption =
-				createOption(name, "Background", 255, 255, 255);
-			SelectionBackgroundOption =
-				createOption(name, "SelectionBackground", 82, 131, 194);
-			SelectionForegroundOption =
-				createOption(name, "SelectionForeground", 255, 255, 220);
-			HighlightingOption =
-				createOption(name, "Highlighting", 255, 192, 128);
-			RegularTextOption =
-				createOption(name, "Text", 0, 0, 0);
-			HyperlinkTextOption =
-				createOption(name, "Hyperlink", 60, 139, 255);
-			VisitedHyperlinkTextOption =
-				createOption(name, "VisitedHyperlink", 200, 139, 255);
-			FooterFillOption =
-				createOption(name, "FooterFillOption", 170, 170, 170);
+			BaseThemeOption = new ZLStringOption("Colors", name + ":Theme", "");
+			if (BaseThemeOption.getValue().length() <= 0) {
+				TextTheme theme = FBReaderApp.Instance().getThemeByName("wallpapers/1");
+				WallpaperOption = new ZLStringOption("Colors", name + ":Wallpaper", "");
+				BackgroundOption = createOption(name, "Background", 255, 255, 255);
+				SelectionBackgroundOption = createOption(name, "SelectionBackground", 82, 131, 194);
+				SelectionForegroundOption = createOption(name, "SelectionForeground", 255, 255, 220);
+				RegularTextOption = createOption(name, "Text", 0, 0, 0);
+				ChangeTheme(theme);
+			} else {
+				WallpaperOption = new ZLStringOption("Colors", name + ":Wallpaper", "wallpapers/1/image.png");
+				BackgroundOption = createOption(name, "Background", 255, 255, 255);
+				SelectionBackgroundOption = createOption(name, "SelectionBackground", 82, 131, 194);
+				SelectionForegroundOption = createOption(name, "SelectionForeground", 255, 255, 220);
+				RegularTextOption = createOption(name, "Text", 0, 0, 0);
+			}
+			
+			HighlightingOption = createOption(name, "Highlighting", 255, 192, 128);
+			HyperlinkTextOption = createOption(name, "Hyperlink", 60, 139, 255);
+			VisitedHyperlinkTextOption = createOption(name, "VisitedHyperlink", 200, 139, 255);
+			FooterFillOption = createOption(name, "FooterFillOption", 170, 170, 170);
 		}
+	}
+	
+	public void ChangeTheme(TextTheme theme)
+	{
+		BaseThemeOption.setValue(theme.m_path);
+		WallpaperOption.setValue(theme.m_imagePath);
+		BackgroundOption.setValue(theme.m_bgColor);
+		SelectionBackgroundOption.setValue(theme.m_selectBgColor);
+		SelectionForegroundOption.setValue(theme.m_selectTextColor);
+		RegularTextOption.setValue(theme.m_textColor);
 	}
 }
