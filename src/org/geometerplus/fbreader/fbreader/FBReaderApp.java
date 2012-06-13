@@ -24,14 +24,12 @@ import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
 import info.monitorenter.cpdetector.io.JChardetFacade;
 import info.monitorenter.cpdetector.io.UnicodeDetector;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.PushbackInputStream;
 import java.io.StringWriter;
 import java.util.*;
 
@@ -67,8 +65,6 @@ import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
-import org.geometerplus.fbreader.filetype.FileType;
-import org.geometerplus.fbreader.filetype.FileTypeCollection;
 import org.geometerplus.fbreader.library.*;
 import org.socool.socoolreader.reader.R;
 
@@ -77,7 +73,6 @@ import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
