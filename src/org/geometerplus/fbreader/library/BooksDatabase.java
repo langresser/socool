@@ -256,7 +256,7 @@ public class BooksDatabase {
 			"Bookmarks.modification_time, Bookmarks.paragraph, Bookmarks.word, Bookmarks.char,"+//4
 			"Bookmarks.type, Bookmarks.comment,"+
 			"Bookmarks.begin_paragraph, Bookmarks.begin_word, Bookmarks.begin_char,"+//5
-			"Bookmarks.end_paragraph,Bookmarks.end_word,Bookmarks.end_char "+//3
+			"Bookmarks.end_paragraph,Bookmarks.end_word,Bookmarks.end_char,Bookmarks.percent "+//4
 			"FROM Bookmarks INNER JOIN Books ON Books.book_id = Bookmarks.book_id WHERE Bookmarks.book_id = ?",
 			new String[] { "" + bookId});
 
@@ -274,7 +274,8 @@ public class BooksDatabase {
 						cursor.getString(4),			// Bookmarks.model_id
 						SQLiteUtil.getDate(cursor, 5),	// date
 						page, begin, end,				// page
-						cursor.getString(10));			// Bookmarks.comment
+						cursor.getString(10),
+						(int)cursor.getLong(16));			// Bookmarks.comment
 				list.add(bookmark);
 			} else {
 				ZLTextFixedPosition page = new ZLTextFixedPosition((int)cursor.getLong(6), (int)cursor.getLong(7), (int)cursor.getLong(8));
@@ -286,7 +287,8 @@ public class BooksDatabase {
 						cursor.getString(8),			// Bookmarks.model_id
 						SQLiteUtil.getDate(cursor, 4),	// date
 						page, null, null,				// page
-						null);							// Bookmarks.comment
+						null,
+						(int)cursor.getLong(16));							// Bookmarks.comment
 				list.add(bookmark);
 			}
 		}
@@ -302,7 +304,7 @@ public class BooksDatabase {
 			"Bookmarks.modification_time, Bookmarks.paragraph, Bookmarks.word, Bookmarks.char,"+//4
 			"Bookmarks.type, Bookmarks.comment,"+
 			"Bookmarks.begin_paragraph, Bookmarks.begin_word, Bookmarks.begin_char,"+//5
-			"Bookmarks.end_paragraph,Bookmarks.end_word,Bookmarks.end_char "+//3
+			"Bookmarks.end_paragraph,Bookmarks.end_word,Bookmarks.end_char,Bookmarks.percent "+//3
 			"FROM Bookmarks INNER JOIN Books ON Books.book_id = Bookmarks.book_id", null
 		);
 		while (cursor.moveToNext()) {
@@ -319,7 +321,8 @@ public class BooksDatabase {
 						cursor.getString(4),			// Bookmarks.model_id
 						SQLiteUtil.getDate(cursor, 5),	// date
 						page, begin, end,				// page
-						cursor.getString(10));			// Bookmarks.comment
+						cursor.getString(10),
+						(int)cursor.getLong(16));			// Bookmarks.comment
 				list.add(bookmark);
 			} else {
 				ZLTextFixedPosition page = new ZLTextFixedPosition((int)cursor.getLong(6), (int)cursor.getLong(7), (int)cursor.getLong(8));
@@ -331,7 +334,8 @@ public class BooksDatabase {
 						cursor.getString(8),			// Bookmarks.model_id
 						SQLiteUtil.getDate(cursor, 4),	// date
 						page, null, null,				// page
-						null);							// Bookmarks.comment
+						null,
+						(int)cursor.getLong(16));							// Bookmarks.comment
 				list.add(bookmark);
 			}
 		}
@@ -348,8 +352,8 @@ public class BooksDatabase {
 				myInsertBookmarkStatement = myDatabase.compileStatement(
 					"INSERT OR IGNORE INTO Bookmarks (book_id,bookmark_text,"+
 					"modification_time,model_id,"+
-					"paragraph,word,char,type,comment,begin_paragraph,begin_word,begin_char,end_paragraph,end_word,end_char) " +
-					"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+					"paragraph,word,char,type,comment,begin_paragraph,begin_word,begin_char,end_paragraph,end_word,end_char,percent) " +
+					"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 				);
 			}
 			statement = myInsertBookmarkStatement;
@@ -359,7 +363,7 @@ public class BooksDatabase {
 					"UPDATE Bookmarks SET book_id = ?, bookmark_text = ?,"+
 					"modification_time = ?, model_id = ?, "+
 					"paragraph = ?, word = ?, char = ?, type = ?,comment = ?,"+
-					"begin_paragraph = ?,begin_word = ?,begin_char = ?,end_paragraph = ?,end_word = ?,end_char = ?"+
+					"begin_paragraph = ?,begin_word = ?,begin_char = ?,end_paragraph = ?,end_word = ?,end_char = ?,percent=?"+
 					"WHERE bookmark_id = ?");
 			}
 			statement = myUpdateBookmarkStatement;
@@ -397,11 +401,13 @@ public class BooksDatabase {
 			statement.bindLong(15, -1);
 		}
 		
+		statement.bindLong(16, -1);
+		
 		if (statement == myInsertBookmarkStatement) {
 			return statement.executeInsert();
 		} else {
 			final long id = bookmark.getId();
-			statement.bindLong(16, id);
+			statement.bindLong(17, id);
 			statement.execute();
 			return id;
 		}
@@ -522,7 +528,7 @@ public class BooksDatabase {
 				"begin_char INTEGER NOT NULL," +
 				"end_paragraph INTEGER NOT NULL," +
 				"end_word INTEGER NOT NULL," +
-				"end_char INTEGER NOT NULL)");
+				"end_char INTEGER NOT NULL, percent INTEGER NOT NULL)");
 
 		// ÔÄ¶Á½ø¶È
 		myDatabase.execSQL("CREATE TABLE BookState(" +

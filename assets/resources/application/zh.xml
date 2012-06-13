@@ -214,7 +214,8 @@
 		<node name="bookmarkCreated" value="创建书签:&#10;%s" />
 		<node name="clearSelection" value="清除" />
 	</node>
-	<node name="menu">
+    <node name="menu">
+        <node name="addbookmark" value="添加书签"/>
 		<node name="preferences" value="设置" />
 		<node name="bookInfo" value="书籍信息" />
 		<node name="library" value="本地书柜" />
@@ -240,7 +241,6 @@
         <node name="showlight" value = "亮度调节"/>
 		<node name="toggleFullscreen" value="全屏" />
         <node name="bookmarks" value="目录/书签" />
-        <node name="selectionBookmark" value="添加书签" />
 	</node>
 	<node name="dialog">
 		<node name="button">

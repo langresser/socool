@@ -44,7 +44,7 @@ public class SelectionBookmarkAction extends FBAndroidAction {
 			Reader.Model.Book,
 			fbview.getModel().myId, text,
 			fbview.getStartCursor(), fbview.getSelectionStartPosition(),
-			fbview.getSelectionEndPosition(), null);
+			fbview.getSelectionEndPosition(), null, fbview.getCurrentPercent());
 		bookmark.save();
 		fbview.addBookmarkHighlight(bookmark);
 		fbview.clearSelection();

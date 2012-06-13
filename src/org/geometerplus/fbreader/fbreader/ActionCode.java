@@ -72,4 +72,5 @@ public interface ActionCode {
 	String SELECTION_SHARE = "selectionShare";
 	String SELECTION_TRANSLATE = "selectionTranslate";
 	String SELECTION_BOOKMARK = "selectionBookmark";
+	String ADD_BOOKMARK = "addbookmark";
 }

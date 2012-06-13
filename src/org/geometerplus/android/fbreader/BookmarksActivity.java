@@ -80,7 +80,6 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 		LayoutInflater.from(this).inflate(R.layout.bookmarks, host.getTabContentView(), true);
 
 		AllBooksBookmarks = FBReaderApp.Instance().getDatabase().loadAllBookmarks();
-//		Collections.sort(AllBooksBookmarks, new Bookmark.ByTimeComparator());
 
 		if (FBReaderApp.Instance().Model != null) {
 			final long bookId = FBReaderApp.Instance().Model.Book.myId;
@@ -98,8 +97,6 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 
 		myAllBooksView = createTab("allBooks", R.id.all_books);
 		new BookmarksAdapter(myAllBooksView, AllBooksBookmarks, false);
-
-		findViewById(R.id.search_results).setVisibility(View.GONE);
 	}
 
 	@Override
@@ -116,11 +113,6 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 			if (ZLMiscUtil.matchesIgnoreCase(b.getText(), pattern)) {
 				bookmarks.add(b);
 			}
-		}
-		if (!bookmarks.isEmpty()) {
-			showSearchResultsTab(bookmarks);
-		} else {
-			UIUtil.showErrorMessage(this, "bookmarkNotFound");
 		}
 	}
 
@@ -142,25 +134,6 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 		item.setOnMenuItemClickListener(this);
 		item.setIcon(R.drawable.ic_menu_search);
 		return true;
-	}
-
-	@Override
-	public boolean onSearchRequested() {
-		startSearch(myBookmarkSearchPatternOption.getValue(), true, null, false);
-		return true;
-	}
-
-	void showSearchResultsTab(LinkedList<Bookmark> results) {
-		if (mySearchResultsView == null) {
-			mySearchResultsView = createTab("found", R.id.search_results);
-			new BookmarksAdapter(mySearchResultsView, mySearchResults, false);
-		} else {
-			mySearchResults.clear();
-		}
-		mySearchResults.addAll(results);
-		mySearchResultsView.invalidateViews();
-		mySearchResultsView.requestLayout();
-		getTabHost().setCurrentTabByTag("found");
 	}
 
 	public boolean onMenuItemClick(MenuItem item) {
@@ -217,7 +190,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 			return;
 		}
 
-		final Bookmark bookmark = new Bookmark(fbreader.Model.Book, view.getModel().myId, cursor, 20);
+		final Bookmark bookmark = new Bookmark(fbreader.Model.Book, view.getModel().myId, cursor, 20, view.getCurrentPercent());
 		if (bookmark != null) {
 			myThisBookBookmarks.add(0, bookmark);
 			AllBooksBookmarks.add(0, bookmark);

@@ -1,7 +1,7 @@
 package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.text.ZLTextView;
+import org.geometerplus.zlibrary.text.ZLTextWordCursor;
 
 import org.geometerplus.fbreader.library.Bookmark;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -16,23 +16,23 @@ public class AddBookmarkAction extends FBAndroidAction {
 
 	@Override
     protected void run(Object ... params) {
-		final ZLTextView fbview = Reader.getCurrentView();
-		final String text = fbview.getSelectedText();
-
 		// 创建新书摘
 		// TODO add comment
-		Bookmark bookmark = new Bookmark(
-			Reader.Model.Book,
-			fbview.getModel().myId, text,
-			fbview.getStartCursor(), fbview.getSelectionStartPosition(),
-			fbview.getSelectionEndPosition(), null);
+		final FBReaderApp fbreader = FBReaderApp.Instance();
+		final ZLTextView view = fbreader.getCurrentView();
+		final ZLTextWordCursor cursor = view.getStartCursor();
+
+		if (cursor.isNull()) {
+			return;
+		}
+		
+		final int percent = view.getCurrentPercent();
+		final Bookmark bookmark = new Bookmark(fbreader.Model.Book, view.getModel().myId, cursor, 20, percent);
 		bookmark.save();
-		fbview.addBookmarkHighlight(bookmark);
-		fbview.clearSelection();
 
 		UIUtil.showMessageText(
 			BaseActivity,
-			ZLResource.resource("selection").getResource("bookmarkCreated").getValue().replace("%s", text)
+			"添加书签成功"
 		);
 	}
 }

@@ -52,18 +52,20 @@ public final class Bookmark {
 	public ZLTextFixedPosition m_posCurrentPage = null;	// 书签或者书摘在哪一页
 	public ZLTextFixedPosition m_posBegin = null;			// 书摘开始字符
 	public ZLTextFixedPosition m_posEnd = null;			// 书摘结束字符
+	public int m_percent = 0;							// 阅读进度(仅用于显示)
 
 	private boolean myIsChanged;
 	
 	// 通过数据库载入
 	Bookmark(long id, long bookId, String bookTitle, String text, String modelId, Date date,
-			ZLTextPosition page, ZLTextPosition begin, ZLTextPosition end, String comment) {
+			ZLTextPosition page, ZLTextPosition begin, ZLTextPosition end, String comment, int percent) {
 		myId = id;
 		myBookId = bookId;
 		myBookTitle = bookTitle;
 		myText = text;
 		ModelId = modelId;
 		myIsChanged = false;
+		m_percent = percent;
 		
 		m_posCurrentPage = new ZLTextFixedPosition(page);
 
@@ -83,13 +85,13 @@ public final class Bookmark {
 	}
 
 	// 新创建书签
-	public Bookmark(Book book, String modelId, ZLTextWordCursor cursor, int maxLength) {
-		this(book, modelId, createBookmarkText(cursor, maxLength), cursor, null, null, null);
+	public Bookmark(Book book, String modelId, ZLTextWordCursor cursor, int maxLength, int percent) {
+		this(book, modelId, createBookmarkText(cursor, maxLength), cursor, null, null, null, percent);
 	}
 
 	// 代码中创建书签或书摘，如果没有指定选中文字的话，为书签
 	public Bookmark(Book book, String modelId, String text,
-			ZLTextPosition page, ZLTextPosition begin, ZLTextPosition end, String comment) {
+			ZLTextPosition page, ZLTextPosition begin, ZLTextPosition end, String comment, int percent) {
 		myId = -1;
 		myBookId = book.myId;
 		myBookTitle = book.myTitle;
@@ -97,6 +99,7 @@ public final class Bookmark {
 		myModificationDate = new Date();
 		ModelId = modelId;
 		myIsChanged = true;
+		m_percent = percent;
 		
 		m_posCurrentPage = new ZLTextFixedPosition(page);
 		

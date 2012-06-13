@@ -163,6 +163,7 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.SELECTION_SHARE, new SelectionShareAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_TRANSLATE, new SelectionTranslateAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_BOOKMARK, new SelectionBookmarkAction(this, fbReader));
+		fbReader.addAction(ActionCode.ADD_BOOKMARK, new AddBookmarkAction(this, fbReader));
 
 		fbReader.addAction(ActionCode.PROCESS_HYPERLINK, new ProcessHyperlinkAction(this, fbReader));
 
@@ -457,8 +458,8 @@ public final class SCReaderActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		addMenuItem(menu, ActionCode.SELECTION_BOOKMARK, R.drawable.menu_icon_mark);
-		addMenuItem(menu, ActionCode.SHOW_BOOKMARKS, R.drawable.ic_menu_bookmarks);
+		addMenuItem(menu, ActionCode.ADD_BOOKMARK, R.drawable.menu_icon_mark);
+		addMenuItem(menu, ActionCode.SHOW_BOOKMARKS, R.drawable.menu_icon_catalog);
 		addMenuItem(menu, ActionCode.SHOW_FONT, R.drawable.cartoon_fontsize);
 		addMenuItem(menu, ActionCode.SHOW_LIGHT, R.drawable.menu_icon_brightness);
 //		addMenuItem(menu, ActionCode.SEARCH, R.drawable.ic_menu_search);

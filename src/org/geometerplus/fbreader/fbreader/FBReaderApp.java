@@ -515,7 +515,7 @@ public final class FBReaderApp {
 			return null;
 		}
 
-		return new Bookmark(Model.Book, view.getModel().myId, cursor, maxLength);
+		return new Bookmark(Model.Book, view.getModel().myId, cursor, maxLength, view.getCurrentPercent());
 	}
 
 	public TOCTree getCurrentTOCElement() {
