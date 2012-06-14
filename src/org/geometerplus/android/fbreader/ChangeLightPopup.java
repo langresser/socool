@@ -121,31 +121,7 @@ public class ChangeLightPopup extends PopupPanel {
 
 		btnPlus.setOnClickListener(listener);
 		btnDec.setOnClickListener(listener);
-		
-		View.OnTouchListener touchListener = new View.OnTouchListener() {
-			@Override 
-			public boolean onTouch(View v, MotionEvent event) { 
-				if(event.getAction() == MotionEvent.ACTION_DOWN){
-					if (v instanceof ImageButton) {
-						ImageButton btn = (ImageButton)v;
-						btn.getDrawable().setAlpha(127);
-						btn.invalidate();
-					}
-				} else if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (v instanceof ImageButton) {
-						ImageButton btn = (ImageButton)v;
-						btn.getDrawable().setAlpha(255);
-						btn.invalidate();
-					}
-				}
 				
-				return false;
-			}
-		};
-		
-		btnPlus.setOnTouchListener(touchListener);
-		btnDec.setOnTouchListener(touchListener);
-		
 		final ImageButton btnNeight = (ImageButton)layout.findViewById(R.id.night_button);
 		btnNeight.setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -28,7 +28,8 @@
              android:id="@+id/reader_bookmark_item_time" 
              android:layout_width="0.0dip" 
              android:layout_height="wrap_content"
-android:layout_weight="1.0" style="?android:attr/textAppearanceSmall" />
+			 android:layout_weight="1.0"
+			 style="?android:attr/textAppearanceSmall" />
         <ImageView android:id="@+id/reader_bookmark_item_delete"
              android:paddingLeft="20.0dip" 
              android:paddingTop="5.0dip" 

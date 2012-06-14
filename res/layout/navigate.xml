@@ -19,14 +19,8 @@
 
 	<LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content">
        <ImageButton android:id="@+id/btn_back_chapter"
-                android:src="@drawable/btn_backward_selector"
-                android:background="#00000000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-	    <ImageButton android:id="@+id/btn_back"
                 android:src="@drawable/icon_backward_selector"
                 android:background="#00000000"
-                android:paddingLeft="10dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
  
@@ -39,15 +33,9 @@
             android:max="10000"
             android:minWidth="15.0dip" 
             android:layout_weight="1.0" />
-        
-        <ImageButton android:id="@+id/btn_forward"
-                android:src="@drawable/icon_forward_selector"
-                android:background="#00000000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
         <ImageButton android:id="@+id/btn_forward_chapter"
-                android:src="@drawable/btn_forward_selector"
+                android:src="@drawable/icon_forward_selector"
                 android:background="#00000000"
                 android:paddingLeft="10dip"
                 android:layout_width="wrap_content"
@@ -59,26 +47,35 @@
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
 		android:weightSum="1.0"
-		android:layout_below="@id/book_position_slider"
 		android:layout_alignParentBottom="true"
-		android:paddingTop="4px"
+		android:paddingTop="20dip"
 	>
+        <LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.15"
+		/>
 		<Button
 			android:id="@android:id/button1"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_weight="0.35"
+			android:layout_weight="0.3"
 		/>
 		<LinearLayout
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_weight="0.3"
+			android:layout_weight="0.1"
 		/>
 		<Button
 			android:id="@android:id/button3"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_weight="0.35"
+			android:layout_weight="0.3"
+		/>
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.15"
 		/>
 	</LinearLayout>
 </LinearLayout>

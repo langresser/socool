@@ -131,13 +131,6 @@ public class NavigationPopup extends PopupPanel {
 					final String title = FBReaderApp.Instance().Model.m_chapter.getChapterTitle(chapterIndex);
 					slider.setProgress(percent);
 					text.setText(String.format("%1$.2f%%", percent / 100.0) + "  " + title);
-					Log.d("progress change", String.format("%1d %2d %3d %4s", progress, txtOffset, chapterIndex, title));
-					
-					final ImageButton btnLast = (ImageButton)myWindow.findViewById(R.id.btn_back);
-					final ImageButton btnNext = (ImageButton)myWindow.findViewById(R.id.btn_forward);
-					
-					btnLast.setEnabled(percent > 0);
-					btnNext.setEnabled(percent < 10000);
 				}
 			}
 		});
@@ -167,8 +160,6 @@ public class NavigationPopup extends PopupPanel {
 
 		final ImageButton btnLastChapter = (ImageButton)layout.findViewById(R.id.btn_back_chapter);
 		final ImageButton btnNextChapter = (ImageButton)layout.findViewById(R.id.btn_forward_chapter);
-		final ImageButton btnLast = (ImageButton)layout.findViewById(R.id.btn_back);
-		final ImageButton btnNext = (ImageButton)layout.findViewById(R.id.btn_forward);
 		
 		View.OnClickListener listenerJump = new View.OnClickListener() {
 			public void onClick(View v) {
@@ -179,14 +170,6 @@ public class NavigationPopup extends PopupPanel {
 				} else if (v == btnNextChapter) {
 					final int currentChapter = textView.getCurrentChapter();
 					textView.gotoChapter(currentChapter + 1);
-				} else if (v == btnLast) {
-					int percent = textView.getCurrentPercent();
-					percent -= 1;
-					textView.gotoPercent(percent);
-				} else if (v == btnNext) {
-					int percent = textView.getCurrentPercent();
-					percent += 1;
-					textView.gotoPercent(percent);
 				}
 
 				setupNavigation(myWindow);
@@ -197,9 +180,6 @@ public class NavigationPopup extends PopupPanel {
 		
 		btnLastChapter.setOnClickListener(listenerJump);
 		btnNextChapter.setOnClickListener(listenerJump);
-		btnLast.setOnClickListener(listenerJump);
-		btnNext.setOnClickListener(listenerJump);
-		
 		
 		myWindow.addView(layout);
 	}
@@ -214,13 +194,5 @@ public class NavigationPopup extends PopupPanel {
 		final String title = FBReaderApp.Instance().Model.m_chapter.getChapterTitle(chapterIndex);
 		slider.setProgress(percent);
 		text.setText(String.format("%1$.2f%%", percent / 100.0) + "  " + title);
-		
-		Log.d("setupNavigation", String.format("%1d %2d %3s", percent, chapterIndex, title));
-
-		final ImageButton btnLast = (ImageButton)panel.findViewById(R.id.btn_back);
-		final ImageButton btnNext = (ImageButton)panel.findViewById(R.id.btn_forward);
-		
-		btnLast.setEnabled(percent > 0);
-		btnNext.setEnabled(percent < 10000);
 	}
 }

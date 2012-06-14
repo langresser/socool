@@ -460,7 +460,7 @@ public final class SCReaderActivity extends Activity {
 		super.onCreateOptionsMenu(menu);
 		addMenuItem(menu, ActionCode.ADD_BOOKMARK, R.drawable.menu_icon_mark);
 		addMenuItem(menu, ActionCode.SHOW_BOOKMARKS, R.drawable.menu_icon_catalog);
-		addMenuItem(menu, ActionCode.SHOW_FONT, R.drawable.cartoon_fontsize);
+		addMenuItem(menu, ActionCode.SHOW_FONT, R.drawable.button_text_normal);
 		addMenuItem(menu, ActionCode.SHOW_LIGHT, R.drawable.menu_icon_brightness);
 //		addMenuItem(menu, ActionCode.SEARCH, R.drawable.ic_menu_search);
 	
