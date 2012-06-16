@@ -1,5 +1,6 @@
 package org.geometerplus.fbreader.bookmodel;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -19,7 +20,7 @@ public class BookChapter {
 		public String m_title;
 		public int m_juanIndex;
 		
-		public Vector<Integer> paragraphOffset = new Vector<Integer>();
+		public ArrayList<Integer> paragraphOffset = new ArrayList<Integer>();
 	}
 	
 	public BookChapter()
@@ -124,7 +125,7 @@ public class BookChapter {
 	
 	public int getParagraphIndexByTxtOffset(int chapter, int offset)
 	{
-		final Vector<Integer> paraOffset = m_chapterData.get(chapter).paragraphOffset;
+		final ArrayList<Integer> paraOffset = m_chapterData.get(chapter).paragraphOffset;
 		final int amount = paraOffset.size();
 		int low = 0;
 		int high = amount - 1;
@@ -300,8 +301,15 @@ public class BookChapter {
 		}
 	}
 	
-	public Vector<BookChapterData> m_chapterData = new Vector<BookChapterData>();
-	public Vector<String> m_juanData = new Vector<String>();
+	public ArrayList<BookChapterData> m_chapterData = new ArrayList<BookChapterData>();
+	
+	static public class JuanData
+	{
+		public String m_juanTitle;
+		public ArrayList<Integer> m_juanChapter = new ArrayList<Integer>();
+	}
+	
+	public ArrayList<JuanData> m_juanData = new ArrayList<JuanData>();
 	public int m_allParagraphNumber = 0;
 	public int m_allTextSize = 0;
 }

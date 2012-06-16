@@ -3,7 +3,6 @@
     android:paddingBottom="13.0dip"
      android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:background="@drawable/book_grid_bkg"
   	xmlns:android="http://schemas.android.com/apk/res/android">
     <ListView android:id="@+id/reader_boomark_list" 
         android:paddingLeft="20.0dip" 
@@ -12,7 +11,8 @@
         android:layout_height="fill_parent" 
         android:cacheColorHint="@android:color/transparent" 
         android:divider="@color/listview_divider_color" 
-        android:dividerHeight="1.0px" 
+        android:dividerHeight="3.0px" 
+        android:background="#ffeeeeee"
         android:fastScrollEnabled="true" />
 
     <RelativeLayout android:id="@+id/reader_bookmark_cover" android:layout_width="fill_parent" android:layout_height="fill_parent">

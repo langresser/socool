@@ -26,20 +26,23 @@
 			android:layout_width="0dip"
 			android:layout_weight="1"
 			android:maxLines="2"
+			android:text="开始阅读"
 			android:layout_height="wrap_content"
 		/>
 		<Button
-			android:id="@+id/book_info_button_edit"
+			android:id="@+id/book_info_button_book"
 			android:layout_width="0dip"
 			android:layout_weight="1"
 			android:maxLines="2"
+			android:text="本地书籍"
 			android:layout_height="wrap_content"
 		/>
 		<Button
-			android:id="@+id/book_info_button_reload"
+			android:id="@+id/book_info_button_app"
 			android:layout_width="0dip"
 			android:layout_weight="1"
 			android:maxLines="2"
+			android:text="推荐应用"
 			android:layout_height="wrap_content"
 		/>
 		<LinearLayout

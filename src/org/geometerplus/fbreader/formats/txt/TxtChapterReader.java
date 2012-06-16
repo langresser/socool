@@ -1,6 +1,7 @@
 package org.geometerplus.fbreader.formats.txt;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.geometerplus.fbreader.bookmodel.BookChapter;
@@ -48,12 +49,22 @@ public final class TxtChapterReader extends BookReader {
 			int paraCount = 0;
 			int textSize = 0;
 			int currentJuanIndex = -1;
+			int currentChapterIndex = -1;
 			final BookChapter chapter = m_bookModel.m_chapter;
+			BookChapter.JuanData juanData = null;
+
 			while ((line = reader.readLine()) != null) {
 				if (line.charAt(0) == 'j') {
-					chapter.m_juanData.add(line);
+					if (juanData != null) {
+						chapter.m_juanData.add(juanData);
+					}
+
+					juanData = new BookChapter.JuanData();
+					juanData.m_juanTitle = line.substring(1);
 					++currentJuanIndex;
 				} else {
+					++currentChapterIndex;
+
 					// 加1是补上隐藏的段落终结符
 					final int firstA = line.indexOf("@@");
 					final int count = Integer.parseInt(line.substring(0, firstA)) + 1;
@@ -68,9 +79,15 @@ public final class TxtChapterReader extends BookReader {
 					chapter.addChapterData(data);
 					paraCount += count;
 					textSize += data.m_textSize;
+					
+					juanData.m_juanChapter.add(currentChapterIndex);
 				}
 			}
 			input.close();
+			
+			if (juanData != null) {
+				chapter.m_juanData.add(juanData);
+			}
 			
 			chapter.m_allParagraphNumber = paraCount;
 			chapter.m_allTextSize = textSize;
@@ -84,10 +101,10 @@ public final class TxtChapterReader extends BookReader {
 			bis.read(buffer);
 			input.close();
 
-			Vector<Integer> currentParagraphOffset = null;
+			ArrayList<Integer> currentParagraphOffset = null;
 			int startTxtOffset = 0;
 			int paraTxtSize = 0;
-			int currentChapterIndex = -1;
+			currentChapterIndex = -1;
 			for (int i = 0; i < size; ++i) {
 				final int ps = buffer[i] & 0xff;
 				if (ps == 0) {

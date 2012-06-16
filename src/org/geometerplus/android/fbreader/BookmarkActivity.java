@@ -1,23 +1,35 @@
 package org.geometerplus.android.fbreader;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.library.Book;
+import org.geometerplus.fbreader.library.Bookmark;
 import org.socool.socoolreader.reader.R;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class BookmarkActivity extends Activity {
+
+	private static final int OPEN_ITEM_ID = 0;
+	private static final int DELETE_ITEM_ID = 2;
+
+	List<Bookmark> AllBooksBookmarks;
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -26,94 +38,130 @@ public class BookmarkActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.reader_bookmark_page);
 		
-//		setListAdapter(new BookmarkAdapter(this));
-		
+		AllBooksBookmarks = FBReaderApp.Instance().getDatabase().loadBookmarks(FBReaderApp.Instance().Model.Book.myId);
+
 		RelativeLayout noneLayout = (RelativeLayout)findViewById(R.id.reader_bookmark_cover);
 
 		ListView listView = (ListView)findViewById(R.id.reader_boomark_list);
-		listView.setAdapter(new BookmarkAdapter(this));
+		BookmarkAdapter adapter = new BookmarkAdapter(this);
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(adapter);
+		listView.setOnCreateContextMenuListener(adapter);
 		noneLayout.setVisibility(View.GONE);
 	}
 	
-	private static class BookmarkAdapter extends BaseAdapter {
+	private void gotoBookmark(Bookmark bookmark)
+	{
+		if (bookmark == null) {
+			return;
+		}
+
+		final FBReaderApp fbreader = (FBReaderApp)FBReaderApp.Instance();
+		final long bookId = bookmark.getBookId();
+		if ((fbreader.Model == null) || (fbreader.Model.Book.myId != bookId)) {
+			final Book book = Book.getById(bookId);
+			if (book != null) {
+				finish();
+				fbreader.openBook(book, bookmark, null);
+			}
+		} else {
+			finish();
+			fbreader.gotoBookmark(bookmark);
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		final int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
+		final ListView view = (ListView)findViewById(R.id.reader_boomark_list);
+		final Bookmark bookmark = (Bookmark) ((BookmarkAdapter)view.getAdapter()).getItem(position);
+		switch (item.getItemId()) {
+			case OPEN_ITEM_ID:
+				gotoBookmark(bookmark);
+				return true;
+			case DELETE_ITEM_ID:
+				bookmark.delete();
+				AllBooksBookmarks.remove(bookmark);
+				view.invalidate();
+				view.requestLayout();
+				return true;
+		}
+		return super.onContextItemSelected(item);
+	}
+	
+	private class BookmarkAdapter extends BaseAdapter
+				implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener{
         private LayoutInflater mInflater;
-        private Bitmap mIcon1;
-        private Bitmap mIcon2;
 
         public BookmarkAdapter(Context context) {
             // Cache the LayoutInflate to avoid asking for a new one each time.
             mInflater = LayoutInflater.from(context);
          }
 
-        /**
-         * The number of items in the list is determined by the number of speeches
-         * in our array.
-         *
-         * @see android.widget.ListAdapter#getCount()
-         */
         public int getCount() {
-            return 10;
+            return AllBooksBookmarks.size();
         }
+        
+        public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+			final int position = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
+			final Bookmark bookmark = (Bookmark) getItem(position);
+			if (bookmark != null) {
+				menu.setHeaderTitle(bookmark.myText);
+				menu.add(0, OPEN_ITEM_ID, 0, "Ìø×ª");
+				menu.add(0, DELETE_ITEM_ID, 0, "É¾³ý´ËÊéÇ©");
+			}
+		}
+        
+        public final void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			final Bookmark bookmark = (Bookmark) getItem(position);
+			gotoBookmark(bookmark);
+		}
 
-        /**
-         * Since the data comes from an array, just returning the index is
-         * sufficent to get at the data. If we were using a more complex data
-         * structure, we would return whatever object represents one row in the
-         * list.
-         *
-         * @see android.widget.ListAdapter#getItem(int)
-         */
         public Object getItem(int position) {
-            return position;
+        	final int count = AllBooksBookmarks.size();
+        	if (position > count - 1) {
+        		position = count - 1;
+        	}
+        	if (position < 0) {
+        		position = 0;
+        	}
+
+            return AllBooksBookmarks.get(position);
         }
 
-        /**
-         * Use the array index as a unique id.
-         *
-         * @see android.widget.ListAdapter#getItemId(int)
-         */
         public long getItemId(int position) {
             return position;
         }
 
-        /**
-         * Make a view to hold each row.
-         *
-         * @see android.widget.ListAdapter#getView(int, android.view.View,
-         *      android.view.ViewGroup)
-         */
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
 
-            // When convertView is not null, we can reuse it directly, there is no need
-            // to reinflate it. We only inflate a new View when the convertView supplied
-            // by ListView is null.
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.reader_bookmark_item, null);
 
-                // Creates a ViewHolder and store references to the two children views
-                // we want to bind data to.
                 holder = new ViewHolder();
-//                holder.text = (TextView) convertView.findViewById(R.id.text);
-//                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+                holder.textBookmark = (TextView)convertView.findViewById(R.id.reader_bookmark_item_content);
+                holder.textPercent = (TextView)convertView.findViewById(R.id.reader_bookmark_item_percent);
+                holder.textTime = (TextView)convertView.findViewById(R.id.reader_bookmark_item_time);
 
                 convertView.setTag(holder);
             } else {
-                // Get the ViewHolder back to get fast access to the TextView
-                // and the ImageView.
                 holder = (ViewHolder) convertView.getTag();
             }
-
-            // Bind the data efficiently with the holder.
-//            holder.text.setText(DATA[position]);
-//            holder.icon.setImageBitmap((position & 1) == 1 ? mIcon1 : mIcon2);
+            
+            Bookmark bookmark = AllBooksBookmarks.get(position);
+            holder.textBookmark.setText(bookmark.myText);
+            final String time = format.format(bookmark.getTime());
+            holder.textTime.setText(time);
+            holder.textPercent.setText(String.format("%1$.2f%%", bookmark.m_percent / 100.0));
 
             return convertView;
         }
 
-        static class ViewHolder {
-            TextView text;
-            ImageView icon;
+        class ViewHolder {
+            TextView textBookmark;
+            TextView textTime;
+            TextView textPercent;
         }
     }
 }

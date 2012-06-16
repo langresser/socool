@@ -100,6 +100,7 @@
 		<activity android:name="org.geometerplus.android.fbreader.TOCActivity" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name="org.geometerplus.android.fbreader.BookmarkActivity" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name="org.geometerplus.android.fbreader.BookChapterActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.geometerplus.android.fbreader.BookChapterJuanActivity" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name="org.geometerplus.android.fbreader.BookmarksActivity" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />

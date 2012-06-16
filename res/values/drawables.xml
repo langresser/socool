@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="match_list_item_normal">@android:color/transparent</drawable>
+    <item type="drawable" name="color_solid_black">#00000000</item>
+    <item type="drawable" name="general__shared__list_item_normal">#ffeeeeee</item>
+    <item type="drawable" name="general__shared__list_item_pressed">#ffe2e2e2</item>
+</resources>

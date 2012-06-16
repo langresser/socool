@@ -66,7 +66,7 @@ public final class Bookmark {
 		ModelId = modelId;
 		myIsChanged = false;
 		m_percent = percent;
-		
+		myModificationDate = date;
 		m_posCurrentPage = new ZLTextFixedPosition(page);
 
 		if (begin == null && end == null) {

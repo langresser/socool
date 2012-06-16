@@ -275,7 +275,7 @@ public class BooksDatabase {
 						SQLiteUtil.getDate(cursor, 5),	// date
 						page, begin, end,				// page
 						cursor.getString(10),
-						(int)cursor.getLong(16));			// Bookmarks.comment
+						(int)cursor.getLong(17));			// Bookmarks.comment
 				list.add(bookmark);
 			} else {
 				ZLTextFixedPosition page = new ZLTextFixedPosition((int)cursor.getLong(6), (int)cursor.getLong(7), (int)cursor.getLong(8));
@@ -284,11 +284,11 @@ public class BooksDatabase {
 						cursor.getLong(1),				// Bookmarks.book_id
 						cursor.getString(2),			// Books.title
 						cursor.getString(3),			// Bookmarks.bookmark_text
-						cursor.getString(8),			// Bookmarks.model_id
-						SQLiteUtil.getDate(cursor, 4),	// date
+						cursor.getString(4),			// Bookmarks.model_id
+						SQLiteUtil.getDate(cursor, 5),	// date
 						page, null, null,				// page
 						null,
-						(int)cursor.getLong(16));							// Bookmarks.comment
+						(int)cursor.getLong(17));							// Bookmarks.comment
 				list.add(bookmark);
 			}
 		}
@@ -322,7 +322,7 @@ public class BooksDatabase {
 						SQLiteUtil.getDate(cursor, 5),	// date
 						page, begin, end,				// page
 						cursor.getString(10),
-						(int)cursor.getLong(16));			// Bookmarks.comment
+						(int)cursor.getLong(17));			// Bookmarks.comment
 				list.add(bookmark);
 			} else {
 				ZLTextFixedPosition page = new ZLTextFixedPosition((int)cursor.getLong(6), (int)cursor.getLong(7), (int)cursor.getLong(8));
@@ -331,11 +331,11 @@ public class BooksDatabase {
 						cursor.getLong(1),				// Bookmarks.book_id
 						cursor.getString(2),			// Books.title
 						cursor.getString(3),			// Bookmarks.bookmark_text
-						cursor.getString(8),			// Bookmarks.model_id
-						SQLiteUtil.getDate(cursor, 4),	// date
+						cursor.getString(4),			// Bookmarks.model_id
+						SQLiteUtil.getDate(cursor, 5),	// date
 						page, null, null,				// page
 						null,
-						(int)cursor.getLong(16));							// Bookmarks.comment
+						(int)cursor.getLong(17));							// Bookmarks.comment
 				list.add(bookmark);
 			}
 		}
@@ -401,7 +401,7 @@ public class BooksDatabase {
 			statement.bindLong(15, -1);
 		}
 		
-		statement.bindLong(16, -1);
+		statement.bindLong(16, bookmark.m_percent);
 		
 		if (statement == myInsertBookmarkStatement) {
 			return statement.executeInsert();

@@ -79,32 +79,39 @@ public class BookInfoActivity extends Activity {
 			setupAnnotation(book);
 			setupFileInfo(book);
 		}
-
-		setupButton(R.id.book_info_button_open, "openBook", new View.OnClickListener() {
-			public void onClick(View view) {
-				startActivity(
-						new Intent(getApplicationContext(), SCReaderActivity.class)
-							.setAction(Intent.ACTION_VIEW)
-							.putExtra(SCReaderActivity.BOOK_PATH_KEY, m_currentBookPath)
-							.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-					);
+		
+		final Button btnOpen = (Button)findViewById(R.id.book_info_button_open);
+		final Button btnBook = (Button)findViewById(R.id.book_info_button_book);
+		final Button btnApp = (Button)findViewById(R.id.book_info_button_app);
+		
+		View.OnClickListener listener = new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button btn = (Button)v;
+				if (btn == btnOpen) {
+					startActivity(
+							new Intent(getApplicationContext(), SCReaderActivity.class)
+								.setAction(Intent.ACTION_VIEW)
+								.putExtra(SCReaderActivity.BOOK_PATH_KEY, m_currentBookPath)
+								.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+						);
+				} else if (btn == btnBook) {
+					Intent intent = new Intent(getApplicationContext(), LibraryActivity.class);
+					startActivity(intent);
+				} else if (btn == btnApp) {
+					
+				}
 			}
-		});
+		};
+		
+		btnOpen.setOnClickListener(listener);
+		btnBook.setOnClickListener(listener);
+		btnApp.setOnClickListener(listener);
 
 		final View root = findViewById(R.id.book_info_root);
 		root.invalidate();
 		root.requestLayout();
-	}
-
-	private Button findButton(int buttonId) {
-		return (Button)findViewById(buttonId);
-	}
-
-	private void setupButton(int buttonId, String resourceKey, View.OnClickListener listener) {
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		final Button button = findButton(buttonId);
-		button.setText(buttonResource.getResource(resourceKey).getValue());
-		button.setOnClickListener(listener);
 	}
 
 	private void setupInfoPair(int id, String key, CharSequence value) {
