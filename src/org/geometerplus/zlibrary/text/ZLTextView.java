@@ -639,9 +639,19 @@ public class ZLTextView {
 
 		// 补上不显示的章节结束段落标识
 		currentParagraph += 1;
-		final int currentChapter = myModel.m_chapter.getChapterIndexByParagraph(currentParagraph);
-		final int chapterCount = myModel.m_chapter.getChapterCount();
+		final BookChapter chapter = myModel.m_chapter;
+		final int currentChapter = chapter.getChapterIndexByParagraph(currentParagraph);
+		final int chapterCount = chapter.getChapterCount();
 		final String chapterInfo = String.format("%1d/%2d", currentChapter + 1, chapterCount);
+		
+		if (pageIndex == PageIndex.current) {
+			final int currentJuanIndex = chapter.getChapter(currentChapter).m_juanIndex;
+			if (currentJuanIndex != chapter.m_currentJuanIndex) {
+				chapter.m_currentJuanIndex = currentJuanIndex;
+				final String text = chapter.getJuanTitle(currentJuanIndex);
+				UIUtil.showMessageText(FBReaderApp.Instance().getActivity(), text);
+			}
+		}
 		
 		// 显示章节进度
 		final int chapterWidth = context.getStringWidth(chapterInfo);
@@ -656,7 +666,7 @@ public class ZLTextView {
 		context.drawString(right - infoWidth, offsetY, infoString);
 
 		// 显示章节名称
-		final String title = myModel.m_chapter.getChapterTitle(currentChapter);
+		final String title = chapter.getChapterTitle(currentChapter);
 		final int titleWidth = context.getStringWidth(title);
 		final int maxTitleWidth = right - left - infoWidth - chapterWidth - 6;
 		if (titleWidth < maxTitleWidth) {

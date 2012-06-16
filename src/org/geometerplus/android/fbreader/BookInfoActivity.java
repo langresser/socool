@@ -60,7 +60,7 @@ public class BookInfoActivity extends Activity {
 
 		m_currentBookPath = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
 		if (m_currentBookPath == null) {
-			m_currentBookPath = "book/wxkb";
+			m_currentBookPath = "book/mcnxs";
 		}
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -198,29 +198,5 @@ public class BookInfoActivity extends Activity {
 		setupInfoPair(R.id.file_type, "type", null);
 		setupInfoPair(R.id.file_size, "size", null);
 		setupInfoPair(R.id.file_time, "time", null);
-	}
-
-	private String formatSize(long size) {
-		if (size <= 0) {
-			return null;
-		}
-		final int kilo = 1024;
-		if (size < kilo) { // less than 1 kilobyte
-			return myResource.getResource("sizeInBytes").getValue((int)size).replaceAll("%s", String.valueOf(size));
-		}
-		final String value;
-		if (size < kilo * kilo) { // less than 1 megabyte
-			value = String.format("%.2f", ((float)size) / kilo);
-		} else {
-			value = String.valueOf(size / kilo);
-		}
-		return myResource.getResource("sizeInKiloBytes").getValue().replaceAll("%s", value);
-	}
-
-	private String formatDate(long date) {
-		if (date == 0) {
-			return null;
-		}
-		return DateFormat.getDateTimeInstance().format(new Date(date));
 	}
 }

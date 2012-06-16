@@ -309,7 +309,22 @@ public class BookChapter {
 		public ArrayList<Integer> m_juanChapter = new ArrayList<Integer>();
 	}
 	
+	public String getJuanTitle(int index)
+	{
+		if (index < 0) {
+			index = 0;
+		}
+		
+		if (index > m_juanData.size() - 1) {
+			index = m_juanData.size() - 1;
+		}
+		
+		return m_juanData.get(index).m_juanTitle;
+	}
+
 	public ArrayList<JuanData> m_juanData = new ArrayList<JuanData>();
 	public int m_allParagraphNumber = 0;
 	public int m_allTextSize = 0;
+	
+	public int m_currentJuanIndex = -1;
 }
