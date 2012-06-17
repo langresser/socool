@@ -28,9 +28,9 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowBookmarksAction extends RunActivityAction {
 	public ShowBookmarksAction(SCReaderActivity baseActivity, FBReaderApp fbreader) {
-		//super(baseActivity, fbreader, BookmarksActivity.class);
+		super(baseActivity, fbreader, BookmarksActivity.class);
 		//super(baseActivity, fbreader, BookmarkActivity.class);
 		//super(baseActivity, fbreader, BookChapterActivity.class);
-		super(baseActivity, fbreader, BookChapterJuanActivity.class);
+		//super(baseActivity, fbreader, BookChapterJuanActivity.class);
 	}
 }
