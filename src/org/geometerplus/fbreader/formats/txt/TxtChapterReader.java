@@ -2,7 +2,6 @@ package org.geometerplus.fbreader.formats.txt;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import org.geometerplus.fbreader.bookmodel.BookChapter;
 import org.geometerplus.fbreader.bookmodel.BookChapter.BookChapterData;
@@ -31,13 +30,16 @@ public final class TxtChapterReader extends BookReader {
 	public void setModel(BookModel model)
 	{
 		m_bookModel = model;
-		myCurrentContentsTree = model.TOCTree;
-		
+
 		initData();
 	}
 	
-	private void initData()
+	public void initData()
 	{
+		if (m_bookModel.m_chapter.m_chapterData.size() > 0) {
+			return;
+		}
+
 		try {
 			long startTime = System.currentTimeMillis();
 
@@ -141,7 +143,6 @@ public final class TxtChapterReader extends BookReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	public void readChapter(int fileNum)

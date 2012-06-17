@@ -32,21 +32,7 @@
 			android:layout_height="wrap_content"
 		/>
 		<LinearLayout
-			android:layout_weight="0.11"
-			android:layout_width="0dip"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"
-		/>
-		<Button
-			android:id="@+id/book_info_button_book"
-			android:layout_width="0dip"
-			android:layout_weight="1"
-			android:text="浏览目录"
-			android:background="@drawable/normal_button_selector"
-			android:layout_height="wrap_content"
-		/>
-		<LinearLayout
-			android:layout_weight="0.11"
+			android:layout_weight="0.35"
 			android:layout_width="0dip"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"

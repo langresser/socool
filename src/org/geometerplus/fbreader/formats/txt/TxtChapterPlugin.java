@@ -24,7 +24,6 @@ public class TxtChapterPlugin extends FormatPlugin {
 
 	@Override
 	public void readMetaInfo(Book book){
-		// txt格式没有附加信息
 		detectLanguageAndEncoding(book);
 
 		try {

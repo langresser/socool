@@ -28,7 +28,9 @@ import android.widget.*;
 
 import org.socool.socoolreader.reader.R;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.*;
+import org.geometerplus.zlibrary.text.ZLTextPosition;
 
 public class BookInfoActivity extends Activity {
 	public static final String CURRENT_BOOK_PATH_KEY = "CurrentBookPath";
@@ -48,15 +50,8 @@ public class BookInfoActivity extends Activity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		final Book book = Book.getByPath(m_currentBookPath);
+		
 		final Button btnOpen = (Button)findViewById(R.id.book_info_button_open);
-		final Button btnBook = (Button)findViewById(R.id.book_info_button_book);
 		final Button btnApp = (Button)findViewById(R.id.book_info_button_app);
 		
 		View.OnClickListener listener = new View.OnClickListener() {
@@ -71,9 +66,6 @@ public class BookInfoActivity extends Activity {
 								.putExtra(SCReaderActivity.BOOK_PATH_KEY, m_currentBookPath)
 								.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 						);
-				} else if (btn == btnBook) {
-					Intent intent = new Intent(getApplicationContext(), LibraryActivity.class);
-					startActivity(intent);
 				} else if (btn == btnApp) {
 					
 				}
@@ -81,7 +73,17 @@ public class BookInfoActivity extends Activity {
 		};
 		
 		btnOpen.setOnClickListener(listener);
-		btnBook.setOnClickListener(listener);
 		btnApp.setOnClickListener(listener);
+		
+		final Book book = Book.getByPath(m_currentBookPath);
+		ZLTextPosition position = book.getStoredPosition();
+		if (position != null) {
+			startActivity(
+					new Intent(getApplicationContext(), SCReaderActivity.class)
+						.setAction(Intent.ACTION_VIEW)
+						.putExtra(SCReaderActivity.BOOK_PATH_KEY, m_currentBookPath)
+						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+				);
+		}
 	}
 }

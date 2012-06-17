@@ -88,18 +88,8 @@ public class Book {
 			return null;
 		}
 		
-		
-
-		Book book = new Book(path);;//FBReaderApp.Instance().getDatabase().loadBookByFile(bookFile);
-
-//		if (book == null) {
-//			book = new Book(path);
-//		} else {
-//			book.readMetaInfo();
-//		}
-
-		book.save();
-		return book;
+		ZLFile file = FBReaderApp.Instance().createResourceFile(path);
+		return getByFile(file);
 	}
 
 	public String m_filePath = "";		// 如果是单文件，则对应文件全路径；如果是一组文件，则对应文件夹路径
