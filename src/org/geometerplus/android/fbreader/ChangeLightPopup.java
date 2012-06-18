@@ -1,19 +1,14 @@
 package org.geometerplus.android.fbreader;
 
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
 
 import org.socool.socoolreader.reader.R;
 
-import org.geometerplus.fbreader.fbreader.ColorProfile;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ChangeLightPopup extends PopupPanel {
@@ -77,9 +72,6 @@ public class ChangeLightPopup extends PopupPanel {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				if (fromUser) {
 					progress = Math.min(Math.max(progress, 1), 100);
-
-					ZLIntegerRangeOption option = FBReaderApp.Instance().ScreenBrightnessLevelOption;
-					option.setValue(progress);
 					FBReaderApp.Instance().setScreenBrightness(progress);
 
 					setupNavigation(myWindow);
@@ -99,23 +91,16 @@ public class ChangeLightPopup extends PopupPanel {
 						int nextValue = Math.min(Math.max(value + 5, 1), 100);
 						option.setValue(nextValue);
 						FBReaderApp.Instance().setScreenBrightness(nextValue);
-						setupNavigation(myWindow);	
-					} else {
-						btnDec.setEnabled(value > 1);
-						btnPlus.setEnabled(value < 100);
 					}
 				} else if (v == btnDec) {
 					if (value > 1) {
 						int nextValue = Math.min(Math.max(value - 5, 1), 100);
 						option.setValue(nextValue);
 						FBReaderApp.Instance().setScreenBrightness(nextValue);
-						
-						setupNavigation(myWindow);
-					} else {
-						btnDec.setEnabled(value > 1);
-						btnPlus.setEnabled(value < 100);
 					}
 				}
+				
+				setupNavigation(myWindow);
 			}
 		};
 
@@ -123,16 +108,34 @@ public class ChangeLightPopup extends PopupPanel {
 		btnDec.setOnClickListener(listener);
 				
 		final ImageButton btnNeight = (ImageButton)layout.findViewById(R.id.night_button);
-		btnNeight.setOnClickListener(new View.OnClickListener() {
+		final ImageButton btnAuto = (ImageButton)layout.findViewById(R.id.auto_button);
+		
+		View.OnClickListener listener1 = new View.OnClickListener() {
+			
 			@Override
 			public void onClick(View v) {
-				final boolean night = !btnNeight.isSelected();
-				btnNeight.setSelected(night);
-				FBReaderApp.Instance().isNightModeOption.setValue(night);
-				FBReaderApp.Instance().resetWidget();
-				FBReaderApp.Instance().repaintWidget();
+				if (v == btnNeight) {
+					final boolean night = !btnNeight.isSelected();
+					btnNeight.setSelected(night);
+					FBReaderApp.Instance().isNightModeOption.setValue(night);
+					FBReaderApp.Instance().resetWidget();
+					FBReaderApp.Instance().repaintWidget();
+				} else if (v == btnAuto) {
+					final boolean auto = !btnAuto.isSelected();
+					btnAuto.setSelected(auto);
+					FBReaderApp.Instance().setScreenBrightnessAuto(auto);
+					
+					if (auto) {
+						slider.setProgress(0);
+					} else {
+						setupNavigation(myWindow);
+					}
+				}
 			}
-		});
+		};
+		
+		btnNeight.setOnClickListener(listener1);
+		btnAuto.setOnClickListener(listener1);
 
 		myWindow.addView(layout);
 	}
@@ -149,7 +152,9 @@ public class ChangeLightPopup extends PopupPanel {
 		btnPlus.setEnabled(value < 100);
 		
 		final ImageButton btnNeight = (ImageButton)panel.findViewById(R.id.night_button);
+		final ImageButton btnAuto = (ImageButton)panel.findViewById(R.id.auto_button);
 		
 		btnNeight.setSelected(FBReaderApp.Instance().isNightModeOption.getValue() == true);
+		btnAuto.setSelected(value > 0);
 	}
 }

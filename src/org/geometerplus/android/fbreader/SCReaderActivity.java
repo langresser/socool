@@ -355,12 +355,8 @@ public final class SCReaderActivity extends Activity {
 			FBReaderApp.Instance().getBatteryLevel()
 		);
 		myStartTimer = true;
-		final int brightnessLevel = FBReaderApp.Instance().ScreenBrightnessLevelOption.getValue();
-		if (brightnessLevel != 0) {
-			setScreenBrightness(brightnessLevel);
-		} else {
-			setScreenBrightnessAuto();
-		}
+		setScreenBrightnessAuto(FBReaderApp.Instance().ScreenBrightnessAuto.getValue());
+		
 		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		PopupPanel.restoreVisibilities();
 	}
@@ -472,22 +468,18 @@ public final class SCReaderActivity extends Activity {
 		return true;
 	}
 	
-	public void setScreenBrightnessAuto() {
-		final WindowManager.LayoutParams attrs = getWindow().getAttributes();
-		attrs.screenBrightness = -1.0f;
-		getWindow().setAttributes(attrs);
+	public void setScreenBrightnessAuto(boolean auto) {
+		if (auto) {
+			final WindowManager.LayoutParams attrs = getWindow().getAttributes();
+			attrs.screenBrightness = -1.0f;
+			getWindow().setAttributes(attrs);
+		} else {
+			final int brightness = FBReaderApp.Instance().ScreenBrightnessLevelOption.getValue();
+			setScreenBrightness(brightness);
+		}
 	}
 
 	public void setScreenBrightness(int percent) {
-		if (percent <= 0) {
-			setScreenBrightnessAuto();
-			return;
-		}
-
-		if (percent > 100) {
-			percent = 100;
-		}
-
 		final WindowManager.LayoutParams attrs = getWindow().getAttributes();
 		attrs.screenBrightness = percent / 100.0f;
 		getWindow().setAttributes(attrs);

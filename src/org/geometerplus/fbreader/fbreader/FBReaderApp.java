@@ -779,14 +779,7 @@ public final class FBReaderApp {
 	public final ZLStringOption TurnOffTimeOpion = new ZLStringOption("LookNFeel", "TurnOffTime", "default");
 	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 0);
 
-	private boolean hasNoHardwareMenuButton() {
-		return
-			// Eken M001
-			(Build.DISPLAY != null && Build.DISPLAY.contains("simenxie")) ||
-			// PanDigital
-			"PD_Novel".equals(Build.MODEL);
-	}
-
+	public final ZLBooleanOption ScreenBrightnessAuto = new ZLBooleanOption("LookNFeel", "ScreenBrightnessAuto", true);
 	private Boolean myIsKindleFire = null;
 	
 	// 是否是opengles绘制的3d翻页效果
@@ -906,8 +899,24 @@ public final class FBReaderApp {
 		return DateFormat.getTimeFormat(myApplication.getApplicationContext()).format(new Date());
 	}
 
+	public void setScreenBrightnessAuto(boolean auto)
+	{
+		if (myActivity != null) {
+			ScreenBrightnessAuto.setValue(auto);
+			myActivity.setScreenBrightnessAuto(auto);
+		}
+	}
+
 	public void setScreenBrightness(int percent) {
 		if (myActivity != null) {
+			if (percent < 1) {
+				percent = 1;
+			}
+
+			if (percent > 100) {
+				percent = 100;
+			}
+
 			ScreenBrightnessLevelOption.setValue(percent);
 			myActivity.setScreenBrightness(percent);
 		}
