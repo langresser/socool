@@ -39,7 +39,9 @@ import org.geometerplus.zlibrary.text.ZLTextBaseStyle;
 import org.geometerplus.zlibrary.text.ZLTextFullStyleDecoration;
 import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
 import org.geometerplus.zlibrary.text.ZLTextStyleDecoration;
+import org.geometerplus.zlibrary.view.AndroidFontUtil;
 
+import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.*;
 
@@ -173,18 +175,13 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			this, textScreen.Resource, "lineSpacing",
 			spaceOption, spacings));
 		
-		textScreen.addPreference(new ZLIntegerRangePreference(
-				this, textScreen.Resource.getResource("left"),
-				fbReader.LeftMarginOption));
-		textScreen.addPreference(new ZLIntegerRangePreference(
-				this, textScreen.Resource.getResource("right"),
-				fbReader.RightMarginOption));
-		textScreen.addPreference(new ZLIntegerRangePreference(
-				this, textScreen.Resource.getResource("top"),
-				fbReader.TopMarginOption));
-		textScreen.addPreference(new ZLIntegerRangePreference(
-					this, textScreen.Resource.getResource("bottom"),
-					fbReader.BottomMarginOption));
+		textScreen.addPreference(new ZLChoicePreference(
+			this, textScreen.Resource, "paragraphSpace",
+			FBReaderApp.Instance().ParagraphSpaceOption, spacings));
+		
+		textScreen.addPreference(new ZLChoicePreference(
+				this, textScreen.Resource, "firstLineIndent",
+				FBReaderApp.Instance().FirstLineIndentDeltaOption, spacings));
 
 		final String[] alignments = { "left", "right", "center", "justify" };
 		textScreen.addPreference(new ZLChoicePreference(
@@ -192,6 +189,31 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			baseStyle.AlignmentOption, alignments
 		));
 		textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
+		
+		final Screen pageScreen = createPreferenceScreen("pagelayout");
+		
+		// 先调用一下，防止空指针
+		int value = fbReader.getLeftMargin();
+		value = fbReader.getRightMargin();
+		value = fbReader.getTopMargin();
+		value = fbReader.getBottomMargin();
+		value = fbReader.getFooterHeight();
+
+		pageScreen.addPreference(new ZLIntegerRangePreference(
+				this, textScreen.Resource.getResource("left"),
+				fbReader.LeftMarginOption));
+		pageScreen.addPreference(new ZLIntegerRangePreference(
+				this, textScreen.Resource.getResource("right"),
+				fbReader.RightMarginOption));
+		pageScreen.addPreference(new ZLIntegerRangePreference(
+				this, textScreen.Resource.getResource("top"),
+				fbReader.TopMarginOption));
+		pageScreen.addPreference(new ZLIntegerRangePreference(
+					this, textScreen.Resource.getResource("bottom"),
+					fbReader.BottomMarginOption));
+		pageScreen.addPreference(new ZLIntegerRangePreference(
+				this, textScreen.Resource.getResource("footerheight"),
+				fbReader.FooterHeightOption));
 
 		final Screen appearanceScreen = createPreferenceScreen("appearance");
 
@@ -199,6 +221,34 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		appearanceScreen.addPreference(new ZLStringChoicePreference(this, 
 				appearanceScreen.Resource, "turnOffTime", fbReader.TurnOffTimeOpion, turnoffTimes));
 		
+		final ZLKeyBindings keyBindings = fbReader.keyBindings();
+		appearanceScreen.addOption(fbReader.SoundTurnOption, "soundturn");
+		appearanceScreen.addPreference(new ZLCheckBoxPreference(
+				this, appearanceScreen.Resource, "soundturn"
+			) {
+				{
+					setChecked(ActionCode.VOLUME_KEY_SCROLL_FORWARD.equals(
+						keyBindings.getBinding(KeyEvent.KEYCODE_VOLUME_UP, false)
+					));
+				}
+
+				@Override
+				protected void onClick() {
+					super.onClick();
+					if (isChecked()) {
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
+					} else {
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, FBReaderApp.NoAction);
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, FBReaderApp.NoAction);
+					}
+				}
+			});
+		
+		final String[] turnoff = {"all", "night", "none"};
+		textScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
+				"turnoffmenulight", fbReader.TurnOffMenuLight, turnoff));
+
 		final String[] screenOrientation = {"portrait", "landscape", "system"};
 		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
 				"screenOrientation", fbReader.OrientationOption, screenOrientation));
@@ -240,12 +290,12 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			scrollingPreferences.AnimationSpeedOption
 		));
 		
-//		final Screen directoriesScreen = createPreferenceScreen("directories");
+		final Screen directoriesScreen = createPreferenceScreen("directories");
 //		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");
-//		if (AndroidFontUtil.areExternalFontsSupported()) {
-//			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
-//		}
-//		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
+		if (AndroidFontUtil.areExternalFontsSupported()) {
+			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
+		}
+		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
 	}
 	
 	void initFormat(Screen textScreen)
@@ -332,10 +382,6 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 				formatScreen.addPreference(new ZLIntegerRangePreference(
 					this, textScreen.Resource.getResource("spaceBefore"),
 					fullDecoration.SpaceBeforeOption
-				));
-				formatScreen.addPreference(new ZLIntegerRangePreference(
-					this, textScreen.Resource.getResource("spaceAfter"),
-					fullDecoration.SpaceAfterOption
 				));
 				formatScreen.addPreference(new ZLIntegerRangePreference(
 					this, textScreen.Resource.getResource("leftIndent"),

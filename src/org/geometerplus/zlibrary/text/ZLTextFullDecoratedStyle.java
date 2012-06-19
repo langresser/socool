@@ -57,7 +57,7 @@ public class ZLTextFullDecoratedStyle extends ZLTextPartialDecoratedStyle {
 
 	@Override
 	public int getSpaceAfter() {
-		return myFullDecoration.SpaceAfterOption.getValue();
+		return FBReaderApp.Instance().ParagraphSpaceOption.getValue();
 	}		
 
 	@Override

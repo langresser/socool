@@ -272,20 +272,14 @@
 			<node name="title" value="安装字典" />
 			<node name="message" value="你希望安装 %s 么?" />
 		</node>
-		<node name="BookInfo">
-			<node name="fileName" value="文件" />
-			<node name="title" value="书名" />
-			<node name="language" value="语言" />
-			<node name="encoding" value="编码" />
-		</node>
-		<node name="Preferences">
+        <node name="Preferences">
 			<node name="directories" value="文件夹设定">
-				<node name="summary" value="相关文件夹位置设定"/>
+				<node name="summary" value="第三方字体、壁纸等文件夹位置设定"/>
 				<node name="books" value="书文存放位置"/>
-				<node name="fonts" value="字体存放位置"/>
+				<node name="fonts" value="第三方字体存放位置"/>
 				<node name="wallpapers" value="墙纸存放位置" />
 			</node>
-			<node name="appearance" value="屏幕显示">
+			<node name="appearance" value="更多功能">
                 <node name="summary" value="自动休眠时间,屏幕方向等"/>
                 <node name="turnOffTime" value="自动关闭屏幕时间">
                     <node name="default" value="系统默认"/>
@@ -297,14 +291,20 @@
                     <node name="30" value="30 分钟"/>
                     <node name="never" value="常亮"/>
                 </node>
+                <node name="soundturn" value="音量键翻页"/>
                 <node name="screenOrientation" value="屏幕方向">
                    	<node name="portrait" value="竖屏"/>
 	                <node name="landscape" value="横屏"/> 
 	                <node name="system" value="自动"/> 
                 </node>
+                <node name="turnoffmenulight" value="阅读时关闭按钮灯">
+                    <node name="all" value="阅读时关闭"/>
+                    <node name="night" value="仅夜间模式时关闭"/>
+                    <node name="none" value="不关闭">
+                </node>
 			</node>
 			<node name="text" value="文字排版">
-				<node name="summary" value="字体排版,页面边距,对齐,断字等"/>
+				<node name="summary" value="字体排版,对齐,断字等"/>
 				<node name="fontProperties" value="Font properties" toBeTranslated="true">
 					<node name="summary" value="Font smoothing options" toBeTranslated="true"/>
 					<node name="antiAlias" value="Antialiasing" toBeTranslated="true">
@@ -328,67 +328,39 @@
 						<node name="summaryOff" value="Subpixel smoothing is disabled" toBeTranslated="true"/>
 					</node>
 				</node>
-				<node name="font" value="字体">
+				<node name="font" value="选择字体">
 					<node name="unchanged" value="&lt;不变&gt;" />
 				</node>
 				<node name="fontSize" value="字体大小"/>
-				<node name="fontSizeDifference" value="大小差异" />
-				<node name="fontStyle" value="字型">
+				<node name="fontStyle" value="字体样式">
 					<node name="regular" value="正常"/>
 					<node name="bold" value="加粗"/>
 					<node name="italic" value="倾斜"/>
 					<node name="boldItalic" value="加粗并倾斜"/>
 				</node>
-				<node name="bold" value="加粗">
-					<node name="summaryOn" value="加粗"/>
-					<node name="summaryOff" value="正常"/>
-					<node name="unchanged" value="&lt;不变&gt;" />
-				</node>
-				<node name="italic" value="倾斜">
-					<node name="summaryOn" value="倾斜"/>
-					<node name="summaryOff" value="规则"/>
-					<node name="unchanged" value="&lt;不变&gt;" />
-				</node>
-				<node name="underlined" value="Underlined" toBeTranslated="true">
-					<node name="summaryOn" value="underlined" toBeTranslated="true"/>
-					<node name="summaryOff" value="regular" toBeTranslated="true"/>
-					<node name="unchanged" value="&lt;不变&gt;" />
-				</node>
-				<node name="strikedThrough" value="Striked through" toBeTranslated="true">
-					<node name="summaryOn" value="striked through" toBeTranslated="true"/>
-					<node name="summaryOff" value="regular" toBeTranslated="true"/>
-					<node name="unchanged" value="&lt;不变&gt;" />
-				</node>
 				<node name="lineSpacing" value="行间距">
 					<node name="unchanged" value="&lt;不变&gt;" />
-				</node>
-				<node name="alignment" value="对齐">
+                </node>
+				<node name="firstLineIndent" value="段首缩进" />
+                <node name="paragraphSpace" value="段落间距"/>
+				<node name="leftIndent" value="左缩进" />
+				<node name="rightIndent" value="右缩进" />
+                
+                <node name="alignment" value="对齐">
 					<node name="left" value="左" />
 					<node name="right" value="右" />
 					<node name="center" value="居中" />
 					<node name="justify" value="对齐" />
 					<node name="unchanged" value="&lt;不变&gt;" />
                 </node>
-                
-				<node name="left" value="左边距" />
-				<node name="right" value="右边距" />
-				<node name="top" value="顶边距" />
-				<node name="bottom" value="底边距" />
-                
-                <node name="autoHyphenations" value="自动断字">
-					<node name="summaryOn" value="自动断字"/>
-					<node name="summaryOff" value="禁止自动断字"/>
+                <node name="autoHyphenations" value="自动检测网址">
+					<node name="summaryOn" value="自动检测网址"/>
+					<node name="summaryOff" value="禁止自动检测网址"/>
 				</node>
-				<node name="allowHyphenations" value="允许断字">
-					<node name="summaryOn" value="断字"/>
-					<node name="summaryOff" value="禁止断字"/>
-					<node name="unchanged" value="&lt;不变&gt;" />
+				<node name="autoLinebreak" value="自动断字">
+					<node name="summaryOn" value="保持英文单词完整性"/>
+					<node name="summaryOff" value="禁用自动断字"/>
 				</node>
-				<node name="firstLineIndent" value="首行缩进" />
-				<node name="spaceBefore" value="段前距" />
-				<node name="spaceAfter" value="段后距" />
-				<node name="leftIndent" value="左缩进" />
-				<node name="rightIndent" value="右缩进" />
 				<node name="more" value="更多样式">
 					<node name="summary" value="分别设定标题、段落等."/>
 					<node name="Regular Paragraph" value="连续段落" >
@@ -492,7 +464,7 @@
 					</node>
 				</node>
 			</node>
-			<node name="colors" value="颜色 &amp; 壁纸" >
+			<node name="colors" value="阅读风格" >
 				<node name="summary" value="设置文字颜色和背景壁纸"/>
 				<node name="background" value="背景壁纸">
 					<node name="solidColor" value="单色" />
@@ -513,7 +485,15 @@
 				<node name="hyperlinkVisited" value="已访问过的链接文字" />
 				<node name="highlighting" value="搜索结果背景" />
 				<node name="footer" value="页脚"/>
-			</node>
+            </node>
+            <node name="pagelayout" value="页面排版">
+                <node name="summary" value="设置页边距，信息条字体"/>
+				<node name="left" value="左边距" />
+				<node name="right" value="右边距" />
+				<node name="top" value="顶边距" />
+                <node name="bottom" value="底边距" />
+                <node name="footerheight" value="信息条高度" />
+            </node>
 			<node name="scrolling" value="翻页效果">
 				<node name="summary" value="翻页动画特效"/>
 				<node name="animation" value="动画效果" >

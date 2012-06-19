@@ -19,6 +19,7 @@
 
 package org.geometerplus.android.fbreader;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import android.app.SearchManager;
@@ -42,6 +43,7 @@ import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.fbreader.VolumeKeyTurnPageAction;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.android.fbreader.tips.TipsManager;
@@ -355,21 +357,48 @@ public final class SCReaderActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		final FBReaderApp fbReader = FBReaderApp.Instance();
 		switchWakeLock(
-			FBReaderApp.Instance().BatteryLevelToTurnScreenOffOption.getValue() <
-			FBReaderApp.Instance().getBatteryLevel()
+				fbReader.BatteryLevelToTurnScreenOffOption.getValue() <
+				fbReader.getBatteryLevel()
 		);
 		myStartTimer = true;
 		setScreenBrightnessAuto(FBReaderApp.Instance().ScreenBrightnessAuto.getValue());
 		
 		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		PopupPanel.restoreVisibilities();
+		
+		final String light = FBReaderApp.Instance().TurnOffMenuLight.getValue();
+		if (light.compareTo("all") == 0) {
+			setButtonLight(false);
+		} else if (light.compareTo("night") == 0) {
+			final boolean isNight = fbReader.isNightModeOption.getValue();
+			if (isNight) {
+				setButtonLight(false);
+			}
+		}
 	}
 
 	@Override
 	public void onStop() {
 		PopupPanel.removeAllWindows(this);
 		super.onStop();
+	}
+	
+	public boolean m_enableButtonLight = false;
+	public void setButtonLight(boolean enabled) {
+		m_enableButtonLight = enabled;
+		try {
+			final WindowManager.LayoutParams attrs = getWindow().getAttributes();
+			final Class<?> cls = attrs.getClass();
+			final Field fld = cls.getField("buttonBrightness");
+			if (fld != null && "float".equals(fld.getType().toString())) {
+				fld.setFloat(attrs, enabled ? -1.0f : 0.0f);
+				getWindow().setAttributes(attrs);
+			}
+		} catch (NoSuchFieldException e) {
+		} catch (IllegalAccessException e) {
+		}
 	}
 
 	@Override
@@ -540,6 +569,11 @@ public final class SCReaderActivity extends Activity {
 		FBReaderApp.Instance().stopTimer();
 		switchWakeLock(false);
 		FBReaderApp.Instance().onWindowClosing();
+		
+		// 如果按钮灯被禁用，则还原
+		if (!m_enableButtonLight) {
+			setButtonLight(true);
+		}
 		super.onPause();
 	}
 

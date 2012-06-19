@@ -609,7 +609,7 @@ public class ZLTextView {
 		final ZLTextStyle baseStyle = ZLTextStyleCollection.Instance().getBaseStyle();
 		final String fontFamily = baseStyle.getFontFamily();
 		final int textFontSize = baseStyle.getFontSize() - 3;
-		final int footHeight = FBReaderApp.Instance().getBottomMargin();
+		final int footHeight = FBReaderApp.Instance().getFooterHeight();
 		final int footFontSize = Math.min(textFontSize, footHeight);
 		
 		// foot字体选择文本字体，字号是foot高度-5，但是最大不超过文本字号-3
@@ -1682,7 +1682,10 @@ public class ZLTextView {
 		if (myContext == null) {
 			return 0;
 		}
-		return myContext.getHeight() - FBReaderApp.Instance().getTopMargin() - FBReaderApp.Instance().getBottomMargin();
+		return myContext.getHeight() - 
+				FBReaderApp.Instance().getTopMargin() - 
+				FBReaderApp.Instance().getBottomMargin() -
+				FBReaderApp.Instance().getFooterHeight();
 	}
 
 	int getTextAreaWidth() {
@@ -1696,7 +1699,7 @@ public class ZLTextView {
 		if (myContext == null) {
 			return 0;
 		}
-		return myContext.getHeight() - FBReaderApp.Instance().getBottomMargin() - 1;
+		return myContext.getHeight() - FBReaderApp.Instance().getBottomMargin() - FBReaderApp.Instance().getFooterHeight() - 1;
 	}
 
 	int getRightLine() {

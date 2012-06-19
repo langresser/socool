@@ -43,6 +43,7 @@ import org.geometerplus.zlibrary.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLColorOption;
 import org.geometerplus.zlibrary.options.ZLEnumOption;
+import org.geometerplus.zlibrary.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 import org.geometerplus.zlibrary.text.ZLTextPosition;
@@ -94,6 +95,9 @@ public final class FBReaderApp {
 		new ZLBooleanOption("Options", "EnableDoubleTap", false);
 	public final ZLBooleanOption NavigateAllWordsOption =
 		new ZLBooleanOption("Options", "NavigateAllWords", false);
+	
+	public final ZLBooleanOption SoundTurnOption = new ZLBooleanOption("Options", "SoundTurn", true);
+	public final ZLStringOption TurnOffMenuLight = new ZLStringOption("Options", "TurnOffMenuLight", "night");
 
 	public static enum WordTappingAction {
 		doNothing, selectSingleWord, startSelecting, openDictionary
@@ -113,6 +117,7 @@ public final class FBReaderApp {
 	public ZLIntegerRangeOption RightMarginOption = null;
 	public ZLIntegerRangeOption TopMarginOption = null;
 	public ZLIntegerRangeOption BottomMarginOption = null;
+	public ZLIntegerRangeOption FooterHeightOption = null;
 
 	public final ZLIntegerRangeOption FirstLineIndentDeltaOption = new ZLIntegerRangeOption("LayoutStyle", "firstLineIndent", 0, 5, 2);	// 段首缩进，字体数目
 	public final ZLIntegerRangeOption ParagraphSpaceOption = new ZLIntegerRangeOption("LayoutStyle", "paragraphSpace", 0, 20, 0);	// 段落间隔，除以10再乘以字体高度为实机间隔
@@ -158,11 +163,10 @@ public final class FBReaderApp {
 
 		addAction(ActionCode.SWITCH_TO_DAY_PROFILE, new SwitchProfileAction(this));
 		addAction(ActionCode.SWITCH_TO_NIGHT_PROFILE, new SwitchProfileAction(this));
-
+		addAction(ActionCode.EXIT, new ExitAction(this));
+		
 		addAction(ActionCode.VOLUME_KEY_SCROLL_FORWARD, new VolumeKeyTurnPageAction(this, true));
 		addAction(ActionCode.VOLUME_KEY_SCROLL_BACK, new VolumeKeyTurnPageAction(this, false));
-
-		addAction(ActionCode.EXIT, new ExitAction(this));
 
 		BookTextView = new ZLTextView();
 
@@ -398,6 +402,16 @@ public final class FBReaderApp {
 			BottomMarginOption = new ZLIntegerRangeOption("Options", "BottomMargin", 10, 30, 12);
 		}
 		return BottomMarginOption.getValue();
+	}
+	
+	public int getFooterHeight()
+	{
+		// TODO display
+		if (FooterHeightOption == null) {
+			FooterHeightOption = new ZLIntegerRangeOption("Options", "footerheight", 0, 50, 15);
+		}
+		
+		return FooterHeightOption.getValue();
 	}
 
 
