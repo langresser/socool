@@ -73,7 +73,7 @@ public class ChangeLightPopup extends PopupPanel {
 				if (fromUser) {
 					progress = Math.min(Math.max(progress, 1), 100);
 					FBReaderApp.Instance().setScreenBrightness(progress);
-
+					FBReaderApp.Instance().setScreenBrightnessAuto(false);
 					setupNavigation(myWindow);
 				}
 			}
@@ -91,12 +91,14 @@ public class ChangeLightPopup extends PopupPanel {
 						int nextValue = Math.min(Math.max(value + 5, 1), 100);
 						option.setValue(nextValue);
 						FBReaderApp.Instance().setScreenBrightness(nextValue);
+						FBReaderApp.Instance().setScreenBrightnessAuto(false);
 					}
 				} else if (v == btnDec) {
 					if (value > 1) {
 						int nextValue = Math.min(Math.max(value - 5, 1), 100);
 						option.setValue(nextValue);
 						FBReaderApp.Instance().setScreenBrightness(nextValue);
+						FBReaderApp.Instance().setScreenBrightnessAuto(false);
 					}
 				}
 				
@@ -122,13 +124,12 @@ public class ChangeLightPopup extends PopupPanel {
 					FBReaderApp.Instance().repaintWidget();
 				} else if (v == btnAuto) {
 					final boolean auto = !btnAuto.isSelected();
-					btnAuto.setSelected(auto);
 					FBReaderApp.Instance().setScreenBrightnessAuto(auto);
-					
+
 					if (auto) {
-						slider.setProgress(0);
+						setupNavigation(myWindow, 0, true, btnNeight.isSelected());
 					} else {
-						setupNavigation(myWindow);
+						setupNavigation(myWindow, FBReaderApp.Instance().ScreenBrightnessLevelOption.getValue(), false, btnNeight.isSelected());
 					}
 				}
 			}
@@ -141,20 +142,29 @@ public class ChangeLightPopup extends PopupPanel {
 	}
 
 	private void setupNavigation(PopupWindow panel) {
-		final SeekBar slider = (SeekBar)panel.findViewById(R.id.bar_light);
-
 		int value = FBReaderApp.Instance().ScreenBrightnessLevelOption.getValue();
-		slider.setProgress(value);
+		boolean auto = FBReaderApp.Instance().ScreenBrightnessAuto.getValue();
+		boolean night = FBReaderApp.Instance().isNightModeOption.getValue();
+
+		setupNavigation(panel, value, auto, night);
+	}
+	
+	private void setupNavigation(PopupWindow panel, int brightness, boolean auto, boolean night) {
+		if (auto) {
+			brightness = 0;
+		}
+
+		final SeekBar slider = (SeekBar)panel.findViewById(R.id.bar_light);
+		slider.setProgress(brightness);
 		
 		final ImageButton btnPlus = (ImageButton)panel.findViewById(R.id.btn_light_increase);
 		final ImageButton btnDec = (ImageButton)panel.findViewById(R.id.btn_light_decreases);
-		btnDec.setEnabled(value > 1);
-		btnPlus.setEnabled(value < 100);
+		btnDec.setEnabled(brightness > 1);
+		btnPlus.setEnabled(brightness < 100);
 		
 		final ImageButton btnNeight = (ImageButton)panel.findViewById(R.id.night_button);
 		final ImageButton btnAuto = (ImageButton)panel.findViewById(R.id.auto_button);
-		
-		btnNeight.setSelected(FBReaderApp.Instance().isNightModeOption.getValue() == true);
-		btnAuto.setSelected(value > 0);
+		btnNeight.setSelected(night);
+		btnAuto.setSelected(auto);
 	}
 }

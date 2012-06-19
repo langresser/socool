@@ -114,28 +114,17 @@ public final class FBReaderApp {
 	public ZLIntegerRangeOption TopMarginOption = null;
 	public ZLIntegerRangeOption BottomMarginOption = null;
 
-	public final ZLBooleanOption ShowLibraryInCancelMenuOption =
-			new ZLBooleanOption("CancelMenu", "library", true);
-	public final ZLBooleanOption ShowNetworkLibraryInCancelMenuOption =
-			new ZLBooleanOption("CancelMenu", "networkLibrary", false);
-
-	public final ZLBooleanOption ShowPreviousBookInCancelMenuOption =
-		new ZLBooleanOption("CancelMenu", "previousBook", false);
-	public final ZLBooleanOption ShowPositionsInCancelMenuOption =
-		new ZLBooleanOption("CancelMenu", "positions", true);
-
+	public final ZLIntegerRangeOption FirstLineIndentDeltaOption = new ZLIntegerRangeOption("LayoutStyle", "firstLineIndent", 0, 5, 2);	// 段首缩进，字体数目
+	public final ZLIntegerRangeOption ParagraphSpaceOption = new ZLIntegerRangeOption("LayoutStyle", "paragraphSpace", 0, 20, 0);	// 段落间隔，除以10再乘以字体高度为实机间隔
+	
 	private ZLKeyBindings myBindings = null;
-
 	public ZLTextView BookTextView = null;
-
 	public volatile BookModel Model;
-
 	private static FBReaderApp ourInstance;
 
 	public static final String NoAction = "none";
 
 	private volatile ZLTextView myView;
-
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 	
 	private BooksDatabase m_booksDatabase;

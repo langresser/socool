@@ -103,11 +103,6 @@ public final class ZLTextParagraphCursor {
 			if (length == 0) {
 				return;
 			}
-			
-			if (length == 1 && data[0] == ' ') {
-				addWord(data, 0, 1, 0, hyperlink);
-				return;
-			}
 
 			if (ourBreaks.length < length) {
 				ourBreaks = new byte[length];

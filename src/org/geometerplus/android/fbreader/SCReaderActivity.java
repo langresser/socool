@@ -218,6 +218,11 @@ public final class SCReaderActivity extends Activity {
 		if (!FBReaderApp.Instance().isKindleFire()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
+		
+		if (FBReaderApp.Instance().getActivePopup() != null) {
+			FBReaderApp.Instance().hideActivePopup();
+		}
+
 		return super.onPrepareOptionsMenu(menu);
 	}
 

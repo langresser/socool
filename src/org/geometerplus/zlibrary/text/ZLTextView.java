@@ -887,6 +887,7 @@ public class ZLTextView {
 		int textAreaHeight = getTextAreaHeight();
 		page.LineInfos.clear();
 		int counter = 0;
+		final int paragraphSpace = 20;//FBReaderApp.Instance().ParagraphSpaceOption.getValue();
 
 		do {
 			// 富文本显示每个段落都进行格式初始化
@@ -914,7 +915,29 @@ public class ZLTextView {
 				}
 				counter++;
 			}
-		} while (result.isEndOfParagraph() && result.nextParagraph() && !result.getParagraphCursor().isEndOfSection() && (textAreaHeight >= 0));
+			
+			// 排满一页
+			if (textAreaHeight < 0) {
+				break;
+			}
+			
+			// 如果有下一段，则继续排版(加段落空行)，否则结束
+			if (!(result.isEndOfParagraph() && result.nextParagraph())) {
+				break;
+			} else {
+				final int lineHeight = info.Height + info.Descent + info.VSpaceAfter;
+				textAreaHeight -= paragraphSpace / 10.0 * lineHeight;
+				
+				if (textAreaHeight < 0) {
+					break;
+				}
+			}
+
+			// 全文完
+			if (result.getParagraphCursor().isEndOfSection()) {
+				break;
+			}
+		} while (true);
 		
 		// 排版完毕，进行段落初始化
 		resetTextStyle();
@@ -961,10 +984,9 @@ public class ZLTextView {
 		ZLTextStyle storedStyle = myTextStyle;
 
 		info.LeftIndent = myTextStyle.getLeftIndent();
-		// TODO 智能排版，自动过滤空格，但是要考虑某些文件有意使用空格进行排版
 		if (isFirstLine) {
-			info.LeftIndent += myTextStyle.getFirstLineIndentDelta();
-//			Log.d("isFirstLine", "Indent: " + info.LeftIndent + "style: " + myTextStyle.Base.getClass().getName());
+			info.LeftIndent += myTextStyle.getFirstLineIndentDelta() * myTextStyle.getFontSize();
+			Log.d("isFirstLine", "Indent: " + info.LeftIndent + "style: " + myTextStyle.Base.getClass().getName());
 		}
 
 		info.Width = info.LeftIndent;

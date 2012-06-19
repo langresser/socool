@@ -20,6 +20,7 @@
 package org.geometerplus.zlibrary.text;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 public class ZLTextFullDecoratedStyle extends ZLTextPartialDecoratedStyle {
 	private final ZLTextFullStyleDecoration myFullDecoration;
 	
@@ -40,7 +41,7 @@ public class ZLTextFullDecoratedStyle extends ZLTextPartialDecoratedStyle {
 
 	@Override
 	public int getFirstLineIndentDelta() {
-		return (getAlignment() == BookModel.ALIGN_CENTER) ? 0 : Base.getFirstLineIndentDelta() + myFullDecoration.FirstLineIndentDeltaOption.getValue();
+		return (getAlignment() == BookModel.ALIGN_CENTER) ? 0 : FBReaderApp.Instance().FirstLineIndentDeltaOption.getValue();
 	}
 	
 	@Override

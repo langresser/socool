@@ -345,10 +345,6 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 					this, textScreen.Resource.getResource("rightIndent"),
 					fullDecoration.RightIndentOption
 				));
-				formatScreen.addPreference(new ZLIntegerRangePreference(
-					this, textScreen.Resource.getResource("firstLineIndent"),
-					fullDecoration.FirstLineIndentDeltaOption
-				));
 				final ZLIntegerOption spacePercentOption = fullDecoration.LineSpacePercentOption;
 				final int[] spacingValues = new int[17];
 				final String[] spacingKeys = new String[17];
