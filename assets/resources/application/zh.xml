@@ -291,7 +291,10 @@
                     <node name="30" value="30 分钟"/>
                     <node name="never" value="常亮"/>
                 </node>
-                <node name="soundturn" value="音量键翻页"/>
+                <node name="soundturn" value="音量键翻页">
+                    <node name="summaryOn" value="开启"/>
+                    <node name="summaryOff" value="禁用"/>
+                </node>
                 <node name="screenOrientation" value="屏幕方向">
                    	<node name="portrait" value="竖屏"/>
 	                <node name="landscape" value="横屏"/> 
@@ -300,7 +303,7 @@
                 <node name="turnoffmenulight" value="阅读时关闭按钮灯">
                     <node name="all" value="阅读时关闭"/>
                     <node name="night" value="仅夜间模式时关闭"/>
-                    <node name="none" value="不关闭">
+                    <node name="none" value="不关闭"/>
                 </node>
 			</node>
 			<node name="text" value="文字排版">
@@ -346,20 +349,20 @@
 				<node name="leftIndent" value="左缩进" />
 				<node name="rightIndent" value="右缩进" />
                 
-                <node name="alignment" value="对齐">
+                <node name="alignment" value="对齐方式">
 					<node name="left" value="左" />
 					<node name="right" value="右" />
 					<node name="center" value="居中" />
-					<node name="justify" value="对齐" />
+					<node name="justify" value="自动" />
 					<node name="unchanged" value="&lt;不变&gt;" />
                 </node>
                 <node name="autoHyphenations" value="自动检测网址">
 					<node name="summaryOn" value="自动检测网址"/>
 					<node name="summaryOff" value="禁止自动检测网址"/>
 				</node>
-				<node name="autoLinebreak" value="自动断字">
-					<node name="summaryOn" value="保持英文单词完整性"/>
-					<node name="summaryOff" value="禁用自动断字"/>
+				<node name="autoLinebreak" value="保持英文单词完整性">
+					<node name="summaryOn" value="保证英文单词完整的显示在一行中"/>
+					<node name="summaryOff" value="英文单词可分行显示"/>
 				</node>
 				<node name="more" value="更多样式">
 					<node name="summary" value="分别设定标题、段落等."/>
@@ -465,21 +468,11 @@
 				</node>
 			</node>
 			<node name="colors" value="阅读风格" >
-				<node name="summary" value="设置文字颜色和背景壁纸"/>
-				<node name="background" value="背景壁纸">
-					<node name="solidColor" value="单色" />
-					<node name="leather" value="皮革" />
-					<node name="sepia" value="棕褐" />
-                    <node name="wood" value="木质" />
-                    <node name="read_bg_1" value="羊皮纸" />
-                    <node name="read_bg_2" value="粉红回忆" />
-                    <node name="read_bg_3" value="蓝色幻想" />
-                    <node name="read_bg_6" value="咖啡时光" />
-                    <node name="read_bg_7" value="水墨江南" />
-				</node>
-				<node name="backgroundColor" value="背景颜色" />
-				<node name="selectionBackground" value="选择背景色" />
-				<node name="selectionForeground" value="选择的文本" />
+				<node name="summary" value="设置阅读主题和文字颜色"/>
+                <node name="background" value="阅读主题"/>
+				<node name="backgroundColor" value="单色背景设置" />
+				<node name="selectionBackground" value="选定文字背景" />
+				<node name="selectionForeground" value="选定文字" />
 				<node name="text" value="普通文字" />
 				<node name="hyperlink" value="链接文字" />
 				<node name="hyperlinkVisited" value="已访问过的链接文字" />

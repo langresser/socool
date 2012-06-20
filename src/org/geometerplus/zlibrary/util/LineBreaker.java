@@ -1,5 +1,7 @@
 package org.geometerplus.zlibrary.util;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+
 import android.util.Log;
 
 public final class LineBreaker {
@@ -19,7 +21,14 @@ public final class LineBreaker {
 		}
 	}
 	public static void setLineBreaks(char[] data, int offset, int length, byte[] breaks) {
-//		setLineBreaksForCharArray(data, offset, length, myLanguage, breaks);
+		final boolean linebreak = FBReaderApp.Instance().AutoLineBreakOption.getValue();
+		if (linebreak) {
+			for (int i = offset; i < offset + length - 1; ++i) {
+				breaks[i] = ALLOWBREAK;
+			}
+			return;
+		}
+
 		for (int i = offset; i < offset + length - 1; ++i) {
 			breaks[i] = ALLOWBREAK;
 

@@ -47,7 +47,7 @@ class WallpaperPreference extends ListPreference {
 		final String[] texts = new String[size];
 
 		values[0] = "";
-		texts[0] = resource.getResource(resourceKey).getResource("solidColor").getValue();
+		texts[0] = "µ¥É«";
 		
 		int index = 1;
 		for (TextTheme each : themes) {

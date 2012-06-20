@@ -179,9 +179,10 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			this, textScreen.Resource, "paragraphSpace",
 			FBReaderApp.Instance().ParagraphSpaceOption, spacings));
 		
+		final String[] firstIntent = {"ÎÞËõ½ø", "1×Ö·û", "2×Ö·û", "3×Ö·û", "4×Ö·û"};
 		textScreen.addPreference(new ZLChoicePreference(
 				this, textScreen.Resource, "firstLineIndent",
-				FBReaderApp.Instance().FirstLineIndentDeltaOption, spacings));
+				FBReaderApp.Instance().FirstLineIndentDeltaOption, firstIntent));
 
 		final String[] alignments = { "left", "right", "center", "justify" };
 		textScreen.addPreference(new ZLChoicePreference(
@@ -189,6 +190,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			baseStyle.AlignmentOption, alignments
 		));
 		textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
+		textScreen.addOption(fbReader.AutoLineBreakOption, "autoLinebreak");
 		
 		final Screen pageScreen = createPreferenceScreen("pagelayout");
 		
@@ -200,19 +202,19 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		value = fbReader.getFooterHeight();
 
 		pageScreen.addPreference(new ZLIntegerRangePreference(
-				this, textScreen.Resource.getResource("left"),
+				this, pageScreen.Resource.getResource("left"),
 				fbReader.LeftMarginOption));
 		pageScreen.addPreference(new ZLIntegerRangePreference(
-				this, textScreen.Resource.getResource("right"),
+				this, pageScreen.Resource.getResource("right"),
 				fbReader.RightMarginOption));
 		pageScreen.addPreference(new ZLIntegerRangePreference(
-				this, textScreen.Resource.getResource("top"),
+				this, pageScreen.Resource.getResource("top"),
 				fbReader.TopMarginOption));
 		pageScreen.addPreference(new ZLIntegerRangePreference(
-					this, textScreen.Resource.getResource("bottom"),
+					this, pageScreen.Resource.getResource("bottom"),
 					fbReader.BottomMarginOption));
 		pageScreen.addPreference(new ZLIntegerRangePreference(
-				this, textScreen.Resource.getResource("footerheight"),
+				this, pageScreen.Resource.getResource("footerheight"),
 				fbReader.FooterHeightOption));
 
 		final Screen appearanceScreen = createPreferenceScreen("appearance");
@@ -222,7 +224,6 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 				appearanceScreen.Resource, "turnOffTime", fbReader.TurnOffTimeOpion, turnoffTimes));
 		
 		final ZLKeyBindings keyBindings = fbReader.keyBindings();
-		appearanceScreen.addOption(fbReader.SoundTurnOption, "soundturn");
 		appearanceScreen.addPreference(new ZLCheckBoxPreference(
 				this, appearanceScreen.Resource, "soundturn"
 			) {
@@ -246,7 +247,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			});
 		
 		final String[] turnoff = {"all", "night", "none"};
-		textScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
+		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
 				"turnoffmenulight", fbReader.TurnOffMenuLight, turnoff));
 
 		final String[] screenOrientation = {"portrait", "landscape", "system"};

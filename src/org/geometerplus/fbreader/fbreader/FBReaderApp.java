@@ -119,9 +119,11 @@ public final class FBReaderApp {
 	public ZLIntegerRangeOption BottomMarginOption = null;
 	public ZLIntegerRangeOption FooterHeightOption = null;
 
-	public final ZLIntegerRangeOption FirstLineIndentDeltaOption = new ZLIntegerRangeOption("LayoutStyle", "firstLineIndent", 0, 5, 2);	// 段首缩进，字体数目
+	public final ZLIntegerRangeOption FirstLineIndentDeltaOption = new ZLIntegerRangeOption("LayoutStyle", "firstLineIndent", 0, 4, 2);	// 段首缩进，字体数目
 	public final ZLIntegerRangeOption ParagraphSpaceOption = new ZLIntegerRangeOption("LayoutStyle", "paragraphSpace", 0, 20, 0);	// 段落间隔，除以10再乘以字体高度为实机间隔
 	
+	public final ZLBooleanOption AutoLineBreakOption = new ZLBooleanOption("Options", "autoLinebreak", true);
+
 	private ZLKeyBindings myBindings = null;
 	public ZLTextView BookTextView = null;
 	public volatile BookModel Model;
@@ -399,7 +401,7 @@ public final class FBReaderApp {
 
 	public int getBottomMargin() {
 		if (BottomMarginOption == null) {
-			BottomMarginOption = new ZLIntegerRangeOption("Options", "BottomMargin", 10, 30, 12);
+			BottomMarginOption = new ZLIntegerRangeOption("Options", "BottomMargin", 0, 20, 5);
 		}
 		return BottomMarginOption.getValue();
 	}
