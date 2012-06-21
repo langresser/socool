@@ -120,7 +120,7 @@ public final class FBReaderApp {
 	public ZLIntegerRangeOption FooterHeightOption = null;
 
 	public final ZLIntegerRangeOption FirstLineIndentDeltaOption = new ZLIntegerRangeOption("LayoutStyle", "firstLineIndent", 0, 4, 2);	// 段首缩进，字体数目
-	public final ZLIntegerRangeOption ParagraphSpaceOption = new ZLIntegerRangeOption("LayoutStyle", "paragraphSpace", 0, 20, 0);	// 段落间隔，除以10再乘以字体高度为实机间隔
+	public final ZLIntegerRangeOption ParagraphSpaceOption = new ZLIntegerRangeOption("LayoutStyle", "paragraphSpace", 0, 20, 2);	// 段落间隔，除以10再乘以字体高度为实机间隔
 	
 	public final ZLBooleanOption AutoLineBreakOption = new ZLBooleanOption("Options", "autoLinebreak", true);
 
@@ -789,7 +789,7 @@ public final class FBReaderApp {
 	
 	// 是否是opengles绘制的3d翻页效果
 	public boolean isUseGLView() {
-		return ScrollingPreferences.Instance().AnimationOption.getValue() == ZLTextView.Animation.curl3d;
+		return false;//return ScrollingPreferences.Instance().AnimationOption.getValue() == ZLTextView.Animation.curl3d;
 	}
 	
 	// 卷轴模式 还是翻页模式 无动画效果时是垂直滚动

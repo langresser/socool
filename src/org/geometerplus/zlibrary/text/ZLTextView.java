@@ -1962,7 +1962,7 @@ public class ZLTextView {
 		leftToRight, rightToLeft, up, down;
 	};
 	public static enum Animation {
-		none, shift, curl, curl3d
+		none, shift, curl//, curl3d
 	}
 
 	private String myZoneMapId;

@@ -161,10 +161,10 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			this, textScreen.Resource.getResource("fontSize"),
 			baseStyle.FontSizeOption
 		));
-		textScreen.addPreference(new FontStylePreference(
-			this, textScreen.Resource, "fontStyle",
-			baseStyle.BoldOption, baseStyle.ItalicOption
-		));
+//		textScreen.addPreference(new FontStylePreference(
+//			this, textScreen.Resource, "fontStyle",
+//			baseStyle.BoldOption, baseStyle.ItalicOption
+//		));
 		final ZLIntegerRangeOption spaceOption = baseStyle.LineSpaceOption;
 		final String[] spacings = new String[spaceOption.MaxValue - spaceOption.MinValue + 1];
 		for (int i = 0; i < spacings.length; ++i) {
@@ -175,11 +175,14 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			this, textScreen.Resource, "lineSpacing",
 			spaceOption, spacings));
 		
-//		textScreen.addPreference(new ZLChoicePreference(
-//			this, textScreen.Resource, "paragraphSpace",
-//			FBReaderApp.Instance().ParagraphSpaceOption, spacings));
-		textScreen.addPreference(new SeekBarPreference(
-				this, FBReaderApp.Instance().ParagraphSpaceOption, textScreen.Resource, "paragraphSpace"));
+		final ZLIntegerRangeOption paragrapOption = FBReaderApp.Instance().ParagraphSpaceOption;
+		final String[] paragraphspacings = new String[paragrapOption.MaxValue - paragrapOption.MinValue + 1];
+		for (int i = 0; i < paragraphspacings.length; ++i) {
+			final int val = paragrapOption.MinValue + i;
+			paragraphspacings[i] = (char)(val / 10 + '0') + "." + (char)(val % 10 + '0');
+		}
+		textScreen.addPreference(new ZLChoicePreference(
+				this, textScreen.Resource, "paragraphSpace", paragrapOption, paragraphspacings));
 		
 		final String[] firstIntent = {"ÎÞËõ½ø", "1×Ö·û", "2×Ö·û", "3×Ö·û", "4×Ö·û"};
 		textScreen.addPreference(new ZLChoicePreference(
@@ -191,7 +194,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			this, textScreen.Resource, "alignment",
 			baseStyle.AlignmentOption, alignments
 		));
-		textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
+//		textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
 		textScreen.addOption(fbReader.AutoLineBreakOption, "autoLinebreak");
 		
 		final Screen pageScreen = createPreferenceScreen("pagelayout");
