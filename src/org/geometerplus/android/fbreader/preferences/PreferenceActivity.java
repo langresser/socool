@@ -175,9 +175,11 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			this, textScreen.Resource, "lineSpacing",
 			spaceOption, spacings));
 		
-		textScreen.addPreference(new ZLChoicePreference(
-			this, textScreen.Resource, "paragraphSpace",
-			FBReaderApp.Instance().ParagraphSpaceOption, spacings));
+//		textScreen.addPreference(new ZLChoicePreference(
+//			this, textScreen.Resource, "paragraphSpace",
+//			FBReaderApp.Instance().ParagraphSpaceOption, spacings));
+		textScreen.addPreference(new SeekBarPreference(
+				this, FBReaderApp.Instance().ParagraphSpaceOption, textScreen.Resource, "paragraphSpace"));
 		
 		final String[] firstIntent = {"ÎÞËõ½ø", "1×Ö·û", "2×Ö·û", "3×Ö·û", "4×Ö·û"};
 		textScreen.addPreference(new ZLChoicePreference(

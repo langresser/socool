@@ -23,19 +23,39 @@ import org.geometerplus.zlibrary.filesystem.ZLResource;
 import org.geometerplus.zlibrary.options.ZLStringOption;
 
 import android.content.Context;
+import android.preference.EditTextPreference;
 
-class ZLStringOptionPreference extends ZLStringPreference {
+class ZLStringOptionPreference extends EditTextPreference {
 	private final ZLStringOption myOption;
+	private String myValue;
 
 	ZLStringOptionPreference(Context context, ZLStringOption option, ZLResource rootResource, String resourceKey) {
-		super(context, rootResource, resourceKey);
+		super(context);
+		
+		ZLResource resource = rootResource.getResource(resourceKey);
+		setTitle(resource.getValue());
+
 		myOption = option;
-		super.setValue(myOption.getValue());
+		
+		setValue(myOption.getValue());
 	}
 
-	@Override
 	protected void setValue(String value) {
-		super.setValue(value);
+		setSummary(value);
+		setText(value);
+		myValue = value;
 		myOption.setValue(value);
+	}
+	
+	protected final String getValue() {
+		return myValue;
+	}
+	
+	@Override
+	protected void onDialogClosed(boolean result) {
+		if (result) {
+			setValue(getEditText().getText().toString());
+		}
+		super.onDialogClosed(result);
 	}
 }
