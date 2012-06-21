@@ -600,6 +600,11 @@ public class ZLTextView {
 		if (model == null) {
 			return;
 		}
+		
+		final int footHeight = FBReaderApp.Instance().getFooterHeight();
+		if (footHeight <= 0) {
+			return;
+		}
 
 		//final ZLColor bgColor = getBackgroundColor();
 		// TODO: separate color option for footer color
@@ -608,14 +613,9 @@ public class ZLTextView {
 		final int left = FBReaderApp.Instance().getLeftMargin();
 		final int right = context.getWidth() - FBReaderApp.Instance().getRightMargin();
 
-		final ZLTextStyle baseStyle = ZLTextStyleCollection.Instance().getBaseStyle();
-		final String fontFamily = baseStyle.getFontFamily();
-		final int textFontSize = baseStyle.getFontSize() - 3;
-		final int footHeight = FBReaderApp.Instance().getFooterHeight();
-		final int footFontSize = Math.min(textFontSize, footHeight);
-		
-		// foot字体选择文本字体，字号是foot高度-5，但是最大不超过文本字号-3
-		context.setFont(fontFamily, footFontSize, false, false, false, false);
+		final ZLTextStyle baseStyle = ZLTextStyleCollection.Instance().getBaseStyle();	
+		final int footFontSize = Math.min(baseStyle.getFontSize(), footHeight);
+		context.setFont( baseStyle.getFontFamily(), footFontSize, false, false, false, false);
 
 		// 状态栏文本在最底部显示，留3个像素的空白区域
 		int offsetY = context.getHeight() - 2 * FBReaderApp.Instance().getDisplayDPI() / 120;

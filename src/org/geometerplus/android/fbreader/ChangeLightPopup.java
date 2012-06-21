@@ -122,6 +122,10 @@ public class ChangeLightPopup extends PopupPanel {
 					FBReaderApp.Instance().isNightModeOption.setValue(night);
 					FBReaderApp.Instance().resetWidget();
 					FBReaderApp.Instance().repaintWidget();
+					
+					if (FBReaderApp.Instance().TurnOffMenuLight.getValue().compareTo("night") == 0) {
+						FBReaderApp.Instance().getActivity().setButtonLight(!night);
+					}
 				} else if (v == btnAuto) {
 					final boolean auto = !btnAuto.isSelected();
 					FBReaderApp.Instance().setScreenBrightnessAuto(auto);

@@ -97,7 +97,7 @@ public final class FBReaderApp {
 		new ZLBooleanOption("Options", "NavigateAllWords", false);
 	
 	public final ZLBooleanOption SoundTurnOption = new ZLBooleanOption("Options", "SoundTurn", true);
-	public final ZLStringOption TurnOffMenuLight = new ZLStringOption("Options", "TurnOffMenuLight", "night");
+	public final ZLStringOption TurnOffMenuLight = new ZLStringOption("Options", "TurnOffMenuLight", "none");
 
 	public static enum WordTappingAction {
 		doNothing, selectSingleWord, startSelecting, openDictionary
@@ -394,7 +394,7 @@ public final class FBReaderApp {
 	
 	public int getTopMargin() {
 		if (TopMarginOption == null) {
-			TopMarginOption = new ZLIntegerRangeOption("Options", "TopMargin", 0, 20, 0);
+			TopMarginOption = new ZLIntegerRangeOption("Options", "TopMargin", 0, 20, 5);
 		}
 		return TopMarginOption.getValue();
 	}
@@ -410,7 +410,8 @@ public final class FBReaderApp {
 	{
 		// TODO display
 		if (FooterHeightOption == null) {
-			FooterHeightOption = new ZLIntegerRangeOption("Options", "footerheight", 0, 50, 15);
+			final int defaultHeight = (int)(12 * getDensity());
+			FooterHeightOption = new ZLIntegerRangeOption("Options", "footerheight", 0, 40, defaultHeight);
 		}
 		
 		return FooterHeightOption.getValue();
@@ -946,6 +947,15 @@ public final class FBReaderApp {
 			initDisplayMetrics();
 		}
 		return (int)(160 * myMetrics.density);
+	}
+	
+	public float getDensity()
+	{
+		if (myMetrics == null) {
+			initDisplayMetrics();
+		}
+
+		return myMetrics.density;
 	}
 
 	public int getPixelWidth() {

@@ -222,43 +222,6 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 				this, pageScreen.Resource.getResource("footerheight"),
 				fbReader.FooterHeightOption));
 
-		final Screen appearanceScreen = createPreferenceScreen("appearance");
-
-		final String[] turnoffTimes = {"default", "1", "3", "5", "10", "30", "never"};
-		appearanceScreen.addPreference(new ZLStringChoicePreference(this, 
-				appearanceScreen.Resource, "turnOffTime", fbReader.TurnOffTimeOpion, turnoffTimes));
-		
-		final ZLKeyBindings keyBindings = fbReader.keyBindings();
-		appearanceScreen.addPreference(new ZLCheckBoxPreference(
-				this, appearanceScreen.Resource, "soundturn"
-			) {
-				{
-					setChecked(ActionCode.VOLUME_KEY_SCROLL_FORWARD.equals(
-						keyBindings.getBinding(KeyEvent.KEYCODE_VOLUME_UP, false)
-					));
-				}
-
-				@Override
-				protected void onClick() {
-					super.onClick();
-					if (isChecked()) {
-						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
-						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
-					} else {
-						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, FBReaderApp.NoAction);
-						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, FBReaderApp.NoAction);
-					}
-				}
-			});
-		
-		final String[] turnoff = {"all", "night", "none"};
-		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
-				"turnoffmenulight", fbReader.TurnOffMenuLight, turnoff));
-
-		final String[] screenOrientation = {"portrait", "landscape", "system"};
-		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
-				"screenOrientation", fbReader.OrientationOption, screenOrientation));
-
 		final ZLPreferenceSet bgPreferences = new ZLPreferenceSet();
 
 		final Screen colorsScreen = createPreferenceScreen("colors");
@@ -295,6 +258,43 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			"animationSpeed",
 			scrollingPreferences.AnimationSpeedOption
 		));
+		
+		final Screen appearanceScreen = createPreferenceScreen("appearance");
+
+		final String[] turnoffTimes = {"default", "1", "3", "5", "10", "30", "never"};
+		appearanceScreen.addPreference(new ZLStringChoicePreference(this, 
+				appearanceScreen.Resource, "turnOffTime", fbReader.TurnOffTimeOpion, turnoffTimes));
+		
+		final ZLKeyBindings keyBindings = fbReader.keyBindings();
+		appearanceScreen.addPreference(new ZLCheckBoxPreference(
+				this, appearanceScreen.Resource, "soundturn"
+			) {
+				{
+					setChecked(FBReaderApp.Instance().SoundTurnOption.getValue());
+				}
+
+				@Override
+				protected void onClick() {
+					super.onClick();
+					if (isChecked()) {
+						FBReaderApp.Instance().SoundTurnOption.setValue(true);
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
+					} else {
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, FBReaderApp.NoAction);
+						keyBindings.bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, FBReaderApp.NoAction);
+						FBReaderApp.Instance().SoundTurnOption.setValue(false);
+					}
+				}
+			});
+		
+		final String[] turnoff = {"all", "night", "none"};
+		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
+				"turnoffmenulight", fbReader.TurnOffMenuLight, turnoff));
+
+		final String[] screenOrientation = {"portrait", "landscape", "system"};
+		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
+				"screenOrientation", fbReader.OrientationOption, screenOrientation));
 		
 		final Screen directoriesScreen = createPreferenceScreen("directories");
 //		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");

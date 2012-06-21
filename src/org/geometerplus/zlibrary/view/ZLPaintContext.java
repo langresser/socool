@@ -61,6 +61,8 @@ public class ZLPaintContext {
 	private HashMap<String,Typeface[]> myTypefaces = new HashMap<String,Typeface[]>();
 	private static ZLFile ourWallpaperFile;
 	private static Bitmap ourWallpaper;
+	private static int m_widthWallpaper;
+	private static int m_heightWallpaper;
 	
 	private boolean myResetFont = true;
 	private String myFontFamily = "";
@@ -84,6 +86,10 @@ public class ZLPaintContext {
 		myCanvas = canvas;
 		myWidth = width;
 		myHeight = height;
+		
+		if (myWidth != m_widthWallpaper || myHeight != m_heightWallpaper) {
+			ourWallpaperFile = null;
+		}
 
 		myTextPaint.setLinearText(false);
 		myTextPaint.setAntiAlias(AntiAliasOption.getValue());
@@ -224,7 +230,7 @@ public class ZLPaintContext {
 	}	
 
 	public void clear(ZLFile wallpaperFile) {
-		if (!wallpaperFile.equals(ourWallpaperFile)) {
+		if (ourWallpaperFile == null || !wallpaperFile.equals(ourWallpaperFile)) {
 			ourWallpaperFile = wallpaperFile;
 			ourWallpaper = null;
 			try {
@@ -238,6 +244,9 @@ public class ZLPaintContext {
 
 		        Bitmap wallpaper = Bitmap.createBitmap(fileBitmap, 0, 0, width, height, m, true);
 				ourWallpaper = wallpaper;
+				
+				m_widthWallpaper = myWidth;
+				m_heightWallpaper = myHeight;
 			} catch (Throwable t) {
 				t.printStackTrace();
 			}

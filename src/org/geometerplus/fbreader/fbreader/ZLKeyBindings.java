@@ -68,13 +68,13 @@ public final class ZLKeyBindings {
 			oldBackKeyOption.setValue("");
 		}
 
-		final ZLBooleanOption volumeKeysOption =
-			new ZLBooleanOption("Scrolling", "VolumeKeys", true);
-		if (!volumeKeysOption.getValue()) {
+		if (FBReaderApp.Instance().SoundTurnOption.getValue()) {
+			bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, ActionCode.VOLUME_KEY_SCROLL_FORWARD);
+			bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, ActionCode.VOLUME_KEY_SCROLL_BACK);
+		} else {
 			bindKey(KeyEvent.KEYCODE_VOLUME_UP, false, FBReaderApp.NoAction);
 			bindKey(KeyEvent.KEYCODE_VOLUME_DOWN, false, FBReaderApp.NoAction);
 		}
-		volumeKeysOption.setValue(true);
 		// end of migration code
 	}
 

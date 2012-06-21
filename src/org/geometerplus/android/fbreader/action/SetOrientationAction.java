@@ -31,7 +31,7 @@ public class SetOrientationAction extends FBAndroidAction {
 	public static void setOrientation(Activity activity, String optionValue) {
 		int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 		if (FBReaderApp.SCREEN_ORIENTATION_SYSTEM.equals(optionValue)) {
-			orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
+			orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 		} else if (FBReaderApp.SCREEN_ORIENTATION_PORTRAIT.equals(optionValue)) {
 			orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 		} else if (FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE.equals(optionValue)) {

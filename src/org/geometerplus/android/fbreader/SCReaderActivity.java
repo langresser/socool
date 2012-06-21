@@ -385,8 +385,12 @@ public final class SCReaderActivity extends Activity {
 		super.onStop();
 	}
 	
-	public boolean m_enableButtonLight = false;
+	public boolean m_enableButtonLight = true;
 	public void setButtonLight(boolean enabled) {
+		if (enabled == m_enableButtonLight) {
+			return;
+		}
+
 		m_enableButtonLight = enabled;
 		try {
 			final WindowManager.LayoutParams attrs = getWindow().getAttributes();
