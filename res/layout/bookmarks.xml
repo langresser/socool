@@ -22,12 +22,21 @@
            <Button android:gravity="center" 
                android:layout_gravity="center" 
                android:id="@+id/book_mark"
-                android:background="@drawable/select_right_tab_selector"
+                android:background="@drawable/select_mid_tab_selector"
                  android:layout_width="0dip"
                   android:layout_height="50.0dip" 
                   android:text="书签" 
                   android:layout_weight="1.0"
                    style="@style/setting_text_for_button" />
+           <Button android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/book_comment" 
+               android:background="@drawable/select_right_tab_selector" 
+               android:layout_width="0dip" 
+               android:layout_height="50.0dip"
+                android:text="书摘" 
+                android:layout_weight="1.0" 
+                style="@style/setting_text_for_button" />
        </LinearLayout>
        <FrameLayout android:orientation="vertical" 
 		    android:layout_width="fill_parent" 
@@ -45,6 +54,16 @@
 	            android:fastScrollEnabled="true" />
 	    
 	    <ListView android:id="@+id/boomark_list" 
+	        android:paddingLeft="10.0dip" 
+	        android:paddingRight="10.0dip" 
+	        android:layout_width="fill_parent" 
+	        android:layout_height="fill_parent" 
+	        android:cacheColorHint="@android:color/transparent" 
+	        android:divider="@color/listview_divider_color" 
+	        android:dividerHeight="3.0px" 
+	        android:background="#ffeeeeee"
+	        android:fastScrollEnabled="true" />
+	    <ListView android:id="@+id/bookcomment_list" 
 	        android:paddingLeft="10.0dip" 
 	        android:paddingRight="10.0dip" 
 	        android:layout_width="fill_parent" 

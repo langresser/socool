@@ -71,6 +71,7 @@ public interface ActionCode {
 	String SELECTION_COPY_TO_CLIPBOARD = "selectionCopyToClipboard";
 	String SELECTION_SHARE = "selectionShare";
 	String SELECTION_TRANSLATE = "selectionTranslate";
+	String SELECTION_SEARCH = "selectionSearch";
 	String SELECTION_BOOKMARK = "selectionBookmark";
 	String ADD_BOOKMARK = "addbookmark";
 }

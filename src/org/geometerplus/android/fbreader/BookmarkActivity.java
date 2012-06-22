@@ -53,7 +53,7 @@ public class BookmarkActivity extends Activity {
 				return true;
 			case BookmarkAdapter.DELETE_ITEM_ID:
 				bookmark.delete();
-				adapter.AllBooksBookmarks.remove(bookmark);
+				adapter.m_bookmarks.remove(bookmark);
 				view.invalidate();
 				view.requestLayout();
 				return true;

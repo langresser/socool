@@ -51,9 +51,19 @@ class WallpaperPreference extends ListPreference {
 		
 		int index = 1;
 		for (TextTheme each : themes) {
-			values[index] = each.m_path;
-			texts[index] = each.m_title;
-			index += 1;
+			if (!each.m_isNightMode) {
+				values[index] = each.m_path;
+				texts[index] = each.m_title;
+				index += 1;
+			}
+		}
+		
+		for (TextTheme each : themes) {
+			if (each.m_isNightMode) {
+				values[index] = each.m_path;
+				texts[index] = each.m_title + "(Ò¹¼ä)";
+				index += 1;
+			}
 		}
 
 		setLists(values, texts);

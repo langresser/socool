@@ -211,7 +211,7 @@
 		<node name="openInDictionary" value="打开字典" />
 		<node name="quoteFrom" value="从%s中引用" />
 		<node name="textInBuffer" value="复制到剪贴板:&#10;%s" />
-		<node name="bookmarkCreated" value="创建书签:&#10;%s" />
+        <node name="bookmarkCreated" value="添加书摘:&#10;%s" />
 		<node name="clearSelection" value="清除" />
 	</node>
     <node name="menu">

@@ -25,10 +25,11 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ZoomButton;
 
 abstract class ButtonsPopupPanel extends PopupPanel implements View.OnClickListener {
-	class ActionButton extends ZoomButton {
+	class ActionButton extends Button {
 		final String ActionId;
 		final boolean IsCloseButton;
 
@@ -47,7 +48,16 @@ abstract class ButtonsPopupPanel extends PopupPanel implements View.OnClickListe
 
 	protected void addButton(String actionId, boolean isCloseButton, int imageId) {
 		final ActionButton button = new ActionButton(myWindow.getContext(), actionId, isCloseButton);
-		button.setImageResource(imageId);
+//		button.setImageResource(imageId);
+		myWindow.addView(button);
+		button.setOnClickListener(this);
+		myButtons.add(button);
+	}
+	
+	protected void addButton(String actionId, boolean isCloseButton, String text) {
+		final ActionButton button = new ActionButton(myWindow.getContext(), actionId, isCloseButton);
+//		button.setImageResource(imageId);
+		button.setText(text);
 		myWindow.addView(button);
 		button.setOnClickListener(this);
 		myButtons.add(button);

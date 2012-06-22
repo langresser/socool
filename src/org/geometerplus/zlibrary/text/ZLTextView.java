@@ -1980,6 +1980,15 @@ public class ZLTextView {
 	public boolean onFingerSingleTap(int x, int y) {
 		if (FBReaderApp.Instance().getActivePopup() != null) {
 			FBReaderApp.Instance().hideActivePopup();
+			
+			if (!mySelection.isEmpty()) {
+				clearSelection();
+			}
+			return true;
+		}
+
+		if (!mySelection.isEmpty()) {
+			clearSelection();
 			return true;
 		}
 

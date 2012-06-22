@@ -59,7 +59,7 @@ public final class ZLColor {
 		}
 
 		double temp = Double.parseDouble(value);
-		if (temp > 0) {
+		if (temp > 1) {
 			return (short)temp;
 		} else {
 			return (short)(temp * 255);

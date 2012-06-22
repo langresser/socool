@@ -20,45 +20,23 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-class ComparatorBookmark implements Comparator<Bookmark>{
-
-	 public int compare(Bookmark arg0, Bookmark arg1) {
-		if (arg0.m_percent < arg1.m_percent) {
-			return -1;
-		} else if (arg0.m_percent > arg1.m_percent) {
-			return 1;
-		} else {
-			final long time1 = arg0.getTime().getTime();
-			final long time2 = arg1.getTime().getTime();
-			if (time1 < time2) {
-				return -1;
-			} else if (time1 > time2) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
-	}
-}
-
-public class BookmarkAdapter extends BaseAdapter implements
+public class BookCommentAdapter extends BaseAdapter implements
 		AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	public static final int OPEN_ITEM_ID = 0;
 	public static final int DELETE_ITEM_ID = 2;
 	private LayoutInflater mInflater;
-	public ArrayList<Bookmark> m_bookmarks = new ArrayList<Bookmark>();
+	ArrayList<Bookmark> m_bookmarks = new ArrayList<Bookmark>();
 	Activity m_baseActivity;
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public BookmarkAdapter(Activity activity) {
+	public BookCommentAdapter(Activity activity) {
 		// Cache the LayoutInflate to avoid asking for a new one each time.
 		mInflater = LayoutInflater.from(activity);
 		m_baseActivity = activity;
 		List<Bookmark> AllBooksBookmarks = FBReaderApp.Instance().getDatabase()
 				.loadBookmarks(FBReaderApp.Instance().Model.Book.myId);
-		
 		for (Bookmark bookmark : AllBooksBookmarks) {
-			if (bookmark.m_bookmarkType == Bookmark.BOOKMARK_TYPE_BOOKMARK) {
+			if (bookmark.m_bookmarkType == Bookmark.BOOKMARK_TYPE_COMMENT) {
 				m_bookmarks.add(bookmark);
 			}
 		}
