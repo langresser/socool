@@ -1,6 +1,9 @@
 package org.geometerplus.android.fbreader;
 
 import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -18,6 +21,27 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+class ComparatorBookmark implements Comparator<Bookmark>{
+
+	 public int compare(Bookmark arg0, Bookmark arg1) {
+		if (arg0.m_percent < arg1.m_percent) {
+			return -1;
+		} else if (arg0.m_percent > arg1.m_percent) {
+			return 1;
+		} else {
+			final long time1 = arg0.getTime().getTime();
+			final long time2 = arg1.getTime().getTime();
+			if (time1 < time2) {
+				return -1;
+			} else if (time1 > time2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
+}
+
 public class BookmarkAdapter extends BaseAdapter implements
 		AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	public static final int OPEN_ITEM_ID = 0;
@@ -33,6 +57,8 @@ public class BookmarkAdapter extends BaseAdapter implements
 		m_baseActivity = activity;
 		AllBooksBookmarks = FBReaderApp.Instance().getDatabase()
 				.loadBookmarks(FBReaderApp.Instance().Model.Book.myId);
+		ComparatorBookmark comp = new ComparatorBookmark();
+		Collections.sort(AllBooksBookmarks, comp);
 	}
 
 	public int getCount() {
