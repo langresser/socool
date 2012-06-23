@@ -181,16 +181,16 @@ public class ZLTextView {
 			return 10000;
 		}
 
-		final int chapterIndex = chapter.getChapterIndexByParagraph(paragraph);
-		final int startTextOffset = chapter.getChapterTextOffset(chapterIndex);
-		final int startParagraph = chapter.getChapterOffset(chapterIndex);
+//		final int chapterIndex = chapter.getChapterIndexByParagraph(paragraph);
+//		final int startTextOffset = chapter.getChapterTextOffset(chapterIndex);
+//		final int startParagraph = chapter.getChapterOffset(chapterIndex);
 		final int textOffset = chapter.getParagraphTextOffset(paragraph) + word + chara;
 		final int percent = Math.round((float)textOffset / chapter.m_allTextSize * 10000);
 		if (percent == 0 && (paragraph != 0 || word != 0)) {
-			Log.d("getPercent1", String.format("%1d  %2d  %3d  percent:%4d  %5d  %6d", paragraph, word, textOffset, percent, startParagraph, startTextOffset));
+//			Log.d("getPercent1", String.format("%1d  %2d  %3d  percent:%4d  %5d  %6d", paragraph, word, textOffset, percent, startParagraph, startTextOffset));
 			return 1;
 		}
-		Log.d("getPercent", String.format("%1d  %2d  %3d  percent:%4d  %5d  %6d", paragraph, word, textOffset, percent, startParagraph, startTextOffset));
+//		Log.d("getPercent", String.format("%1d  %2d  %3d  percent:%4d  %5d  %6d", paragraph, word, textOffset, percent, startParagraph, startTextOffset));
 		return percent;
 	}
 	
@@ -245,7 +245,7 @@ public class ZLTextView {
 		}
 
 		int textOffset = (int)(myModel.m_chapter.m_allTextSize * (percent / 10000.0));
-		Log.d("gotoPercent", String.format("%1d  %2d  %3d", percent, textOffset, myModel.m_chapter.m_allTextSize));
+//		Log.d("gotoPercent", String.format("%1d  %2d  %3d", percent, textOffset, myModel.m_chapter.m_allTextSize));
 		myModel.m_chapter.gotoPositionByOffset(textOffset);
 	}
 
@@ -570,7 +570,7 @@ public class ZLTextView {
 		for (ZLTextLineInfo info : lineInfos) {
 			prepareTextLine(page, info, y);
 			y += info.Height + info.Descent + info.VSpaceAfter;
-			Log.d("line1", String.format("height:%1d  descent:%2d vspace:%3d    %4d", info.Height, info.Descent, info.VSpaceAfter, index));
+//			Log.d("line1", String.format("height:%1d  descent:%2d vspace:%3d    %4d", info.Height, info.Descent, info.VSpaceAfter, index));
 			labels[++index] = page.TextElementMap.size();
 		}
 
@@ -579,7 +579,7 @@ public class ZLTextView {
 		for (ZLTextLineInfo info : lineInfos) {
 			drawTextLine(page, info, labels[index], labels[index + 1], y);
 			y += info.Height + info.Descent + info.VSpaceAfter;
-			Log.d("line2", String.format("height:%1d  descent:%2d vspace:%3d    %4d", info.Height, info.Descent, info.VSpaceAfter, index));
+//			Log.d("line2", String.format("height:%1d  descent:%2d vspace:%3d    %4d", info.Height, info.Descent, info.VSpaceAfter, index));
 			++index;
 		}
 
@@ -980,7 +980,7 @@ public class ZLTextView {
 		info.LeftIndent = myTextStyle.getLeftIndent();
 		if (isFirstLine) {
 			info.LeftIndent += myTextStyle.getFirstLineIndentDelta() * myTextStyle.getFontSize();
-			Log.d("isFirstLine", "Indent: " + info.LeftIndent + "style: " + myTextStyle.Base.getClass().getName());
+//			Log.d("isFirstLine", "Indent: " + info.LeftIndent + "style: " + myTextStyle.Base.getClass().getName());
 		}
 
 		info.Width = info.LeftIndent;
@@ -1127,7 +1127,7 @@ public class ZLTextView {
 			info.VSpaceAfter = (int)(myTextStyle.getSpaceAfter() / 10.0 * myTextStyle.getFontSize());
 		}
 		
-		Log.d("line0", String.format("height:%1d  descent:%2d vspace:%3d", info.Height, info.Descent, info.VSpaceAfter));
+//		Log.d("line0", String.format("height:%1d  descent:%2d vspace:%3d", info.Height, info.Descent, info.VSpaceAfter));
 
 		if (info.EndElementIndex != endIndex || endIndex == info.ParagraphCursorLength) {
 			myLineInfoCache.put(info, info);

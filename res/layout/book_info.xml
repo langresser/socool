@@ -38,10 +38,24 @@
 			android:orientation="horizontal"
 		/>
 		<Button
+			android:id="@+id/book_info_button_import"
+			android:layout_width="0dip"
+			android:layout_weight="1"
+			android:text="导出书籍"
+			android:background="@drawable/normal_button_selector"
+			android:layout_height="wrap_content"
+		/>
+		<LinearLayout
+			android:layout_width="0dip"
+			android:layout_weight="0.35"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+		/>
+		<Button
 			android:id="@+id/book_info_button_app"
 			android:layout_width="0dip"
 			android:layout_weight="1"
-			android:text="推荐应用"
+			android:text="精品推荐"
 			android:background="@drawable/normal_button_selector"
 			android:layout_height="wrap_content"
 		/>

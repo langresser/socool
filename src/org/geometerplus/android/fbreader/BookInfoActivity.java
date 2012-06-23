@@ -57,6 +57,7 @@ public class BookInfoActivity extends Activity {
 		
 		final Button btnOpen = (Button)findViewById(R.id.book_info_button_open);
 		final Button btnApp = (Button)findViewById(R.id.book_info_button_app);
+		final Button btnImport = (Button)findViewById(R.id.book_info_button_import);
 		
 		View.OnClickListener listener = new View.OnClickListener() {
 			
@@ -71,6 +72,8 @@ public class BookInfoActivity extends Activity {
 								.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 						);
 				} else if (btn == btnApp) {
+					
+				} else if (btn == btnImport) {
 					
 				}
 			}

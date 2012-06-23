@@ -28,8 +28,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.geometerplus.zlibrary.filesystem.ZLFile;
@@ -52,11 +54,14 @@ import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
 
+import com.admogo.AdMogoLayout;
+import com.admogo.AdMogoListener;
+import com.admogo.AdMogoManager;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 
-public final class SCReaderActivity extends Activity {
+public final class SCReaderActivity extends Activity implements AdMogoListener {
 	public static final String BOOK_PATH_KEY = "BookPath";
 
 	public static final int REQUEST_PREFERENCES = 1;
@@ -121,6 +126,7 @@ public final class SCReaderActivity extends Activity {
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
+	public AdMogoLayout m_adMogoLayoutCode;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -136,12 +142,16 @@ public final class SCReaderActivity extends Activity {
 		createBookView();
 
 		setContentView(m_mainLayout);
+		
+		m_adMogoLayoutCode = new AdMogoLayout(this,"3425416cdea3450ebc2fd49b9628d3e7", true);
+		m_adMogoLayoutCode.setAdMogoListener(this);
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+		FrameLayout.LayoutParams.FILL_PARENT,
+		FrameLayout.LayoutParams.WRAP_CONTENT);
 
-		new Thread() {
-			public void run() {
-				FBReaderApp.Instance().openFile(fileFromIntent(getIntent()), getPostponedInitAction());
-			}
-		}.start();
+		params.topMargin = 0;
+		params.gravity = Gravity.TOP;
+		addContentView(m_adMogoLayoutCode, params);
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -171,6 +181,46 @@ public final class SCReaderActivity extends Activity {
 
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_PORTRAIT));
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE));
+	
+		FBReaderApp.Instance().openFile(fileFromIntent(getIntent()), null);
+	}
+	
+	@Override
+	public void onClickAd() {
+		Log.v("=onClickAd=", "Click the buttom ad.");
+	}
+
+	@Override
+	public void onFailedReceiveAd() {
+		Log.v("=onFailedReceiveAd=", "Failed to receive the buttom ad.");
+	}
+
+	@Override
+	public void onReceiveAd() {
+		Log.v("=onReceiveAd=", "Receive the buttom ad.");
+		final FBReaderApp fbReader = FBReaderApp.Instance();
+		
+		if (fbReader.m_adsHeight == 0) {
+			fbReader.m_adsHeight = m_adMogoLayoutCode.getHeight();
+			fbReader.resetWidget();
+			fbReader.repaintWidget(true);
+		}
+	}
+	
+	@Override
+	public void onCloseMogoDialog() {
+		Log.v("=onCloseMogoDialog=", "Close ad Dialog.");
+	}
+
+	@Override
+	public void onCloseAd() {
+		Log.v("=onCloseAd=", "Close ad.");
+	}
+
+	@Override
+	public void onRequestAd() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public void createBookView()
@@ -208,6 +258,7 @@ public final class SCReaderActivity extends Activity {
 	@Override
 	public void onDestroy()
 	{
+		AdMogoManager.clear();
 		super.onDestroy();
 	}
 

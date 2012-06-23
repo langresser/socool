@@ -130,6 +130,8 @@ public final class FBReaderApp {
 
 	public static final String NoAction = "none";
 
+	public int m_adsHeight = 0;
+
 	private volatile ZLTextView myView;
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 	
@@ -395,7 +397,7 @@ public final class FBReaderApp {
 		if (TopMarginOption == null) {
 			TopMarginOption = new ZLIntegerRangeOption("Options", "TopMargin", 0, 20, 5);
 		}
-		return TopMarginOption.getValue();
+		return TopMarginOption.getValue() + m_adsHeight;
 	}
 
 	public int getBottomMargin() {
