@@ -11,6 +11,8 @@ import android.widget.ListView;
 import org.geometerplus.fbreader.library.Bookmark;
 import org.socool.socoolreader.reader.R;
 
+import com.umeng.analytics.MobclickAgent;
+
 public class BookmarksActivity extends Activity {
 	Button m_btnChapter;
 	Button m_btnBookmark;
@@ -27,9 +29,6 @@ public class BookmarksActivity extends Activity {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 		
@@ -146,5 +145,14 @@ public class BookmarksActivity extends Activity {
 		}
 		
 		return super.onContextItemSelected(item);
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    MobclickAgent.onResume(this);
+	}
+	public void onPause() {
+	    super.onPause();
+	    MobclickAgent.onPause(this);
 	}
 }

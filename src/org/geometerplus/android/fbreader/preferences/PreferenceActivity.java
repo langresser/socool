@@ -47,7 +47,11 @@ import org.geometerplus.fbreader.fbreader.*;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
 
-public class PreferenceActivity extends android.preference.PreferenceActivity {
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.UMFeedbackService;
+
+public class PreferenceActivity extends android.preference.PreferenceActivity
+	implements Preference.OnPreferenceClickListener {
 	public PreferenceActivity() {
 		Resource = ZLResource.resource("dialog").getResource("Preferences");
 	}
@@ -133,14 +137,21 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
-
 		myScreen = getPreferenceManager().createPreferenceScreen(this);
 
 		final Intent intent = getIntent();
 		init(intent);
 		final Screen screen = myScreenMap.get(intent.getStringExtra(SCREEN_KEY));
 		setPreferenceScreen(screen != null ? screen.myScreen : myScreen);
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    MobclickAgent.onResume(this);
+	}
+	public void onPause() {
+	    super.onPause();
+	    MobclickAgent.onPause(this);
 	}
 
 	protected void init(Intent intent) {
@@ -296,12 +307,18 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		appearanceScreen.addPreference(new ZLStringChoicePreference(this, appearanceScreen.Resource, 
 				"screenOrientation", fbReader.OrientationOption, screenOrientation));
 		
-		final Screen directoriesScreen = createPreferenceScreen("directories");
-//		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");
-		if (AndroidFontUtil.areExternalFontsSupported()) {
-			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
-		}
-		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
+//		final Screen directoriesScreen = createPreferenceScreen("directories");
+////		directoriesScreen.addOption(Paths.BooksDirectoryOption(), "books");
+//		if (AndroidFontUtil.areExternalFontsSupported()) {
+//			directoriesScreen.addOption(Paths.FontsDirectoryOption(), "fonts");
+//		}
+//		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
+
+		Preference fbPreference = new Preference(this);
+		fbPreference.setTitle("用户反馈");
+		fbPreference.setSummary("告诉我们您的意见或建议");
+		fbPreference.setOnPreferenceClickListener(this);
+		addPreference(fbPreference);
 	}
 	
 	void initFormat(Screen textScreen)
@@ -414,5 +431,12 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			}
 		}
 
+	}
+
+	@Override
+	public boolean onPreferenceClick(Preference preference) {
+		UMFeedbackService.setGoBackButtonVisible();
+		UMFeedbackService.openUmengFeedbackSDK(this);
+		return false;
 	}
 }

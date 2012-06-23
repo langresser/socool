@@ -73,8 +73,7 @@ public class BuyBooksActivity extends Activity implements NetworkLibrary.ChangeL
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
-
+		
 		myLibrary = NetworkLibrary.Instance();
 
 		final List<NetworkTree.Key> keys =

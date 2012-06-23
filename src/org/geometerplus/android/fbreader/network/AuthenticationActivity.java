@@ -105,7 +105,6 @@ public class AuthenticationActivity extends Activity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
 		setContentView(R.layout.authentication);
 
 		final Intent intent = getIntent();

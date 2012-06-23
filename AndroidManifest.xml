@@ -5,22 +5,15 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+	
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.READ_LOGS"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> 
+
 	<application android:name="org.geometerplus.android.fbreader.FBReaderApplication" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name">
-		<activity android:name="org.geometerplus.android.fbreader.BookReadingErrorActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" android:process=":error">
-			<intent-filter>
-				<action android:name="android.fbreader.action.ERROR" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:scheme="BookReadingException" />
-			</intent-filter>
-		</activity>
-		<activity android:name="org.geometerplus.zlibrary.error.BugReportActivity" android:label="SocoolReader crash" android:configChanges="orientation|keyboardHidden" android:process=":crash" />
-		<activity android:name="org.geometerplus.android.fbreader.FixBooksDirectoryActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" android:process=":crash">
-			<intent-filter>
-				<action android:name="android.fbreader.action.CRASH" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:scheme="CachedCharStorageException" />
-			</intent-filter>
-		</activity>
 		<activity android:name="org.geometerplus.android.fbreader.bookshelf.ShelvesActivity">		    
 		</activity>
 		<activity android:name="org.geometerplus.android.fbreader.SCReaderActivity" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
@@ -97,7 +90,6 @@
 		<activity android:name="org.geometerplus.android.fbreader.LibraryActivity" android:configChanges="orientation|keyboardHidden">
 			<meta-data android:name="android.app.default_searchable" android:value="org.geometerplus.android.fbreader.library.LibrarySearchActivity" />
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.TOCActivity" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name="org.geometerplus.android.fbreader.BookmarkActivity" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name="org.geometerplus.android.fbreader.BookChapterActivity" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name="org.geometerplus.android.fbreader.BookChapterJuanActivity" android:configChanges="orientation|keyboardHidden" />
@@ -215,5 +207,19 @@
 			</intent-filter>
 		</receiver>
 		<activity android:name="org.geometerplus.android.fbreader.tips.TipsActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+	
+	<!--友盟-->
+	<meta-data android:value="4fe4926e5270156649000081" android:name="UMENG_APPKEY"/>
+	<meta-data android:value="91nd" android:name="UMENG_CHANNEL"/>
+	<activity android:name="com.umeng.fb.ui.SendFeedback" android:windowSoftInputMode="adjustResize" />
+	<activity android:name="com.umeng.fb.ui.FeedbackConversations" />
+	<activity android:name="com.umeng.fb.ui.FeedbackConversation" android:configChanges="keyboard" />
+	
+	<service
+    	android:name="com.umeng.common.net.DownloadingService"
+   	 	android:exported="true"
+    	android:process=":DownloadingService" >
+	</service>
+
 	</application>
 </manifest>

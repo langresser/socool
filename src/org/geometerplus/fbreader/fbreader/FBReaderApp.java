@@ -33,7 +33,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
-import org.geometerplus.zlibrary.error.ErrorKeys;
 import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
@@ -1192,34 +1191,6 @@ public final class FBReaderApp {
 			UIUtil.runWithMessage(activity, key, action, postAction, false);
 		} else {
 			action.run();
-		}
-	}
-
-	public void processException(Exception exception) {
-		exception.printStackTrace();
-
-		final Activity activity = FBReaderApp.Instance().getActivity();
-		final Intent intent = new Intent(
-			"android.fbreader.action.ERROR",
-			new Uri.Builder().scheme(exception.getClass().getSimpleName()).build()
-		);
-		intent.putExtra(ErrorKeys.MESSAGE, exception.getMessage());
-		final StringWriter stackTrace = new StringWriter();
-		exception.printStackTrace(new PrintWriter(stackTrace));
-		intent.putExtra(ErrorKeys.STACKTRACE, stackTrace.toString());
-		/*
-		if (exception instanceof BookReadingException) {
-			final ZLFile file = ((BookReadingException)exception).File;
-			if (file != null) {
-				intent.putExtra("file", file.getPath());
-			}
-		}
-		*/
-		try {
-			activity.startActivity(intent);
-		} catch (ActivityNotFoundException e) {
-			// ignore
-			e.printStackTrace();
 		}
 	}
 

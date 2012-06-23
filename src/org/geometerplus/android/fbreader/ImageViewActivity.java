@@ -51,10 +51,6 @@ public class ImageViewActivity extends Activity {
 			0
 		);
 
-		Thread.setDefaultUncaughtExceptionHandler(
-			new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this)
-		);
-
 		setContentView(new ImageView());
 
 		final Intent intent = getIntent();

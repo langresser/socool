@@ -32,6 +32,9 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.zlibrary.text.ZLTextPosition;
 
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
+
 public class BookInfoActivity extends Activity {
 	public static final String CURRENT_BOOK_PATH_KEY = "CurrentBookPath";
 	private String m_currentBookPath;
@@ -39,9 +42,10 @@ public class BookInfoActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		Thread.setDefaultUncaughtExceptionHandler(
-			new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this)
-		);
+		
+		MobclickAgent.updateOnlineConfig(this);
+		MobclickAgent.onError(this);
+		UmengUpdateAgent.update(this);
 
 		m_currentBookPath = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
 		if (m_currentBookPath == null) {
@@ -85,5 +89,14 @@ public class BookInfoActivity extends Activity {
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 				);
 		}
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    MobclickAgent.onResume(this);
+	}
+	public void onPause() {
+	    super.onPause();
+	    MobclickAgent.onPause(this);
 	}
 }

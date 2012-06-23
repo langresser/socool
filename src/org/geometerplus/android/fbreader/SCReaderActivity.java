@@ -32,7 +32,6 @@ import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
-import org.geometerplus.zlibrary.error.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.text.ZLTextView;
@@ -52,6 +51,8 @@ import org.geometerplus.android.fbreader.action.*;
 import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
+
+import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 
@@ -124,9 +125,6 @@ public final class SCReaderActivity extends Activity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
-		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
@@ -152,7 +150,6 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.SHOW_LIBRARY, new ShowLibraryAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_PREFERENCES, new ShowPreferencesAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_BOOK_INFO, new ShowBookInfoAction(this, fbReader));
-		fbReader.addAction(ActionCode.SHOW_TOC, new ShowTOCAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_BOOKMARKS, new ShowBookmarksAction(this, fbReader));
 		
 		fbReader.addAction(ActionCode.SHOW_MENU, new ShowMenuAction(this, fbReader));
@@ -377,6 +374,8 @@ public final class SCReaderActivity extends Activity {
 				setButtonLight(false);
 			}
 		}
+		
+		MobclickAgent.onResume(this);
 	}
 
 	@Override
@@ -578,6 +577,8 @@ public final class SCReaderActivity extends Activity {
 		if (!m_enableButtonLight) {
 			setButtonLight(true);
 		}
+		
+		MobclickAgent.onPause(this);
 		super.onPause();
 	}
 

@@ -63,8 +63,7 @@ public class NetworkBookInfoActivity extends Activity implements NetworkLibrary.
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.error.UncaughtExceptionHandler(this));
-
+		
 		SQLiteCookieDatabase.init(this);
 
 		myMainView = getLayoutInflater().inflate(R.layout.network_book, null, false);
