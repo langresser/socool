@@ -31,14 +31,11 @@ public class BookmarkActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.reader_bookmark_page);
 
-		RelativeLayout noneLayout = (RelativeLayout)findViewById(R.id.reader_bookmark_cover);
-
 		ListView listView = (ListView)findViewById(R.id.reader_boomark_list);
 		BookmarkAdapter adapter = new BookmarkAdapter(this);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(adapter);
 		listView.setOnCreateContextMenuListener(adapter);
-		noneLayout.setVisibility(View.GONE);
 	}
 	
 	@Override

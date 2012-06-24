@@ -194,7 +194,7 @@ abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.OnItemCl
 				imageView.setImageResource(R.drawable.ic_list_group_closed);
 			}
 		} else {
-			imageView.setImageResource(R.drawable.ic_list_group_empty);
+//			imageView.setImageResource(R.drawable.ic_list_group_empty);
 		}
 		imageView.setPadding(25 * (tree.Level - 1), imageView.getPaddingTop(), 0, imageView.getPaddingBottom());
 	}

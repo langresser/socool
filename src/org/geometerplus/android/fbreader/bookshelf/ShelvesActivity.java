@@ -178,13 +178,7 @@ public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	addMenuItem(menu, 1, "localSearch", R.drawable.ic_menu_search);
-        return super.onCreateOptionsMenu(menu);
-    }
-    
+   
     private MenuItem addMenuItem(Menu menu, int index, String resourceKey, int iconId) {
 		final String label = ZLResource.resource("library").getResource("menu").getResource(resourceKey).getValue();
 		final MenuItem item = menu.add(0, index, Menu.NONE, label);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" 
+      android:paddingTop="5.0dip" 
+      android:paddingBottom="5.0dip"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/general__shared_list_item_select"
+      android:orientation="horizontal"
+  	  xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+    <TextView android:textSize="16.0sp"
+           android:textColor="@color/textcolor" 
+           android:ellipsize="middle"
+           android:id="@+id/reader_chapter_item_content"
+           android:layout_width="0dip" 
+           android:layout_height="wrap_content"
+           android:layout_weight="4"
+           android:singleLine="true"  />
+    <TextView android:textSize="12.0sp" 
+          android:textColor="#ff000000" 
+          android:id="@+id/reader_chapter_item_percent"
+		  android:singleLine="true"
+	      android:layout_width="0dip"
+	      android:gravity="right"
+	      android:layout_gravity="right"
+	      android:layout_weight="1"
+          android:layout_height="wrap_content"/>
+</LinearLayout>

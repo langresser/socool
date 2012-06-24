@@ -545,20 +545,8 @@ public final class SCReaderActivity extends Activity {
 		}
 	}
 
-	private Menu addSubMenu(Menu menu, String id) {
-		return FBReaderApp.Instance().addSubMenu(menu, id);
-	}
-
-	private void addMenuItem(Menu menu, String actionId, String name) {
-		FBReaderApp.Instance().addMenuItem(menu, actionId, null, name);
-	}
-
 	private void addMenuItem(Menu menu, String actionId, int iconId) {
 		FBReaderApp.Instance().addMenuItem(menu, actionId, iconId, null);
-	}
-
-	private void addMenuItem(Menu menu, String actionId) {
-		FBReaderApp.Instance().addMenuItem(menu, actionId, null, null);
 	}
 
 	@Override

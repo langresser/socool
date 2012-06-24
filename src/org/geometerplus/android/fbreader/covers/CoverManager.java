@@ -154,7 +154,7 @@ public class CoverManager {
 	}
 	
 	
-	static private final int[] m_coverResId = {R.drawable.wxkb1_cover, R.drawable.wxkb2_cover};
+	static private final int[] m_coverResId = {0, 0};
 	static public int getCoverResIdByIndex(int index)
 	{
 		if (index < 0 || index > m_coverResId.length) {

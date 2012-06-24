@@ -56,7 +56,8 @@ public abstract class FormatPlugin {
 
 	public int getDefaultCoverId()
 	{
-		return R.drawable.cover_default;
+		return 0;
+//		return R.drawable.cover_default;
 	}
 
 	public abstract void readMetaInfo(Book book);				// 读取附加信息

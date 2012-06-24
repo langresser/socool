@@ -237,7 +237,7 @@ public class LibraryActivity extends TreeActivity implements MenuItem.OnMenuItem
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		addMenuItem(menu, 1, "localSearch", R.drawable.ic_menu_search);
+//		addMenuItem(menu, 1, "localSearch", R.drawable.ic_menu_search);
 		return true;
 	}
 

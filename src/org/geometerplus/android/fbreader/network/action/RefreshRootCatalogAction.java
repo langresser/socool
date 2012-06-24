@@ -32,7 +32,7 @@ import org.geometerplus.android.fbreader.util.UIUtil;
 
 public class RefreshRootCatalogAction extends RootAction {
 	public RefreshRootCatalogAction(Activity activity) {
-		super(activity, ActionCode.REFRESH, "refreshCatalogsList", R.drawable.ic_menu_refresh);
+		super(activity, ActionCode.REFRESH, "refreshCatalogsList", 0);
 	}
 
 	@Override
