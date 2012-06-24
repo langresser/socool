@@ -40,9 +40,6 @@ class ZLTextSelection {
 	private ZLTextSelectionCursor myCursorInMovement = ZLTextSelectionCursor.None;
 	private final Point myCursorInMovementPoint = new Point(-1, -1);
 
-	private Scroller myScroller;
-
-
 	ZLTextSelection(ZLTextView view) {
 		myView = view;
 	}
@@ -93,10 +90,6 @@ class ZLTextSelection {
 
 	void stop() {
 		myCursorInMovement = ZLTextSelectionCursor.None;
-		if (myScroller != null) {
-			myScroller.stop();
-			myScroller = null;
-		}
 	}
 
 	void  expandTo(int x, int y) {
@@ -105,39 +98,9 @@ class ZLTextSelection {
 		}
 
 		final ZLTextElementAreaVector vector = myView.myCurrentPage.TextElementMap;
-		final ZLTextElementArea firstArea = vector.getFirstArea();
-		final ZLTextElementArea lastArea = vector.getLastArea();
-		if (firstArea != null && y < firstArea.YStart) {
-			if (myScroller != null && myScroller.scrollsForward()) {
-				myScroller.stop();
-				myScroller = null;
-			}
-			if (myScroller == null) {
-				myScroller = new Scroller(false, x, y);
-				return;
-			}
-		} else if (lastArea != null && y + ZLTextSelectionCursor.getHeight() / 2 + ZLTextSelectionCursor.getAccent() / 2 > lastArea.YEnd) {
-			if (myScroller != null && !myScroller.scrollsForward()) {
-				myScroller.stop();
-				myScroller = null;
-			}
-			if (myScroller == null) {
-				myScroller = new Scroller(true, x, y);
-				return;
-			}
-		} else {
-			if (myScroller != null) {
-				myScroller.stop();
-				myScroller = null;
-			}
-		}
-
-		if (myScroller != null) {
-			myScroller.setXY(x, y);
-		}
 
 		ZLTextRegion region = myView.findRegion(x, y, ZLTextView.MAX_SELECTION_DISTANCE, ZLTextRegion.AnyRegionFilter);
-		if (region == null && myScroller != null) {
+		if (region == null) {
 			region = myView.findRegion(x, y, ZLTextRegion.AnyRegionFilter);
 		}
 		if (region == null) {
@@ -261,37 +224,5 @@ class ZLTextSelection {
 		}
 		final int cmp = myRightMostRegionSoul.compareTo(lastPageArea);
 		return cmp > 0 || (cmp == 0 && !lastPageArea.isLastInElement());
-	}
-
-	private class Scroller implements Runnable {
-		private final boolean myScrollForward;
-		private int myX, myY;
-
-		Scroller(boolean forward, int x, int y) {
-			myScrollForward = forward;
-			setXY(x, y);
-			FBReaderApp.Instance().addTimerTask(this, 400);
-		}
-
-		boolean scrollsForward() {
-			return myScrollForward;
-		}
-
-		void setXY(int x, int y) {
-			myX = x;
-			myY = y;
-		}
-
-		public void run() {
-			myView.scrollPage(myScrollForward, ZLTextView.ScrollingMode.SCROLL_LINES, 1);
-			myView.preparePaintInfo();
-			expandTo(myX, myY);
-			FBReaderApp.Instance().resetWidget();
-			FBReaderApp.Instance().repaintWidget();
-		}
-
-		private void stop() {
-			FBReaderApp.Instance().removeTimerTask(this);
-		}
 	}
 }

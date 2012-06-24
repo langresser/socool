@@ -1,5 +1,43 @@
-import re,os,struct;
+import re,os,struct,glob;
 
+def is_juan_title(line):
+    if re.search('.*第[壹贰叁肆伍陆柒捌玖拾佰零一二三四五六七八九十百0-9]+卷', line):
+        return True;
+
+    return False;
+def is_chapter_title(line):
+    #无限恐怖
+    if re.search('.*半部.*第.*集.*第.*章', line):
+        return True;
+
+    #明朝那些事儿
+    if re.search('.*第[壹贰叁肆伍陆柒捌玖拾佰零一二三四五六七八九十百0-9]+章', line):
+        return True;
+
+    if re.search('\s*前言\s*$', line):
+        return True;
+    if re.search('\s*引子\s*$', line):
+        return True;
+    if re.search('朱.{1,2}篇$', line):
+        return True;
+    if re.search('^后记$', line):
+        return True;
+
+    return False;
+def get_juan_chapter(each):
+    if False:
+        title_line = each[0][each[0].find('第') :].strip();
+        first_di = title_line.find('第');
+        second_di = title_line.find('第', first_di + 1);
+        juan = title_line[:second_di];
+        zhang = title_line[title_line.rfind('第'):];
+    else:
+        title_line = each[0].strip().split('@@');
+
+        juan = title_line[0];
+        zhang = title_line[1];
+
+    return juan,zhang
 def split_file(file):
     fp = open(file, 'r');
     dir_name = file[:file.rfind('.')];
@@ -10,17 +48,21 @@ def split_file(file):
     all_text = [];
     data_text = [];
 
+    current_juan = "";
     for line in fp:
         if line == '\n':
             continue;
 
-        if re.search('.*半部.*第.*集.*第.*章', line):
+        if is_juan_title(line):
+            current_juan = line.strip();
+            continue;
+
+        if is_chapter_title(line):
             if len(data_text) > 0:
                 all_text.append(data_text);
 
             data_text = [];
-            data_text.append(line);
-            data_text.append('   \n');
+            data_text.append(current_juan + '@@' + line);
             continue;
 
         data_text.append(line);
@@ -35,15 +77,10 @@ def split_file(file):
     i = -1;
     current_juan = "";
     paragra_data = [];
-    short_mode = False;
 
     for each in all_text:
         i += 1;
-        title_line = each[0][each[0].find('第') :].strip();
-        first_di = title_line.find('第');
-        second_di = title_line.find('第', first_di + 1);
-        juan = title_line[:second_di];
-        zhang = title_line[title_line.rfind('第'):];
+        juan,zhang = get_juan_chapter(each)
         
         each[0] = zhang + '\n';
   
@@ -89,8 +126,11 @@ def split_file(file):
 
     fpws = open('{0}/data.db'.format(dir_name), 'wb');
     for each in paragra_data:
-        print(each);
         bytes = struct.pack('B', each);
         fpws.write(bytes);
     fpws.close();
-split_file('无限恐怖.txt');
+
+
+file_list = glob.glob('*.TXT')
+for file in file_list:
+    split_file(file);

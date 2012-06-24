@@ -171,6 +171,9 @@ public class ZLViewWidget extends View implements View.OnLongClickListener {
 				case shift:
 					myAnimationProvider = new ShiftAnimationProvider();
 					break;
+				case shift2:
+					myAnimationProvider = new SlideAnimationProvider();
+					break;
 			}
 		}
 		return myAnimationProvider;

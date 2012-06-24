@@ -3,25 +3,12 @@
 <resources>
 	<node name="library" value="FBReader 书库" >
 		<node name="unknownAuthor" value="佚名" />
-		<node name="booksWithNoTags" value="未归类" />
 		<node name="demo" value="试读本" />
 		<node name="byAuthor" value="作者">
 			<node name="summary" value="按作者排序" />
 		</node>
-		<node name="byTitle" value="按书名" >
-			<node name="summary" value="按书名排序" />
-		</node>
-		<node name="bySeries" value="按系列" >
-			<node name="summary" value="按系列排序" />
-		</node>
-		<node name="byTag" value="标签">
-			<node name="summary" value="按标签排序"/>
-		</node>
 		<node name="recent" value="最近读过">
 			<node name="summary" value="最近读过的书刊"/>
-		</node>
-		<node name="favorites" value="超爱的书">
-			<node name="summary" value="很喜欢的，特地收藏起来的书刊"/>
 		</node>
 		<node name="found" value="搜索结果">
 			<node name="summary" value="搜索结果: %s" />
@@ -34,9 +21,6 @@
 		</node>
 		<node name="fileTreeCard" value="SD存储卡">
 			<node name="summary" value="插入设备的存储卡"/>
-		</node>
-		<node name="fileTreeLibrary" value="FBReader 文件夹">
-			<node name="summary" value="FBReader 存放书刊的文件夹"/>
 		</node>
 		<node name="menu">
 			<node name="localSearch" value="本地搜索" />
@@ -146,30 +130,6 @@
 		<node name="unsufficientFunds" value="你这次买了 %0 ，但是你现在只有 %1" />
 		<node name="zeroFunds" value="你这次买了 %0" />
 	</node>
-	<node name="bookInfo">
-		<node name="bookInfo" value="书籍信息" />
-		<node name="fileInfo" value="书文信息" />
-		<node name="description" value="描述" />
-		<node name="noDescription" value="没有有效描述." />
-		<node name="annotation" value="简介" />
-		<node name="title" value="书名:" />
-		<node name="authors" value="作者:" />
-		<node name="series" value="丛书系列:" />
-		<node name="indexInSeries" value="系列序号:" />
-		<node name="tags" value="标签:" />
-		<node name="language" value="语言:" />
-		<node name="name" value="文件名:" />
-		<node name="type" value="类型:" />
-		<node name="size" value="大小:" />
-		<node name="time" value="最后更改时间:" />
-		<node name="sizeInBytes" value="%s 字节" />
-		<node name="sizeInKiloBytes" value="%s kB" />
-		<node name="catalog" value="书库:" />
-		<node name="extraLinks" value="相关链接" />
-		<node name="menu">
-			<node name="edit" value="编辑" />
-		</node>
-	</node>
 	<node name="bookDownloader">
 		<node name="tickerSuccess" value="下载成功" />
 		<node name="tickerError" value="下载出错" />
@@ -179,32 +139,6 @@
 		<node name="alreadyDownloading" value="已在下载" />
 		<node name="cannotCreateDirectory" value="无法创建文件夹 %s" />
 		<node name="cannotCreateFile" value="无法创建文件 %s" />
-	</node>
-	<node name="tocView">
-		<node name="expandTree" value="展开目录" />
-		<node name="collapseTree" value="折叠目录" />
-		<node name="readText" value="阅读图书内容" />
-	</node>
-	<node name="bookmarksView">
-		<node name="thisBook" value="本书" />
-		<node name="allBooks" value="所有图书" />
-		<node name="found" value="搜索结果" />
-		<node name="new" value="添加书签" />
-		<node name="open" value="打开书签" />
-		<node name="edit" value="编辑书签" />
-		<node name="delete" value="删除书签" />
-		<node name="menu">
-			<node name="search" value="搜索" />
-		</node>
-	</node>
-	<node name="cancelMenu">
-		<node name="library" value="Open library" toBeTranslated="true"/>
-		<node name="networkLibrary" value="Open network library" toBeTranslated="true"/>
-		<node name="previousBook" value="打开上一本书" />
-		<node name="returnTo" value="返回到..." />
-		<node name="back" value="后退" />
-		<node name="forward" value="前进" />
-		<node name="close" value="关闭FBReader" />
 	</node>
 	<node name="selection" value="选择">
 		<node name="copyToClipboard" value="复制到剪贴板" />
@@ -223,17 +157,7 @@
 		<node name="day" value="白天" />
 		<node name="night" value="夜间" />
 		<node name="networkLibrary" value="在线书库" />
-		<node name="navigate" value="进度跳转">
-			<node name="toc" value="内容目录" />
-			<node name="gotoHome" value="翻到图书开始" />
-			<node name="gotoPageNumber" value="翻到页码" />
-			<node name="gotoSectionStart" value="翻到章节开始" />
-			<node name="gotoSectionEnd" value="翻到章节结束" />
-			<node name="nextTOCSection" value="翻到下一章节 " />
-			<node name="previousTOCSection" value="翻到上一章节" />
-			<node name="undo" value="还原" />
-			<node name="redo" value="重做" />
-        </node>
+        <node name="navigate" value="进度跳转"/>
         <node name="light" value="亮度"/>
 		<node name="shareBook" value="Share book" toBeTranslated="true"/>
 		<node name="search" value="搜索" />
@@ -470,7 +394,18 @@
 			<node name="colors" value="阅读风格" >
 				<node name="summary" value="设置阅读主题和文字颜色"/>
                 <node name="background" value="阅读主题"/>
-				<node name="backgroundColor" value="单色背景设置" />
+                <node name="backgroundColor" value="单色背景设置" />
+                <node name="animation" value="翻页效果" >
+					<node name="none" value="无动画效果" />
+                    <node name="shift" value="左右滑动" />
+                    <node name="shift2" value="左右覆盖"/>
+					<node name="curl" value="拟真翻页" />
+					<node name="curl3d" value="3D翻页" />
+				</node>
+				<node name="animationSpeed" value="动画速度" >
+					<node name="fast" value="快" />
+					<node name="slow" value="慢" />
+				</node>
 				<node name="selectionBackground" value="选定文字背景" />
 				<node name="selectionForeground" value="选定文字" />
 				<node name="text" value="普通文字" />
@@ -487,19 +422,9 @@
                 <node name="bottom" value="底边距" />
                 <node name="footerheight" value="信息条高度" />
             </node>
-			<node name="scrolling" value="翻页效果">
-				<node name="summary" value="翻页动画特效"/>
-				<node name="animation" value="动画效果" >
-					<node name="none" value="无动画效果" />
-					<node name="shift" value="左右滑动" />
-					<node name="curl" value="拟真翻页" />
-					<node name="curl3d" value="3D翻页" />
-				</node>
-				<node name="animationSpeed" value="动画速度" >
-					<node name="fast" value="快" />
-					<node name="slow" value="慢" />
-				</node>
-			</node>
+            <node name="about" value="关于">
+                <node name="summary" value="检查更新，意见反馈等"/>
+            </node>
 			<node name="dictionary" value="字典设定">
 				<node name="summary" value="设置字典及其对应操作"/>
 				<node name="dictionary" value="字典"/>
@@ -591,31 +516,5 @@
 	<node name="external">
 		<node name="browser" value="浏览器" />
 		<node name="defaultBrowser" value="默认浏览器" />
-	</node>
-	<node name="mobipocketPlugin">
-		<node name="unknown" value="未知的错误" />
-		<node name="unsupportedCompressionMethod" value="不支持的压缩方法" />
-		<node name="encryptedFile" value="受版权保护文件" />
-	</node>
-	<node name="crash">
-		<node name="fixBooksDirectory">
-			<node name="title" value="Directory issue" toBeTranslated="true"/>
-			<node name="text" value="缓存目录无法写入，或许你忘了插入或已拔出内存卡。请处理这个问题，或者进入下面的另一个文件夹。" />
-		</node>
-	</node>
-	<node name="error">
-		<node name="bookReading">
-			<node name="title" value="FBReader issue" toBeTranslated="true"/>
-		</node>
-	</node>
-	<node name="bookReadingException">
-		<node name="errorReadingFile" value="Error occured during reading '%s'" toBeTranslated="true"/>
-		<node name="errorReadingZip" value="Error occured during extracting '%s'" toBeTranslated="true"/>
-		<node name="pluginNotFound" value="No plugin for '%s'" toBeTranslated="true"/>
-		<node name="unknownPluginType" value="Unknown plugin type: %s" toBeTranslated="true"/>
-		<node name="fileNotFound" value="File is not found: %s" toBeTranslated="true"/>
-		<node name="opfFileNotFound" value="OPF is not found in %s" toBeTranslated="true"/>
-		<node name="unsupportedFileFormat" value="File format is not supported for '%s'" toBeTranslated="true"/>
-		<node name="errorParsingRtf" value="Rtf parsing error in: %s" toBeTranslated="true"/>
 	</node>
 </resources>

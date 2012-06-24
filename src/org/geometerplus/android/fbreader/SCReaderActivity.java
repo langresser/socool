@@ -27,7 +27,6 @@ import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
@@ -44,7 +43,6 @@ import org.socool.socoolreader.reader.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.fbreader.VolumeKeyTurnPageAction;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.library.Book;
 import org.geometerplus.android.fbreader.tips.TipsManager;
@@ -54,14 +52,14 @@ import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.fbreader.util.UIUtil;
 
-import com.admogo.AdMogoLayout;
-import com.admogo.AdMogoListener;
-import com.admogo.AdMogoManager;
+import com.guohead.sdk.GHView;
+import com.guohead.sdk.GHView.OnAdClosedListener;
+import com.guohead.sdk.GHView.OnAdLoadedListener;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 
-public final class SCReaderActivity extends Activity implements AdMogoListener {
+public final class SCReaderActivity extends Activity {
 	public static final String BOOK_PATH_KEY = "BookPath";
 
 	public static final int REQUEST_PREFERENCES = 1;
@@ -126,7 +124,7 @@ public final class SCReaderActivity extends Activity implements AdMogoListener {
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
-	public AdMogoLayout m_adMogoLayoutCode;
+	public GHView m_adsView = null;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -135,7 +133,8 @@ public final class SCReaderActivity extends Activity implements AdMogoListener {
 
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
-		FBReaderApp.Instance().setActivity(this);
+		final FBReaderApp fbReader = FBReaderApp.Instance();
+		fbReader.setActivity(this);
 		
 		m_mainLayout = new RelativeLayout(this);
 		m_mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
@@ -143,33 +142,23 @@ public final class SCReaderActivity extends Activity implements AdMogoListener {
 
 		setContentView(m_mainLayout);
 		
-		m_adMogoLayoutCode = new AdMogoLayout(this,"3425416cdea3450ebc2fd49b9628d3e7", true);
-		m_adMogoLayoutCode.setAdMogoListener(this);
-		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-		FrameLayout.LayoutParams.FILL_PARENT,
-		FrameLayout.LayoutParams.WRAP_CONTENT);
-
-		params.topMargin = 0;
-		params.gravity = Gravity.TOP;
-		addContentView(m_adMogoLayoutCode, params);
+		createBannerAds();
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-
-		fbReader.addAction(ActionCode.SHOW_LIBRARY, new ShowLibraryAction(this, fbReader));
+//		fbReader.addAction(ActionCode.SHOW_LIBRARY, new ShowLibraryAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_PREFERENCES, new ShowPreferencesAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_BOOK_INFO, new ShowBookInfoAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_BOOKMARKS, new ShowBookmarksAction(this, fbReader));
 		
 		fbReader.addAction(ActionCode.SHOW_MENU, new ShowMenuAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_NAVIGATION, new ShowNavigationAction(this, fbReader));
-		fbReader.addAction(ActionCode.SEARCH, new SearchAction(this, fbReader));
+//		fbReader.addAction(ActionCode.SEARCH, new SearchAction(this, fbReader));
 
 		fbReader.addAction(ActionCode.SELECTION_SHOW_PANEL, new SelectionShowPanelAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_HIDE_PANEL, new SelectionHidePanelAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_COPY_TO_CLIPBOARD, new SelectionCopyAction(this, fbReader));
-		fbReader.addAction(ActionCode.SELECTION_SHARE, new SelectionShareAction(this, fbReader));
+//		fbReader.addAction(ActionCode.SELECTION_SHARE, new SelectionShareAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_TRANSLATE, new SelectionTranslateAction(this, fbReader));
 		fbReader.addAction(ActionCode.SELECTION_BOOKMARK, new SelectionBookmarkAction(this, fbReader));
 		fbReader.addAction(ActionCode.ADD_BOOKMARK, new AddBookmarkAction(this, fbReader));
@@ -185,44 +174,71 @@ public final class SCReaderActivity extends Activity implements AdMogoListener {
 		FBReaderApp.Instance().openFile(fileFromIntent(getIntent()), null);
 	}
 	
-	@Override
-	public void onClickAd() {
-		Log.v("=onClickAd=", "Click the buttom ad.");
-	}
+	private boolean m_hasCloseAds = false;
 
-	@Override
-	public void onFailedReceiveAd() {
-		Log.v("=onFailedReceiveAd=", "Failed to receive the buttom ad.");
-	}
+	// 创建广告条
+	final public void createBannerAds()
+	{
+		if (FBReaderApp.Instance().EnableAdsOption.getValue() == false) {
+			return;
+		}
 
-	@Override
-	public void onReceiveAd() {
-		Log.v("=onReceiveAd=", "Receive the buttom ad.");
-		final FBReaderApp fbReader = FBReaderApp.Instance();
+		FBReaderApp.Instance().m_adsHeight = 0;
 		
-		if (fbReader.m_adsHeight == 0) {
-			fbReader.m_adsHeight = m_adMogoLayoutCode.getHeight();
-			fbReader.resetWidget();
-			fbReader.repaintWidget(true);
+		
+		m_adsView =new GHView(this); 
+		//您可以根据布局需求，对布局参数params设定具体的值 
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) ;
+		params.topMargin = 0;
+		params.gravity = Gravity.TOP;
+		addContentView(m_adsView, params);
+		m_adsView.setAdUnitId("6fc147213f9cd78e216e8e4ecfaf5352");
+		m_adsView.startLoadAd();
+
+		m_adsView.setOnAdLoadedListener(new OnAdLoadedListener() {
+			
+			@Override
+			public void OnAdLoaded(GHView arg0) {
+				if (m_hasCloseAds || arg0 == null) {
+					return;
+				}
+
+				final FBReaderApp fbReader = FBReaderApp.Instance();
+				
+				if (fbReader.m_adsHeight == 0) {
+					final int height = (int)(arg0.getAdHeight() * fbReader.getDensity());
+					fbReader.m_adsHeight = height;
+					fbReader.resetWidget();
+					fbReader.repaintWidget(true);
+				}
+			}
+		});
+		m_adsView.setOnAdClosedListener(new OnAdClosedListener() {
+			
+			@Override
+			public void OnAdClosed(GHView arg0) {
+				if (!m_hasCloseAds) {
+					MobclickAgent.onEvent(SCReaderActivity.this, "closeAds");
+					FBReaderApp.Instance().m_adsHeight = 0;
+					FBReaderApp.Instance().resetWidget();
+					FBReaderApp.Instance().repaintWidget(true);
+				}
+				
+				m_hasCloseAds = true;
+			}
+		});
+	}
+	
+	// 清理广告条资源
+	final public void clearAds()
+	{
+		if (m_adsView != null) {
+			m_adsView.destroy();
+			m_adsView = null;
 		}
 	}
 	
-	@Override
-	public void onCloseMogoDialog() {
-		Log.v("=onCloseMogoDialog=", "Close ad Dialog.");
-	}
-
-	@Override
-	public void onCloseAd() {
-		Log.v("=onCloseAd=", "Close ad.");
-	}
-
-	@Override
-	public void onRequestAd() {
-		// TODO Auto-generated method stub
-		
-	}
-	
+	// 创建书籍view
 	public void createBookView()
 	{
 		if (FBReaderApp.Instance().isUseGLView()) {
@@ -258,8 +274,8 @@ public final class SCReaderActivity extends Activity implements AdMogoListener {
 	@Override
 	public void onDestroy()
 	{
-		AdMogoManager.clear();
 		super.onDestroy();
+		clearAds();
 	}
 
  	@Override
@@ -424,6 +440,12 @@ public final class SCReaderActivity extends Activity implements AdMogoListener {
 			if (isNight) {
 				setButtonLight(false);
 			}
+		}
+		
+		final boolean enableAds = fbReader.EnableAdsOption.getValue();
+		if (!enableAds && m_adsView != null) {
+			m_adsView.setVisibility(View.GONE);
+			clearAds();
 		}
 		
 		MobclickAgent.onResume(this);

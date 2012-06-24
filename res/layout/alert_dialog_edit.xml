@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+>
+	<TextView
+		android:id="@+id/alert_dialog_message"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="导出路径："
+		android:textColor="#ffffffff"
+		android:layout_marginLeft="5dip"/>
+	<EditText
+		android:id="@+id/alert_dialog_edit"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="5dip"
+		android:layout_marginRight="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_marginBottom="5dip"
+		android:singleLine="false"
+		android:gravity="left"/>
+	<TextView
+		android:id="@+id/alert_dialog_message2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="导出书籍文件名称："
+		android:textColor="#ffffffff"
+		android:layout_marginLeft="5dip"/>
+	<EditText
+		android:id="@+id/alert_dialog_edit_file"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="5dip"
+		android:layout_marginRight="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_marginBottom="5dip"
+		android:singleLine="false"
+		android:gravity="left"/>
+</LinearLayout>

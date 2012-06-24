@@ -26,12 +26,16 @@ import info.monitorenter.cpdetector.io.UnicodeDetector;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
+
+import net.youmi.android.appoffers.YoumiOffersManager;
+import net.youmi.android.appoffers.YoumiPointsManager;
 
 import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
@@ -60,26 +64,35 @@ import org.geometerplus.android.fbreader.PopupPanel;
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.android.fbreader.SelectionPopup;
 import org.geometerplus.android.fbreader.TextSearchPopup;
+import org.geometerplus.android.fbreader.preferences.PreferenceActivity;
 import org.geometerplus.android.fbreader.util.UIUtil;
 import org.geometerplus.fbreader.FBTree;
 import org.geometerplus.fbreader.Paths;
+import org.geometerplus.fbreader.bookmodel.BookChapter;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.library.*;
 import org.socool.socoolreader.reader.R;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -130,8 +143,6 @@ public final class FBReaderApp {
 
 	public static final String NoAction = "none";
 
-	public int m_adsHeight = 0;
-
 	private volatile ZLTextView myView;
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 	
@@ -143,12 +154,12 @@ public final class FBReaderApp {
 		
 		m_booksDatabase = new BooksDatabase(application);
 		
-		new FavoritesTree(myRootTree, ROOT_FAVORITES);
+//		new FavoritesTree(myRootTree, ROOT_FAVORITES);
 		new FirstLevelTree(myRootTree, ROOT_RECENT);
-		new FirstLevelTree(myRootTree, ROOT_BY_AUTHOR);
-		new FirstLevelTree(myRootTree, ROOT_BY_TITLE);
-		new FirstLevelTree(myRootTree, ROOT_BY_TAG);
-		new FileFirstLevelTree(myRootTree, ROOT_FILE_TREE);
+//		new FirstLevelTree(myRootTree, ROOT_BY_AUTHOR);
+//		new FirstLevelTree(myRootTree, ROOT_BY_TITLE);
+//		new FirstLevelTree(myRootTree, ROOT_BY_TAG);
+//		new FileFirstLevelTree(myRootTree, ROOT_FILE_TREE);
 
 		addAction(ActionCode.FIND_NEXT, new FindNextAction(this));
 		addAction(ActionCode.FIND_PREVIOUS, new FindPreviousAction(this));
@@ -1667,5 +1678,189 @@ public final class FBReaderApp {
 		}
 		
 		return R.drawable.ic_list_library_book;
+	}
+	
+	// 广告模块相关内容
+	// 控制是否显示广告，每个电子书对应一个标识
+	public final ZLBooleanOption EnableAdsOption = new ZLBooleanOption("Options", "enableAdsMcnxs", true);
+	public int m_adsHeight = 0;
+	public void initOfferWall(Context context)
+	{
+		// 有米
+		YoumiOffersManager.init(context, "8293ee0143c779e7", "53af3575317e0e36");
+	}
+	
+	public void showOfferWall(Context context)
+	{
+		MobclickAgent.onEvent(context, "moreApp");
+		YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARD_OFFERS);
+	}
+	
+	public int getOfferPoints(Context context)
+	{
+		return YoumiPointsManager.queryPoints(context);
+	}
+	
+	public void costOfferPoints(Context context, int points)
+	{
+		YoumiPointsManager.spendPoints(context, points);
+	}
+	
+	public final static int REMOVE_ADS_POINT = 0;
+	public final static int IMPORT_BOOK_POINT = 10;
+	public void removeAds(final Context context)
+	{
+		if (EnableAdsOption.getValue() == false) {
+			return;
+		}
+
+		final int currentPoints = getOfferPoints(context);
+		if (currentPoints < REMOVE_ADS_POINT) {
+			String text = String.format("移除广告需要 %1d积分，当前积分%2d，您可以通过下载推荐应用的方式免费获取积分", REMOVE_ADS_POINT, currentPoints);
+			Dialog dialog = new AlertDialog.Builder(context).setTitle("积分不足").setMessage(text)
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int whichButton) {
+									dialog.cancel();
+								}
+							}).setNegativeButton("推荐应用",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									showOfferWall(context);
+									dialog.cancel();
+								}
+							}).create();// 创建按钮
+			dialog.show();
+			
+		} else {
+			MobclickAgent.onEvent(context, "removeAds");
+			costOfferPoints(context, REMOVE_ADS_POINT);
+			UIUtil.showMessageText(context, "广告已移除，感谢您的支持。");
+			m_adsHeight = 0;
+			EnableAdsOption.setValue(false);
+		}
+	}
+	
+	public void importBook(final Context context, String pathBook, String pathTo, String destFile)
+	{
+		MobclickAgent.onEvent(context, "import");
+		
+		String sdStatus = Environment.getExternalStorageState();
+	    if(!sdStatus.equals(Environment.MEDIA_MOUNTED)) {  
+	        UIUtil.showMessageText(context, "发生错误，SD卡未找到。");
+	        return;  
+	    }
+
+	    try {
+	    	// 读取书籍信息
+			InputStream input = FBReaderApp.Instance().getBookFile(pathBook + "/chapter.txt");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input, "gbk"));
+			
+			String line = "";
+
+			int paraCount = 0;
+			int textSize = 0;
+			int currentJuanIndex = -1;
+			int currentChapterIndex = -1;
+			final BookChapter chapter = new BookChapter();
+			BookChapter.JuanData juanData = null;
+
+			while ((line = reader.readLine()) != null) {
+				if (line.charAt(0) == 'j') {
+					if (juanData != null) {
+						chapter.m_juanData.add(juanData);
+					}
+
+					juanData = new BookChapter.JuanData();
+					juanData.m_juanTitle = line.substring(1);
+					++currentJuanIndex;
+				} else {
+					++currentChapterIndex;
+
+					// 加1是补上隐藏的段落终结符
+					final int firstA = line.indexOf("@@");
+					final int count = Integer.parseInt(line.substring(0, firstA)) + 1;
+					BookChapter.BookChapterData data = new BookChapter.BookChapterData();
+					data.m_startOffset = paraCount;
+					data.m_paragraphCount = count;
+					final int secondA = line.indexOf("@@", firstA + 2);
+					data.m_textSize = Integer.parseInt(line.substring(firstA + 2, secondA));
+					data.m_startTxtOffset = textSize;
+					data.m_title = line.substring(secondA + 2);
+					data.m_juanIndex = currentJuanIndex;
+					chapter.addChapterData(data);
+					paraCount += count;
+					textSize += data.m_textSize;
+					
+					juanData.m_juanChapter.add(currentChapterIndex);
+				}
+			}
+			input.close();
+			
+			if (juanData != null) {
+				chapter.m_juanData.add(juanData);
+			}
+			
+			// 拷贝书籍内容
+	        File path = new File(pathTo);  
+	        File file = new File(pathTo + "/" + destFile);  
+	        if( !path.exists()) {
+	            path.mkdir();  
+	        }
+	        
+	        if( !file.exists()) {  
+	            file.createNewFile();  
+	        }
+
+	        FileOutputStream outputStream = new FileOutputStream(file);  
+
+	        currentJuanIndex = -1;
+	        final int bufferSize = 1024 * 500;
+	        byte[] buffer = new byte[bufferSize];
+	        final int chapterCount = chapter.m_chapterData.size();
+	        
+	        if (chapter.m_juanData.size() <= 0) {
+	        	for (int i = 0; i < chapterCount; ++i) {
+					InputStream inputTxt = getBookFile(pathBook + "/" + i + ".txt");
+					int size = inputTxt.available();
+					if (size > bufferSize) {
+						buffer = new byte[size];
+					}
+					inputTxt.read(buffer);
+					outputStream.write(buffer, 0, size);
+				}
+	        } else {
+	        	for (int i = 0; i < chapterCount; ++i) {
+					final BookChapter.BookChapterData data = chapter.m_chapterData.get(i);
+					final int index = data.m_juanIndex;
+					if (index != currentJuanIndex) {
+						currentJuanIndex = index;
+						final String juanTitle = chapter.m_juanData.get(index).m_juanTitle + "\n";
+						outputStream.write(juanTitle.getBytes("gbk"));
+					}
+					
+					InputStream inputTxt = getBookFile(pathBook + "/" + i + ".txt");
+					int size = inputTxt.available();
+					if (size > bufferSize) {
+						buffer = new byte[size];
+					}
+					inputTxt.read(buffer);
+					outputStream.write(buffer, 0, size);
+				}
+	        }
+
+			outputStream.close();
+			costOfferPoints(context, IMPORT_BOOK_POINT);
+			UIUtil.showMessageText(context, "导出书籍完毕。");
+	    } catch(Exception e) {
+	    	UIUtil.showMessageText(context, "发生错误，导出书籍失败。");
+	    	String error = e.getMessage();
+	    	if (error == null) {
+	    		error = "import book fail";
+	    	}
+	    	MobclickAgent.reportError(context, error); 
+	        e.printStackTrace();  
+	    }  
 	}
 }

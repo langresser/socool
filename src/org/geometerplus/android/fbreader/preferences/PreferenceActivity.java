@@ -21,11 +21,15 @@ package org.geometerplus.android.fbreader.preferences;
 
 import java.util.HashMap;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 
 import org.geometerplus.zlibrary.filesystem.ZLResource;
@@ -39,19 +43,19 @@ import org.geometerplus.zlibrary.text.ZLTextBaseStyle;
 import org.geometerplus.zlibrary.text.ZLTextFullStyleDecoration;
 import org.geometerplus.zlibrary.text.ZLTextStyleCollection;
 import org.geometerplus.zlibrary.text.ZLTextStyleDecoration;
-import org.geometerplus.zlibrary.view.AndroidFontUtil;
-
-import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.*;
 
 import org.geometerplus.android.fbreader.SCReaderActivity;
+import org.geometerplus.android.fbreader.util.UIUtil;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.UMFeedbackService;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
 
-public class PreferenceActivity extends android.preference.PreferenceActivity
-	implements Preference.OnPreferenceClickListener {
+public class PreferenceActivity extends android.preference.PreferenceActivity {
 	public PreferenceActivity() {
 		Resource = ZLResource.resource("dialog").getResource("Preferences");
 	}
@@ -249,6 +253,16 @@ public class PreferenceActivity extends android.preference.PreferenceActivity
 			colorsScreen.addOption(profile.BackgroundOption, "backgroundColor")
 		);
 		bgPreferences.setEnabled("".equals(profile.WallpaperOption.getValue()));
+		
+		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
+		colorsScreen.addOption(scrollingPreferences.AnimationOption, "animation");
+		colorsScreen.addPreference(new AnimationSpeedPreference(
+			this,
+			colorsScreen.Resource,
+			"animationSpeed",
+			scrollingPreferences.AnimationSpeedOption
+		));
+		
 
 		colorsScreen.addOption(profile.HighlightingOption, "highlighting");
 		colorsScreen.addOption(profile.RegularTextOption, "text");
@@ -258,18 +272,6 @@ public class PreferenceActivity extends android.preference.PreferenceActivity
 		colorsScreen.addOption(profile.SelectionBackgroundOption, "selectionBackground");
 		colorsScreen.addOption(profile.SelectionForegroundOption, "selectionForeground");
 
-		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
-
-		final Screen scrollingScreen = createPreferenceScreen("scrolling");
-
-		scrollingScreen.addOption(scrollingPreferences.AnimationOption, "animation");
-		scrollingScreen.addPreference(new AnimationSpeedPreference(
-			this,
-			scrollingScreen.Resource,
-			"animationSpeed",
-			scrollingPreferences.AnimationSpeedOption
-		));
-		
 		final Screen appearanceScreen = createPreferenceScreen("appearance");
 
 		final String[] turnoffTimes = {"default", "1", "3", "5", "10", "30", "never"};
@@ -314,11 +316,105 @@ public class PreferenceActivity extends android.preference.PreferenceActivity
 //		}
 //		directoriesScreen.addOption(Paths.WallpapersDirectoryOption(), "wallpapers");
 
-		Preference fbPreference = new Preference(this);
-		fbPreference.setTitle("用户反馈");
-		fbPreference.setSummary("告诉我们您的意见或建议");
-		fbPreference.setOnPreferenceClickListener(this);
-		addPreference(fbPreference);
+		final boolean enableAds = FBReaderApp.Instance().EnableAdsOption.getValue();
+		final Preference fbPreferenceRemove = new Preference(this);
+		final int currentPoints = FBReaderApp.Instance().getOfferPoints(PreferenceActivity.this);
+		fbPreferenceRemove.setTitle("去除广告");
+		fbPreferenceRemove.setSummary("消耗50积分，永久去除广告，当前积分("+currentPoints+")");
+		
+		if (enableAds) {
+			addPreference(fbPreferenceRemove);
+		}
+		
+		final Screen screenAbout = createPreferenceScreen("about");
+		
+		final Preference fbPreferenceUpdate = new Preference(this);
+		fbPreferenceUpdate.setTitle("检查更新");
+		fbPreferenceUpdate.setSummary("检查应用是否有新版本");
+		screenAbout.addPreference(fbPreferenceUpdate);
+
+		final Preference fbPreferenceFeedback = new Preference(this);
+		fbPreferenceFeedback.setTitle("用户反馈");
+		fbPreferenceFeedback.setSummary("告诉我们您的意见或建议");
+		screenAbout.addPreference(fbPreferenceFeedback);
+		
+		final Preference fbPreferenceAbout = new Preference(this);
+		fbPreferenceAbout.setTitle("关于我们");
+		fbPreferenceAbout.setSummary("Banana Studio");
+		screenAbout.addPreference(fbPreferenceAbout);
+		
+		Preference.OnPreferenceClickListener listener = new Preference.OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				if (preference == fbPreferenceFeedback) {
+					UMFeedbackService.setGoBackButtonVisible();
+					UMFeedbackService.openUmengFeedbackSDK(PreferenceActivity.this);
+					return true;
+				} else if (preference == fbPreferenceUpdate) {
+					MobclickAgent.onEvent(PreferenceActivity.this, "checkUpdate");
+					UmengUpdateAgent.update(PreferenceActivity.this);
+					UmengUpdateAgent.setUpdateAutoPopup(false);
+					UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+					        @Override
+					        public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
+					            switch (updateStatus) {
+					            case 0: // has update
+					                UmengUpdateAgent.showUpdateDialog(PreferenceActivity.this, updateInfo);
+					                break;
+					            case 1: // has no update
+					                Toast.makeText(PreferenceActivity.this, "已经是最新版本", Toast.LENGTH_SHORT)
+					                        .show();
+					                break;
+					            case 2: // none wifi
+					                Toast.makeText(PreferenceActivity.this, "没有wifi连接， 为了避免消耗您的流量，只在wifi环境下进行更新", Toast.LENGTH_SHORT)
+					                        .show();
+					                break;
+					            case 3: // time out
+					                Toast.makeText(PreferenceActivity.this, "超时", Toast.LENGTH_SHORT)
+					                        .show();
+					                break;
+					            }
+					        }
+					});
+					return true;
+				} else if (preference == fbPreferenceRemove) {
+					MobclickAgent.onEvent(PreferenceActivity.this, "btnRemoveAds");
+					FBReaderApp.Instance().removeAds(PreferenceActivity.this);
+					return true;
+				} else if (preference == fbPreferenceAbout) {
+					final String text = "原书作者：当年明月\n" +
+				"研发团队：Banana Studio\n" +
+				//"官方网站：" +;
+				"邮箱:bananastudio@sina.cn\n" +
+				"微博: http://weibo.com/u/2605635545\n\n" +
+				"电子书内容来源于网络，如果您喜欢的话，请支持正版。";
+					Dialog dialog = new AlertDialog.Builder(PreferenceActivity.this).setTitle("Banana Studio").setMessage(text)
+							.setPositiveButton("确定",
+									new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog, int whichButton) {
+											dialog.cancel();
+										}
+									}).setNegativeButton("更多应用",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											MobclickAgent.onEvent(PreferenceActivity.this, "moreBook");
+											UIUtil.showMessageText(PreferenceActivity.this, "敬请期待...");
+											dialog.cancel();
+										}
+									}).create();// 创建按钮
+					dialog.show();
+					return true;
+				}
+				return false;
+			}
+		};
+		
+		fbPreferenceUpdate.setOnPreferenceClickListener(listener);
+		fbPreferenceFeedback.setOnPreferenceClickListener(listener);
+		fbPreferenceRemove.setOnPreferenceClickListener(listener);
+		fbPreferenceAbout.setOnPreferenceClickListener(listener);
 	}
 	
 	void initFormat(Screen textScreen)
@@ -431,12 +527,5 @@ public class PreferenceActivity extends android.preference.PreferenceActivity
 			}
 		}
 
-	}
-
-	@Override
-	public boolean onPreferenceClick(Preference preference) {
-		UMFeedbackService.setGoBackButtonVisible();
-		UMFeedbackService.openUmengFeedbackSDK(this);
-		return false;
 	}
 }

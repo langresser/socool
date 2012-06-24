@@ -6,8 +6,10 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.library.Bookmark;
 import org.socool.socoolreader.reader.R;
 
@@ -17,6 +19,7 @@ public class BookmarksActivity extends Activity {
 	Button m_btnChapter;
 	Button m_btnBookmark;
 	Button m_btnComment;
+	ImageButton m_btnApp;
 	
 	ListView m_bookmark;
 	ListView m_bookComment;
@@ -34,9 +37,12 @@ public class BookmarksActivity extends Activity {
 		
 		setContentView(R.layout.bookmarks);
 		
+		MobclickAgent.onEvent(this, "chapterList");
+		
 		m_btnChapter = (Button)findViewById(R.id.book_content);
 		m_btnBookmark = (Button)findViewById(R.id.book_mark);
 		m_btnComment = (Button)findViewById(R.id.book_comment);
+		m_btnApp = (ImageButton)findViewById(R.id.app_button);
 		
 		m_chapter = (ExpandableListView)findViewById(R.id.chapterjuan_listview);
 		m_bookmark = (ListView)findViewById(R.id.boomark_list);
@@ -63,13 +69,14 @@ public class BookmarksActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Button btn = (Button)v;
-				if (btn == m_btnChapter) {
+				if (v == m_btnChapter) {
 					gotoPage(PAGE_CHAPTER);
-				} else if (btn == m_btnBookmark){
+				} else if (v == m_btnBookmark){
 					gotoPage(PAGE_BOOKMARK);
-				} else if (btn == m_btnComment) {
+				} else if (v == m_btnComment) {
 					gotoPage(PAGE_COMMENT);
+				} else if (v == m_btnApp) {
+					FBReaderApp.Instance().showOfferWall(BookmarksActivity.this);
 				}
 			}
 		};
@@ -77,6 +84,7 @@ public class BookmarksActivity extends Activity {
 		m_btnChapter.setOnClickListener(listener);
 		m_btnBookmark.setOnClickListener(listener);
 		m_btnComment.setOnClickListener(listener);
+		m_btnApp.setOnClickListener(listener);
 
 		gotoPage(PAGE_CHAPTER);
 	}

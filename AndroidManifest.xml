@@ -12,9 +12,7 @@
 	<uses-permission android:name="android.permission.READ_LOGS"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> 
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> 
 
 
 	<application android:name="org.geometerplus.android.fbreader.FBReaderApplication" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name">
@@ -211,8 +209,19 @@
 			</intent-filter>
 		</receiver>
 		<activity android:name="org.geometerplus.android.fbreader.tips.TipsActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
-	<!--芒果 -->
-	<meta-data android:name="ADMOGO_KEY" android:value="3425416cdea3450ebc2fd49b9628d3e7" />
+
+	<!--有米-->
+	<meta-data android:name="YOUMI_CHANNEL" android:value="10050"/>
+	<activity android:configChanges="keyboard|keyboardHidden|orientation"
+		android:name="net.youmi.android.appoffers.YoumiOffersActivity" >
+	</activity>
+	
+	<!-- 聚赢 -->
+	<activity android:name="com.tencent.mobwin.MobinWINBrowserActivity" > </activity>
+	
+	<!-- 多盟  -->
+	<activity android:name="cn.domob.android.ads.DomobActivity"
+	    android:theme="@android:style/Theme.Translucent" />
 
 	<!--友盟-->
 	<meta-data android:value="4fe4926e5270156649000081" android:name="UMENG_APPKEY"/>

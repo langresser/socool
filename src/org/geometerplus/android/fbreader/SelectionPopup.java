@@ -64,17 +64,14 @@ public class SelectionPopup extends ButtonsPopupPanel {
 		);
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-        final int verticalPosition; 
+        final int verticalPosition;
         final int screenHeight = ((View)myWindow.getParent()).getHeight();
-		final int diffTop = screenHeight - selectionEndY;
-		final int diffBottom = selectionStartY;
-		if (diffTop > diffBottom) {
-			verticalPosition = diffTop > myWindow.getHeight() + 20
-				? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.CENTER_VERTICAL;
-		} else {
-			verticalPosition = diffBottom > myWindow.getHeight() + 20
-				? RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.CENTER_VERTICAL;
-		}
+        
+        if (screenHeight - selectionEndY < screenHeight / 4) {
+        	verticalPosition = RelativeLayout.CENTER_VERTICAL;
+        } else {
+        	verticalPosition = RelativeLayout.ALIGN_PARENT_BOTTOM;
+        }
 
         layoutParams.addRule(verticalPosition);
         myWindow.setLayoutParams(layoutParams);

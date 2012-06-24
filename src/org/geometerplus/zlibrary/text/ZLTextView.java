@@ -645,6 +645,8 @@ public class ZLTextView {
 		final int currentChapter = chapter.getChapterIndexByParagraph(currentParagraph);
 		final int chapterCount = chapter.getChapterCount();
 		final String chapterInfo = String.format("%1d/%2d", currentChapter + 1, chapterCount);
+		final double percent = getCurrentPercent();
+		final String percentInfo = String.format("%1$.2f%%", percent / 100);
 		
 		if (pageIndex == PageIndex.current) {
 			final int currentJuanIndex = chapter.getChapter(currentChapter).m_juanIndex;
@@ -658,7 +660,11 @@ public class ZLTextView {
 		// 显示章节进度
 		final int chapterWidth = context.getStringWidth(chapterInfo);
 		context.setTextColor(fgColor);
-		context.drawString(left, offsetY, chapterInfo);
+		if (chapterCount >= 500) {
+			context.drawString(left, offsetY, chapterInfo);
+		} else {
+			context.drawString(left, offsetY, percentInfo);
+		}
 		
 		// 显示电池和时间
 		final String infoString = String.format("%1d%% %2s", FBReaderApp.Instance().getBatteryLevel(),
@@ -1962,7 +1968,7 @@ public class ZLTextView {
 		leftToRight, rightToLeft, up, down;
 	};
 	public static enum Animation {
-		none, shift, curl//, curl3d
+		none, shift, shift2, curl//, curl3d
 	}
 
 	private String myZoneMapId;
