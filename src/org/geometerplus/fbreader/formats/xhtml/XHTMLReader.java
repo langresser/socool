@@ -22,7 +22,6 @@ package org.geometerplus.fbreader.formats.xhtml;
 import java.util.*;
 import java.io.IOException;
 
-import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.xml.XMLNamespaces;
 import org.geometerplus.zlibrary.xml.ZLStringMap;
@@ -154,7 +153,6 @@ public class XHTMLReader extends ZLXMLReaderAdapter {
 		String num = myFileNumbers.get(fileName);
 		if (num == null) {
 			fileName = MiscUtil.decodeHtmlReference(fileName);
-			fileName = ZLArchiveEntryFile.normalizeEntryName(fileName);
 			num = myFileNumbers.get(fileName);
 		}
 		if (num == null) {

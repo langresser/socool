@@ -37,7 +37,6 @@ import java.util.*;
 import net.youmi.android.appoffers.YoumiOffersManager;
 import net.youmi.android.appoffers.YoumiPointsManager;
 
-import org.geometerplus.zlibrary.filesystem.ZLArchiveEntryFile;
 import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.filesystem.ZLResource;
@@ -1372,8 +1371,8 @@ public final class FBReaderApp {
 			getFirstLevelTree(ROOT_BY_TITLE).getBookSubTree(book, true);
 		}
 
-		final SearchResultsTree found =
-			(SearchResultsTree)getFirstLevelTree(ROOT_FOUND);
+//		final SearchResultsTree found =
+//			(SearchResultsTree)getFirstLevelTree(ROOT_FOUND);
 //		if (found != null && book.matches(found.getPattern())) {
 //			found.getBookSubTree(book, true);
 //		}
@@ -1524,11 +1523,11 @@ public final class FBReaderApp {
 
 		pattern = pattern.toLowerCase();
 
-		final SearchResultsTree oldSearchResults = (SearchResultsTree)getFirstLevelTree(ROOT_FOUND);
-		if (oldSearchResults != null && pattern.equals(oldSearchResults.getPattern())) {
-			fireModelChangedEvent(ChangeListener.Code.Found);
-			return;
-		}
+//		final SearchResultsTree oldSearchResults = (SearchResultsTree)getFirstLevelTree(ROOT_FOUND);
+//		if (oldSearchResults != null && pattern.equals(oldSearchResults.getPattern())) {
+//			fireModelChangedEvent(ChangeListener.Code.Found);
+//			return;
+//		}
 		
 		FirstLevelTree newSearchResults = null;
 		final List<Book> booksCopy;
@@ -1595,12 +1594,7 @@ public final class FBReaderApp {
 		if (file.getPhysicalFile() == null) {
 			return false;
 		}
-		while (file instanceof ZLArchiveEntryFile) {
-			file = file.getParent();
-			if (file.children().size() != 1) {
-				return false;
-			}
-		}
+
 		return true;
 	}
 
@@ -1706,7 +1700,7 @@ public final class FBReaderApp {
 		YoumiPointsManager.spendPoints(context, points);
 	}
 	
-	public final static int REMOVE_ADS_POINT = 0;
+	public final static int REMOVE_ADS_POINT = 50;
 	public final static int IMPORT_BOOK_POINT = 10;
 	public void removeAds(final Context context)
 	{

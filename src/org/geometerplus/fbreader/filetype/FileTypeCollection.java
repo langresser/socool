@@ -30,14 +30,10 @@ public class FileTypeCollection {
 	private final TreeMap<String,FileType> myTypes = new TreeMap<String,FileType>();
 
 	private FileTypeCollection() {
-		addType(new FileTypeFB2());
-		addType(new FileTypeEpub());
-		addType(new FileTypeMobipocket());
 		addType(new FileTypeHtml());
 		addType(new SimpleFileType("plain text", "txt", MimeType.TYPES_TXT));
 		addType(new SimpleFileType("RTF", "rtf", MimeType.TYPES_RTF));
 		addType(new SimpleFileType("PDF", "pdf", MimeType.TYPES_PDF));
-		addType(new FileTypeDjVu());
 		addType(new SimpleFileType("ZIP archive", "zip", Collections.singletonList(MimeType.APP_ZIP)));
 	}
 

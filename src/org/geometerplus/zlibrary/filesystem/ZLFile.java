@@ -74,8 +74,6 @@ public abstract class ZLFile {
 			file = new ZLPhysicalFile(parent.getPath() + '/' + name);
 		} else if (parent instanceof ZLResourceFile) {
 			file = ZLResourceFile.createResourceFile((ZLResourceFile)parent, name);
-		} else {
-			file = ZLArchiveEntryFile.createArchiveEntryFile(parent, name);
 		}
 
 		if (!ourCachedFiles.isEmpty() && (file != null)) {
@@ -102,12 +100,7 @@ public abstract class ZLFile {
 			}
 			return FBReaderApp.Instance().createResourceFile(path);
 		}
-		int index = path.lastIndexOf(':');
-		if (index > 1) {
-			return ZLArchiveEntryFile.createArchiveEntryFile(
-				createFileByPath(path.substring(0, index)), path.substring(index + 1)
-			);
-		}
+
 		return new ZLPhysicalFile(path);
 	}
 
@@ -149,8 +142,6 @@ public abstract class ZLFile {
 		if (exists()) {
 			if (isDirectory()) {
 				return directoryEntries();
-			} else if (isArchive()) {
-				return ZLArchiveEntryFile.archiveEntries(this);
 			}
 		}
 		return Collections.emptyList();
@@ -183,7 +174,7 @@ public abstract class ZLFile {
 		} else {
 			ourCachedFiles.remove(getPath());
 			if (0 != (myArchiveType & ArchiveType.ZIP)) {
-				ZLZipEntryFile.removeFromCache(this);
+//				ZLZipEntryFile.removeFromCache(this);
 			}
 		}
 	}

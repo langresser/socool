@@ -70,33 +70,6 @@ public final class SCReaderActivity extends Activity {
 	public static final int RESULT_REPAINT = RESULT_FIRST_USER + 1;
 	public static final int RESULT_RELOAD_BOOK = RESULT_FIRST_USER + 2;
 
-	private static final String PLUGIN_ACTION_PREFIX = "___";
-	private final List<PluginApi.ActionInfo> myPluginActions =
-		new LinkedList<PluginApi.ActionInfo>();
-	private final BroadcastReceiver myPluginInfoReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			final ArrayList<PluginApi.ActionInfo> actions = getResultExtras(true).<PluginApi.ActionInfo>getParcelableArrayList(PluginApi.PluginInfo.KEY);
-			if (actions != null) {
-				synchronized (myPluginActions) {
-					final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-					int index = 0;
-					while (index < myPluginActions.size()) {
-						fbReader.removeAction(PLUGIN_ACTION_PREFIX + index++);
-					}
-					myPluginActions.addAll(actions);
-					index = 0;
-					for (PluginApi.ActionInfo info : myPluginActions) {
-						fbReader.addAction(
-							PLUGIN_ACTION_PREFIX + index++,
-							new RunPluginAction(SCReaderActivity.this, fbReader, info.getId())
-						);
-					}
-				}
-			}
-		}
-	};
-
 	protected ZLFile fileFromIntent(Intent intent) {
 		String filePath = intent.getStringExtra(BOOK_PATH_KEY);
 		if (filePath == null) {
@@ -360,35 +333,12 @@ public final class SCReaderActivity extends Activity {
 	public void onStart() {
 		super.onStart();
 
-		initPluginActions();
-
 		SetOrientationAction.setOrientation(this, FBReaderApp.Instance().OrientationOption.getValue());
 		((PopupPanel)FBReaderApp.Instance().getPopupById(TextSearchPopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(NavigationPopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(SelectionPopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(ChangeFontSizePopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(ChangeLightPopup.ID)).setPanelInfo(this, m_mainLayout);
-	}
-
-	private void initPluginActions() {
-		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
-		synchronized (myPluginActions) {
-			int index = 0;
-			while (index < myPluginActions.size()) {
-				fbReader.removeAction(PLUGIN_ACTION_PREFIX + index++);
-			}
-			myPluginActions.clear();
-		}
-
-		sendOrderedBroadcast(
-			new Intent(PluginApi.ACTION_REGISTER),
-			null,
-			myPluginInfoReceiver,
-			null,
-			RESULT_OK,
-			null,
-			null
-		);
 	}
 
 	private class TipRunner extends Thread {
@@ -408,9 +358,6 @@ public final class SCReaderActivity extends Activity {
 					startActivity(new Intent(
 						TipsActivity.SHOW_TIP_ACTION, null, SCReaderActivity.this, TipsActivity.class
 					));
-					break;
-				case Download:
-					manager.startDownloading();
 					break;
 				case None:
 					break;

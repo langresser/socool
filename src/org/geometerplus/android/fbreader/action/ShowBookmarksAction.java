@@ -19,9 +19,6 @@
 
 package org.geometerplus.android.fbreader.action;
 
-import org.geometerplus.android.fbreader.BookChapterActivity;
-import org.geometerplus.android.fbreader.BookChapterJuanActivity;
-import org.geometerplus.android.fbreader.BookmarkActivity;
 import org.geometerplus.android.fbreader.BookmarksActivity;
 import org.geometerplus.android.fbreader.SCReaderActivity;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

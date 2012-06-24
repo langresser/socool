@@ -27,8 +27,6 @@ import org.geometerplus.zlibrary.filesystem.ZLFile;
 import org.geometerplus.zlibrary.util.MimeType;
 
 import org.geometerplus.fbreader.Paths;
-import org.geometerplus.fbreader.network.ZLNetworkException;
-import org.geometerplus.fbreader.network.ZLNetworkManager;
 
 public final class NetworkImage extends ZLLoadableImage {
 	public final String Url;
@@ -200,10 +198,10 @@ public final class NetworkImage extends ZLLoadableImage {
 				return;
 			}
 
-			try {
-				ZLNetworkManager.Instance().downloadToFile(Url, imageFile);
-			} catch (ZLNetworkException e) {
-			}
+//			try {
+//				ZLNetworkManager.Instance().downloadToFile(Url, imageFile);
+//			} catch (ZLNetworkException e) {
+//			}
 		} finally {
 			setSynchronized();
 		}

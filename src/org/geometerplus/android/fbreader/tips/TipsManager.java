@@ -27,9 +27,6 @@ import org.geometerplus.zlibrary.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.options.ZLIntegerOption;
 
 import org.geometerplus.fbreader.Paths;
-import org.geometerplus.fbreader.network.ZLNetworkException;
-import org.geometerplus.fbreader.network.ZLNetworkManager;
-import org.geometerplus.fbreader.network.atom.ATOMXMLReader;
 
 public class TipsManager {
 	private static TipsManager ourInstance;
@@ -70,14 +67,14 @@ public class TipsManager {
 	private List<Tip> getTips() {
 		if (myTips == null) {
 			final ZLFile file = ZLFile.createFileByPath(getLocalFilePath());
-			if (file.exists()) {
-				final TipsFeedHandler handler = new TipsFeedHandler();
-				new ATOMXMLReader(handler, false).readQuietly(file);
-				final List<Tip> tips = Collections.unmodifiableList(handler.Tips);
-				if (tips.size() > 0) {
-					myTips = tips;
-				}
-			}
+//			if (file.exists()) {
+//				final TipsFeedHandler handler = new TipsFeedHandler();
+//				new ATOMXMLReader(handler, false).readQuietly(file);
+//				final List<Tip> tips = Collections.unmodifiableList(handler.Tips);
+//				if (tips.size() > 0) {
+//					myTips = tips;
+//				}
+//			}
 		}
 		return myTips;
 	}
@@ -142,28 +139,5 @@ public class TipsManager {
 			return Action.Initialize;
 		}
 		return Action.None;
-	}
-
-	public synchronized void startDownloading() {
-		if (requiredAction() != Action.Download) {
-			return;
-		}
-
-		myDownloadInProgress = true;
-
-		new File(Paths.networkCacheDirectory() + "/tips").mkdirs();
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					ZLNetworkManager.Instance().downloadToFile(
-						getUrl(), new File(getLocalFilePath())
-					);
-				} catch (ZLNetworkException e) {
-					e.printStackTrace();
-				} finally {
-					myDownloadInProgress = false;
-				}
-			}
-		}).start();
 	}
 }

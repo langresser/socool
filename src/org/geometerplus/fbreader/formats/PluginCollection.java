@@ -21,11 +21,7 @@ package org.geometerplus.fbreader.formats;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.filesystem.ZLFile;
 
-import org.geometerplus.fbreader.formats.fb2.FB2Plugin;
-import org.geometerplus.fbreader.formats.oeb.OEBPlugin;
-import org.geometerplus.fbreader.formats.pdb.MobipocketPlugin;
 import org.geometerplus.fbreader.formats.txt.TxtChapterPlugin;
 import org.geometerplus.fbreader.formats.txt.TxtPlugin;
 import org.geometerplus.fbreader.filetype.*;
@@ -51,9 +47,9 @@ public class PluginCollection {
 	}
 
 	private PluginCollection() {
-		myPlugins.add(new FB2Plugin());
-		myPlugins.add(new MobipocketPlugin());
-		myPlugins.add(new OEBPlugin());
+//		myPlugins.add(new FB2Plugin());
+//		myPlugins.add(new MobipocketPlugin());
+//		myPlugins.add(new OEBPlugin());
 		myPlugins.add(new TxtPlugin());
 
 		m_txtPlugin = new TxtChapterPlugin();

@@ -64,7 +64,6 @@ public class TipsActivity extends Activity {
 				public void onClick(View v) {
 					myManager.TipsAreInitializedOption.setValue(true);
 					myManager.ShowTipsOption.setValue(true);
-					myManager.startDownloading();
 					finish();
 				}
 			});
