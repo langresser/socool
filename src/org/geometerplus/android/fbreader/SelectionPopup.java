@@ -48,7 +48,7 @@ public class SelectionPopup extends ButtonsPopupPanel {
 
         addButton(ActionCode.SELECTION_COPY_TO_CLIPBOARD, true, "复制");
         addButton(ActionCode.SELECTION_BOOKMARK, true, "书摘");
-        addButton(ActionCode.SELECTION_SHARE, true, "分享");
+//        addButton(ActionCode.SELECTION_SHARE, true, "分享");
 //        addButton(ActionCode.SELECTION_SEARCH, true, "搜索");
 //        addButton(ActionCode.SELECTION_TRANSLATE, true, "词典");
     }
