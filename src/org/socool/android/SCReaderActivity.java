@@ -45,7 +45,6 @@ import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.library.Book;
 
 import org.socool.android.action.*;
-import org.socool.android.tips.TipsActivity;
 
 import org.socool.android.util.UIUtil;
 
@@ -140,6 +139,7 @@ public final class SCReaderActivity extends Activity {
 		fbReader.openFile(fileFromIntent(getIntent()), null);
 		
 		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
+//		if (true) {
 			final Thread runner = new Thread() {
 				public void run() {
 					getPostponedInitAction().run();
@@ -364,6 +364,7 @@ public final class SCReaderActivity extends Activity {
 	}
 
 	public void showSelectionPanel() {
+		MobclickAgent.onEvent(this, "popupmenu");
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		final ZLTextView view = fbReader.getCurrentView();
 		((SelectionPopup)fbReader.getPopupById(SelectionPopup.ID))

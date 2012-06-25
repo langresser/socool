@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.socool.android.tips;
+package org.socool.android;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -38,7 +38,7 @@ public class TipsActivity extends Activity {
 
 		setContentView(R.layout.tip);
 
-		setTitle("Banana Studio");
+		setTitle("帮助");
 		setTitleColor(0xff000000);
 		
 		final CheckBox checkBox = (CheckBox)findViewById(R.id.tip_checkbox);
@@ -80,5 +80,6 @@ public class TipsActivity extends Activity {
 	
 	private static final String m_tips = 
 		"    点击屏幕中部可以显示系统菜单，通过设置选项可以进行更多的个性化设置。\n\n"+
+		"    长按屏幕文字可以进行文本选择\n\n" +
 		"    如果您喜欢本应用，可以通过下载或打开精品推荐中您所喜欢的应用的方式来支持我们。有您的支持，我们可以为您提供出更多更好的精品电子书。"; 
 }

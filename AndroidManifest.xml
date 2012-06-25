@@ -208,7 +208,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</receiver>
-		<activity android:name="org.socool.android.tips.TipsActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.TipsActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
 
 	<!--有米-->
 	<meta-data android:name="YOUMI_CHANNEL" android:value="10050"/>

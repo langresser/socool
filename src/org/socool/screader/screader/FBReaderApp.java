@@ -1167,6 +1167,10 @@ public final class FBReaderApp {
 	private final MenuItem.OnMenuItemClickListener myMenuListener =
 		new MenuItem.OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
+				if (myActivity != null) {
+					MobclickAgent.onEvent(myActivity, "menu", myMenuItemMap.get(item));
+				}
+				
 				FBReaderApp.Instance().runAction(myMenuItemMap.get(item));
 				return true;
 			}
