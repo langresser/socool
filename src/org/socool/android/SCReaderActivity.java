@@ -97,7 +97,6 @@ public final class SCReaderActivity extends Activity {
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
-//	public GHView m_adsView = null;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -114,8 +113,6 @@ public final class SCReaderActivity extends Activity {
 		createBookView();
 
 		setContentView(m_mainLayout);
-		
-		createBannerAds();
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -145,79 +142,6 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE));
 	
 		FBReaderApp.Instance().openFile(fileFromIntent(getIntent()), null);
-	}
-	
-	private boolean m_hasCloseAds = false;
-
-	// 创建广告条
-	final public void createBannerAds()
-	{
-//		if (FBReaderApp.Instance().EnableAdsOption.getValue() == false) {
-//			return;
-//		}
-//
-//		FBReaderApp.Instance().m_adsHeight = 0;
-//		
-//		
-//		m_adsView =new GHView(this); 
-//		//您可以根据布局需求，对布局参数params设定具体的值 
-//		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) ;
-//		params.topMargin = 0;
-//		params.gravity = Gravity.TOP;
-//		addContentView(m_adsView, params);
-//		m_adsView.setAdUnitId("6fc147213f9cd78e216e8e4ecfaf5352");
-//		m_adsView.startLoadAd();
-//
-//		m_adsView.setOnAdLoadedListener(new OnAdLoadedListener() {
-//			
-//			@Override
-//			public void OnAdLoaded(GHView arg0) {
-//				if (m_hasCloseAds || arg0 == null) {
-//					return;
-//				}
-//
-//				final FBReaderApp fbReader = FBReaderApp.Instance();
-//				
-//				if (fbReader.m_adsHeight == 0) {
-//					final int height = (int)(arg0.getAdHeight() * fbReader.getDensity());
-//					fbReader.m_adsHeight = height;
-//					fbReader.resetWidget();
-//					fbReader.repaintWidget(true);
-//				}
-//			}
-//		});
-//		m_adsView.setOnAdClosedListener(new OnAdClosedListener() {
-//			
-//			@Override
-//			public void OnAdClosed(GHView arg0) {
-//				if (!m_hasCloseAds) {
-//					MobclickAgent.onEvent(SCReaderActivity.this, "closeAds");
-//					FBReaderApp.Instance().m_adsHeight = 0;
-//					FBReaderApp.Instance().resetWidget();
-//					FBReaderApp.Instance().repaintWidget(true);
-//				}
-//				
-//				m_hasCloseAds = true;
-//			}
-//		});
-	}
-	
-	// 清理广告条资源
-	final public void clearAds()
-	{
-//		if (m_adsView != null) {
-//			m_adsView.destroy();
-//			m_adsView = null;
-//		}
-	}
-	
-	final public void removeAds()
-	{
-//		final boolean enableAds = fbReader.EnableAdsOption.getValue();
-//		if (!enableAds && m_adsView != null) {
-//			m_adsView.setVisibility(View.GONE);
-//			clearAds();
-//		}
 	}
 	
 	// 创建书籍view
@@ -257,7 +181,6 @@ public final class SCReaderActivity extends Activity {
 	public void onDestroy()
 	{
 		super.onDestroy();
-		clearAds();
 	}
 
  	@Override
@@ -398,7 +321,6 @@ public final class SCReaderActivity extends Activity {
 			}
 		}
 		
-		removeAds();
 		MobclickAgent.onResume(this);
 	}
 

@@ -51,8 +51,6 @@ public class BookInfoActivity extends Activity {
 		// ”—√À
 		MobclickAgent.updateOnlineConfig(this);
 		MobclickAgent.onError(this);
-		
-		FBReaderApp.Instance().initOfferWall(this);
 
 		m_currentBookPath = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
 		if (m_currentBookPath == null) {

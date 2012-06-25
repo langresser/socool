@@ -28,7 +28,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
@@ -49,6 +52,8 @@ import org.socool.screader.screader.*;
 import org.socool.android.SCReaderActivity;
 import org.socool.android.util.UIUtil;
 
+//import com.guohead.sdk.GHView;
+//import com.guohead.sdk.GHView.OnAdLoadedListener;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.UMFeedbackService;
 import com.umeng.update.UmengUpdateAgent;
@@ -160,6 +165,8 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 
 	protected void init(Intent intent) {
 		setResult(SCReaderActivity.RESULT_REPAINT);
+		
+//		createBannerAds();
 
 		final FBReaderApp fbReader = (FBReaderApp)FBReaderApp.Instance();
 		final ColorProfile profile = fbReader.getColorProfile();
@@ -415,6 +422,11 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		fbPreferenceFeedback.setOnPreferenceClickListener(listener);
 		fbPreferenceRemove.setOnPreferenceClickListener(listener);
 		fbPreferenceAbout.setOnPreferenceClickListener(listener);
+//		
+//		final Preference fbPreferenceTemp = new Preference(this);
+//		fbPreferenceTemp.setTitle("");
+//		fbPreferenceTemp.setSummary("");
+//		addPreference(fbPreferenceTemp);
 	}
 	
 	void initFormat(Screen textScreen)
@@ -528,4 +540,43 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		}
 
 	}
+	
+//	// 创建广告条
+// 	public GHView m_adsView = null;
+//	final public void createBannerAds()
+//	{		
+//		m_adsView =new GHView(this); 
+//		//您可以根据布局需求，对布局参数params设定具体的值 
+//		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) ;
+//		params.bottomMargin = 0;
+//		params.gravity = Gravity.BOTTOM;
+//		addContentView(m_adsView, params);
+//		m_adsView.setAdUnitId("6fc147213f9cd78e216e8e4ecfaf5352");
+//		m_adsView.startLoadAd();
+//	}
+//	
+//	// 清理广告条资源
+//	final public void clearAds()
+//	{
+//		if (m_adsView != null) {
+//			m_adsView.destroy();
+//			m_adsView = null;
+//		}
+//	}
+//	
+//	final public void removeAds()
+//	{
+////		final boolean enableAds = fbReader.EnableAdsOption.getValue();
+////		if (!enableAds && m_adsView != null) {
+////			m_adsView.setVisibility(View.GONE);
+////			clearAds();
+////		}
+//	}
+//	
+//	@Override
+//	public void onDestroy()
+//	{
+//		super.onDestroy();
+//		clearAds();
+//	}
 }

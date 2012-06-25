@@ -1680,6 +1680,7 @@ public final class FBReaderApp {
 	// 控制是否显示广告，每个电子书对应一个标识
 	public final ZLBooleanOption EnableAdsOption = new ZLBooleanOption("Options", "enableAdsMcnxs", false);
 	public int m_adsHeight = 0;
+	public boolean m_initOfferWall = false;
 	public void initOfferWall(Context context)
 	{
 		// 有米
@@ -1688,6 +1689,11 @@ public final class FBReaderApp {
 	
 	public void showOfferWall(Context context)
 	{
+		if (!m_initOfferWall) {
+			initOfferWall(context);
+			m_initOfferWall = true;
+		}
+		
 		MobclickAgent.onEvent(context, "moreApp");
 		YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
 	}
