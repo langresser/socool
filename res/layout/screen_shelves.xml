@@ -2,7 +2,7 @@
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <org.geometerplus.android.fbreader.bookshelf.ShelvesView
+    <org.socool.android.fbreader.bookshelf.ShelvesView
         android:id="@+id/grid_shelves"
 
         android:layout_width="fill_parent"

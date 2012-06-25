@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.reader" android:versionCode="104051" android:versionName="1.4.5" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.mcnxs" android:versionCode="100000" android:versionName="1.0.0" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="5" android:maxSdkVersion="10" android:targetSdkVersion="8"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -15,12 +15,12 @@
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> 
 
 
-	<application android:name="org.geometerplus.android.fbreader.FBReaderApplication" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name">
-		<activity android:name="org.geometerplus.android.fbreader.bookshelf.ShelvesActivity">		    
+	<application android:name="org.socool.android.FBReaderApplication" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name">
+		<activity android:name="org.socool.android.bookshelf.ShelvesActivity">		    
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.SCReaderActivity" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
+		<activity android:name="org.socool.android.SCReaderActivity" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
-				<action android:name="android.fbreader.action.VIEW" />
+				<action android:name="android.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:scheme="file" />
 			</intent-filter>
@@ -76,35 +76,35 @@
 			</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.ImageViewActivity" android:configChanges="orientation|keyboardHidden"/>
-		<activity android:name="org.geometerplus.android.fbreader.BookInfoActivity" android:configChanges="orientation|keyboardHidden">
+		<activity android:name="org.socool.android.ImageViewActivity" android:configChanges="orientation|keyboardHidden"/>
+		<activity android:name="org.socool.android.BookInfoActivity" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.LibrarySearchActivity" android:theme="@android:style/Theme.NoDisplay">
+		<activity android:name="org.socool.android.LibrarySearchActivity" android:theme="@android:style/Theme.NoDisplay">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.LibraryActivity" android:configChanges="orientation|keyboardHidden">
-			<meta-data android:name="android.app.default_searchable" android:value="org.geometerplus.android.fbreader.library.LibrarySearchActivity" />
+		<activity android:name="org.socool.android.LibraryActivity" android:configChanges="orientation|keyboardHidden">
+			<meta-data android:name="android.app.default_searchable" android:value="org.socool.android.library.LibrarySearchActivity" />
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.BookmarkActivity" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="org.geometerplus.android.fbreader.BookChapterActivity" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="org.geometerplus.android.fbreader.BookChapterJuanActivity" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="org.geometerplus.android.fbreader.BookmarksActivity" android:configChanges="orientation|keyboardHidden">
+		<activity android:name="org.socool.android.BookmarkActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.BookChapterActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.BookChapterJuanActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.BookmarksActivity" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.BookmarkEditActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="org.geometerplus.android.fbreader.preferences.PreferenceActivity" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="org.geometerplus.android.fbreader.preferences.EditBookInfoActivity" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="org.geometerplus.android.fbreader.network.BookDownloader" android:process=":networkLibrary" android:theme="@android:style/Theme.NoDisplay">
+		<activity android:name="org.socool.android.BookmarkEditActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.preferences.PreferenceActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.preferences.EditBookInfoActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.network.BookDownloader" android:process=":networkLibrary" android:theme="@android:style/Theme.NoDisplay">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -150,29 +150,29 @@
 				<data android:host="*" android:scheme="epub" />
 			</intent-filter>
 		</activity>
-		<service android:name="org.geometerplus.android.fbreader.network.BookDownloaderService" android:process=":networkLibrary" />
-		<activity android:name="org.geometerplus.android.fbreader.network.NetworkSearchActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.NoDisplay">
+		<service android:name="org.socool.android.network.BookDownloaderService" android:process=":networkLibrary" />
+		<activity android:name="org.socool.android.network.NetworkSearchActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.NoDisplay">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.network.NetworkLibraryPrimaryActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden">
-			<meta-data android:name="android.app.default_searchable" android:value="org.geometerplus.android.fbreader.network.NetworkSearchActivity" />
+		<activity android:name="org.socool.android.network.NetworkLibraryPrimaryActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden">
+			<meta-data android:name="android.app.default_searchable" android:value="org.socool.android.network.NetworkSearchActivity" />
 			<intent-filter>
-				<action android:name="android.fbreader.action.OPEN_NETWORK_CATALOG" />
+				<action android:name="android.action.OPEN_NETWORK_CATALOG" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:host="*" android:scheme="http" />
 				<data android:host="*" android:scheme="https" />
 			</intent-filter>
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.network.NetworkLibrarySecondaryActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="org.geometerplus.android.fbreader.network.AuthenticationActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
-		<activity android:name="org.geometerplus.android.fbreader.network.BuyBooksActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
-		<activity android:name="org.geometerplus.android.fbreader.network.AddCatalogMenuActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
-		<activity android:name="org.geometerplus.android.fbreader.network.AddCustomCatalogActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog">
+		<activity android:name="org.socool.android.network.NetworkLibrarySecondaryActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.network.AuthenticationActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.network.BuyBooksActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.network.AddCatalogMenuActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.network.AddCustomCatalogActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog">
 			<intent-filter>
-				<action android:name="android.fbreader.action.ADD_OPDS_CATALOG" />
+				<action android:name="android.action.ADD_OPDS_CATALOG" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:host="data.fbreader.org" android:scheme="http" android:path="/add_catalog/editUrl"/>
 			</intent-filter>
@@ -183,32 +183,32 @@
 				<data android:host="*" android:scheme="opds" />
 			</intent-filter>
 			<intent-filter>
-				<action android:name="android.fbreader.action.ADD_OPDS_CATALOG_URL" />
+				<action android:name="android.action.ADD_OPDS_CATALOG_URL" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:host="*" android:scheme="http" />
 			</intent-filter>
 			<intent-filter>
-				<action android:name="android.fbreader.action.ADD_OPDS_CATALOG_URL" />
+				<action android:name="android.action.ADD_OPDS_CATALOG_URL" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:host="*" android:scheme="https" />
 			</intent-filter>
 		</activity>
-		<activity android:name="org.geometerplus.android.fbreader.network.AuthorizationMenuActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden"/>
-		<activity android:name="org.geometerplus.android.fbreader.network.TopupMenuActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden"/>
-		<activity android:name="org.geometerplus.android.fbreader.network.NetworkBookInfoActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden">
+		<activity android:name="org.socool.android.network.AuthorizationMenuActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden"/>
+		<activity android:name="org.socool.android.network.TopupMenuActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden"/>
+		<activity android:name="org.socool.android.network.NetworkBookInfoActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:host="*" android:scheme="litres-book" />
 			</intent-filter>
 		</activity>
-		<receiver android:name="org.geometerplus.android.fbreader.network.ListenerCallback" android:process=":networkLibrary">
+		<receiver android:name="org.socool.android.network.ListenerCallback" android:process=":networkLibrary">
 			<intent-filter>
-				<action android:name="android.fbreader.action.network.SIGNIN" />
+				<action android:name="android.action.network.SIGNIN" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</receiver>
-		<activity android:name="org.geometerplus.android.fbreader.tips.TipsActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.tips.TipsActivity" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
 
 	<!--有米-->
 	<meta-data android:name="YOUMI_CHANNEL" android:value="10050"/>
