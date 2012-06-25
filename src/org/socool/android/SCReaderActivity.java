@@ -52,9 +52,9 @@ import org.socool.android.tips.TipsActivity;
 
 import org.socool.android.util.UIUtil;
 
-import com.guohead.sdk.GHView;
-import com.guohead.sdk.GHView.OnAdClosedListener;
-import com.guohead.sdk.GHView.OnAdLoadedListener;
+//import com.guohead.sdk.GHView;
+//import com.guohead.sdk.GHView.OnAdClosedListener;
+//import com.guohead.sdk.GHView.OnAdLoadedListener;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -97,7 +97,7 @@ public final class SCReaderActivity extends Activity {
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
-	public GHView m_adsView = null;
+//	public GHView m_adsView = null;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -152,63 +152,72 @@ public final class SCReaderActivity extends Activity {
 	// 创建广告条
 	final public void createBannerAds()
 	{
-		if (FBReaderApp.Instance().EnableAdsOption.getValue() == false) {
-			return;
-		}
-
-		FBReaderApp.Instance().m_adsHeight = 0;
-		
-		
-		m_adsView =new GHView(this); 
-		//您可以根据布局需求，对布局参数params设定具体的值 
-		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) ;
-		params.topMargin = 0;
-		params.gravity = Gravity.TOP;
-		addContentView(m_adsView, params);
-		m_adsView.setAdUnitId("6fc147213f9cd78e216e8e4ecfaf5352");
-		m_adsView.startLoadAd();
-
-		m_adsView.setOnAdLoadedListener(new OnAdLoadedListener() {
-			
-			@Override
-			public void OnAdLoaded(GHView arg0) {
-				if (m_hasCloseAds || arg0 == null) {
-					return;
-				}
-
-				final FBReaderApp fbReader = FBReaderApp.Instance();
-				
-				if (fbReader.m_adsHeight == 0) {
-					final int height = (int)(arg0.getAdHeight() * fbReader.getDensity());
-					fbReader.m_adsHeight = height;
-					fbReader.resetWidget();
-					fbReader.repaintWidget(true);
-				}
-			}
-		});
-		m_adsView.setOnAdClosedListener(new OnAdClosedListener() {
-			
-			@Override
-			public void OnAdClosed(GHView arg0) {
-				if (!m_hasCloseAds) {
-					MobclickAgent.onEvent(SCReaderActivity.this, "closeAds");
-					FBReaderApp.Instance().m_adsHeight = 0;
-					FBReaderApp.Instance().resetWidget();
-					FBReaderApp.Instance().repaintWidget(true);
-				}
-				
-				m_hasCloseAds = true;
-			}
-		});
+//		if (FBReaderApp.Instance().EnableAdsOption.getValue() == false) {
+//			return;
+//		}
+//
+//		FBReaderApp.Instance().m_adsHeight = 0;
+//		
+//		
+//		m_adsView =new GHView(this); 
+//		//您可以根据布局需求，对布局参数params设定具体的值 
+//		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) ;
+//		params.topMargin = 0;
+//		params.gravity = Gravity.TOP;
+//		addContentView(m_adsView, params);
+//		m_adsView.setAdUnitId("6fc147213f9cd78e216e8e4ecfaf5352");
+//		m_adsView.startLoadAd();
+//
+//		m_adsView.setOnAdLoadedListener(new OnAdLoadedListener() {
+//			
+//			@Override
+//			public void OnAdLoaded(GHView arg0) {
+//				if (m_hasCloseAds || arg0 == null) {
+//					return;
+//				}
+//
+//				final FBReaderApp fbReader = FBReaderApp.Instance();
+//				
+//				if (fbReader.m_adsHeight == 0) {
+//					final int height = (int)(arg0.getAdHeight() * fbReader.getDensity());
+//					fbReader.m_adsHeight = height;
+//					fbReader.resetWidget();
+//					fbReader.repaintWidget(true);
+//				}
+//			}
+//		});
+//		m_adsView.setOnAdClosedListener(new OnAdClosedListener() {
+//			
+//			@Override
+//			public void OnAdClosed(GHView arg0) {
+//				if (!m_hasCloseAds) {
+//					MobclickAgent.onEvent(SCReaderActivity.this, "closeAds");
+//					FBReaderApp.Instance().m_adsHeight = 0;
+//					FBReaderApp.Instance().resetWidget();
+//					FBReaderApp.Instance().repaintWidget(true);
+//				}
+//				
+//				m_hasCloseAds = true;
+//			}
+//		});
 	}
 	
 	// 清理广告条资源
 	final public void clearAds()
 	{
-		if (m_adsView != null) {
-			m_adsView.destroy();
-			m_adsView = null;
-		}
+//		if (m_adsView != null) {
+//			m_adsView.destroy();
+//			m_adsView = null;
+//		}
+	}
+	
+	final public void removeAds()
+	{
+//		final boolean enableAds = fbReader.EnableAdsOption.getValue();
+//		if (!enableAds && m_adsView != null) {
+//			m_adsView.setVisibility(View.GONE);
+//			clearAds();
+//		}
 	}
 	
 	// 创建书籍view
@@ -389,12 +398,7 @@ public final class SCReaderActivity extends Activity {
 			}
 		}
 		
-		final boolean enableAds = fbReader.EnableAdsOption.getValue();
-		if (!enableAds && m_adsView != null) {
-			m_adsView.setVisibility(View.GONE);
-			clearAds();
-		}
-		
+		removeAds();
 		MobclickAgent.onResume(this);
 	}
 
