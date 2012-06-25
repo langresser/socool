@@ -100,7 +100,6 @@
     <string name="setupactivity_toast_clear_ok">书架已经清空</string>
     <string name="setupactivity_toast_reset_ok">软件已经还原</string>
     <string name="clear_shelf">清空书架</string>
-    <string name="unspport_file">抱歉，目前Anyview还不支持此文件类型！</string>
     <string name="title_dialog_confirm">确认</string>
     <string name="title_dialog_prompt">请输入</string>
     <string name="about">关于</string>

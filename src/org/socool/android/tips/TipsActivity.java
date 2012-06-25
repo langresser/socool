@@ -25,95 +25,51 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.*;
 
-import org.socool.zlibrary.filesystem.ZLResource;
-
+import org.socool.screader.screader.FBReaderApp;
 import org.socool.socoolreader.mcnxs.R;
-
-import org.socool.android.tips.*;
 
 public class TipsActivity extends Activity {
 	public static final String INITIALIZE_ACTION = "android.action.tips.INITIALIZE";
 	public static final String SHOW_TIP_ACTION = "android.action.tips.SHOW_TIP";
 
-	private final TipsManager myManager = TipsManager.Instance();
-
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		final boolean doInitialize = INITIALIZE_ACTION.equals(getIntent().getAction());
-
 		setContentView(R.layout.tip);
-		final ZLResource dialogResource = ZLResource.resource("dialog");
-		final ZLResource resource = dialogResource.getResource("tips");
-		final ZLResource buttonResource = dialogResource.getResource("button");
+
+		setTitle("Banana Studio");
+		setTitleColor(0xff000000);
+		
 		final CheckBox checkBox = (CheckBox)findViewById(R.id.tip_checkbox);
 
-		setTitle(resource.getResource("title").getValue());
+		final Button yesButton = (Button)findViewById(R.id.ok_button);
+		yesButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FBReaderApp.Instance().EnableTipOption.setValue(!checkBox.isChecked());
+				finish();
+			}
+		});
+		
+//		final Button nextButton = (Button)findViewById(R.id.next_button);
+//		nextButton.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//			}
+//		});
 
-		if (doInitialize) {
-			checkBox.setVisibility(View.GONE);
-
-			showText(resource.getResource("initializationText").getValue());
-
-			final Button yesButton =
-				(Button)findViewById(R.id.tip_buttons).findViewById(R.id.ok_button);
-			yesButton.setText(buttonResource.getResource("yes").getValue());
-			yesButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					myManager.TipsAreInitializedOption.setValue(true);
-					myManager.ShowTipsOption.setValue(true);
-					finish();
-				}
-			});
-
-			final Button noButton =
-				(Button)findViewById(R.id.tip_buttons).findViewById(R.id.cancel_button);
-			noButton.setText(buttonResource.getResource("no").getValue());
-			noButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					myManager.TipsAreInitializedOption.setValue(true);
-					myManager.ShowTipsOption.setValue(false);
-					finish();
-				}
-			});
-		} else {
-			checkBox.setText(resource.getResource("dontShowAgain").getValue());
-
-			final Button okButton =
-				(Button)findViewById(R.id.tip_buttons).findViewById(R.id.ok_button);
-			okButton.setText(buttonResource.getResource("ok").getValue());
-			okButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					myManager.ShowTipsOption.setValue(!checkBox.isChecked());
-					finish();
-				}
-			});
-        
-			final Button nextTipButton =
-				(Button)findViewById(R.id.tip_buttons).findViewById(R.id.cancel_button);
-			nextTipButton.setText(resource.getResource("more").getValue());
-			nextTipButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					showTip(nextTipButton);
-				}
-			});
-        
-			showTip(nextTipButton);
-		}
-	}
-
-	private void showTip(Button nextTipButton) {
-		final Tip tip = myManager.getNextTip();
-		if (tip != null) {
-			setTitle(tip.Title);
-			showText(tip.Content);
-		}
-		nextTipButton.setEnabled(myManager.hasNextTip());
+		final Button appButton = (Button)findViewById(R.id.app_button);
+		appButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FBReaderApp.Instance().showOfferWall(TipsActivity.this);
+				finish();
+			}
+		});
+		
+		showText(m_tips);
+		FBReaderApp.Instance().m_hasShowTip = true;
 	}
 
 	private void showText(CharSequence text) {
@@ -121,4 +77,8 @@ public class TipsActivity extends Activity {
 		textView.setText(text);
 		textView.setMovementMethod(LinkMovementMethod.getInstance());
 	}
+	
+	private static final String m_tips = 
+		"    点击屏幕中部可以显示系统菜单，通过设置选项可以进行更多的个性化设置。\n\n"+
+		"    如果您喜欢本应用，可以通过下载或打开精品推荐中您所喜欢的应用的方式来支持我们。有您的支持，我们可以为您提供出更多更好的精品电子书。"; 
 }

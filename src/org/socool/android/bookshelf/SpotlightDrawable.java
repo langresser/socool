@@ -25,7 +25,7 @@ public class SpotlightDrawable extends Drawable {
     private Drawable mParent;
 
     public SpotlightDrawable(Context context, ViewGroup view) {
-        this(context, view, R.drawable.spotlight);
+        this(context, view, 0);
     }
 
     public SpotlightDrawable(Context context, ViewGroup view, int resource) {

@@ -27,10 +27,8 @@ import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.util.Log;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.socool.zlibrary.filesystem.ZLFile;
@@ -45,7 +43,6 @@ import org.socool.screader.screader.ActionCode;
 import org.socool.screader.screader.FBReaderApp;
 import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.library.Book;
-import org.socool.android.tips.TipsManager;
 
 import org.socool.android.action.*;
 import org.socool.android.tips.TipsActivity;
@@ -140,7 +137,18 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_PORTRAIT));
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE));
 	
-		FBReaderApp.Instance().openFile(fileFromIntent(getIntent()), null);
+		fbReader.openFile(fileFromIntent(getIntent()), null);
+		
+		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
+			final Thread runner = new Thread() {
+				public void run() {
+					getPostponedInitAction().run();
+				}
+			};
+			
+			runner.setPriority(Thread.MIN_PRIORITY);
+			runner.start();
+		}
 	}
 	
 	// ¥¥Ω® ÈºÆview
@@ -278,21 +286,9 @@ public final class SCReaderActivity extends Activity {
 		}
 
 		public void run() {
-			final TipsManager manager = TipsManager.Instance();
-			switch (manager.requiredAction()) {
-				case Initialize:
-					startActivity(new Intent(
-						TipsActivity.INITIALIZE_ACTION, null, SCReaderActivity.this, TipsActivity.class
-					));
-					break;
-				case Show:
-					startActivity(new Intent(
-						TipsActivity.SHOW_TIP_ACTION, null, SCReaderActivity.this, TipsActivity.class
-					));
-					break;
-				case None:
-					break;
-			}
+			startActivity(new Intent(
+					TipsActivity.SHOW_TIP_ACTION, null, SCReaderActivity.this, TipsActivity.class
+				));
 		}
 	}
 

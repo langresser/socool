@@ -96,6 +96,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public final class FBReaderApp {
+	public final ZLBooleanOption EnableTipOption = new ZLBooleanOption("Options", "enableTipMcnxs", true);
+	public boolean m_hasShowTip = false;
+	
 	public final ZLStringOption TextSearchPatternOption =
 		new ZLStringOption("TextSearch", "Pattern", "");
 

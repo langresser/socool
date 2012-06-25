@@ -56,7 +56,7 @@ public class ShelvesView extends GridView {
 
     private void load(Context context, AttributeSet attrs, int defStyle) {
         final Resources resources = getResources();
-        final Bitmap shelfBackground = BitmapFactory.decodeResource(resources, R.drawable.shelf_panel);
+        final Bitmap shelfBackground = BitmapFactory.decodeResource(resources, 0);
         if (shelfBackground != null) {
             mShelfWidth = shelfBackground.getWidth();
             mShelfHeight = shelfBackground.getHeight();
@@ -69,7 +69,7 @@ public class ShelvesView extends GridView {
 
         SpotlightDrawable start = new SpotlightDrawable(context, this);
         start.disableOffset();
-        SpotlightDrawable end = new SpotlightDrawable(context, this, R.drawable.spotlight_blue);
+        SpotlightDrawable end = new SpotlightDrawable(context, this, 0);
         end.disableOffset();
         TransitionDrawable transition = new TransitionDrawable(start, end);
         drawable.addState(new int[] { android.R.attr.state_pressed },
