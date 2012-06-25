@@ -371,6 +371,13 @@ public final class FBReaderApp {
 	}
 
 	public void changeTheme(String name) {
+		if (name.length() == 0) {
+			isNightModeOption.setValue(false);
+			final ColorProfile color = getColorProfile();
+			color.ChangeTheme(null);
+			return;
+		}
+
 		TextTheme theme = getThemeByName(name);
 		if (theme == null) {
 			return;
@@ -796,7 +803,7 @@ public final class FBReaderApp {
 	
 	public final ZLIntegerRangeOption BatteryLevelToTurnScreenOffOption = new ZLIntegerRangeOption("LookNFeel", "BatteryLevelToTurnScreenOff", 0, 100, 50);
 	public final ZLStringOption TurnOffTimeOpion = new ZLStringOption("LookNFeel", "TurnOffTime", "default");
-	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 0);
+	public final ZLIntegerRangeOption ScreenBrightnessLevelOption = new ZLIntegerRangeOption("LookNFeel", "ScreenBrightnessLevel", 0, 100, 10);
 
 	public final ZLBooleanOption ScreenBrightnessAuto = new ZLBooleanOption("LookNFeel", "ScreenBrightnessAuto", true);
 	private Boolean myIsKindleFire = null;

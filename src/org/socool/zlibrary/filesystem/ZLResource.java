@@ -130,8 +130,7 @@ public class ZLResource {
 	}
 
 	private static void loadData(ResourceTreeReader reader, String fileName) {
-		reader.readDocument(ourRoot, FBReaderApp.Instance().createResourceFile("resources/zlibrary/" + fileName));
-		reader.readDocument(ourRoot, FBReaderApp.Instance().createResourceFile("resources/application/" + fileName));
+		reader.readDocument(ourRoot, FBReaderApp.Instance().createResourceFile("resources/" + fileName));
 	}
 
 	private static void loadData() {

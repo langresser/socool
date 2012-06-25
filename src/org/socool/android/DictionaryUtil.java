@@ -132,16 +132,16 @@ public abstract class DictionaryUtil {
 	}
 
 	public static void init(final Context context) {
-		if (ourInfos.isEmpty()) {
-			final Thread initThread = new Thread(new Runnable() {
-				public void run() {
-					new InfoReader().readQuietly(ZLFile.createFileByPath("dictionaries/main.xml"));
-					new ParagonInfoReader(context).readQuietly(ZLFile.createFileByPath("dictionaries/paragon.xml"));
-				}
-			});
-			initThread.setPriority(Thread.MIN_PRIORITY);
-			initThread.start();
-		}
+//		if (ourInfos.isEmpty()) {
+//			final Thread initThread = new Thread(new Runnable() {
+//				public void run() {
+//					new InfoReader().readQuietly(ZLFile.createFileByPath("dictionaries/main.xml"));
+//					new ParagonInfoReader(context).readQuietly(ZLFile.createFileByPath("dictionaries/paragon.xml"));
+//				}
+//			});
+//			initThread.setPriority(Thread.MIN_PRIORITY);
+//			initThread.start();
+//		}
 	}
 
 	public static List<PackageInfo> dictionaryInfos(Context context, boolean dictionaryNotTranslator) {

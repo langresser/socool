@@ -79,7 +79,7 @@ public class ColorProfile {
 				RegularTextOption = createOption(name, "Text", 0, 0, 0);
 				ChangeTheme(theme);
 			} else {
-				WallpaperOption = new ZLStringOption("Colors", name + ":Wallpaper", "wallpapers/1/image.png");
+				WallpaperOption = new ZLStringOption("Colors", name + ":Wallpaper", "");
 				BackgroundOption = createOption(name, "Background", 255, 255, 255);
 				SelectionBackgroundOption = createOption(name, "SelectionBackground", 82, 131, 194);
 				SelectionForegroundOption = createOption(name, "SelectionForeground", 255, 255, 220);
@@ -95,11 +95,20 @@ public class ColorProfile {
 	
 	public void ChangeTheme(TextTheme theme)
 	{
-		BaseThemeOption.setValue(theme.m_path);
-		WallpaperOption.setValue(theme.m_imagePath);
-		BackgroundOption.setValue(theme.m_bgColor);
-		SelectionBackgroundOption.setValue(theme.m_selectBgColor);
-		SelectionForegroundOption.setValue(theme.m_selectTextColor);
-		RegularTextOption.setValue(theme.m_textColor);
+		if (theme == null) {
+			// 单色模式
+			BaseThemeOption.setValue("");
+			WallpaperOption.setValue("");
+			BackgroundOption.setValue(new ZLColor(255, 255, 255));
+			RegularTextOption.setValue(new ZLColor(0, 0, 0));
+		} else {
+			// 背景主题
+			BaseThemeOption.setValue(theme.m_path);
+			WallpaperOption.setValue(theme.m_imagePath);
+			BackgroundOption.setValue(theme.m_bgColor);
+			SelectionBackgroundOption.setValue(theme.m_selectBgColor);
+			SelectionForegroundOption.setValue(theme.m_selectTextColor);
+			RegularTextOption.setValue(theme.m_textColor);
+		}
 	}
 }
