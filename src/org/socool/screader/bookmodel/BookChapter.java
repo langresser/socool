@@ -69,24 +69,24 @@ public class BookChapter {
 	{
 		int chapterIndex = getChapterIndexByParagraph(paragraph);
 		if (chapterIndex < 0) {
-			Log.e("chapterIndex", String.format("%1d  %2d  %3d", paragraph, chapterIndex, m_chapterData.size()));
+//			Log.e("chapterIndex", String.format("%1d  %2d  %3d", paragraph, chapterIndex, m_chapterData.size()));
 			chapterIndex = 0;
 		}
 		
 		if (chapterIndex > m_chapterData.size() - 1) {
-			Log.e("chapterIndex", String.format("%1d  %2d  %3d", paragraph, chapterIndex, m_chapterData.size()));
+//			Log.e("chapterIndex", String.format("%1d  %2d  %3d", paragraph, chapterIndex, m_chapterData.size()));
 			chapterIndex = m_chapterData.size() - 1;
 		}
 
 		final BookChapterData data = m_chapterData.get(chapterIndex);
 		int paragraphIndex = paragraph - data.m_startOffset;
 		if (paragraphIndex < 0) {
-			Log.e("paragraphIndex", String.format("%1d  chapter:%2d  %3d  para:%4d %5d", paragraph, chapterIndex, m_chapterData.size(), paragraphIndex, data.paragraphOffset.size()));
+//			Log.e("paragraphIndex", String.format("%1d  chapter:%2d  %3d  para:%4d %5d", paragraph, chapterIndex, m_chapterData.size(), paragraphIndex, data.paragraphOffset.size()));
 			paragraphIndex = 0;
 		}
 		
 		if (paragraphIndex > data.paragraphOffset.size() - 1) {
-			Log.e("paragraphIndex", String.format("%1d  chapter:%2d  %3d  para:%4d %5d", paragraph, chapterIndex, m_chapterData.size(), paragraphIndex, data.paragraphOffset.size()));
+//			Log.e("paragraphIndex", String.format("%1d  chapter:%2d  %3d  para:%4d %5d", paragraph, chapterIndex, m_chapterData.size(), paragraphIndex, data.paragraphOffset.size()));
 			paragraphIndex = data.paragraphOffset.size() - 1;
 		}
 

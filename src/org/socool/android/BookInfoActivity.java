@@ -100,7 +100,8 @@ public class BookInfoActivity extends Activity {
 										}).create();// 创建按钮
 						dialog.show();
 					} else {
-						String text = String.format("导出电子书将会消耗%1d积分（当前积分%2d）", FBReaderApp.IMPORT_BOOK_POINT, currentPoints);
+						String text = "导出电子书";
+//						String text = String.format("导出电子书将会消耗%1d积分（当前积分%2d）", FBReaderApp.IMPORT_BOOK_POINT, currentPoints);
 						LayoutInflater inflater = LayoutInflater.from(BookInfoActivity.this);
 				        final View view = inflater.inflate(R.layout.alert_dialog_edit, null);
 				        final EditText edit = (EditText)view.findViewById(R.id.alert_dialog_edit);

@@ -1,22 +1,3 @@
-/*
- * Copyright (C) 2007-2012 Geometer Plus <contact@geometerplus.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
-
 package org.socool.zlibrary.text;
 
 import java.util.*;
@@ -24,7 +5,6 @@ import java.util.*;
 import org.socool.android.util.UIUtil;
 import org.socool.screader.bookmodel.BookChapter;
 import org.socool.screader.bookmodel.BookModel;
-import org.socool.screader.bookmodel.TOCTree;
 import org.socool.screader.screader.ActionCode;
 import org.socool.screader.screader.ColorProfile;
 import org.socool.screader.screader.FBReaderApp;
@@ -35,14 +15,9 @@ import org.socool.screader.screader.TextBuildTraverser;
 import org.socool.screader.screader.WordCountTraverser;
 import org.socool.screader.library.Bookmark;
 import org.socool.zlibrary.filesystem.ZLFile;
-import org.socool.zlibrary.filesystem.ZLResourceFile;
 
 import org.socool.zlibrary.util.ZLColor;
-import org.socool.zlibrary.view.ZLGLWidget;
 import org.socool.zlibrary.view.ZLPaintContext;
-import org.socool.zlibrary.view.ZLViewWidget;
-
-import android.util.Log;
 
 public class ZLTextView {
 	// paint state
@@ -1016,7 +991,12 @@ public class ZLTextView {
 				if (wordOccurred) {
 					wordOccurred = false;
 					internalSpaceCounter++;
-					lastSpaceWidth = myContext.getSpaceWidth();
+					if (myContext == null) {
+						lastSpaceWidth = 0;
+					} else {
+						lastSpaceWidth = myContext.getSpaceWidth();
+					}
+					
 					newWidth += lastSpaceWidth;
 				}
 			} else if (element instanceof ZLTextWord) {
@@ -1185,7 +1165,7 @@ public class ZLTextView {
 			if (element == ZLTextElement.HSpace) {
 				if (wordOccurred && (spaceCounter > 0)) {
 					final int correction = fullCorrection / spaceCounter;
-					final int spaceLength = myContext.getSpaceWidth() + correction;
+					final int spaceLength = (myContext == null ? correction : (myContext.getSpaceWidth() + correction));
 					if (myTextStyle.isUnderline()) {
 						spaceElement = new ZLTextElementArea(
 							paragraphIndex, wordIndex, 0,
@@ -1235,7 +1215,7 @@ public class ZLTextView {
 				final boolean addHyphenationSign = word.Data[word.Offset + len - 1] != '-';
 				final int width = getWordWidth(word, 0, len, addHyphenationSign);
 				final int height = getElementHeight(word);
-				final int descent = myContext.getDescent();
+				final int descent = myContext == null ? 0 : myContext.getDescent();
 				page.TextElementMap.add(
 					new ZLTextElementArea(
 						paragraphIndex, wordIndex, 0,
@@ -2261,3 +2241,4 @@ public class ZLTextView {
 		return traverser.getCount();
 	}
 }
+

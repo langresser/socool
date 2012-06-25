@@ -462,13 +462,15 @@ public final class FBReaderApp {
 
 			Model = BookModel.createModel(book);
 			BookTextView.setModel(Model);
-			final ZLTextPosition position = book.getStoredPosition();
-			if (position != null) {
-				BookTextView.gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
-			}
 			
 			if (bookmark == null) {
 				setView(BookTextView);
+				
+				final ZLTextPosition position = book.getStoredPosition();
+				if (position != null) {
+					BookTextView.gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
+				}
+
 				resetWidget();
 				repaintWidget(true);
 			} else {
@@ -1676,7 +1678,7 @@ public final class FBReaderApp {
 	
 	// 广告模块相关内容
 	// 控制是否显示广告，每个电子书对应一个标识
-	public final ZLBooleanOption EnableAdsOption = new ZLBooleanOption("Options", "enableAdsMcnxs", true);
+	public final ZLBooleanOption EnableAdsOption = new ZLBooleanOption("Options", "enableAdsMcnxs", false);
 	public int m_adsHeight = 0;
 	public void initOfferWall(Context context)
 	{
@@ -1687,21 +1689,22 @@ public final class FBReaderApp {
 	public void showOfferWall(Context context)
 	{
 		MobclickAgent.onEvent(context, "moreApp");
-		YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARD_OFFERS);
+		YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
 	}
 	
 	public int getOfferPoints(Context context)
 	{
-		return YoumiPointsManager.queryPoints(context);
+//		return YoumiPointsManager.queryPoints(context);
+		return 0;
 	}
 	
 	public void costOfferPoints(Context context, int points)
 	{
-		YoumiPointsManager.spendPoints(context, points);
+//		YoumiPointsManager.spendPoints(context, points);
 	}
 	
-	public final static int REMOVE_ADS_POINT = 50;
-	public final static int IMPORT_BOOK_POINT = 10;
+	public final static int REMOVE_ADS_POINT = 0;
+	public final static int IMPORT_BOOK_POINT = 0;
 	public void removeAds(final Context context)
 	{
 		if (EnableAdsOption.getValue() == false) {
