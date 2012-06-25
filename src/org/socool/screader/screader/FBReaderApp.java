@@ -1728,7 +1728,7 @@ public final class FBReaderApp {
 			dialog.show();
 			
 		} else {
-			MobclickAgent.onEvent(context, "removeAds");
+			MobclickAgent.onEvent(context, "removeAds", "ok");
 			costOfferPoints(context, REMOVE_ADS_POINT);
 			UIUtil.showMessageText(context, "广告已移除，感谢您的支持。");
 			m_adsHeight = 0;
@@ -1738,8 +1738,6 @@ public final class FBReaderApp {
 	
 	public void importBook(final Context context, String pathBook, String pathTo, String destFile)
 	{
-		MobclickAgent.onEvent(context, "import");
-		
 		String sdStatus = Environment.getExternalStorageState();
 	    if(!sdStatus.equals(Environment.MEDIA_MOUNTED)) {  
 	        UIUtil.showMessageText(context, "发生错误，SD卡未找到。");
@@ -1847,6 +1845,7 @@ public final class FBReaderApp {
 			outputStream.close();
 			costOfferPoints(context, IMPORT_BOOK_POINT);
 			UIUtil.showMessageText(context, "导出书籍完毕。");
+			MobclickAgent.onEvent(context, "import", "ok");
 	    } catch(Exception e) {
 	    	UIUtil.showMessageText(context, "发生错误，导出书籍失败。");
 	    	String error = e.getMessage();
@@ -1854,6 +1853,7 @@ public final class FBReaderApp {
 	    		error = "import book fail";
 	    	}
 	    	MobclickAgent.reportError(context, error); 
+	    	MobclickAgent.onEvent(context, "import", "fail");
 	        e.printStackTrace();  
 	    }  
 	}

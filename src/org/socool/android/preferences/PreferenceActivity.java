@@ -379,7 +379,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 					});
 					return true;
 				} else if (preference == fbPreferenceRemove) {
-					MobclickAgent.onEvent(PreferenceActivity.this, "btnRemoveAds");
+					MobclickAgent.onEvent(PreferenceActivity.this, "removeAds", "onClick");
 					FBReaderApp.Instance().removeAds(PreferenceActivity.this);
 					return true;
 				} else if (preference == fbPreferenceAbout) {

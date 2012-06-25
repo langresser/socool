@@ -80,7 +80,7 @@ public class BookInfoActivity extends Activity {
 				} else if (v == btnApp) {
 					FBReaderApp.Instance().showOfferWall(BookInfoActivity.this);
 				} else if (v == btnImport) {
-					MobclickAgent.onEvent(BookInfoActivity.this, "btnImport");
+					MobclickAgent.onEvent(BookInfoActivity.this, "import", "onclickbtn");
 					final int currentPoints = FBReaderApp.Instance().getOfferPoints(BookInfoActivity.this);
 					if (currentPoints < FBReaderApp.IMPORT_BOOK_POINT) {
 						String text = String.format("只要消耗 %1d积分（当前积分%2d），您就可以把内置电子书导出到SD卡中，使用您最喜欢的阅读器进行阅读。\n您可以通过下载推荐应用的方式免费获取积分", FBReaderApp.IMPORT_BOOK_POINT, currentPoints);

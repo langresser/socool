@@ -37,8 +37,6 @@ public class BookmarksActivity extends Activity {
 		
 		setContentView(R.layout.bookmarks);
 		
-		MobclickAgent.onEvent(this, "chapterList");
-		
 		m_btnChapter = (Button)findViewById(R.id.book_content);
 		m_btnBookmark = (Button)findViewById(R.id.book_mark);
 		m_btnComment = (Button)findViewById(R.id.book_comment);
@@ -91,6 +89,7 @@ public class BookmarksActivity extends Activity {
 	
 	public void gotoPage(int page)
 	{
+		MobclickAgent.onEvent(this, "chapterList", "" + page);
 		if (page == PAGE_CHAPTER) {
 			m_btnChapter.setSelected(true);
 			m_btnBookmark.setSelected(false);
