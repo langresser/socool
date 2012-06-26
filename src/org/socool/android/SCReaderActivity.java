@@ -126,8 +126,8 @@ public final class SCReaderActivity extends Activity {
 	
 		fbReader.openFile(fileFromIntent(getIntent()), null);
 		
-//		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
-		if (true) {
+		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
+//		if (true) {
 			final Thread runner = new Thread() {
 				public void run() {
 					runOnUiThread(new Runnable() {

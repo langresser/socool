@@ -1,0 +1,1208 @@
+android.annotation.SuppressLint
+android.annotation.TargetApi
+com.umeng.analytics.Gender
+com.umeng.analytics.MobclickAgent:
+    private static final int h
+    private static final int i
+    private static final int j
+    private static final int k
+    private static final int l
+    private static final int m
+    private static final int n
+    private static final java.lang.String p
+    private static final java.lang.String q
+    private static final java.lang.String r
+    private static final java.lang.String s
+    private static final java.lang.String t
+    private static final java.lang.String u
+    private static final java.lang.String v
+    private static final java.lang.String w
+    private static final java.lang.String x
+    private static final java.lang.String y
+    private static final java.lang.String z
+    private static final java.lang.String A
+    private static final java.lang.String B
+    private static final java.lang.String C
+    private static final java.lang.String D
+    private static final java.lang.String E
+    private static final java.lang.String F
+    private static final java.lang.String G
+    private static final java.lang.String H
+    private static final java.lang.String I
+    private static final java.lang.String J
+    private static final java.lang.String K
+    private static final java.lang.String L
+    private static final java.lang.String M
+    private static final java.lang.String N
+    private static final java.lang.String O
+    private static final java.lang.String P
+    private static final java.lang.String Q
+    private static final java.lang.String R
+    private static final java.lang.String S
+    private static final java.lang.String T
+    private static final java.lang.String U
+    private static final java.lang.String V
+    public static void setAutoLocation(boolean)
+    public static void setSessionContinueMillis(long)
+    public static void setOnlineConfigureListener(com.umeng.analytics.UmengOnlineConfigureListener)
+    public static void openActivityDurationTrack(boolean)
+    public static void setDebugMode(boolean)
+    public static void setDefaultReportPolicy(android.content.Context,int)
+    public static void flush(android.content.Context)
+    public static void onEvent(android.content.Context,java.lang.String,java.lang.String,int)
+    public static void onEvent(android.content.Context,java.lang.String,java.util.Map)
+    private static void a(android.content.Context,java.lang.String,java.util.Map,long)
+    public static void enterPage(android.content.Context,java.lang.String)
+    private synchronized void d(android.content.Context)
+    private void f(android.content.Context)
+    private org.json.JSONArray a(org.json.JSONObject,org.json.JSONArray)
+    public static void setOpenGLContext(javax.microedition.khronos.opengles.GL10)
+    public static java.lang.String getConfigParams(android.content.Context,java.lang.String)
+    private static void a(android.content.Context,int)
+    public static void updateOnlineConfig(android.content.Context,java.lang.String)
+    public static void setGender(android.content.Context,com.umeng.analytics.Gender)
+    public static void setAge(android.content.Context,int)
+    public static void setUserID(android.content.Context,java.lang.String,java.lang.String)
+    public static void onEventDuration(android.content.Context,java.lang.String,long)
+    public static void onEventDuration(android.content.Context,java.lang.String,java.lang.String,long)
+    public static void onEventDuration(android.content.Context,java.lang.String,java.util.Map,long)
+    public static void onEventBegin(android.content.Context,java.lang.String)
+    public static void onEventEnd(android.content.Context,java.lang.String)
+    public static void onEventBegin(android.content.Context,java.lang.String,java.lang.String)
+    public static void onEventEnd(android.content.Context,java.lang.String,java.lang.String)
+    public static void onKVEventBegin(android.content.Context,java.lang.String,java.util.Map,java.lang.String)
+    public static void onKVEventEnd(android.content.Context,java.lang.String,java.lang.String)
+com.umeng.analytics.MobclickAgent$1
+com.umeng.analytics.MobclickAgent$a:
+    MobclickAgent$a(android.content.Context,java.lang.String,java.util.Map,long,int)
+    MobclickAgent$a(android.content.Context,java.lang.String,java.util.Map,java.lang.String,int)
+com.umeng.analytics.ReportPolicy
+com.umeng.analytics.a:
+    static final java.lang.String a
+    static final java.lang.String b
+    static final java.lang.String c
+    static final int e
+    static final int f
+    static final java.lang.String n
+    static final java.lang.String p
+    static final java.lang.String q
+    static final java.lang.String s
+    static final java.lang.String t
+    static final java.lang.String u
+    static final java.lang.String v
+    static final java.lang.String w
+    static final java.lang.String x
+    static final java.lang.String y
+    static final java.lang.String z
+    static final java.lang.String A
+    a()
+com.umeng.analytics.b:
+    b()
+com.umeng.common.Log:
+    public Log()
+    public static void d(java.lang.String,java.lang.String)
+    public static void d(java.lang.String,java.lang.String,java.lang.Exception)
+    public static void e(java.lang.String,java.lang.String,java.lang.Exception)
+com.umeng.common.a
+com.umeng.common.a.a:
+    public a()
+com.umeng.common.a.b:
+    public b()
+com.umeng.common.b:
+    protected static final java.lang.String b
+    private static final java.lang.String d
+    private static final java.lang.String e
+    public static final int c
+    public static boolean a(java.lang.String,android.content.Context)
+    public static boolean a(android.content.Context)
+    public static java.util.Set b(android.content.Context)
+    public static boolean c(android.content.Context)
+    public static java.lang.String[] a(javax.microedition.khronos.opengles.GL10)
+    public static java.lang.String h(android.content.Context)
+    public static java.lang.String i(android.content.Context)
+    public static java.lang.String a(java.util.Date)
+    public static java.util.Date a(java.lang.String)
+    public static int a(java.util.Date,java.util.Date)
+com.umeng.common.b.a
+com.umeng.common.b.b
+com.umeng.common.b.c
+com.umeng.common.b.d
+com.umeng.common.b.e
+com.umeng.common.b.f:
+    public f()
+    public static java.lang.String a(byte[],java.lang.String)
+com.umeng.common.b.g:
+    private static final java.lang.String b
+    public g()
+    public static java.lang.String a(android.content.Context,long)
+    public static void a(android.content.Context,java.lang.String)
+    public static boolean b(android.content.Context,java.lang.String)
+    public static boolean d(java.lang.String)
+com.umeng.common.b.h
+com.umeng.common.b.i
+com.umeng.common.c:
+    public int a(java.lang.String)
+    public int e(java.lang.String)
+com.umeng.common.net.DownloadingService:
+    static final int a
+    static final int b
+    static final int c
+    static final int d
+    static final int e
+    static final int f
+    static final java.lang.String g
+com.umeng.common.net.DownloadingService$a:
+    private static final long j
+com.umeng.common.net.c:
+    private static final java.lang.String b
+    private static final java.lang.String c
+    private static final java.lang.String d
+    private static final java.lang.String e
+    private static final java.lang.String f
+    private static final java.lang.String g
+    private static final java.lang.String h
+    private static final java.lang.String j
+    public void a(java.lang.String,java.lang.String,java.lang.String)
+    public int b(java.lang.String,java.lang.String)
+    public java.lang.String c(java.lang.String,java.lang.String)
+    public java.util.Date d(java.lang.String,java.lang.String)
+    public void e(java.lang.String,java.lang.String)
+    public java.util.List a(java.lang.String)
+com.umeng.common.net.c$a:
+    private static final int b
+    private static final java.lang.String c
+com.umeng.common.net.c$b:
+    private c$b()
+com.umeng.common.net.f
+com.umeng.common.net.f$a
+com.umeng.common.net.f$b
+com.umeng.common.net.g
+com.umeng.common.net.h
+com.umeng.common.net.h$a
+com.umeng.common.net.i
+com.umeng.common.net.i$a
+com.umeng.common.net.i$b
+com.umeng.common.net.i$c
+com.umeng.common.net.j:
+    public com.umeng.common.net.j a(java.util.Map)
+com.umeng.common.net.k:
+    public java.lang.String d()
+com.umeng.fb.NotificationType
+com.umeng.fb.UMFeedbackService:
+    private static com.umeng.fb.NotificationType a
+    private static android.content.Context b
+    public UMFeedbackService()
+    private static void b(java.lang.String)
+    public static void setContactMap(java.util.Map)
+    public static void setRemarkMap(java.util.Map)
+    public static void enableNewReplyNotification(android.content.Context,com.umeng.fb.NotificationType)
+    public static void setFeedBackListener(com.umeng.fb.util.FeedBackListener)
+    static synthetic android.content.Context a()
+    static synthetic void a(java.lang.String)
+com.umeng.fb.a:
+    public java.lang.String d
+com.umeng.fb.a.a:
+    private static final int b
+com.umeng.fb.a.b:
+    public b(java.lang.String)
+com.umeng.fb.a.e:
+    public e(android.content.Context,android.os.Handler)
+com.umeng.fb.b.a:
+    public a()
+com.umeng.fb.b.b:
+    public b()
+    public static int d(android.content.Context)
+    public static int e(android.content.Context)
+    public static int f(android.content.Context)
+    public static int g(android.content.Context)
+    public static int h(android.content.Context)
+    public static int i(android.content.Context)
+com.umeng.fb.b.c:
+    public c()
+    public static int l(android.content.Context)
+    public static int v(android.content.Context)
+    public static int w(android.content.Context)
+    public static int x(android.content.Context)
+    public static int y(android.content.Context)
+com.umeng.fb.b.d:
+    public d()
+    public static int f(android.content.Context)
+com.umeng.fb.b.e:
+    public e()
+    public static int c(android.content.Context)
+    public static int k(android.content.Context)
+    public static int w(android.content.Context)
+    public static int x(android.content.Context)
+    public static int y(android.content.Context)
+    public static int z(android.content.Context)
+    public static int A(android.content.Context)
+com.umeng.fb.c
+com.umeng.fb.d
+com.umeng.fb.e
+com.umeng.fb.f:
+    public static final java.lang.String a
+    public static final java.lang.String b
+    public static final java.lang.String c
+    public static final int f
+    static final int g
+    public static final java.lang.String p
+    public static final java.lang.String s
+    public static final java.lang.String t
+    public static final java.lang.String v
+    public static final java.lang.String w
+    public static final java.lang.String x
+    public static final java.lang.String y
+    public static final java.lang.String z
+    public static final java.lang.String A
+    public static final java.lang.String B
+    public static final java.lang.String C
+    public static final java.lang.String D
+    public static final java.lang.String E
+    public static final java.lang.String F
+    public static final java.lang.String G
+    public static final java.lang.String H
+    public static final java.lang.String I
+    public static final java.lang.String J
+    public static final java.lang.String K
+    public static final java.lang.String L
+    public static final java.lang.String M
+    static final java.lang.String N
+    static final java.lang.String O
+    static final java.lang.String P
+    static final java.lang.String Q
+    static final java.lang.String R
+    public static final java.lang.String S
+    public static final java.lang.String T
+    public static final java.lang.String U
+    public static final java.lang.String V
+    public static final java.lang.String W
+    public static final java.lang.String X
+    public static final java.lang.String Y
+    public static final java.lang.String Z
+    public static final java.lang.String aa
+    public static final java.lang.String ab
+    public static final java.lang.String ac
+    public static final java.lang.String ad
+    public static final java.lang.String ae
+    public static final java.lang.String af
+    public static final java.lang.String ag
+    public static final java.lang.String ah
+    public static final java.lang.String ai
+    public static final java.lang.String aj
+    public static final java.lang.String ak
+    public static final java.lang.String al
+    public static final java.lang.String am
+    public static final java.lang.String an
+    public static final java.lang.String ao
+    public static final java.lang.String ap
+    public static final java.lang.String aq
+    public static final java.lang.String ar
+    public static final java.lang.String as
+    public static final java.lang.String at
+    public static final java.lang.String au
+    public static final java.lang.String av
+    public static final java.lang.String aw
+    public static final java.lang.String ax
+    public static final java.lang.String ay
+    public static final java.lang.String az
+    public static final java.lang.String aA
+    public static final int aB
+    public static final int aC
+    public static final int aD
+    public static final java.lang.String aE
+    public static final int aF
+    public static final int aG
+    public static final java.lang.String aH
+    public static final java.lang.String aI
+    public static final int aJ
+    public static final int aK
+    public static final java.lang.String aL
+    public static final java.lang.String aM
+    public static final java.lang.String aN
+    public static final java.lang.String aO
+    public static final java.lang.String aP
+    public static final java.lang.String aQ
+    public f()
+com.umeng.fb.g:
+    public g()
+    public static void a(android.content.Context)
+    public static java.lang.String a()
+    public static int a(java.util.Date,java.util.Date)
+    public static java.util.Date b(android.content.Context)
+    public static void a(android.content.Context,java.util.Date)
+    public static java.lang.String a(org.json.JSONObject)
+    public static java.lang.String b(org.json.JSONObject)
+com.umeng.fb.ui.FeedbackConversations:
+    private static final int c
+    private static final int d
+    private static final int e
+    private static final int f
+    private static final int g
+com.umeng.fb.ui.ThreadView
+com.umeng.fb.ui.b:
+    java.lang.String c
+com.umeng.fb.ui.d:
+    org.json.JSONArray d
+    java.lang.String[] e
+    public com.umeng.fb.b$a a(int)
+com.umeng.fb.util.ActivityStarter:
+    public ActivityStarter()
+com.umeng.fb.util.a:
+    static final java.lang.String a
+    private static final int b
+    public a()
+com.umeng.fb.util.b:
+    public b()
+    public static synchronized boolean b(org.json.JSONObject)
+com.umeng.fb.util.c:
+    public c()
+com.umeng.update.UmengUpdateAgent:
+    private static final java.lang.String e
+    private static final java.lang.String g
+    private static final java.lang.String h
+    public static final java.lang.String a
+    public static void setOnDownloadListener(com.umeng.update.UmengDownloadListener)
+    public static void update(android.content.Context,java.lang.String)
+    public static void setUpdateOnlyWifi(boolean)
+    public static void update(android.content.Context,long)
+    private static android.content.SharedPreferences a(android.content.Context)
+com.umeng.update.UpdateStatus:
+    public UpdateStatus()
+info.monitorenter.cpdetector.io.ASCIIDetector:
+    private static final long serialVersionUID
+info.monitorenter.cpdetector.io.AbstractCodepageDetector:
+    88:91:public java.nio.charset.Charset detectCodepage(java.net.URL)
+    103:108:public final java.io.Reader open(java.net.URL)
+info.monitorenter.cpdetector.io.ByteOrderMarkDetector
+info.monitorenter.cpdetector.io.ClassFileFilterIsA
+info.monitorenter.cpdetector.io.CodepageDetectorProxy:
+    private static final long serialVersionUID
+    132:147:public java.nio.charset.Charset detectCodepage(java.net.URL)
+info.monitorenter.cpdetector.io.FileFilterExtensions
+info.monitorenter.cpdetector.io.IClassFileFilter
+info.monitorenter.cpdetector.io.ICodepageDetector:
+    public abstract java.io.Reader open(java.net.URL)
+    public abstract java.nio.charset.Charset detectCodepage(java.net.URL)
+info.monitorenter.cpdetector.io.InputStreamDebug
+info.monitorenter.cpdetector.io.JChardetFacade:
+    194:194:public boolean isGuessing()
+    224:225:public synchronized void setGuessing(boolean)
+info.monitorenter.cpdetector.io.JarArchive
+info.monitorenter.cpdetector.io.JarArchive$JarElement
+info.monitorenter.cpdetector.io.UnicodeDetector:
+    170:173:public java.nio.charset.Charset detectCodepage(java.net.URL)
+info.monitorenter.cpdetector.util.collections.ITreeNode
+info.monitorenter.cpdetector.util.collections.ITreeNode$DefaultTreeNode
+info.monitorenter.cpdetector.util.collections.TreeNodeUniqueChildren
+info.monitorenter.io.LimitedInputStream
+info.monitorenter.io.MultiplexingOutputStream
+info.monitorenter.util.Entry
+info.monitorenter.util.ExceptionUtil
+info.monitorenter.util.ExceptionUtil$InputStreamTracer
+info.monitorenter.util.FileUtil:
+    private static info.monitorenter.util.FileUtil instance
+    80:104:public static java.util.Map$Entry cutDirectoryInformation(java.net.URL)
+    139:177:public static java.util.Map$Entry cutDirectoryInformation(java.lang.String)
+    214:232:public static java.util.Map$Entry cutExtension(java.lang.String)
+    263:277:public static java.lang.String getDefaultFileName(java.lang.String)
+    287:290:public static info.monitorenter.util.FileUtil getInstance()
+    310:310:public static boolean isAllASCII(java.io.File)
+    372:401:public static boolean isEqual(java.io.File,java.nio.charset.Charset,java.nio.charset.Charset)
+    422:422:public static java.io.InputStream readCache(java.io.File)
+    444:459:public static byte[] readRAM(java.io.File)
+    475:543:public static void removeDuplicateLineBreaks(java.io.File)
+    598:615:public java.lang.String formatFilesize(long,java.util.Locale)
+info.monitorenter.util.StringUtil
+org.mozilla.intl.chardet.Big5Statistics:
+    51:51:public float mFirstByteStdDev()
+    52:52:public float mFirstByteMean()
+    55:55:public float mSecondByteStdDev()
+    56:56:public float mSecondByteMean()
+org.mozilla.intl.chardet.EUCJPStatistics:
+    52:52:public float mFirstByteStdDev()
+    53:53:public float mFirstByteMean()
+    56:56:public float mSecondByteStdDev()
+    57:57:public float mSecondByteMean()
+org.mozilla.intl.chardet.EUCKRStatistics:
+    52:52:public float mFirstByteStdDev()
+    53:53:public float mFirstByteMean()
+    56:56:public float mSecondByteStdDev()
+    57:57:public float mSecondByteMean()
+org.mozilla.intl.chardet.EUCTWStatistics:
+    52:52:public float mFirstByteStdDev()
+    53:53:public float mFirstByteMean()
+    56:56:public float mSecondByteStdDev()
+    57:57:public float mSecondByteMean()
+org.mozilla.intl.chardet.GB2312Statistics:
+    52:52:public float mFirstByteStdDev()
+    53:53:public float mFirstByteMean()
+    56:56:public float mSecondByteStdDev()
+    57:57:public float mSecondByteMean()
+org.mozilla.intl.chardet.HtmlCharsetDetector
+org.mozilla.intl.chardet.HtmlCharsetDetector$1
+org.mozilla.intl.chardet.nsDetector:
+    69:70:public void Done()
+    80:85:public boolean isAscii(byte[],int)
+org.mozilla.intl.chardet.nsEUCStatistics:
+    public abstract float mFirstByteStdDev()
+    public abstract float mFirstByteMean()
+    public abstract float mSecondByteStdDev()
+    public abstract float mSecondByteMean()
+org.mozilla.intl.chardet.nsICharsetDetector
+org.mozilla.intl.chardet.nsPSMDetector:
+    public static final int ALL
+    public static final int JAPANESE
+    public static final int CHINESE
+    public static final int SIMPLIFIED_CHINESE
+    public static final int TRADITIONAL_CHINESE
+    public static final int KOREAN
+    public static final int NO_OF_LANGUAGES
+    public static final int MAX_VERIFIERS
+    74:82:public nsPSMDetector(int,org.mozilla.intl.chardet.nsVerifier[],org.mozilla.intl.chardet.nsEUCStatistics[])
+org.mozilla.intl.chardet.nsVerifier:
+    static final byte eStart
+    static final byte eError
+    static final byte eItsMe
+    static final int eidxSft4bits
+    static final int eSftMsk4bits
+    static final int eBitSft4bits
+    static final int eUnitMsk4bits
+org.socool.android.BookCommentAdapter:
+    public static final int OPEN_ITEM_ID
+    public static final int DELETE_ITEM_ID
+org.socool.android.BookInfoActivity:
+    public static final java.lang.String CURRENT_BOOK_PATH_KEY
+org.socool.android.BookmarkAdapter:
+    public static final int OPEN_ITEM_ID
+    public static final int DELETE_ITEM_ID
+org.socool.android.BookmarksActivity:
+    private static final int PAGE_CHAPTER
+    private static final int PAGE_BOOKMARK
+    private static final int PAGE_COMMENT
+org.socool.android.ChangeFontSizePopup:
+    public static final java.lang.String ID
+org.socool.android.ChangeLightPopup:
+    public static final java.lang.String ID
+org.socool.android.DictionaryUtil:
+    43:43:public DictionaryUtil()
+    145:145:public static void init(android.content.Context)
+    148:177:public static java.util.List dictionaryInfos(android.content.Context,boolean)
+    45:45:static synthetic int access$0()
+    46:46:static synthetic int access$1()
+    44:44:static synthetic int access$2()
+    52:52:static synthetic java.util.Map access$3()
+org.socool.android.DictionaryUtil$ColorDict3
+org.socool.android.DictionaryUtil$InfoReader
+org.socool.android.DictionaryUtil$ParagonInfoReader
+org.socool.android.ImageViewActivity:
+    public static final java.lang.String BACKGROUND_COLOR_KEY
+org.socool.android.LibraryActivity:
+    public static final java.lang.String SELECTED_BOOK_PATH_KEY
+    private static final int BOOK_INFO_REQUEST
+    private static final int OPEN_BOOK_ITEM_ID
+    private static final int SHOW_BOOK_INFO_ITEM_ID
+    private static final int SHARE_BOOK_ITEM_ID
+    private static final int ADD_TO_FAVORITES_ITEM_ID
+    private static final int REMOVE_FROM_FAVORITES_ITEM_ID
+    private static final int DELETE_BOOK_ITEM_ID
+    245:249:private android.view.MenuItem addMenuItem(android.view.Menu,int,java.lang.String,int)
+org.socool.android.NavigationPopup:
+    public static final java.lang.String ID
+org.socool.android.PackageInfo:
+    32:41:PackageInfo(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+org.socool.android.SCReaderActivity:
+    public static final java.lang.String BOOK_PATH_KEY
+    public static final int REQUEST_PREFERENCES
+    public static final int REQUEST_BOOK_INFO
+    public static final int REQUEST_CANCEL_MENU
+    public static final int RESULT_DO_NOTHING
+    public static final int RESULT_REPAINT
+    public static final int RESULT_RELOAD_BOOK
+    456:457:public final int getScreenBrightness()
+org.socool.android.SelectionPopup:
+    public static final java.lang.String ID
+org.socool.android.TextSearchPopup:
+    public static final java.lang.String ID
+org.socool.android.TipsActivity:
+    public static final java.lang.String INITIALIZE_ACTION
+    public static final java.lang.String SHOW_TIP_ACTION
+    private static final java.lang.String m_tips
+org.socool.android.ZLTreeAdapter
+org.socool.android.action.RunPluginAction
+org.socool.android.action.SearchAction
+org.socool.android.action.SelectionShareAction
+org.socool.android.action.ShareBookAction
+org.socool.android.action.ShowLibraryAction
+org.socool.android.bookshelf.BooksAdapter:
+    public static final int COVER_MAC_COUNT
+    96:135:void updateBookButton(android.widget.ImageView,int)
+org.socool.android.bookshelf.BubbleTextView:
+    private static final float CORNER_RADIUS
+    private static final float PADDING_H
+    private static final float PADDING_V
+    35:37:public BubbleTextView(android.content.Context)
+    40:42:public BubbleTextView(android.content.Context,android.util.AttributeSet)
+    45:47:public BubbleTextView(android.content.Context,android.util.AttributeSet,int)
+    50:62:private void init()
+org.socool.android.bookshelf.FastBitmapDrawable:
+    71:71:public android.graphics.Bitmap getBitmap()
+org.socool.android.bookshelf.LayerDrawable:
+    35:36:varargs LayerDrawable(android.graphics.drawable.Drawable[])
+    39:54:varargs LayerDrawable(org.socool.android.bookshelf.LayerDrawable$LayerState,android.graphics.drawable.Drawable[])
+    222:223:public void setParent(android.graphics.drawable.Drawable)
+org.socool.android.bookshelf.ShelvesActivity:
+    private boolean mPendingCoversUpdate
+    private static final int OPEN_BOOK_ITEM_ID
+    private static final int SHOW_BOOK_INFO_ITEM_ID
+    private static final int SHARE_BOOK_ITEM_ID
+    private static final int DELETE_BOOK_ITEM_ID
+    private static final int BOOK_INFO_REQUEST
+    138:138:boolean isPendingCoversUpdate()
+    183:186:private android.view.MenuItem addMenuItem(android.view.Menu,int,java.lang.String,int)
+org.socool.android.bookshelf.ShelvesView:
+    41:43:public ShelvesView(android.content.Context)
+    46:49:public ShelvesView(android.content.Context,android.util.AttributeSet)
+    52:55:public ShelvesView(android.content.Context,android.util.AttributeSet,int)
+    58:65:private void load(android.content.Context,android.util.AttributeSet,int)
+    68:86:private void init(android.content.Context)
+org.socool.android.bookshelf.SpotlightDrawable
+org.socool.android.bookshelf.TransitionDrawable:
+    private static final int TRANSITION_STARTING
+    private static final int TRANSITION_RUNNING
+    private static final int TRANSITION_NONE
+    38:39:public varargs TransitionDrawable(android.graphics.drawable.Drawable[])
+    51:53:private varargs TransitionDrawable(org.socool.android.bookshelf.TransitionDrawable$TransitionState,android.graphics.drawable.Drawable[])
+    93:119:public void reverseTransition(int)
+    179:180:public void setCrossFadeEnabled(boolean)
+    188:188:public boolean isCrossFadeEnabled()
+    1:1:public bridge synthetic void setParent(android.graphics.drawable.Drawable)
+org.socool.android.covers.CoverManager:
+    private static final float EDGE_START
+    private static final float EDGE_END
+    private static final int EDGE_COLOR_START
+    private static final int EDGE_COLOR_END
+    private static final int END_EDGE_COLOR_START
+    private static final int END_EDGE_COLOR_END
+    private static final float FOLD_START
+    private static final float FOLD_END
+    private static final int FOLD_COLOR_START
+    private static final int FOLD_COLOR_END
+    private static final float SHADOW_RADIUS
+    private static final int SHADOW_COLOR
+    private static volatile android.graphics.Matrix sScaleMatrix
+    238:240:public static void deleteCachedCover(java.lang.String)
+    255:273:public static org.socool.android.bookshelf.FastBitmapDrawable getCachedCover(java.lang.String,org.socool.android.bookshelf.FastBitmapDrawable)
+    299:310:public static android.graphics.Bitmap createShadow(android.graphics.Bitmap,int,int)
+    325:345:public static android.graphics.Bitmap createBookCover(android.graphics.Bitmap,int,int)
+    373:388:private static android.graphics.Bitmap loadCover(java.lang.String)
+    395:416:public static android.graphics.Bitmap createScaledBitmap(android.graphics.Bitmap,int,int,float,boolean,android.graphics.Paint)
+    422:456:private static android.graphics.Bitmap createBitmap(android.graphics.Bitmap,int,int,int,int,android.graphics.Matrix,float,boolean,android.graphics.Paint)
+org.socool.android.covers.CoverManager$ExpiringBitmap
+org.socool.android.preferences.DictionaryPreference
+org.socool.android.preferences.FontStylePreference
+org.socool.android.preferences.InfoPreference
+org.socool.android.preferences.PreferenceActivity:
+    134:135:public android.preference.Preference addPreference(android.preference.Preference)
+    140:142:public android.preference.Preference addOption(org.socool.zlibrary.options.ZLBooleanOption,java.lang.String)
+    434:542:void initFormat(org.socool.android.preferences.PreferenceActivity$Screen)
+org.socool.android.preferences.PreferenceActivity$Screen:
+    84:85:public void setSummary(java.lang.CharSequence)
+    88:90:public org.socool.android.preferences.PreferenceActivity$Screen createPreferenceScreen(java.lang.String)
+    105:105:public android.preference.Preference addOption(org.socool.zlibrary.options.ZLStringOption,java.lang.String)
+org.socool.android.preferences.UrlPreference
+org.socool.android.preferences.ZLBoolean3Preference
+org.socool.android.preferences.ZLIntegerChoicePreference
+org.socool.android.preferences.ZLStringOptionPreference
+org.socool.android.tree.TreeActivity:
+    private static final java.lang.String OPEN_TREE_ACTION
+    public static final java.lang.String TREE_KEY_KEY
+    public static final java.lang.String SELECTED_TREE_KEY_KEY
+    public static final java.lang.String HISTORY_KEY
+org.socool.android.tree.TreeAdapter:
+    52:58:public void add(org.socool.screader.FBTree)
+    61:67:public void add(int,org.socool.screader.FBTree)
+org.socool.android.tree.TreeAdapter$2
+org.socool.android.tree.TreeAdapter$3
+org.socool.android.util.PackageUtil:
+    42:42:public PackageUtil()
+    48:48:private static android.net.Uri homeUri(java.lang.String)
+    52:52:private static android.net.Uri homeUri(java.lang.String,java.lang.String)
+    57:56:private static boolean isPluginInstalled(android.app.Activity,java.lang.String)
+    65:64:private static boolean isPluginInstalled(android.app.Activity,java.lang.String,java.lang.String)
+org.socool.android.util.SQLiteUtil:
+    27:27:public SQLiteUtil()
+org.socool.android.util.UIUtil:
+    41:41:public UIUtil()
+org.socool.screader.FBTree$Key:
+    private static final long serialVersionUID
+org.socool.screader.FileUtil:
+    3:3:public FileUtil()
+    12:16:public static java.lang.String getFileName(java.lang.String)
+    22:22:public static java.lang.String getFullFileName(java.lang.String)
+org.socool.screader.Paths:
+    26:26:public Paths()
+    40:40:public static org.socool.zlibrary.options.ZLStringOption WallpapersDirectoryOption()
+    44:44:public static java.lang.String coverCacheDirectory()
+    48:48:public static java.lang.String cacheDirectory()
+    52:52:public static java.lang.String networkCacheDirectory()
+org.socool.screader.bookmodel.BookChapter:
+    61:65:public int getChapterTextOffset(int)
+    98:102:public int getParagraphCount(int)
+org.socool.screader.bookmodel.BookModel:
+    public static final byte NONE
+    public static final byte INTERNAL
+    public static final byte EXTERNAL
+    public static final byte REGULAR
+    public static final byte TITLE
+    public static final byte SECTION_TITLE
+    public static final byte POEM_TITLE
+    public static final byte SUBTITLE
+    public static final byte ANNOTATION
+    public static final byte EPIGRAPH
+    public static final byte STANZA
+    public static final byte VERSE
+    public static final byte PREFORMATTED
+    public static final byte IMAGE
+    public static final byte CITE
+    public static final byte AUTHOR
+    public static final byte DATE
+    public static final byte INTERNAL_HYPERLINK
+    public static final byte FOOTNOTE
+    public static final byte EMPHASIS
+    public static final byte STRONG
+    public static final byte SUB
+    public static final byte SUP
+    public static final byte CODE
+    public static final byte STRIKETHROUGH
+    public static final byte ITALIC
+    public static final byte BOLD
+    public static final byte DEFINITION
+    public static final byte DEFINITION_DESCRIPTION
+    public static final byte H1
+    public static final byte H2
+    public static final byte H3
+    public static final byte H4
+    public static final byte H5
+    public static final byte H6
+    public static final byte EXTERNAL_HYPERLINK
+    public static final byte ALIGN_UNDEFINED
+    public static final byte ALIGN_LEFT
+    public static final byte ALIGN_RIGHT
+    public static final byte ALIGN_CENTER
+    public static final byte ALIGN_JUSTIFY
+    public static final byte ALIGN_LINESTART
+    122:123:public void addImage(java.lang.String,org.socool.zlibrary.image.ZLImage)
+    194:195:void addHyperlinkLabel(java.lang.String,int)
+org.socool.screader.bookmodel.BookModel$Label:
+    187:190:public BookModel$Label(java.lang.String,int)
+org.socool.screader.bookmodel.BookParagraph:
+    public static final int PARAGRAPH_ELEMENT_TEXT
+    public static final int PARAGRAPH_ELEMENT_IMAGE
+    public static final int PARAGRAPH_ELEMENT_CONTROL
+    public static final int PARAGRAPH_ELEMENT_HYPERLINK_CONTROL
+    public static final int PARAGRAPH_ELEMENT_STYLE
+    public static final int PARAGRAPH_ELEMENT_FIXED_HSPACE
+    public static final int PARAGRAPH_ELEMENT_RESET_BIDI
+    public static final int PARAGRAPH_KIND_TEXT_PARAGRAPH
+    public static final int PARAGRAPH_KIND_EMPTY_LINE_PARAGRAPH
+    public static final int PARAGRAPH_KIND_BEFORE_SKIP_PARAGRAPH
+    public static final int PARAGRAPH_KIND_AFTER_SKIP_PARAGRAPH
+    public static final int PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH
+    public static final int PARAGRAPH_KIND_END_OF_TEXT_PARAGRAPH
+    72:90:public final java.lang.String getText(int)
+    94:104:public final int getTextLength(int)
+    202:203:public void addImage(java.lang.String,short,boolean)
+    218:219:public void addStyleEntry(org.socool.zlibrary.text.ZLTextStyleEntry)
+    222:223:public void addFixedHSpace(short)
+    226:227:public void addBidiReset()
+org.socool.screader.bookmodel.BookParagraph$Element:
+    149:151:BookParagraph$Element(org.socool.screader.bookmodel.BookParagraph,int)
+    161:166:BookParagraph$Element(org.socool.screader.bookmodel.BookParagraph,java.lang.String,short,boolean)
+    184:187:BookParagraph$Element(org.socool.screader.bookmodel.BookParagraph,org.socool.zlibrary.text.ZLTextStyleEntry)
+    190:193:BookParagraph$Element(org.socool.screader.bookmodel.BookParagraph,int,int)
+org.socool.screader.bookmodel.BookReader:
+    private int myUnderflowLength
+    63:64:public final void setByteDecoder(java.nio.charset.CharsetDecoder)
+    77:84:public final void addControl(byte,boolean)
+    131:138:public final void insertEndParagraph(int)
+    141:142:public final void addData(char[])
+    183:227:public final void addByteData(byte[],int,int)
+    235:241:public final void addHyperlinkControl(byte,java.lang.String)
+    244:251:public final void addHyperlinkLabel(java.lang.String)
+    254:255:public final void addHyperlinkLabel(java.lang.String,int)
+    258:259:public final void addContentsData(char[])
+    268:268:public final boolean hasContentsData()
+    272:289:public final void beginContentsParagraph(int)
+    292:304:public final void endContentsParagraph()
+    307:307:public final boolean contentsParagraphIsOpen()
+    311:312:public final void beginContentsParagraph()
+    315:316:public final void addImageReference(java.lang.String,boolean)
+    319:332:public final void addImageReference(java.lang.String,short,boolean)
+    335:336:public final void addImage(java.lang.String,org.socool.zlibrary.image.ZLImage)
+    339:342:public final void addFixedHSpace(short)
+org.socool.screader.bookmodel.TOCTree:
+    private java.lang.String myText
+    private org.socool.screader.bookmodel.TOCTree$Reference myReference
+    33:34:public TOCTree(org.socool.screader.bookmodel.TOCTree)
+    37:37:public final java.lang.String getText()
+    41:46:public final void setText(java.lang.String)
+    49:49:public org.socool.screader.bookmodel.TOCTree$Reference getReference()
+    53:54:public void setReference(org.socool.screader.bookmodel.BookModel,int)
+org.socool.screader.bookmodel.TOCTree$Reference
+org.socool.screader.filetype.FileType:
+    public abstract java.util.List mimeTypes()
+    public abstract org.socool.zlibrary.util.MimeType mimeType(java.lang.String)
+    40:40:public org.socool.zlibrary.util.MimeType simplifiedMimeType(java.lang.String)
+org.socool.screader.filetype.FileTypeCollection:
+    49:49:public org.socool.screader.filetype.FileType typeById(java.lang.String)
+    62:68:public org.socool.zlibrary.util.MimeType mimeType(java.lang.String)
+    72:78:public org.socool.zlibrary.util.MimeType simplifiedMimeType(java.lang.String)
+org.socool.screader.filetype.FileTypeHtml:
+    48:48:public java.util.List mimeTypes()
+    53:53:public org.socool.zlibrary.util.MimeType mimeType(java.lang.String)
+org.socool.screader.filetype.SimpleFileType:
+    45:45:public java.util.List mimeTypes()
+    50:50:public org.socool.zlibrary.util.MimeType mimeType(java.lang.String)
+org.socool.screader.formats.FormatPlugin:
+    43:43:public boolean supportStreamRead()
+    51:51:public void readPercent(double)
+    55:55:public void readChapter(int)
+    59:59:public int getDefaultCoverId()
+    public abstract void readMetaInfo(org.socool.screader.library.Book)
+    public abstract java.lang.String readAnnotation(org.socool.screader.library.Book)
+    public abstract org.socool.zlibrary.encodings.EncodingCollection supportedEncodings()
+org.socool.screader.formats.PluginCollection:
+    44:47:public static void deleteInstance()
+org.socool.screader.formats.html.HtmlReader
+org.socool.screader.formats.html.HtmlTag
+org.socool.screader.formats.html.MiscUtil
+org.socool.screader.formats.txt.TxtChapterPlugin:
+    52:52:public boolean supportStreamRead()
+    68:68:public void readChapter(int)
+    73:73:public void readPercent(double)
+    92:92:public java.lang.String readAnnotation(org.socool.screader.library.Book)
+    97:97:public org.socool.zlibrary.encodings.AutoEncodingCollection supportedEncodings()
+    1:1:public bridge synthetic org.socool.zlibrary.encodings.EncodingCollection supportedEncodings()
+org.socool.screader.formats.txt.TxtChapterReader:
+    public static final int BREAK_PARAGRAPH_AT_NEW_LINE
+    public static final int BREAK_PARAGRAPH_AT_EMPTY_LINE
+    public static final int BREAK_PARAGRAPH_AT_LINE_WITH_INDENT
+org.socool.screader.formats.txt.TxtPlugin:
+    26:26:public void readMetaInfo(org.socool.screader.library.Book)
+    31:31:public boolean supportStreamRead()
+    44:44:public void readPercent(double)
+    64:64:public java.lang.String readAnnotation(org.socool.screader.library.Book)
+    69:69:public org.socool.zlibrary.encodings.AutoEncodingCollection supportedEncodings()
+    1:1:public bridge synthetic org.socool.zlibrary.encodings.EncodingCollection supportedEncodings()
+org.socool.screader.formats.txt.TxtReader:
+    public static final int BREAK_PARAGRAPH_AT_NEW_LINE
+    public static final int BREAK_PARAGRAPH_AT_EMPTY_LINE
+    public static final int BREAK_PARAGRAPH_AT_LINE_WITH_INDENT
+org.socool.screader.formats.xhtml.XHTMLReader
+org.socool.screader.formats.xhtml.XHTMLReader$1
+org.socool.screader.formats.xhtml.XHTMLTagAction
+org.socool.screader.formats.xhtml.XHTMLTagBodyAction
+org.socool.screader.formats.xhtml.XHTMLTagControlAction
+org.socool.screader.formats.xhtml.XHTMLTagHyperlinkAction
+org.socool.screader.formats.xhtml.XHTMLTagImageAction
+org.socool.screader.formats.xhtml.XHTMLTagItemAction
+org.socool.screader.formats.xhtml.XHTMLTagParagraphAction
+org.socool.screader.formats.xhtml.XHTMLTagParagraphWithControlAction
+org.socool.screader.formats.xhtml.XHTMLTagPreAction
+org.socool.screader.formats.xhtml.XHTMLTagRestartParagraphAction
+org.socool.screader.library.Book:
+    130:132:public void reloadInfoFromFile()
+    259:291:public java.lang.String getContentHashCode()
+org.socool.screader.library.Bookmark:
+    public static final int CREATION
+    public static final int MODIFICATION
+    public static final int ACCESS
+    public static final int LATEST
+    public static final int BOOKMARK_TYPE_BOOKMARK
+    public static final int BOOKMARK_TYPE_COMMENT
+    134:134:public java.lang.String getBookTitle()
+    142:147:public void setText(java.lang.String)
+    150:151:public void onOpen()
+org.socool.screader.library.BooksDatabase:
+    private android.database.sqlite.SQLiteStatement myDeleteVisitedHyperlinksStatement
+    300:343:public java.util.List loadAllBookmarks()
+    459:467:private void deleteVisitedHyperlinks(long)
+org.socool.screader.library.FileFirstLevelTree
+org.socool.screader.library.FileInfo
+org.socool.screader.library.FileTree:
+    39:44:FileTree(org.socool.screader.library.LibraryTree,org.socool.zlibrary.filesystem.ZLFile,java.lang.String,java.lang.String)
+org.socool.screader.library.FirstLevelTree:
+    29:32:FirstLevelTree(org.socool.screader.library.RootTree,int,java.lang.String)
+org.socool.screader.library.Tag
+org.socool.screader.screader.ActionCode
+org.socool.screader.screader.ChangeFontSizeAction
+org.socool.screader.screader.ColorProfile:
+    public static final java.lang.String DAY
+    public static final java.lang.String NIGHT
+org.socool.screader.screader.FBReaderApp:
+    public static final java.lang.String NoAction
+    public static final java.lang.String SCREEN_ORIENTATION_SYSTEM
+    public static final java.lang.String SCREEN_ORIENTATION_PORTRAIT
+    public static final java.lang.String SCREEN_ORIENTATION_LANDSCAPE
+    public static final int TURN_OFF_TIME_DEFAULT
+    public static final int TURN_OFF_TIME_1
+    public static final int TURN_OFF_TIME_3
+    public static final int TURN_OFF_TIME_5
+    public static final int TURN_OFF_TIME_10
+    public static final int TURN_OFF_TIME_30
+    public static final int TURN_OFF_TIME_NEVER
+    public static final java.lang.String ROOT_FOUND
+    public static final java.lang.String ROOT_FAVORITES
+    public static final java.lang.String ROOT_RECENT
+    public static final java.lang.String ROOT_BY_AUTHOR
+    public static final java.lang.String ROOT_BY_TITLE
+    public static final java.lang.String ROOT_BY_SERIES
+    public static final java.lang.String ROOT_BY_TAG
+    public static final java.lang.String ROOT_FILE_TREE
+    public static final int REMOVE_DONT_REMOVE
+    public static final int REMOVE_FROM_LIBRARY
+    public static final int REMOVE_FROM_DISK
+    public static final int REMOVE_FROM_LIBRARY_AND_DISK
+    private static final int STATUS_LOADING
+    private static final int STATUS_SEARCHING
+    public static final int REMOVE_ADS_POINT
+    public static final int IMPORT_BOOK_POINT
+    540:547:public org.socool.screader.library.Bookmark addBookmark(int,boolean)
+    551:571:public org.socool.screader.bookmodel.TOCTree getCurrentTOCElement()
+    621:622:public final void removeAction(java.lang.String)
+    792:792:public java.lang.String[] allOrientations()
+    821:821:public boolean isScrollMode()
+    842:845:public void finish()
+    904:904:public org.socool.zlibrary.filesystem.ZLResourceFile createResourceFile(org.socool.zlibrary.filesystem.ZLResourceFile,java.lang.String)
+    910:913:public java.lang.String getVersionName()
+    920:923:public java.lang.String getFullVersionName()
+    955:955:public int getScreenBrightness()
+    985:988:public int getPixelWidth()
+    992:995:public int getPixelHeight()
+    1011:1033:public java.util.Collection defaultLanguageCodes()
+    1180:1180:public android.view.Menu addSubMenu(android.view.Menu,java.lang.String)
+    1237:1238:public void close()
+    1354:1373:private java.util.List collectPhysicalFiles()
+    1515:1516:public org.socool.screader.library.Book getPreviousBook()
+    1520:1532:public void startBookSearch(java.lang.String)
+    1535:1556:private void searchBooks(java.lang.String)
+    1638:1664:public boolean hasCustomCover(org.socool.zlibrary.filesystem.ZLFile)
+    1669:1690:public int getCoverResourceId(org.socool.zlibrary.filesystem.ZLFile)
+    1534:1534:static synthetic void access$7(org.socool.screader.screader.FBReaderApp,java.lang.String)
+org.socool.screader.screader.FBReaderApp$5
+org.socool.screader.screader.FBReaderApp$AndroidAssetsFile:
+    1109:1112:public long size()
+    1117:1126:private long sizeInternal()
+    1132:1148:private long sizeSlow()
+    1159:1159:public org.socool.zlibrary.filesystem.ZLFile getParent()
+org.socool.screader.screader.TapZoneMap:
+    40:43:TapZoneMap(int,int)
+org.socool.screader.screader.TextBuildTraverser:
+    42:42:protected void processControlElement(org.socool.zlibrary.text.ZLTextControlElement)
+org.socool.screader.screader.WallpapersUtil:
+    28:28:public WallpapersUtil()
+    34:34:public static java.util.List externalWallpaperFiles()
+org.socool.screader.screader.WordCountTraverser:
+    42:42:protected void processControlElement(org.socool.zlibrary.text.ZLTextControlElement)
+org.socool.screader.screader.ZLKeyBindings:
+    private static final java.lang.String ACTION
+    private static final java.lang.String LONG_PRESS_ACTION
+org.socool.socoolreader.mcnxs.BuildConfig
+org.socool.socoolreader.mcnxs.R
+org.socool.socoolreader.mcnxs.R$anim
+org.socool.socoolreader.mcnxs.R$array
+org.socool.socoolreader.mcnxs.R$attr
+org.socool.socoolreader.mcnxs.R$color
+org.socool.socoolreader.mcnxs.R$drawable
+org.socool.socoolreader.mcnxs.R$id
+org.socool.socoolreader.mcnxs.R$layout
+org.socool.socoolreader.mcnxs.R$string
+org.socool.socoolreader.mcnxs.R$style
+org.socool.socoolreader.mcnxs.R$xml
+org.socool.zlibrary.encodings.AutoEncodingCollection
+org.socool.zlibrary.encodings.Encoding
+org.socool.zlibrary.encodings.EncodingCollection
+org.socool.zlibrary.encodings.EncodingConverter
+org.socool.zlibrary.encodings.FilteredEncodingCollection
+org.socool.zlibrary.encodings.FilteredEncodingCollection$EncodingCollectionReader
+org.socool.zlibrary.encodings.JavaEncodingCollection
+org.socool.zlibrary.filesystem.ZLFile:
+    private boolean myIsCached
+    61:85:public static org.socool.zlibrary.filesystem.ZLFile createFile(org.socool.zlibrary.filesystem.ZLFile,java.lang.String)
+    public abstract long size()
+    public abstract org.socool.zlibrary.filesystem.ZLFile getParent()
+    120:120:public final boolean isCompressed()
+    134:134:public final java.lang.String getExtension()
+    167:167:protected boolean isCached()
+    171:180:public void setCached(boolean)
+org.socool.zlibrary.filesystem.ZLFile$ArchiveType
+org.socool.zlibrary.filesystem.ZLPhysicalFile:
+    44:44:public long size()
+    62:62:public java.io.File javaFile()
+    77:77:public org.socool.zlibrary.filesystem.ZLFile getParent()
+org.socool.zlibrary.filesystem.ZLResource:
+    160:167:public java.lang.String getValue(int)
+org.socool.zlibrary.filesystem.ZLResource$Condition:
+    public abstract boolean accepts(int)
+org.socool.zlibrary.filesystem.ZLResource$ModCondition:
+    89:89:public boolean accepts(int)
+org.socool.zlibrary.filesystem.ZLResource$ModRangeCondition:
+    73:74:public boolean accepts(int)
+org.socool.zlibrary.filesystem.ZLResource$RangeCondition:
+    56:56:public boolean accepts(int)
+org.socool.zlibrary.filesystem.ZLResource$ResourceTreeReader:
+    private static final java.lang.String NODE
+org.socool.zlibrary.filesystem.ZLResource$ValueCondition:
+    41:41:public boolean accepts(int)
+org.socool.zlibrary.filesystem.ZLResourceFile:
+    27:27:static org.socool.zlibrary.filesystem.ZLResourceFile createResourceFile(org.socool.zlibrary.filesystem.ZLResourceFile,java.lang.String)
+org.socool.zlibrary.html.ZLByteBuffer
+org.socool.zlibrary.html.ZLHtmlAttributeMap
+org.socool.zlibrary.html.ZLHtmlParser
+org.socool.zlibrary.html.ZLHtmlProcessor
+org.socool.zlibrary.html.ZLHtmlReader
+org.socool.zlibrary.image.NetworkImage
+org.socool.zlibrary.image.ZLBase64EncodedImage
+org.socool.zlibrary.image.ZLFileImage:
+    public static final java.lang.String SCHEME
+    public static final java.lang.String ENCODING_NONE
+    public static final java.lang.String ENCODING_HEX
+    public static final java.lang.String ENCODING_BASE64
+    59:60:public ZLFileImage(java.lang.String,org.socool.zlibrary.filesystem.ZLFile,java.lang.String,int,int)
+    71:72:public ZLFileImage(org.socool.zlibrary.util.MimeType,org.socool.zlibrary.filesystem.ZLFile)
+org.socool.zlibrary.image.ZLImageManager:
+    private static final int IMAGE_LOADING_THREADS_NUMBER
+    195:195:private static int uShort(byte[],int)
+    194:194:static synthetic int access$1(byte[],int)
+org.socool.zlibrary.image.ZLImageManager$PalmImageHeader
+org.socool.zlibrary.image.ZLLoadableImage:
+    31:32:public ZLLoadableImage(org.socool.zlibrary.util.MimeType)
+    61:62:public void synchronizeFast()
+org.socool.zlibrary.image.ZLLoadableImage$SourceType
+org.socool.zlibrary.options.ZLBoolean3Option:
+    46:57:public void setValue(org.socool.zlibrary.util.ZLBoolean3)
+org.socool.zlibrary.options.ZLIntegerOption:
+    47:57:public void setValue(int)
+org.socool.zlibrary.options.ZLOption:
+    public static final java.lang.String PLATFORM_GROUP
+org.socool.zlibrary.text.ZLTextBaseStyle:
+    private static final java.lang.String GROUP
+    private static final java.lang.String OPTIONS
+org.socool.zlibrary.text.ZLTextElementArea:
+    54:54:boolean contains(int,int)
+org.socool.zlibrary.text.ZLTextElementAreaVector:
+    85:92:org.socool.zlibrary.text.ZLTextElementArea getFirstAfter(org.socool.zlibrary.text.ZLTextPosition)
+    96:104:org.socool.zlibrary.text.ZLTextElementArea getLastBefore(org.socool.zlibrary.text.ZLTextPosition)
+    108:108:org.socool.zlibrary.text.ZLTextElementArea binarySearch(int,int)
+org.socool.zlibrary.text.ZLTextHighlighting:
+    32:37:public boolean clear()
+    41:41:public boolean isEmpty()
+    45:45:public org.socool.zlibrary.text.ZLTextPosition getStartPosition()
+    49:49:public org.socool.zlibrary.text.ZLTextPosition getEndPosition()
+    53:53:public org.socool.zlibrary.text.ZLTextElementArea getStartArea(org.socool.zlibrary.text.ZLTextPage)
+    57:57:public org.socool.zlibrary.text.ZLTextElementArea getEndArea(org.socool.zlibrary.text.ZLTextPage)
+org.socool.zlibrary.text.ZLTextHyphenator:
+    35:38:public static void deleteInstance()
+org.socool.zlibrary.text.ZLTextMark:
+    33:37:public ZLTextMark(org.socool.zlibrary.text.ZLTextMark)
+org.socool.zlibrary.text.ZLTextParagraphCursor:
+    255:255:org.socool.screader.bookmodel.BookParagraph$ParagraphData getParagraph()
+org.socool.zlibrary.text.ZLTextParagraphCursor$Processor:
+    private static final int NO_SPACE
+    private static final int SPACE
+org.socool.zlibrary.text.ZLTextParagraphCursorCache:
+    27:27:ZLTextParagraphCursorCache()
+org.socool.zlibrary.text.ZLTextStyleCollection:
+    46:47:public static void deleteInstance()
+org.socool.zlibrary.text.ZLTextStyleDecoration:
+    static final java.lang.String STYLE
+    63:63:public java.lang.String getName()
+org.socool.zlibrary.text.ZLTextStyleEntry:
+    public static final short SUPPORTS_LEFT_INDENT
+    public static final short SUPPORTS_RIGHT_INDENT
+    public static final short SUPPORTS_ALIGNMENT_TYPE
+    private short myMask
+    private short myLeftIndent
+    private short myRightIndent
+    private byte myAlignmentType
+    32:33:public ZLTextStyleEntry()
+    36:36:public short getMask()
+    40:40:public boolean isLeftIndentSupported()
+    44:44:public short getLeftIndent()
+    48:50:public void setLeftIndent(short)
+    53:53:public boolean isRightIndentSupported()
+    57:57:public short getRightIndent()
+    61:63:public void setRightIndent(short)
+    66:66:public boolean isAlignmentTypeSupported()
+    70:70:public byte getAlignmentType()
+    74:76:public void setAlignmentType(byte)
+org.socool.zlibrary.text.ZLTextTraverser:
+    protected abstract void processControlElement(org.socool.zlibrary.text.ZLTextControlElement)
+org.socool.zlibrary.text.ZLTextView:
+    public static final int NOTHING_TO_PAINT
+    public static final int READY
+    public static final int START_IS_KNOWN
+    public static final int END_IS_KNOWN
+    public static final int TO_SCROLL_FORWARD
+    public static final int TO_SCROLL_BACKWARD
+    public static final int MAX_SELECTION_DISTANCE
+    678:685:private org.socool.zlibrary.text.ZLTextPage getPage(org.socool.zlibrary.text.ZLTextView$PageIndex)
+    690:690:protected final synchronized int sizeOfTextBeforeParagraph(int)
+    694:697:protected final synchronized int sizeOfFullText()
+    701:713:protected final synchronized int getCurrentCharNumber(org.socool.zlibrary.text.ZLTextView$PageIndex,boolean)
+    718:735:private int sizeOfTextBeforeCursor(org.socool.zlibrary.text.ZLTextWordCursor)
+    749:755:public void gotoHome()
+    1517:1517:protected org.socool.zlibrary.text.ZLTextElementArea getElementByCoordinates(int,int)
+    1613:1615:public void resetRegionPointer()
+    1801:1804:final int getWordWidth(org.socool.zlibrary.text.ZLTextWord,int,int)
+    1833:1844:int getAreaLength(org.socool.zlibrary.text.ZLTextParagraphCursor,org.socool.zlibrary.text.ZLTextElementArea,int)
+org.socool.zlibrary.text.ZLTextView$PagePosition
+org.socool.zlibrary.text.ZLTextView$ScrollingMode
+org.socool.zlibrary.text.ZLTextView$SizeUnit
+org.socool.zlibrary.text.ZLTextWordCursor:
+    44:46:public ZLTextWordCursor(org.socool.zlibrary.text.ZLTextParagraphCursor)
+    63:63:public boolean isStartOfText()
+    73:73:public boolean isEndOfText()
+    121:123:public void previousWord()
+org.socool.zlibrary.util.LineBreaker:
+    public static final byte MUSTBREAK
+    public static final byte ALLOWBREAK
+    public static final byte NOBREAK
+    public static final byte INSIDEACHAR
+    7:7:public LineBreaker()
+org.socool.zlibrary.util.MimeType:
+    public static final java.lang.String IMAGE_PREFIX
+    140:140:public java.lang.String getParameter(java.lang.String)
+    158:158:public boolean weakEquals(org.socool.zlibrary.util.MimeType)
+org.socool.zlibrary.util.Money
+org.socool.zlibrary.util.ZLAndroidColorUtil:
+    26:26:public ZLAndroidColorUtil()
+org.socool.zlibrary.util.ZLArrayUtils:
+    22:22:public ZLArrayUtils()
+    24:28:public static boolean[] createCopy(boolean[],int,int)
+    48:52:public static int[] createCopy(int[],int,int)
+org.socool.zlibrary.util.ZLCharacterUtil:
+    22:22:public ZLCharacterUtil()
+org.socool.zlibrary.util.ZLConfig:
+    82:88:public synchronized java.util.List listGroups()
+    92:98:public synchronized java.util.List listNames(java.lang.String)
+    102:107:public synchronized void removeGroup(java.lang.String)
+org.socool.zlibrary.util.ZLLanguageUtil
+org.socool.zlibrary.util.ZLLanguageUtil$CodeComparator
+org.socool.zlibrary.util.ZLMiscUtil:
+    24:24:public ZLMiscUtil()
+    30:30:public static boolean isEmptyString(java.lang.String)
+    38:44:public static boolean listsEquals(java.util.List,java.util.List)
+    66:66:public static boolean matchesIgnoreCase(java.lang.String,java.lang.String)
+org.socool.zlibrary.util.ZLNetworkUtil
+org.socool.zlibrary.util.ZLSearchPattern
+org.socool.zlibrary.util.ZLSearchUtil
+org.socool.zlibrary.util.ZLTree:
+    72:91:public final synchronized org.socool.zlibrary.util.ZLTree getTreeByParagraphNumber(int)
+    140:140:public final java.lang.Iterable allSubTrees(int)
+org.socool.zlibrary.util.ZLTree$1
+org.socool.zlibrary.util.ZLUnicodeUtil
+org.socool.zlibrary.view.AndroidFontUtil:
+    34:34:public AndroidFontUtil()
+    45:45:public static boolean areExternalFontsSupported()
+org.socool.zlibrary.view.AnimationProvider:
+    protected abstract int getScrollingShift()
+    abstract int getScrolledPercent()
+org.socool.zlibrary.view.CurlAnimationProvider:
+    295:295:protected int getScrollingShift()
+    299:301:int getScrolledPercent()
+org.socool.zlibrary.view.CurlMesh:
+    private static final boolean DRAW_CURL_POSITION
+    private static final boolean DRAW_POLYGON_OUTLINES
+    private static final boolean DRAW_TEXTURE
+    private static final boolean DRAW_SHADOW
+    private static final double BACKFACE_ALPHA
+    private static final double FRONTFACE_ALPHA
+    private int mCurlPositionLinesCount
+    private java.nio.FloatBuffer mCurlPositionLines
+org.socool.zlibrary.view.CurlRenderer:
+    public static final int PAGE_LEFT
+    public static final int PAGE_RIGHT
+    private static final boolean USE_PERSPECTIVE_PROJECTION
+    170:172:public void setBackgroundColor(int)
+    180:185:public synchronized void setMargins(float,float,float,float)
+org.socool.zlibrary.view.NoneAnimationProvider:
+    99:99:protected int getScrollingShift()
+    103:105:int getScrolledPercent()
+org.socool.zlibrary.view.ShiftAnimationProvider:
+    93:95:int getScrolledPercent()
+org.socool.zlibrary.view.SlideAnimationProvider:
+    79:81:int getScrolledPercent()
+org.socool.zlibrary.view.ZLGLWidget:
+    private static final int CURL_NONE
+    private static final int CURL_LEFT
+    private static final int CURL_RIGHT
+    private static final int SET_CURL_TO_LEFT
+    private static final int SET_CURL_TO_RIGHT
+    75:76:public ZLGLWidget(android.content.Context,android.util.AttributeSet,int)
+    79:81:public ZLGLWidget(android.content.Context,android.util.AttributeSet)
+    95:101:public void releaseBitmap()
+org.socool.zlibrary.view.ZLPaintContext:
+    226:229:public java.util.ArrayList fontFamilies()
+    374:375:public void setLineWidth(int)
+    464:471:public void drawLine(int,int,int,int)
+    489:489:public void drawFilledCircle(int,int,int)
+    496:497:protected void fillFamiliesList(java.util.ArrayList)
+org.socool.zlibrary.view.ZLPaintContext$FillStyle
+org.socool.zlibrary.view.ZLPaintContext$LineStyle
+org.socool.zlibrary.view.ZLViewWidget:
+    37:39:public ZLViewWidget(android.content.Context,android.util.AttributeSet,int)
+    42:44:public ZLViewWidget(android.content.Context,android.util.AttributeSet)
+org.socool.zlibrary.xml.XMLNamespaces
+org.socool.zlibrary.xml.ZLDTDParser:
+    private static final byte IGNORABLE_WHITESPACE
+    private static final byte LANGLE
+    private static final byte TAG_PREFIX
+    private static final byte COMMENT
+    private static final byte END_OF_COMMENT1
+    private static final byte END_OF_COMMENT2
+    private static final byte ENTITY
+    private static final byte WAIT_NAME
+    private static final byte NAME
+    private static final byte WAIT_VALUE
+    private static final byte VALUE
+    private static final byte WAIT_END_OF_ENTITY
+org.socool.zlibrary.xml.ZLStringMap:
+    68:68:public int getSize()
+    72:72:public java.lang.String getKey(int)
+    76:76:java.lang.String getValue(int)
+org.socool.zlibrary.xml.ZLXMLParser:
+    private static final byte START_DOCUMENT
+    private static final byte START_TAG
+    private static final byte END_TAG
+    private static final byte TEXT
+    private static final byte COMMENT
+    private static final byte END_OF_COMMENT1
+    private static final byte END_OF_COMMENT2
+    private static final byte EXCL_TAG
+    private static final byte EXCL_TAG_START
+    private static final byte Q_TAG
+    private static final byte END_OF_Q_TAG
+    private static final byte LANGLE
+    private static final byte WS_AFTER_START_TAG_NAME
+    private static final byte WS_AFTER_ATTRIBUTE_VALUE
+    private static final byte WAIT_EQUALS
+    private static final byte WAIT_ATTRIBUTE_VALUE
+    private static final byte SLASH
+    private static final byte ATTRIBUTE_NAME
+    private static final byte ATTRIBUTE_VALUE_QUOT
+    private static final byte ATTRIBUTE_VALUE_APOS
+    private static final byte ENTITY_REF
+    private static final byte CDATA
+    private static final byte END_OF_CDATA1
+    private static final byte END_OF_CDATA2
+org.socool.zlibrary.xml.ZLXMLProcessor:
+    27:27:public ZLXMLProcessor()
+    30:32:public static java.util.Map getEntityMap(java.util.List)
+org.socool.zlibrary.xml.ZLXMLReaderAdapter:
+    41:42:public void read(org.socool.zlibrary.filesystem.ZLFile)
+    45:46:public void read(java.io.InputStream)
+    82:93:public boolean testTag(java.lang.String,java.lang.String,java.lang.String)
+    97:115:public java.lang.String getAttributeValue(org.socool.zlibrary.xml.ZLStringMap,java.lang.String,java.lang.String)
+    123:138:protected java.lang.String getAttributeValue(org.socool.zlibrary.xml.ZLStringMap,org.socool.zlibrary.xml.ZLXMLReaderAdapter$Predicate,java.lang.String)
+org.socool.zlibrary.xml.ZLXMLReaderAdapter$Predicate

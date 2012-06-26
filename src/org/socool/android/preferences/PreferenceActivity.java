@@ -361,35 +361,45 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				if (preference == fbPreferenceFeedback) {
-					UMFeedbackService.setGoBackButtonVisible();
-					UMFeedbackService.openUmengFeedbackSDK(PreferenceActivity.this);
+					try {
+						UMFeedbackService.setGoBackButtonVisible();
+						UMFeedbackService.openUmengFeedbackSDK(PreferenceActivity.this);
+					} catch (Exception e) {
+						e.printStackTrace();
+						MobclickAgent.reportError(PreferenceActivity.this, "umeng feedback error");
+					}
 					return true;
 				} else if (preference == fbPreferenceUpdate) {
-					MobclickAgent.onEvent(PreferenceActivity.this, "checkUpdate");
-					UmengUpdateAgent.update(PreferenceActivity.this);
-					UmengUpdateAgent.setUpdateAutoPopup(false);
-					UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-					        @Override
-					        public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
-					            switch (updateStatus) {
-					            case 0: // has update
-					                UmengUpdateAgent.showUpdateDialog(PreferenceActivity.this, updateInfo);
-					                break;
-					            case 1: // has no update
-					                Toast.makeText(PreferenceActivity.this, "已经是最新版本", Toast.LENGTH_SHORT)
-					                        .show();
-					                break;
-					            case 2: // none wifi
-					                Toast.makeText(PreferenceActivity.this, "没有wifi连接， 为了避免消耗您的流量，只在wifi环境下进行更新", Toast.LENGTH_SHORT)
-					                        .show();
-					                break;
-					            case 3: // time out
-					                Toast.makeText(PreferenceActivity.this, "超时", Toast.LENGTH_SHORT)
-					                        .show();
-					                break;
-					            }
-					        }
-					});
+					try {
+						MobclickAgent.onEvent(PreferenceActivity.this, "checkUpdate");
+						UmengUpdateAgent.update(PreferenceActivity.this);
+						UmengUpdateAgent.setUpdateAutoPopup(false);
+						UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+						        @Override
+						        public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
+						            switch (updateStatus) {
+						            case 0: // has update
+						                UmengUpdateAgent.showUpdateDialog(PreferenceActivity.this, updateInfo);
+						                break;
+						            case 1: // has no update
+						                Toast.makeText(PreferenceActivity.this, "已经是最新版本", Toast.LENGTH_SHORT)
+						                        .show();
+						                break;
+						            case 2: // none wifi
+						                Toast.makeText(PreferenceActivity.this, "没有wifi连接， 为了避免消耗您的流量，只在wifi环境下进行更新", Toast.LENGTH_SHORT)
+						                        .show();
+						                break;
+						            case 3: // time out
+						                Toast.makeText(PreferenceActivity.this, "超时", Toast.LENGTH_SHORT)
+						                        .show();
+						                break;
+						            }
+						        }
+						});
+					} catch (Exception e) {
+						e.printStackTrace();
+						MobclickAgent.reportError(PreferenceActivity.this, "umeng checkupdate error");
+					}
 					return true;
 				} else if (preference == fbPreferenceRemove) {
 					MobclickAgent.onEvent(PreferenceActivity.this, "removeAds", "onClick");
@@ -413,7 +423,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
 											MobclickAgent.onEvent(PreferenceActivity.this, "moreBook");
-											UIUtil.showMessageText(PreferenceActivity.this, "敬请期待...");
+											FBReaderApp.Instance().showMore(PreferenceActivity.this);
 											dialog.cancel();
 										}
 									}).create();// 创建按钮

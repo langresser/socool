@@ -48,14 +48,22 @@ public class BookInfoActivity extends Activity {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
+		FBReaderApp.Instance().m_bookinfoActivity = this;
 		// ”—√À
-		MobclickAgent.updateOnlineConfig(this);
-		MobclickAgent.onError(this);
+		try {
+			MobclickAgent.updateOnlineConfig(this);
+			MobclickAgent.onError(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			MobclickAgent.reportError(this, "init umeng error");
+		}
 
 		m_currentBookPath = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
 		if (m_currentBookPath == null) {
 			m_currentBookPath = "book/mcnxs";
 		}
+		
+		FBReaderApp.Instance().initOfferWall(this);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
@@ -155,6 +163,11 @@ public class BookInfoActivity extends Activity {
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 				);
 		}
+	}
+	
+	public void onDestroy()
+	{
+		super.onDestroy();
 	}
 	
 	public void onResume() {

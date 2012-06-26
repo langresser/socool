@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.mcnxs" android:versionCode="100000" android:versionName="1.0.0" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="5" android:maxSdkVersion="10" android:targetSdkVersion="8"/>
+	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+	
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.READ_LOGS"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> 
+
+
+	<application android:name="org.socool.android.FBReaderApplication" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name">
+		<activity android:name="org.socool.android.bookshelf.ShelvesActivity">		    
+		</activity>
+		<activity android:name="org.socool.android.SCReaderActivity" android:icon="@drawable/mcnxs_icon" android:label="@string/app_name" android:configChanges="orientation|keyboardHidden">
+			<intent-filter>
+				<action android:name="android.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="file" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="fbreader-action" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="" android:scheme="file" />
+				<data android:pathPattern=".*\\.epub" />
+				<data android:pathPattern=".*\\.oeb" />
+				<data android:pathPattern=".*\\.fb2" />
+				<data android:pathPattern=".*\\.fb2\\.zip" />
+				<data android:pathPattern=".*\\.mobi" />
+				<data android:pathPattern=".*\\.prc" />
+				<data android:pathPattern=".*\\.txt" />
+				<data android:pathPattern=".*\\.rtf" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="" android:scheme="file" android:mimeType="text/plain" />
+				<data android:pathPattern=".*\\.epub" />
+				<data android:pathPattern=".*\\.oeb" />
+				<data android:pathPattern=".*\\.fb2" />
+				<data android:pathPattern=".*\\.mobi" />
+				<data android:pathPattern=".*\\.prc" />
+				<data android:pathPattern=".*\\.txt" />
+				<data android:pathPattern=".*\\.rtf" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="content" android:pathPattern=".*\\.fb2" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="" android:scheme="file" />
+				<data android:mimeType="application/epub+zip" />
+				<data android:mimeType="application/x-pilot-prc" />
+				<data android:mimeType="application/x-mobipocket-ebook" />
+				<data android:mimeType="application/x-fictionbook+xml" />
+				<data android:mimeType="application/x-fictionbook" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
+		</activity>
+		<activity android:name="org.socool.android.ImageViewActivity" android:configChanges="orientation|keyboardHidden"/>
+		<activity android:name="org.socool.android.BookInfoActivity" android:configChanges="orientation|keyboardHidden">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name="org.socool.android.LibrarySearchActivity" android:theme="@android:style/Theme.NoDisplay">
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
+		</activity>
+		<activity android:name="org.socool.android.LibraryActivity" android:configChanges="orientation|keyboardHidden">
+			<meta-data android:name="android.app.default_searchable" android:value="org.socool.android.library.LibrarySearchActivity" />
+		</activity>
+		<activity android:name="org.socool.android.BookmarkActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.BookChapterActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.BookChapterJuanActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.BookmarksActivity" android:configChanges="orientation|keyboardHidden">
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
+		</activity>
+		<activity android:name="org.socool.android.BookmarkEditActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.preferences.PreferenceActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.preferences.EditBookInfoActivity" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.network.BookDownloader" android:process=":networkLibrary" android:theme="@android:style/Theme.NoDisplay">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="*" android:scheme="http" />
+				<data android:pathPattern=".*\\.epub" />
+				<data android:pathPattern=".*\\.oeb" />
+				<data android:pathPattern=".*\\.fb2" />
+				<data android:pathPattern=".*\\.fb2\\.zip" />
+				<data android:pathPattern=".*\\.mobi" />
+				<data android:pathPattern=".*\\.prc" />
+				<data android:pathPattern=".*\\.txt" />
+				<data android:pathPattern=".*\\.rtf" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="*" android:scheme="http" />
+				<data android:mimeType="application/epub+zip" />
+				<data android:mimeType="application/x-pilot-prc" />
+				<data android:mimeType="application/x-mobipocket-ebook" />
+				<data android:mimeType="application/x-fictionbook+xml" />
+				<data android:mimeType="application/x-fictionbook" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="*rus.ec" android:mimeType="application/zip" android:scheme="http" />
+				<data android:host="lib.ololo.cc" android:mimeType="application/zip" android:scheme="http" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="*" android:scheme="book" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="*" android:scheme="epub" />
+			</intent-filter>
+		</activity>
+		<service android:name="org.socool.android.network.BookDownloaderService" android:process=":networkLibrary" />
+		<activity android:name="org.socool.android.network.NetworkSearchActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.NoDisplay">
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
+		</activity>
+		<activity android:name="org.socool.android.network.NetworkLibraryPrimaryActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden">
+			<meta-data android:name="android.app.default_searchable" android:value="org.socool.android.network.NetworkSearchActivity" />
+			<intent-filter>
+				<action android:name="android.action.OPEN_NETWORK_CATALOG" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="*" android:scheme="http" />
+				<data android:host="*" android:scheme="https" />
+			</intent-filter>
+		</activity>
+		<activity android:name="org.socool.android.network.NetworkLibrarySecondaryActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" />
+		<activity android:name="org.socool.android.network.AuthenticationActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.network.BuyBooksActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.network.AddCatalogMenuActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name="org.socool.android.network.AddCustomCatalogActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.Dialog">
+			<intent-filter>
+				<action android:name="android.action.ADD_OPDS_CATALOG" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="data.fbreader.org" android:scheme="http" android:path="/add_catalog/editUrl"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="*" android:scheme="opds" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.action.ADD_OPDS_CATALOG_URL" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="*" android:scheme="http" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.action.ADD_OPDS_CATALOG_URL" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="*" android:scheme="https" />
+			</intent-filter>
+		</activity>
+		<activity android:name="org.socool.android.network.AuthorizationMenuActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden"/>
+		<activity android:name="org.socool.android.network.TopupMenuActivity" android:process=":networkLibrary" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden"/>
+		<activity android:name="org.socool.android.network.NetworkBookInfoActivity" android:process=":networkLibrary" android:configChanges="orientation|keyboardHidden">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="*" android:scheme="litres-book" />
+			</intent-filter>
+		</activity>
+		<receiver android:name="org.socool.android.network.ListenerCallback" android:process=":networkLibrary">
+			<intent-filter>
+				<action android:name="android.action.network.SIGNIN" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</receiver>
+		<activity android:name="org.socool.android.TipsActivity" 
+		    android:configChanges="orientation|keyboardHidden" 
+		    android:theme="@style/transparent"/>
+
+	<!--有米-->
+	<meta-data android:name="YOUMI_CHANNEL" android:value="10050"/>
+	<activity android:configChanges="keyboard|keyboardHidden|orientation"
+		android:name="net.youmi.android.appoffers.YoumiOffersActivity" >
+	</activity>
+	
+	<!-- 聚赢 -->
+	<activity android:name="com.tencent.mobwin.MobinWINBrowserActivity" > </activity>
+	
+	<!-- 多盟  -->
+	<activity android:name="cn.domob.android.ads.DomobActivity"
+	    android:theme="@android:style/Theme.Translucent" />
+
+	<!--友盟-->
+	<meta-data android:value="4fe4926e5270156649000081" android:name="UMENG_APPKEY"/>
+	<meta-data android:value="91nd" android:name="UMENG_CHANNEL"/>
+	<activity android:name="com.umeng.fb.ui.SendFeedback" android:windowSoftInputMode="adjustResize" />
+	<activity android:name="com.umeng.fb.ui.FeedbackConversations" />
+	<activity android:name="com.umeng.fb.ui.FeedbackConversation" android:configChanges="keyboard" />
+	
+	<service
+    	android:name="com.umeng.common.net.DownloadingService"
+   	 	android:exported="true"
+    	android:process=":DownloadingService" >
+	</service>
+
+	</application>
+</manifest>
