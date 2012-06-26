@@ -77,18 +77,6 @@ public final class SCReaderActivity extends Activity {
 		return filePath != null ? ZLFile.createFileByPath(filePath) : null;
 	}
 
-	protected Runnable getPostponedInitAction() {
-		return new Runnable() {
-			public void run() {
-				runOnUiThread(new Runnable() {
-					public void run() {
-						new TipRunner().start();
-					}
-				});
-			}
-		};
-	}
-
 	public ZLGLWidget m_bookViewGL;
 	public ZLViewWidget m_bookView;
 	public RelativeLayout m_mainLayout;
@@ -138,11 +126,17 @@ public final class SCReaderActivity extends Activity {
 	
 		fbReader.openFile(fileFromIntent(getIntent()), null);
 		
-		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
-//		if (true) {
+//		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
+		if (true) {
 			final Thread runner = new Thread() {
 				public void run() {
-					getPostponedInitAction().run();
+					runOnUiThread(new Runnable() {
+						public void run() {
+							startActivity(new Intent(
+									TipsActivity.SHOW_TIP_ACTION, null, SCReaderActivity.this, TipsActivity.class
+								));
+						}
+					});
 				}
 			};
 			
@@ -278,18 +272,6 @@ public final class SCReaderActivity extends Activity {
 		((PopupPanel)FBReaderApp.Instance().getPopupById(SelectionPopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(ChangeFontSizePopup.ID)).setPanelInfo(this, m_mainLayout);
 		((PopupPanel)FBReaderApp.Instance().getPopupById(ChangeLightPopup.ID)).setPanelInfo(this, m_mainLayout);
-	}
-
-	private class TipRunner extends Thread {
-		TipRunner() {
-			setPriority(MIN_PRIORITY);
-		}
-
-		public void run() {
-			startActivity(new Intent(
-					TipsActivity.SHOW_TIP_ACTION, null, SCReaderActivity.this, TipsActivity.class
-				));
-		}
 	}
 
 	@Override

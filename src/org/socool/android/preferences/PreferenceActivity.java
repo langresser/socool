@@ -50,6 +50,7 @@ import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.screader.*;
 
 import org.socool.android.SCReaderActivity;
+import org.socool.android.TipsActivity;
 import org.socool.android.util.UIUtil;
 
 //import com.guohead.sdk.GHView;
@@ -345,6 +346,11 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		fbPreferenceFeedback.setSummary("告诉我们您的意见或建议");
 		screenAbout.addPreference(fbPreferenceFeedback);
 		
+		final Preference fbPreferenceHelp = new Preference(this);
+		fbPreferenceHelp.setTitle("帮助");
+		fbPreferenceHelp.setSummary("显示帮助提示");
+		screenAbout.addPreference(fbPreferenceHelp);
+		
 		final Preference fbPreferenceAbout = new Preference(this);
 		fbPreferenceAbout.setTitle("关于我们");
 		fbPreferenceAbout.setSummary("Banana Studio");
@@ -413,6 +419,22 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 									}).create();// 创建按钮
 					dialog.show();
 					return true;
+				} else if (preference == fbPreferenceHelp) {
+					final Thread runner = new Thread() {
+						public void run() {
+							runOnUiThread(new Runnable() {
+								public void run() {
+									startActivity(new Intent(
+											TipsActivity.SHOW_TIP_ACTION, null, PreferenceActivity.this, TipsActivity.class
+										));
+								}
+							});
+						}
+					};
+					
+					runner.setPriority(Thread.MIN_PRIORITY);
+					runner.start();
+					return true;
 				}
 				return false;
 			}
@@ -422,6 +444,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		fbPreferenceFeedback.setOnPreferenceClickListener(listener);
 		fbPreferenceRemove.setOnPreferenceClickListener(listener);
 		fbPreferenceAbout.setOnPreferenceClickListener(listener);
+		fbPreferenceHelp.setOnPreferenceClickListener(listener);
 //		
 //		final Preference fbPreferenceTemp = new Preference(this);
 //		fbPreferenceTemp.setTitle("");

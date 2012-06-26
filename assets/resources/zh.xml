@@ -203,7 +203,7 @@
 				<node name="fonts" value="第三方字体存放位置"/>
 				<node name="wallpapers" value="墙纸存放位置" />
 			</node>
-			<node name="appearance" value="更多功能">
+			<node name="appearance" value="系统设置">
                 <node name="summary" value="自动休眠时间,屏幕方向等"/>
                 <node name="turnOffTime" value="自动关闭屏幕时间">
                     <node name="default" value="系统默认"/>
@@ -216,6 +216,10 @@
                     <node name="never" value="常亮"/>
                 </node>
                 <node name="soundturn" value="音量键翻页">
+                    <node name="summaryOn" value="开启"/>
+                    <node name="summaryOff" value="禁用"/>
+                </node>
+                <node name="fullScreen" value="全屏阅读">
                     <node name="summaryOn" value="开启"/>
                     <node name="summaryOff" value="禁用"/>
                 </node>

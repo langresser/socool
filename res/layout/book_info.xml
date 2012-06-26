@@ -28,7 +28,7 @@
 			android:layout_width="0dip"
 			android:layout_weight="1"
 			android:text="开始阅读"
-			android:background="@drawable/normal_button_selector"
+			android:background="@drawable/big_normal_button_selector"
 			android:layout_height="wrap_content"
 		/>
 		<LinearLayout
@@ -42,7 +42,7 @@
 			android:layout_width="0dip"
 			android:layout_weight="1"
 			android:text="导出书籍"
-			android:background="@drawable/normal_button_selector"
+			android:background="@drawable/big_normal_button_selector"
 			android:layout_height="wrap_content"
 		/>
 		<LinearLayout
@@ -56,7 +56,7 @@
 			android:layout_width="0dip"
 			android:layout_weight="1"
 			android:text="精品推荐"
-			android:background="@drawable/normal_button_selector"
+			android:background="@drawable/big_normal_button_selector"
 			android:layout_height="wrap_content"
 		/>
 		<LinearLayout

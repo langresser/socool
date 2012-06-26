@@ -22,7 +22,9 @@ package org.socool.android;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.view.Window;
 import android.widget.*;
 
 import org.socool.screader.screader.FBReaderApp;
@@ -35,15 +37,13 @@ public class TipsActivity extends Activity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.tip);
-
-		setTitle("帮助");
-		setTitleColor(0xff000000);
 		
 		final CheckBox checkBox = (CheckBox)findViewById(R.id.tip_checkbox);
 
-		final Button yesButton = (Button)findViewById(R.id.ok_button);
+		final Button yesButton = (Button)findViewById(R.id.tip_ok_button);
 		yesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -59,7 +59,7 @@ public class TipsActivity extends Activity {
 //			}
 //		});
 
-		final Button appButton = (Button)findViewById(R.id.app_button);
+		final Button appButton = (Button)findViewById(R.id.tip_app_button);
 		appButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -75,11 +75,12 @@ public class TipsActivity extends Activity {
 	private void showText(CharSequence text) {
 		final TextView textView = (TextView)findViewById(R.id.tip_text);
 		textView.setText(text);
-		textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+		textView.setMovementMethod(ScrollingMovementMethod.getInstance());
 	}
 	
 	private static final String m_tips = 
 		"    点击屏幕中部可以显示系统菜单，通过设置选项可以进行更多的个性化设置。\n\n"+
-		"    长按屏幕文字可以进行文本选择\n\n" +
+		"    点击屏幕两侧或者拖动均可实现翻页，长按屏幕文字可以进行文本选择\n\n" +
 		"    如果您喜欢本应用，可以通过下载或打开精品推荐中您所喜欢的应用的方式来支持我们。有您的支持，我们可以为您提供出更多更好的精品电子书。"; 
 }
