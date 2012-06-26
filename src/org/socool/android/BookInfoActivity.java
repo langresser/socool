@@ -39,6 +39,7 @@ import org.socool.screader.library.*;
 import org.socool.zlibrary.text.ZLTextPosition;
 
 import com.umeng.analytics.MobclickAgent;
+//import com.waps.AppConnect;
 
 public class BookInfoActivity extends Activity {
 	public static final String CURRENT_BOOK_PATH_KEY = "CurrentBookPath";
@@ -48,11 +49,14 @@ public class BookInfoActivity extends Activity {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-		FBReaderApp.Instance().m_bookinfoActivity = this;
 		// ”—√À
 		try {
 			MobclickAgent.updateOnlineConfig(this);
 			MobclickAgent.onError(this);
+			
+			// ÕÚ∆’
+//			AppConnect.getInstance(BookInfoActivity.this);
+//			FBReaderApp.Instance().initOfferWall(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(this, "init umeng error");
@@ -63,7 +67,6 @@ public class BookInfoActivity extends Activity {
 			m_currentBookPath = "book/mcnxs";
 		}
 		
-		FBReaderApp.Instance().initOfferWall(this);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
@@ -167,6 +170,7 @@ public class BookInfoActivity extends Activity {
 	
 	public void onDestroy()
 	{
+		FBReaderApp.Instance().releaseOfferWall(this);
 		super.onDestroy();
 	}
 	

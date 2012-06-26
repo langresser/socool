@@ -34,8 +34,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
-//import net.youmi.android.appoffers.YoumiOffersManager;
-//import net.youmi.android.appoffers.YoumiPointsManager;
+import net.youmi.android.appoffers.YoumiOffersManager;
 
 import org.socool.zlibrary.filesystem.ZLFile;
 import org.socool.zlibrary.filesystem.ZLPhysicalFile;
@@ -75,7 +74,7 @@ import org.socool.screader.library.*;
 import org.socool.socoolreader.mcnxs.R;
 
 import com.umeng.analytics.MobclickAgent;
-import com.waps.AppConnect;
+//import com.waps.AppConnect;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -1697,51 +1696,52 @@ public final class FBReaderApp {
 	public final ZLBooleanOption EnableAdsOption = new ZLBooleanOption("Options", "enableAdsMcnxs", false);
 	public int m_adsHeight = 0;
 	public boolean m_initOfferWall = false;
-	public Context m_bookinfoActivity = null;
 	public void initOfferWall(Context context)
 	{
 		// 万普
 		try {
-			m_bookinfoActivity = context;
-			AppConnect.getInstance(context);
-			AppConnect.getInstance("7281ebff5a5dae5d199636a7b6c8ecc2","appChina", context);
+//			AppConnect.getInstance(context);
+//			AppConnect.getInstance("7281ebff5a5dae5d199636a7b6c8ecc2","appChina", context);
+			
+			// 有米
+			YoumiOffersManager.init(context, "8293ee0143c779e7", "53af3575317e0e36");
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "initOfferWall error");
 		}
 		
-		// 有米
-//		YoumiOffersManager.init(context, "8293ee0143c779e7", "53af3575317e0e36");
+		
 	}
 	
 	public void releaseOfferWall(Context context)
 	{
-		AppConnect.getInstance(context).finalize();
+//		AppConnect.getInstance(context).finalize();
 	}
 	
 	public void showOfferWall(Context context)
 	{
-//		if (!m_initOfferWall) {
-//			initOfferWall(context);
-//			m_initOfferWall = true;
-//		}
+		if (!m_initOfferWall) {
+			initOfferWall(context);
+			m_initOfferWall = true;
+		}
 		
 		try {
 			MobclickAgent.onEvent(context, "moreApp");
-			AppConnect.getInstance(context).showOffers(context);
+//			AppConnect.getInstance(context).showOffers(context);
+			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "showOfferWall error");
-		}
-//		YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
+		}	
 	}
 	
 	public void showMore(Context context)
 	{
 		try {
 			MobclickAgent.onEvent(context, "moreBook");
-			AppConnect.getInstance(context).showMore(context);
-//		YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
+//			AppConnect.getInstance(context).showMore(context);
+			UIUtil.showMessageText(context, "敬请期待...");
+//			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "showMore error");

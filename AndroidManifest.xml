@@ -202,11 +202,11 @@
 		    android:theme="@style/transparent"/>
 
 
-	<!-- 万普 -->
-	<activity android:name="com.waps.OffersWebView"
-	    android:configChanges="keyboardHidden|orientation"/>
-	<meta-data android:name="WAPS_ID" android:value="7281ebff5a5dae5d199636a7b6c8ecc2" />
-	<meta-data android:name="WAPS_PID" android:value="appChina" />
+	<!--有米-->
+	<meta-data android:name="YOUMI_CHANNEL" android:value="10050"/>
+	<activity android:configChanges="keyboard|keyboardHidden|orientation"
+		android:name="net.youmi.android.appoffers.YoumiOffersActivity" >
+	</activity>
 	
 	<!--友盟-->
 	<meta-data android:value="4fe4926e5270156649000081" android:name="UMENG_APPKEY"/>
