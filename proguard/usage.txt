@@ -338,7 +338,8 @@ com.umeng.fb.ui.FeedbackConversations:
     private static final int e
     private static final int f
     private static final int g
-com.umeng.fb.ui.ThreadView
+com.umeng.fb.ui.ThreadView:
+    public ThreadView(android.content.Context,android.util.AttributeSet)
 com.umeng.fb.ui.b:
     java.lang.String c
 com.umeng.fb.ui.d:
@@ -518,15 +519,11 @@ org.socool.android.SCReaderActivity:
     public static final int RESULT_DO_NOTHING
     public static final int RESULT_REPAINT
     public static final int RESULT_RELOAD_BOOK
-    456:457:public final int getScreenBrightness()
+    425:426:public final int getScreenBrightness()
 org.socool.android.SelectionPopup:
     public static final java.lang.String ID
 org.socool.android.TextSearchPopup:
     public static final java.lang.String ID
-org.socool.android.TipsActivity:
-    public static final java.lang.String INITIALIZE_ACTION
-    public static final java.lang.String SHOW_TIP_ACTION
-    private static final java.lang.String m_tips
 org.socool.android.ZLTreeAdapter
 org.socool.android.action.RunPluginAction
 org.socool.android.action.SearchAction
@@ -602,13 +599,13 @@ org.socool.android.preferences.DictionaryPreference
 org.socool.android.preferences.FontStylePreference
 org.socool.android.preferences.InfoPreference
 org.socool.android.preferences.PreferenceActivity:
-    134:135:public android.preference.Preference addPreference(android.preference.Preference)
-    140:142:public android.preference.Preference addOption(org.socool.zlibrary.options.ZLBooleanOption,java.lang.String)
-    434:542:void initFormat(org.socool.android.preferences.PreferenceActivity$Screen)
+    133:134:public android.preference.Preference addPreference(android.preference.Preference)
+    139:141:public android.preference.Preference addOption(org.socool.zlibrary.options.ZLBooleanOption,java.lang.String)
+    454:562:void initFormat(org.socool.android.preferences.PreferenceActivity$Screen)
 org.socool.android.preferences.PreferenceActivity$Screen:
-    84:85:public void setSummary(java.lang.CharSequence)
-    88:90:public org.socool.android.preferences.PreferenceActivity$Screen createPreferenceScreen(java.lang.String)
-    105:105:public android.preference.Preference addOption(org.socool.zlibrary.options.ZLStringOption,java.lang.String)
+    83:84:public void setSummary(java.lang.CharSequence)
+    87:89:public org.socool.android.preferences.PreferenceActivity$Screen createPreferenceScreen(java.lang.String)
+    104:104:public android.preference.Preference addOption(org.socool.zlibrary.options.ZLStringOption,java.lang.String)
 org.socool.android.preferences.UrlPreference
 org.socool.android.preferences.ZLBoolean3Preference
 org.socool.android.preferences.ZLIntegerChoicePreference
@@ -867,34 +864,34 @@ org.socool.screader.screader.FBReaderApp:
     private static final int STATUS_SEARCHING
     public static final int REMOVE_ADS_POINT
     public static final int IMPORT_BOOK_POINT
-    540:547:public org.socool.screader.library.Bookmark addBookmark(int,boolean)
-    551:571:public org.socool.screader.bookmodel.TOCTree getCurrentTOCElement()
-    621:622:public final void removeAction(java.lang.String)
-    792:792:public java.lang.String[] allOrientations()
-    821:821:public boolean isScrollMode()
-    842:845:public void finish()
-    904:904:public org.socool.zlibrary.filesystem.ZLResourceFile createResourceFile(org.socool.zlibrary.filesystem.ZLResourceFile,java.lang.String)
-    910:913:public java.lang.String getVersionName()
-    920:923:public java.lang.String getFullVersionName()
-    955:955:public int getScreenBrightness()
-    985:988:public int getPixelWidth()
-    992:995:public int getPixelHeight()
-    1011:1033:public java.util.Collection defaultLanguageCodes()
-    1180:1180:public android.view.Menu addSubMenu(android.view.Menu,java.lang.String)
-    1237:1238:public void close()
-    1354:1373:private java.util.List collectPhysicalFiles()
-    1515:1516:public org.socool.screader.library.Book getPreviousBook()
-    1520:1532:public void startBookSearch(java.lang.String)
-    1535:1556:private void searchBooks(java.lang.String)
-    1638:1664:public boolean hasCustomCover(org.socool.zlibrary.filesystem.ZLFile)
-    1669:1690:public int getCoverResourceId(org.socool.zlibrary.filesystem.ZLFile)
-    1534:1534:static synthetic void access$7(org.socool.screader.screader.FBReaderApp,java.lang.String)
+    541:548:public org.socool.screader.library.Bookmark addBookmark(int,boolean)
+    552:572:public org.socool.screader.bookmodel.TOCTree getCurrentTOCElement()
+    622:623:public final void removeAction(java.lang.String)
+    793:793:public java.lang.String[] allOrientations()
+    822:822:public boolean isScrollMode()
+    843:846:public void finish()
+    905:905:public org.socool.zlibrary.filesystem.ZLResourceFile createResourceFile(org.socool.zlibrary.filesystem.ZLResourceFile,java.lang.String)
+    911:914:public java.lang.String getVersionName()
+    921:924:public java.lang.String getFullVersionName()
+    956:956:public int getScreenBrightness()
+    986:989:public int getPixelWidth()
+    993:996:public int getPixelHeight()
+    1012:1034:public java.util.Collection defaultLanguageCodes()
+    1181:1181:public android.view.Menu addSubMenu(android.view.Menu,java.lang.String)
+    1238:1239:public void close()
+    1355:1374:private java.util.List collectPhysicalFiles()
+    1516:1517:public org.socool.screader.library.Book getPreviousBook()
+    1521:1533:public void startBookSearch(java.lang.String)
+    1536:1557:private void searchBooks(java.lang.String)
+    1639:1665:public boolean hasCustomCover(org.socool.zlibrary.filesystem.ZLFile)
+    1670:1691:public int getCoverResourceId(org.socool.zlibrary.filesystem.ZLFile)
+    1535:1535:static synthetic void access$7(org.socool.screader.screader.FBReaderApp,java.lang.String)
 org.socool.screader.screader.FBReaderApp$5
 org.socool.screader.screader.FBReaderApp$AndroidAssetsFile:
-    1109:1112:public long size()
-    1117:1126:private long sizeInternal()
-    1132:1148:private long sizeSlow()
-    1159:1159:public org.socool.zlibrary.filesystem.ZLFile getParent()
+    1110:1113:public long size()
+    1118:1127:private long sizeInternal()
+    1133:1149:private long sizeSlow()
+    1160:1160:public org.socool.zlibrary.filesystem.ZLFile getParent()
 org.socool.screader.screader.TapZoneMap:
     40:43:TapZoneMap(int,int)
 org.socool.screader.screader.TextBuildTraverser:
@@ -908,17 +905,8 @@ org.socool.screader.screader.ZLKeyBindings:
     private static final java.lang.String ACTION
     private static final java.lang.String LONG_PRESS_ACTION
 org.socool.socoolreader.mcnxs.BuildConfig
-org.socool.socoolreader.mcnxs.R
-org.socool.socoolreader.mcnxs.R$anim
-org.socool.socoolreader.mcnxs.R$array
-org.socool.socoolreader.mcnxs.R$attr
-org.socool.socoolreader.mcnxs.R$color
-org.socool.socoolreader.mcnxs.R$drawable
-org.socool.socoolreader.mcnxs.R$id
-org.socool.socoolreader.mcnxs.R$layout
-org.socool.socoolreader.mcnxs.R$string
-org.socool.socoolreader.mcnxs.R$style
-org.socool.socoolreader.mcnxs.R$xml
+org.socool.socoolreader.mcnxs.R:
+    10:10:public R()
 org.socool.zlibrary.encodings.AutoEncodingCollection
 org.socool.zlibrary.encodings.Encoding
 org.socool.zlibrary.encodings.EncodingCollection

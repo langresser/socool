@@ -527,6 +527,8 @@ com.umeng.fb.ui.SendFeedback$a -> com.umeng.fb.ui.c:
 com.umeng.fb.ui.SendFeedback$b -> com.umeng.fb.ui.d:
     com.umeng.fb.ui.SendFeedback a -> a
     void onClick(android.view.View) -> onClick
+com.umeng.fb.ui.ThreadView -> com.umeng.fb.ui.ThreadView:
+    void onSizeChanged(int,int,int,int) -> onSizeChanged
 com.umeng.fb.ui.a -> com.umeng.fb.ui.e:
     com.umeng.fb.ui.FeedbackConversation a -> a
     void onClick(android.view.View) -> onClick
@@ -2218,6 +2220,7 @@ org.socool.android.BookCommentAdapter$ViewHolder -> org.socool.android.e:
 org.socool.android.BookInfoActivity -> org.socool.android.BookInfoActivity:
     java.lang.String m_currentBookPath -> a
     void onCreate(android.os.Bundle) -> onCreate
+    void onDestroy() -> onDestroy
     void onResume() -> onResume
     void onPause() -> onPause
     java.lang.String access$0(org.socool.android.BookInfoActivity) -> a
@@ -2516,9 +2519,8 @@ org.socool.android.SCReaderActivity -> org.socool.android.SCReaderActivity:
     boolean myStartTimer -> h
     android.content.BroadcastReceiver myBatteryInfoReceiver -> e
     org.socool.zlibrary.filesystem.ZLFile fileFromIntent(android.content.Intent) -> a
-    java.lang.Runnable getPostponedInitAction() -> a
     void onCreate(android.os.Bundle) -> onCreate
-    void createBookView() -> b
+    void createBookView() -> a
     void onDestroy() -> onDestroy
     boolean onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
     void onOptionsMenuClosed(android.view.Menu) -> onOptionsMenuClosed
@@ -2529,15 +2531,15 @@ org.socool.android.SCReaderActivity -> org.socool.android.SCReaderActivity:
     void onStop() -> onStop
     void setButtonLight(boolean) -> a
     boolean onSearchRequested() -> onSearchRequested
-    void showSelectionPanel() -> c
-    void hideSelectionPanel() -> d
+    void showSelectionPanel() -> b
+    void hideSelectionPanel() -> c
     void onPreferencesUpdate(int) -> b
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
     void addMenuItem(android.view.Menu,java.lang.String,int) -> a
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     void setScreenBrightnessAuto(boolean) -> b
     void setScreenBrightness(int) -> a
-    void createWakeLock() -> e
+    void createWakeLock() -> d
     void switchWakeLock(boolean) -> c
     void onPause() -> onPause
     void onLowMemory() -> onLowMemory
@@ -2549,62 +2551,39 @@ org.socool.android.SCReaderActivity$1 -> org.socool.android.aq:
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
 org.socool.android.SCReaderActivity$2 -> org.socool.android.ar:
     org.socool.android.SCReaderActivity this$0 -> a
+    org.socool.screader.screader.FBReaderApp val$fbReader -> b
+    java.lang.String val$pattern -> c
     void run() -> run
     org.socool.android.SCReaderActivity access$0(org.socool.android.SCReaderActivity$2) -> a
 org.socool.android.SCReaderActivity$2$1 -> org.socool.android.as:
     org.socool.android.SCReaderActivity$2 this$1 -> a
-    void run() -> run
-org.socool.android.SCReaderActivity$3 -> org.socool.android.at:
-    org.socool.android.SCReaderActivity this$0 -> a
-    void run() -> run
-org.socool.android.SCReaderActivity$4 -> org.socool.android.au:
-    org.socool.android.SCReaderActivity this$0 -> a
-    org.socool.screader.screader.FBReaderApp val$fbReader -> b
-    java.lang.String val$pattern -> c
-    void run() -> run
-    org.socool.android.SCReaderActivity access$0(org.socool.android.SCReaderActivity$4) -> a
-org.socool.android.SCReaderActivity$4$1 -> org.socool.android.av:
-    org.socool.android.SCReaderActivity$4 this$1 -> a
     org.socool.screader.screader.FBReaderApp val$fbReader -> b
     org.socool.android.TextSearchPopup val$popup -> c
     void run() -> run
-org.socool.android.SCReaderActivity$4$2 -> org.socool.android.aw:
-    org.socool.android.SCReaderActivity$4 this$1 -> a
+org.socool.android.SCReaderActivity$2$2 -> org.socool.android.at:
+    org.socool.android.SCReaderActivity$2 this$1 -> a
     org.socool.android.TextSearchPopup val$popup -> b
     void run() -> run
-org.socool.android.SCReaderActivity$5 -> org.socool.android.ax:
+org.socool.android.SCReaderActivity$3 -> org.socool.android.au:
     org.socool.android.SCReaderActivity this$0 -> a
     org.socool.android.PopupPanel val$popup -> b
     org.socool.screader.screader.FBReaderApp val$fbreader -> c
     android.app.SearchManager val$manager -> d
     void onCancel() -> onCancel
-org.socool.android.SCReaderActivity$TipRunner -> org.socool.android.ay:
-    org.socool.android.SCReaderActivity this$0 -> a
-    void run() -> run
-org.socool.android.SelectionPopup -> org.socool.android.az:
+org.socool.android.SelectionPopup -> org.socool.android.av:
     java.lang.String getId() -> c
     void createControlPanel(org.socool.android.SCReaderActivity,android.widget.RelativeLayout) -> a
     void move(int,int) -> a
     void run() -> b
     void onClick(android.view.View) -> onClick
     void update() -> a
-org.socool.android.TextSearchPopup -> org.socool.android.ba:
+org.socool.android.TextSearchPopup -> org.socool.android.aw:
     java.lang.String getId() -> c
     void hide_() -> e
     void createControlPanel(org.socool.android.SCReaderActivity,android.widget.RelativeLayout) -> a
     void run() -> b
     void onClick(android.view.View) -> onClick
     void update() -> a
-org.socool.android.TipsActivity -> org.socool.android.TipsActivity:
-    void onCreate(android.os.Bundle) -> onCreate
-    void showText(java.lang.CharSequence) -> a
-org.socool.android.TipsActivity$1 -> org.socool.android.bb:
-    org.socool.android.TipsActivity this$0 -> a
-    android.widget.CheckBox val$checkBox -> b
-    void onClick(android.view.View) -> onClick
-org.socool.android.TipsActivity$2 -> org.socool.android.bc:
-    org.socool.android.TipsActivity this$0 -> a
-    void onClick(android.view.View) -> onClick
 org.socool.android.action.AddBookmarkAction -> org.socool.android.a.a:
     void run(java.lang.Object[]) -> a
 org.socool.android.action.FBAndroidAction -> org.socool.android.a.b:
@@ -2938,6 +2917,7 @@ org.socool.android.preferences.PreferenceActivity$3 -> org.socool.android.prefer
     android.preference.Preference val$fbPreferenceUpdate -> c
     android.preference.Preference val$fbPreferenceRemove -> d
     android.preference.Preference val$fbPreferenceAbout -> e
+    android.preference.Preference val$fbPreferenceHelp -> f
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
     org.socool.android.preferences.PreferenceActivity access$0(org.socool.android.preferences.PreferenceActivity$3) -> a
 org.socool.android.preferences.PreferenceActivity$3$1 -> org.socool.android.preferences.g:
@@ -3691,10 +3671,13 @@ org.socool.screader.screader.FBReaderApp -> org.socool.a.e.e:
     boolean canRemoveBookFile(org.socool.screader.library.Book) -> f
     void removeBook(org.socool.screader.library.Book,int) -> a
     void initOfferWall(android.content.Context) -> a
-    void showOfferWall(android.content.Context) -> b
-    int getOfferPoints(android.content.Context) -> c
+    void releaseOfferWall(android.content.Context) -> b
+    void showOfferWall(android.content.Context) -> c
+    void showMore(android.content.Context) -> d
+    int getOfferPoints(android.content.Context) -> e
     void costOfferPoints(android.content.Context,int) -> a
-    void removeAds(android.content.Context) -> d
+    void removeAds(android.content.Context) -> f
+    void showHelpDialog(android.content.Context) -> g
     void importBook(android.content.Context,java.lang.String,java.lang.String,java.lang.String) -> a
     org.socool.android.SCReaderActivity access$0(org.socool.screader.screader.FBReaderApp) -> a
     java.util.HashMap access$1(org.socool.screader.screader.FBReaderApp) -> b
@@ -3724,7 +3707,14 @@ org.socool.screader.screader.FBReaderApp$7 -> org.socool.a.e.k:
     org.socool.screader.screader.FBReaderApp this$0 -> a
     android.content.Context val$context -> b
     void onClick(android.content.DialogInterface,int) -> onClick
-org.socool.screader.screader.FBReaderApp$AndroidAssetsFile -> org.socool.a.e.l:
+org.socool.screader.screader.FBReaderApp$8 -> org.socool.a.e.l:
+    org.socool.screader.screader.FBReaderApp this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+org.socool.screader.screader.FBReaderApp$9 -> org.socool.a.e.m:
+    org.socool.screader.screader.FBReaderApp this$0 -> a
+    android.content.Context val$context -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+org.socool.screader.screader.FBReaderApp$AndroidAssetsFile -> org.socool.a.e.n:
     org.socool.screader.screader.FBReaderApp$AndroidAssetsFile myParent -> c
     long mySize -> d
     org.socool.screader.screader.FBReaderApp this$0 -> a
@@ -3732,9 +3722,9 @@ org.socool.screader.screader.FBReaderApp$AndroidAssetsFile -> org.socool.a.e.l:
     boolean isDirectory() -> b
     boolean exists() -> c
     java.io.InputStream getInputStream() -> d
-org.socool.screader.screader.FBReaderApp$ChangeListener -> org.socool.a.e.m:
+org.socool.screader.screader.FBReaderApp$ChangeListener -> org.socool.a.e.o:
     void onLibraryChanged(org.socool.screader.screader.FBReaderApp$ChangeListener$Code) -> a
-org.socool.screader.screader.FBReaderApp$ChangeListener$Code -> org.socool.a.e.n:
+org.socool.screader.screader.FBReaderApp$ChangeListener$Code -> org.socool.a.e.p:
     org.socool.screader.screader.FBReaderApp$ChangeListener$Code BookAdded -> a
     org.socool.screader.screader.FBReaderApp$ChangeListener$Code BookRemoved -> b
     org.socool.screader.screader.FBReaderApp$ChangeListener$Code StatusChanged -> c
@@ -3743,17 +3733,17 @@ org.socool.screader.screader.FBReaderApp$ChangeListener$Code -> org.socool.a.e.n
     org.socool.screader.screader.FBReaderApp$ChangeListener$Code[] ENUM$VALUES -> f
     org.socool.screader.screader.FBReaderApp$ChangeListener$Code[] values() -> values
     org.socool.screader.screader.FBReaderApp$ChangeListener$Code valueOf(java.lang.String) -> valueOf
-org.socool.screader.screader.FBReaderApp$ImageTappingAction -> org.socool.a.e.o:
+org.socool.screader.screader.FBReaderApp$ImageTappingAction -> org.socool.a.e.q:
     org.socool.screader.screader.FBReaderApp$ImageTappingAction doNothing -> a
     org.socool.screader.screader.FBReaderApp$ImageTappingAction selectImage -> b
     org.socool.screader.screader.FBReaderApp$ImageTappingAction openImageView -> c
     org.socool.screader.screader.FBReaderApp$ImageTappingAction[] ENUM$VALUES -> d
     org.socool.screader.screader.FBReaderApp$ImageTappingAction[] values() -> values
     org.socool.screader.screader.FBReaderApp$ImageTappingAction valueOf(java.lang.String) -> valueOf
-org.socool.screader.screader.FBReaderApp$MyTimerTask -> org.socool.a.e.p:
+org.socool.screader.screader.FBReaderApp$MyTimerTask -> org.socool.a.e.r:
     java.lang.Runnable myRunnable -> a
     void run() -> run
-org.socool.screader.screader.FBReaderApp$WordTappingAction -> org.socool.a.e.q:
+org.socool.screader.screader.FBReaderApp$WordTappingAction -> org.socool.a.e.s:
     org.socool.screader.screader.FBReaderApp$WordTappingAction doNothing -> a
     org.socool.screader.screader.FBReaderApp$WordTappingAction selectSingleWord -> b
     org.socool.screader.screader.FBReaderApp$WordTappingAction startSelecting -> c
@@ -3761,38 +3751,38 @@ org.socool.screader.screader.FBReaderApp$WordTappingAction -> org.socool.a.e.q:
     org.socool.screader.screader.FBReaderApp$WordTappingAction[] ENUM$VALUES -> e
     org.socool.screader.screader.FBReaderApp$WordTappingAction[] values() -> values
     org.socool.screader.screader.FBReaderApp$WordTappingAction valueOf(java.lang.String) -> valueOf
-org.socool.screader.screader.FBReaderApp$ZLAction -> org.socool.a.e.r:
+org.socool.screader.screader.FBReaderApp$ZLAction -> org.socool.a.e.t:
     boolean isVisible() -> c
     boolean isEnabled() -> a
     org.socool.zlibrary.util.ZLBoolean3 isChecked() -> b
     boolean checkAndRun(java.lang.Object[]) -> b
     void run(java.lang.Object[]) -> a
-org.socool.screader.screader.FindNextAction -> org.socool.a.e.s:
+org.socool.screader.screader.FindNextAction -> org.socool.a.e.u:
     boolean isEnabled() -> a
     void run(java.lang.Object[]) -> a
-org.socool.screader.screader.FindPreviousAction -> org.socool.a.e.t:
+org.socool.screader.screader.FindPreviousAction -> org.socool.a.e.v:
     boolean isEnabled() -> a
     void run(java.lang.Object[]) -> a
-org.socool.screader.screader.MoveCursorAction -> org.socool.a.e.u:
+org.socool.screader.screader.MoveCursorAction -> org.socool.a.e.w:
     org.socool.zlibrary.text.ZLTextView$Direction myDirection -> a
     int[] $SWITCH_TABLE$org$socool$zlibrary$text$ZLTextView$Direction -> c
     void run(java.lang.Object[]) -> a
     int[] $SWITCH_TABLE$org$socool$zlibrary$text$ZLTextView$Direction() -> d
-org.socool.screader.screader.ScrollingPreferences -> org.socool.a.e.v:
+org.socool.screader.screader.ScrollingPreferences -> org.socool.a.e.x:
     org.socool.screader.screader.ScrollingPreferences ourInstance -> e
     org.socool.zlibrary.options.ZLEnumOption FingerScrollingOption -> a
     org.socool.zlibrary.options.ZLEnumOption AnimationOption -> b
     org.socool.zlibrary.options.ZLIntegerRangeOption AnimationSpeedOption -> c
     org.socool.zlibrary.options.ZLEnumOption TapZonesSchemeOption -> d
     org.socool.screader.screader.ScrollingPreferences Instance() -> a
-org.socool.screader.screader.ScrollingPreferences$FingerScrolling -> org.socool.a.e.w:
+org.socool.screader.screader.ScrollingPreferences$FingerScrolling -> org.socool.a.e.y:
     org.socool.screader.screader.ScrollingPreferences$FingerScrolling byTap -> a
     org.socool.screader.screader.ScrollingPreferences$FingerScrolling byFlick -> b
     org.socool.screader.screader.ScrollingPreferences$FingerScrolling byTapAndFlick -> c
     org.socool.screader.screader.ScrollingPreferences$FingerScrolling[] ENUM$VALUES -> d
     org.socool.screader.screader.ScrollingPreferences$FingerScrolling[] values() -> values
     org.socool.screader.screader.ScrollingPreferences$FingerScrolling valueOf(java.lang.String) -> valueOf
-org.socool.screader.screader.ScrollingPreferences$TapZonesScheme -> org.socool.a.e.x:
+org.socool.screader.screader.ScrollingPreferences$TapZonesScheme -> org.socool.a.e.z:
     org.socool.screader.screader.ScrollingPreferences$TapZonesScheme left_to_right -> a
     org.socool.screader.screader.ScrollingPreferences$TapZonesScheme right_to_left -> b
     org.socool.screader.screader.ScrollingPreferences$TapZonesScheme up -> c
@@ -3801,11 +3791,11 @@ org.socool.screader.screader.ScrollingPreferences$TapZonesScheme -> org.socool.a
     org.socool.screader.screader.ScrollingPreferences$TapZonesScheme[] ENUM$VALUES -> f
     org.socool.screader.screader.ScrollingPreferences$TapZonesScheme[] values() -> values
     org.socool.screader.screader.ScrollingPreferences$TapZonesScheme valueOf(java.lang.String) -> valueOf
-org.socool.screader.screader.SelectionClearAction -> org.socool.a.e.y:
+org.socool.screader.screader.SelectionClearAction -> org.socool.a.e.aa:
     void run(java.lang.Object[]) -> a
-org.socool.screader.screader.SwitchProfileAction -> org.socool.a.e.z:
+org.socool.screader.screader.SwitchProfileAction -> org.socool.a.e.ab:
     void run(java.lang.Object[]) -> a
-org.socool.screader.screader.TapZoneMap -> org.socool.a.e.aa:
+org.socool.screader.screader.TapZoneMap -> org.socool.a.e.ac:
     int myVerticalSize -> a
     int myHorizontalSize -> b
     java.util.HashMap myZoneMap -> c
@@ -3817,28 +3807,28 @@ org.socool.screader.screader.TapZoneMap -> org.socool.a.e.aa:
     void access$2(org.socool.screader.screader.TapZoneMap,int) -> a
     void access$3(org.socool.screader.screader.TapZoneMap,int) -> b
     int[] $SWITCH_TABLE$org$socool$screader$screader$TapZoneMap$Tap() -> a
-org.socool.screader.screader.TapZoneMap$Reader -> org.socool.a.e.ab:
+org.socool.screader.screader.TapZoneMap$Reader -> org.socool.a.e.ad:
     org.socool.screader.screader.TapZoneMap this$0 -> a
     boolean startElementHandler(java.lang.String,org.socool.zlibrary.xml.ZLStringMap) -> a
-org.socool.screader.screader.TapZoneMap$Tap -> org.socool.a.e.ac:
+org.socool.screader.screader.TapZoneMap$Tap -> org.socool.a.e.ae:
     org.socool.screader.screader.TapZoneMap$Tap singleTap -> a
     org.socool.screader.screader.TapZoneMap$Tap singleNotDoubleTap -> b
     org.socool.screader.screader.TapZoneMap$Tap doubleTap -> c
     org.socool.screader.screader.TapZoneMap$Tap[] ENUM$VALUES -> d
     org.socool.screader.screader.TapZoneMap$Tap[] values() -> values
     org.socool.screader.screader.TapZoneMap$Tap valueOf(java.lang.String) -> valueOf
-org.socool.screader.screader.TapZoneMap$Zone -> org.socool.a.e.ad:
+org.socool.screader.screader.TapZoneMap$Zone -> org.socool.a.e.af:
     int HIndex -> a
     int VIndex -> b
     boolean equals(java.lang.Object) -> equals
     int hashCode() -> hashCode
-org.socool.screader.screader.TextBuildTraverser -> org.socool.a.e.ae:
+org.socool.screader.screader.TextBuildTraverser -> org.socool.a.e.ag:
     java.lang.StringBuilder myBuffer -> a
     void processWord(org.socool.zlibrary.text.ZLTextWord) -> a
     void processSpace() -> a
     void processEndOfParagraph() -> b
     java.lang.String getText() -> c
-org.socool.screader.screader.TextTheme -> org.socool.a.e.af:
+org.socool.screader.screader.TextTheme -> org.socool.a.e.ah:
     java.lang.String m_path -> a
     java.lang.String m_title -> b
     java.lang.String m_imagePath -> c
@@ -3848,22 +3838,22 @@ org.socool.screader.screader.TextTheme -> org.socool.a.e.af:
     org.socool.zlibrary.util.ZLColor m_selectTextColor -> g
     org.socool.zlibrary.util.ZLColor m_selectBgColor -> h
     boolean m_isNightMode -> i
-org.socool.screader.screader.TurnPageAction -> org.socool.a.e.ag:
+org.socool.screader.screader.TurnPageAction -> org.socool.a.e.ai:
     boolean myForward -> a
     boolean isEnabled() -> a
     void run(java.lang.Object[]) -> a
-org.socool.screader.screader.VolumeKeyTurnPageAction -> org.socool.a.e.ah:
+org.socool.screader.screader.VolumeKeyTurnPageAction -> org.socool.a.e.aj:
     boolean myForward -> a
     void run(java.lang.Object[]) -> a
-org.socool.screader.screader.WallpapersUtil -> org.socool.a.e.ai:
+org.socool.screader.screader.WallpapersUtil -> org.socool.a.e.ak:
     java.util.List predefinedWallpaperFiles() -> a
-org.socool.screader.screader.WordCountTraverser -> org.socool.a.e.aj:
+org.socool.screader.screader.WordCountTraverser -> org.socool.a.e.al:
     int myCount -> a
     void processWord(org.socool.zlibrary.text.ZLTextWord) -> a
     void processSpace() -> a
     void processEndOfParagraph() -> b
     int getCount() -> c
-org.socool.screader.screader.ZLKeyBindings -> org.socool.a.e.ak:
+org.socool.screader.screader.ZLKeyBindings -> org.socool.a.e.am:
     java.lang.String myName -> a
     org.socool.zlibrary.options.ZLStringListOption myKeysOption -> b
     java.util.TreeMap myActionMap -> c
@@ -3874,11 +3864,553 @@ org.socool.screader.screader.ZLKeyBindings -> org.socool.a.e.ak:
     java.lang.String getBinding(int,boolean) -> b
     java.util.TreeMap access$0(org.socool.screader.screader.ZLKeyBindings) -> a
     org.socool.zlibrary.options.ZLStringOption access$1(org.socool.screader.screader.ZLKeyBindings,int,boolean,java.lang.String) -> a
-org.socool.screader.screader.ZLKeyBindings$Reader -> org.socool.a.e.al:
+org.socool.screader.screader.ZLKeyBindings$Reader -> org.socool.a.e.an:
     java.util.Set myKeySet -> b
     org.socool.screader.screader.ZLKeyBindings this$0 -> a
     boolean dontCacheAttributeValues() -> a
     boolean startElementHandler(java.lang.String,org.socool.zlibrary.xml.ZLStringMap) -> a
+org.socool.socoolreader.mcnxs.R -> org.socool.socoolreader.mcnxs.R:
+org.socool.socoolreader.mcnxs.R$anim -> org.socool.socoolreader.mcnxs.R$anim:
+    int popup_enter -> popup_enter
+    int popup_exit -> popup_exit
+    int slide_in -> slide_in
+    int slide_in_top -> slide_in_top
+    int slide_out -> slide_out
+    int slide_out_top -> slide_out_top
+org.socool.socoolreader.mcnxs.R$array -> org.socool.socoolreader.mcnxs.R$array:
+    int UMageList -> UMageList
+    int UMgenderList -> UMgenderList
+    int prefixes -> prefixes
+    int suffixes -> suffixes
+org.socool.socoolreader.mcnxs.R$attr -> org.socool.socoolreader.mcnxs.R$attr:
+org.socool.socoolreader.mcnxs.R$color -> org.socool.socoolreader.mcnxs.R$color:
+    int black -> black
+    int bright_foreground_dark -> bright_foreground_dark
+    int dialog_bg_color -> dialog_bg_color
+    int dialog_line -> dialog_line
+    int home_apart_line_h -> home_apart_line_h
+    int home_apart_line_v -> home_apart_line_v
+    int line_color -> line_color
+    int listview_divider_color -> listview_divider_color
+    int reader_bar_control_text_color -> reader_bar_control_text_color
+    int reader_bar_control_theme_pressed -> reader_bar_control_theme_pressed
+    int reader_bar_item_bg_press -> reader_bar_item_bg_press
+    int reader_chapter_start_analisys_text_color -> reader_chapter_start_analisys_text_color
+    int reader_select_button_pressed -> reader_select_button_pressed
+    int set_activity_color -> set_activity_color
+    int store_item_title -> store_item_title
+    int textcolor -> textcolor
+    int textcolor_gray -> textcolor_gray
+    int translucent_dark -> translucent_dark
+    int translucenter_dark -> translucenter_dark
+    int transparent -> transparent
+    int transparent_background -> transparent_background
+    int white -> white
+org.socool.socoolreader.mcnxs.R$drawable -> org.socool.socoolreader.mcnxs.R$drawable:
+    int action_down_app_bkg -> action_down_app_bkg
+    int action_down_app_press_bkg -> action_down_app_press_bkg
+    int action_down_app_selector -> action_down_app_selector
+    int back -> back
+    int background_shelf -> background_shelf
+    int bg_main_bottom -> bg_main_bottom
+    int big_normal_button_selector -> big_normal_button_selector
+    int black_btn_common -> black_btn_common
+    int black_btn_sel -> black_btn_sel
+    int black_btn_unsel -> black_btn_unsel
+    int bun_common -> bun_common
+    int bun_common_0 -> bun_common_0
+    int bun_common_f -> bun_common_f
+    int button_big_1 -> button_big_1
+    int button_big_2 -> button_big_2
+    int button_small_1 -> button_small_1
+    int button_small_2 -> button_small_2
+    int button_text_normal -> button_text_normal
+    int cartoon_apply -> cartoon_apply
+    int cartoon_clear -> cartoon_clear
+    int check_selector -> check_selector
+    int chm_icon_back -> chm_icon_back
+    int chm_icon_back_disable -> chm_icon_back_disable
+    int chm_icon_forward -> chm_icon_forward
+    int chm_icon_forward_disable -> chm_icon_forward_disable
+    int color_solid_black -> color_solid_black
+    int dropdown -> dropdown
+    int dropdown_normal -> dropdown_normal
+    int dropdown_pressed -> dropdown_pressed
+    int dropdown_selected -> dropdown_selected
+    int general__shared__list_item_normal -> general__shared__list_item_normal
+    int general__shared__list_item_pressed -> general__shared__list_item_pressed
+    int general__shared_list_item_select -> general__shared_list_item_select
+    int group_selector -> group_selector
+    int ic_btn_search -> ic_btn_search
+    int ic_list_buy -> ic_list_buy
+    int ic_list_download -> ic_list_download
+    int ic_list_flag -> ic_list_flag
+    int ic_list_group_closed -> ic_list_group_closed
+    int ic_list_group_open -> ic_list_group_open
+    int ic_list_library_author -> ic_list_library_author
+    int ic_list_library_authors -> ic_list_library_authors
+    int ic_list_library_basket -> ic_list_library_basket
+    int ic_list_library_book -> ic_list_library_book
+    int ic_list_library_books -> ic_list_library_books
+    int ic_list_library_favorites -> ic_list_library_favorites
+    int ic_list_library_folder -> ic_list_library_folder
+    int ic_list_library_permission_denied -> ic_list_library_permission_denied
+    int ic_list_library_recent -> ic_list_library_recent
+    int ic_list_library_search -> ic_list_library_search
+    int ic_list_library_tag -> ic_list_library_tag
+    int ic_list_library_tags -> ic_list_library_tags
+    int ic_list_library_zip -> ic_list_library_zip
+    int ic_list_plus -> ic_list_plus
+    int icon_backward_selector -> icon_backward_selector
+    int icon_button_textbig -> icon_button_textbig
+    int icon_button_textsmall -> icon_button_textsmall
+    int icon_forward_selector -> icon_forward_selector
+    int icon_plus_1 -> icon_plus_1
+    int icon_plus_2 -> icon_plus_2
+    int icon_sub_1 -> icon_sub_1
+    int icon_sub_2 -> icon_sub_2
+    int icon_switch_off -> icon_switch_off
+    int icon_switch_on -> icon_switch_on
+    int icon_switch_selector -> icon_switch_selector
+    int light_button_left -> light_button_left
+    int light_button_right -> light_button_right
+    int lightdown_disable -> lightdown_disable
+    int lightdown_nor -> lightdown_nor
+    int lightdown_press -> lightdown_press
+    int lightup_disable -> lightup_disable
+    int lightup_nor -> lightup_nor
+    int lightup_press -> lightup_press
+    int link -> link
+    int link_default -> link_default
+    int link_pressed -> link_pressed
+    int link_selected -> link_selected
+    int list_selector -> list_selector
+    int match_list_item_normal -> match_list_item_normal
+    int mcnxs_icon -> mcnxs_icon
+    int menu_icon_brightness -> menu_icon_brightness
+    int menu_icon_catalog -> menu_icon_catalog
+    int menu_icon_jump -> menu_icon_jump
+    int menu_icon_landscape -> menu_icon_landscape
+    int menu_icon_mark -> menu_icon_mark
+    int menu_icon_portrait -> menu_icon_portrait
+    int menu_icon_setting -> menu_icon_setting
+    int normal_button_selector -> normal_button_selector
+    int reader_chapter_underline -> reader_chapter_underline
+    int reader_chapter_underline_normal -> reader_chapter_underline_normal
+    int reader_chapter_underline_normal_part -> reader_chapter_underline_normal_part
+    int reader_chapter_underline_pressed -> reader_chapter_underline_pressed
+    int reader_chapter_underline_pressed_part -> reader_chapter_underline_pressed_part
+    int search_plate -> search_plate
+    int select_left_focus -> select_left_focus
+    int select_left_normal -> select_left_normal
+    int select_left_pressed -> select_left_pressed
+    int select_left_tab_selector -> select_left_tab_selector
+    int select_mid_focus -> select_mid_focus
+    int select_mid_normal -> select_mid_normal
+    int select_mid_pressed -> select_mid_pressed
+    int select_mid_tab_selector -> select_mid_tab_selector
+    int select_right_focus -> select_right_focus
+    int select_right_normal -> select_right_normal
+    int select_right_pressed -> select_right_pressed
+    int select_right_tab_selector -> select_right_tab_selector
+    int shadow_read_content -> shadow_read_content
+    int shelf_shadow -> shelf_shadow
+    int text_search_close -> text_search_close
+    int text_search_close_active -> text_search_close_active
+    int text_search_close_default -> text_search_close_default
+    int text_search_next -> text_search_next
+    int text_search_next_active -> text_search_next_active
+    int text_search_next_default -> text_search_next_default
+    int text_search_next_disabled -> text_search_next_disabled
+    int text_search_previous -> text_search_previous
+    int text_search_previous_active -> text_search_previous_active
+    int text_search_previous_default -> text_search_previous_default
+    int text_search_previous_disabled -> text_search_previous_disabled
+    int umeng_fb_bar_bg -> umeng_fb_bar_bg
+    int umeng_fb_blank_selector -> umeng_fb_blank_selector
+    int umeng_fb_bottom_banner -> umeng_fb_bottom_banner
+    int umeng_fb_dev_bubble -> umeng_fb_dev_bubble
+    int umeng_fb_gradient_green -> umeng_fb_gradient_green
+    int umeng_fb_gradient_orange -> umeng_fb_gradient_orange
+    int umeng_fb_gray_frame -> umeng_fb_gray_frame
+    int umeng_fb_list_item -> umeng_fb_list_item
+    int umeng_fb_list_item_pressed -> umeng_fb_list_item_pressed
+    int umeng_fb_list_item_selector -> umeng_fb_list_item_selector
+    int umeng_fb_point_new -> umeng_fb_point_new
+    int umeng_fb_point_normal -> umeng_fb_point_normal
+    int umeng_fb_see_list_normal -> umeng_fb_see_list_normal
+    int umeng_fb_see_list_pressed -> umeng_fb_see_list_pressed
+    int umeng_fb_see_list_selector -> umeng_fb_see_list_selector
+    int umeng_fb_statusbar_icon -> umeng_fb_statusbar_icon
+    int umeng_fb_submit_selector -> umeng_fb_submit_selector
+    int umeng_fb_top_banner -> umeng_fb_top_banner
+    int umeng_fb_user_bubble -> umeng_fb_user_bubble
+    int umeng_fb_write_normal -> umeng_fb_write_normal
+    int umeng_fb_write_pressed -> umeng_fb_write_pressed
+    int umeng_fb_write_selector -> umeng_fb_write_selector
+org.socool.socoolreader.mcnxs.R$id -> org.socool.socoolreader.mcnxs.R$id:
+    int alert_dialog_edit -> alert_dialog_edit
+    int alert_dialog_edit_file -> alert_dialog_edit_file
+    int alert_dialog_message -> alert_dialog_message
+    int alert_dialog_message2 -> alert_dialog_message2
+    int animation_speed_slider -> animation_speed_slider
+    int app_button -> app_button
+    int auto_button -> auto_button
+    int bar_font_size -> bar_font_size
+    int bar_light -> bar_light
+    int book_comment -> book_comment
+    int book_content -> book_content
+    int book_info_button_app -> book_info_button_app
+    int book_info_button_import -> book_info_button_import
+    int book_info_button_open -> book_info_button_open
+    int book_info_button_panel -> book_info_button_panel
+    int book_info_root -> book_info_root
+    int book_mark -> book_mark
+    int book_position_slider -> book_position_slider
+    int book_position_text -> book_position_text
+    int bookcomment_list -> bookcomment_list
+    int books_directory_fix_buttons -> books_directory_fix_buttons
+    int books_directory_fix_directory -> books_directory_fix_directory
+    int books_directory_fix_text -> books_directory_fix_text
+    int boomark_list -> boomark_list
+    int btn_back_chapter -> btn_back_chapter
+    int btn_fontsize_decreases -> btn_fontsize_decreases
+    int btn_fontsize_increase -> btn_fontsize_increase
+    int btn_forward_chapter -> btn_forward_chapter
+    int btn_light_decreases -> btn_light_decreases
+    int btn_light_increase -> btn_light_increase
+    int button_cancel -> button_cancel
+    int buttonset_tip -> buttonset_tip
+    int cancel_button -> cancel_button
+    int chapterjuan_listview -> chapterjuan_listview
+    int color_blue -> color_blue
+    int color_box -> color_box
+    int color_green -> color_green
+    int color_red -> color_red
+    int download_notification_icon -> download_notification_icon
+    int download_notification_progress_bar -> download_notification_progress_bar
+    int download_notification_progress_text -> download_notification_progress_text
+    int download_notification_title -> download_notification_title
+    int expand_image -> expand_image
+    int extra_link_divider -> extra_link_divider
+    int extra_link_title -> extra_link_title
+    int font_size_text -> font_size_text
+    int grid_shelves -> grid_shelves
+    int label_import -> label_import
+    int library_tree_item_childrenlist -> library_tree_item_childrenlist
+    int library_tree_item_icon -> library_tree_item_icon
+    int library_tree_item_name -> library_tree_item_name
+    int night_button -> night_button
+    int ok_button -> ok_button
+    int panel_brightness -> panel_brightness
+    int progress -> progress
+    int reader_bookmark_item_content -> reader_bookmark_item_content
+    int reader_bookmark_item_percent -> reader_bookmark_item_percent
+    int reader_bookmark_item_time -> reader_bookmark_item_time
+    int reader_chapter_item_content -> reader_chapter_item_content
+    int reader_chapter_item_percent -> reader_chapter_item_percent
+    int reader_chapterjuan_item_content -> reader_chapterjuan_item_content
+    int reader_chapterjuan_item_content_group -> reader_chapterjuan_item_content_group
+    int reader_chapterjuan_item_percent -> reader_chapterjuan_item_percent
+    int table_view -> table_view
+    int text -> text
+    int text_auto -> text_auto
+    int text_neight -> text_neight
+    int tip_app_button -> tip_app_button
+    int tip_ok_button -> tip_ok_button
+    int tip_text -> tip_text
+    int tip_text_title -> tip_text_title
+    int title -> title
+    int tools_plate -> tools_plate
+    int umeng_analytics_app -> umeng_analytics_app
+    int umeng_analytics_appIcon -> umeng_analytics_appIcon
+    int umeng_analytics_description -> umeng_analytics_description
+    int umeng_analytics_notification -> umeng_analytics_notification
+    int umeng_analytics_progress_bar -> umeng_analytics_progress_bar
+    int umeng_analytics_progress_text -> umeng_analytics_progress_text
+    int umeng_analytics_title -> umeng_analytics_title
+    int umeng_common_app -> umeng_common_app
+    int umeng_common_appIcon -> umeng_common_appIcon
+    int umeng_common_description -> umeng_common_description
+    int umeng_common_notification -> umeng_common_notification
+    int umeng_common_progress_bar -> umeng_common_progress_bar
+    int umeng_common_progress_text -> umeng_common_progress_text
+    int umeng_common_title -> umeng_common_title
+    int umeng_fb_age_spinner -> umeng_fb_age_spinner
+    int umeng_fb_app -> umeng_fb_app
+    int umeng_fb_appIcon -> umeng_fb_appIcon
+    int umeng_fb_atomLinearLayout -> umeng_fb_atomLinearLayout
+    int umeng_fb_atom_left_margin -> umeng_fb_atom_left_margin
+    int umeng_fb_atom_right_margin -> umeng_fb_atom_right_margin
+    int umeng_fb_atomtxt -> umeng_fb_atomtxt
+    int umeng_fb_bottom_sub -> umeng_fb_bottom_sub
+    int umeng_fb_btnSendFb -> umeng_fb_btnSendFb
+    int umeng_fb_bubble -> umeng_fb_bubble
+    int umeng_fb_content -> umeng_fb_content
+    int umeng_fb_conversation_title -> umeng_fb_conversation_title
+    int umeng_fb_description -> umeng_fb_description
+    int umeng_fb_dev_reply -> umeng_fb_dev_reply
+    int umeng_fb_editTxtFb -> umeng_fb_editTxtFb
+    int umeng_fb_exitBtn -> umeng_fb_exitBtn
+    int umeng_fb_feedbackpreview -> umeng_fb_feedbackpreview
+    int umeng_fb_gender_spinner -> umeng_fb_gender_spinner
+    int umeng_fb_goback_btn -> umeng_fb_goback_btn
+    int umeng_fb_imgBtn_submitFb -> umeng_fb_imgBtn_submitFb
+    int umeng_fb_new_dev_reply_box -> umeng_fb_new_dev_reply_box
+    int umeng_fb_new_reply_alert_title -> umeng_fb_new_reply_alert_title
+    int umeng_fb_new_reply_notifier -> umeng_fb_new_reply_notifier
+    int umeng_fb_notification -> umeng_fb_notification
+    int umeng_fb_progress_bar -> umeng_fb_progress_bar
+    int umeng_fb_progress_text -> umeng_fb_progress_text
+    int umeng_fb_rootId -> umeng_fb_rootId
+    int umeng_fb_see_detail_btn -> umeng_fb_see_detail_btn
+    int umeng_fb_see_list_btn -> umeng_fb_see_list_btn
+    int umeng_fb_stateOrTime -> umeng_fb_stateOrTime
+    int umeng_fb_state_or_date -> umeng_fb_state_or_date
+    int umeng_fb_submit -> umeng_fb_submit
+    int umeng_fb_title -> umeng_fb_title
+org.socool.socoolreader.mcnxs.R$layout -> org.socool.socoolreader.mcnxs.R$layout:
+    int alert_dialog_edit -> alert_dialog_edit
+    int animation_speed_dialog -> animation_speed_dialog
+    int book_info -> book_info
+    int bookmarks -> bookmarks
+    int books_directory_fix -> books_directory_fix
+    int changefontsize -> changefontsize
+    int changelight -> changelight
+    int color_dialog -> color_dialog
+    int control_panel_bottom -> control_panel_bottom
+    int control_panel_floating -> control_panel_floating
+    int download_notification -> download_notification
+    int extra_link_item -> extra_link_item
+    int grid_position -> grid_position
+    int library_tree_item -> library_tree_item
+    int menu_item -> menu_item
+    int navigate -> navigate
+    int ok_cancel_buttons -> ok_cancel_buttons
+    int progress_overlay -> progress_overlay
+    int reader_bookmark_item -> reader_bookmark_item
+    int reader_chapter_item -> reader_chapter_item
+    int reader_chapterjuan_item -> reader_chapterjuan_item
+    int reader_chapterjuan_itemgroup -> reader_chapterjuan_itemgroup
+    int screen_shelves -> screen_shelves
+    int shelf_book -> shelf_book
+    int tip -> tip
+    int umeng_analytics_download_notification -> umeng_analytics_download_notification
+    int umeng_common_download_notification -> umeng_common_download_notification
+    int umeng_fb_atom -> umeng_fb_atom
+    int umeng_fb_conversation -> umeng_fb_conversation
+    int umeng_fb_conversation_item -> umeng_fb_conversation_item
+    int umeng_fb_conversations -> umeng_fb_conversations
+    int umeng_fb_conversations_item -> umeng_fb_conversations_item
+    int umeng_fb_download_notification -> umeng_fb_download_notification
+    int umeng_fb_list_item -> umeng_fb_list_item
+    int umeng_fb_new_reply_alert_dialog -> umeng_fb_new_reply_alert_dialog
+    int umeng_fb_send_feedback -> umeng_fb_send_feedback
+org.socool.socoolreader.mcnxs.R$string -> org.socool.socoolreader.mcnxs.R$string:
+    int UMAppUpdate -> UMAppUpdate
+    int UMBreak_Network -> UMBreak_Network
+    int UMContentTooLong -> UMContentTooLong
+    int UMDeleteFeedback -> UMDeleteFeedback
+    int UMDeleteMsg -> UMDeleteMsg
+    int UMDeleteThread -> UMDeleteThread
+    int UMDialog_InstallAPK -> UMDialog_InstallAPK
+    int UMEmptyFbNotAllowed -> UMEmptyFbNotAllowed
+    int UMFbList_ListItem_State_Fail -> UMFbList_ListItem_State_Fail
+    int UMFbList_ListItem_State_ReSend -> UMFbList_ListItem_State_ReSend
+    int UMFbList_ListItem_State_Resending -> UMFbList_ListItem_State_Resending
+    int UMFbList_ListItem_State_Sending -> UMFbList_ListItem_State_Sending
+    int UMFb_Atom_State_Fail -> UMFb_Atom_State_Fail
+    int UMFb_Atom_State_Resend -> UMFb_Atom_State_Resend
+    int UMFb_Atom_State_Sending -> UMFb_Atom_State_Sending
+    int UMFeedbackContent -> UMFeedbackContent
+    int UMFeedbackConversationTitle -> UMFeedbackConversationTitle
+    int UMFeedbackGoBack -> UMFeedbackGoBack
+    int UMFeedbackGotIt -> UMFeedbackGotIt
+    int UMFeedbackListTitle -> UMFeedbackListTitle
+    int UMFeedbackSeeDetail -> UMFeedbackSeeDetail
+    int UMFeedbackSummit -> UMFeedbackSummit
+    int UMFeedbackTitle -> UMFeedbackTitle
+    int UMFeedbackUmengTitle -> UMFeedbackUmengTitle
+    int UMGprsCondition -> UMGprsCondition
+    int UMNewReplyAlertTitle -> UMNewReplyAlertTitle
+    int UMNewReplyFlick -> UMNewReplyFlick
+    int UMNewReplyHint -> UMNewReplyHint
+    int UMNewReplyTitle -> UMNewReplyTitle
+    int UMNewVersion -> UMNewVersion
+    int UMNotNow -> UMNotNow
+    int UMResendFeedback -> UMResendFeedback
+    int UMToast_IsUpdating -> UMToast_IsUpdating
+    int UMUpdateNow -> UMUpdateNow
+    int UMUpdateTitle -> UMUpdateTitle
+    int UMViewFeedback -> UMViewFeedback
+    int UMViewThread -> UMViewThread
+    int about -> about
+    int apk_upgrade -> apk_upgrade
+    int app_name -> app_name
+    int auto_exit -> auto_exit
+    int auto_exit_hint2 -> auto_exit_hint2
+    int before_rec_cn -> before_rec_cn
+    int before_rec_zh -> before_rec_zh
+    int blog_text -> blog_text
+    int book_detail -> book_detail
+    int book_shelf -> book_shelf
+    int book_store -> book_store
+    int check_upgrade_fail -> check_upgrade_fail
+    int checkupdate -> checkupdate
+    int checkupdate_no_upgrade -> checkupdate_no_upgrade
+    int clear_shelf -> clear_shelf
+    int cnepub_cn -> cnepub_cn
+    int cnepub_zh -> cnepub_zh
+    int delete -> delete
+    int delete_and_delete_file -> delete_and_delete_file
+    int delete_sure -> delete_sure
+    int download -> download
+    int downloaded -> downloaded
+    int downloading -> downloading
+    int drag_up_refresh -> drag_up_refresh
+    int drop_down_refresh -> drop_down_refresh
+    int easou_cn -> easou_cn
+    int easou_zh -> easou_zh
+    int empty_string -> empty_string
+    int error -> error
+    int extract -> extract
+    int extract_file_faild -> extract_file_faild
+    int extract_file_success -> extract_file_success
+    int extracting -> extracting
+    int feedback -> feedback
+    int file_dose_not_exist -> file_dose_not_exist
+    int fontdefaut -> fontdefaut
+    int http401 -> http401
+    int image_descriptoin -> image_descriptoin
+    int input_password -> input_password
+    int install -> install
+    int last_updated -> last_updated
+    int local_file -> local_file
+    int network_timeout -> network_timeout
+    int networkerror -> networkerror
+    int next_time_download -> next_time_download
+    int no_network -> no_network
+    int nomoreresult -> nomoreresult
+    int official_website -> official_website
+    int official_website_help -> official_website_help
+    int onekeyforregister -> onekeyforregister
+    int password -> password
+    int password_error -> password_error
+    int password_text -> password_text
+    int pleasewait -> pleasewait
+    int plsselect -> plsselect
+    int property -> property
+    int pwd -> pwd
+    int pwd_sure -> pwd_sure
+    int read_view_chapter_bookmark_long_time_age -> read_view_chapter_bookmark_long_time_age
+    int read_view_chapter_bookmark_time -> read_view_chapter_bookmark_time
+    int read_view_chapter_bookmark_today -> read_view_chapter_bookmark_today
+    int read_view_click_menu -> read_view_click_menu
+    int read_view_click_read_next -> read_view_click_read_next
+    int read_view_click_read_previous -> read_view_click_read_previous
+    int read_view_cover_content_bookmark -> read_view_cover_content_bookmark
+    int read_view_cover_content_catalogue -> read_view_cover_content_catalogue
+    int read_view_fontsize_add -> read_view_fontsize_add
+    int read_view_fontsize_reduced -> read_view_fontsize_reduced
+    int read_view_hint_bookmark_1 -> read_view_hint_bookmark_1
+    int read_view_hint_chapter_1 -> read_view_hint_chapter_1
+    int read_view_hint_chapter_2 -> read_view_hint_chapter_2
+    int read_view_hint_chapter_3 -> read_view_hint_chapter_3
+    int read_view_is_the_first_page -> read_view_is_the_first_page
+    int read_view_is_the_last_page -> read_view_is_the_last_page
+    int read_view_search_no_data -> read_view_search_no_data
+    int read_view_select_copy -> read_view_select_copy
+    int read_view_select_search -> read_view_select_search
+    int read_view_select_share -> read_view_select_share
+    int read_view_toast_add_bookmark_fail -> read_view_toast_add_bookmark_fail
+    int read_view_toast_add_bookmark_success -> read_view_toast_add_bookmark_success
+    int read_view_toast_copy_to_clipboard -> read_view_toast_copy_to_clipboard
+    int read_view_toast_no_select -> read_view_toast_no_select
+    int reader_empty_file -> reader_empty_file
+    int reader_open_file_error -> reader_open_file_error
+    int real_exit_tip -> real_exit_tip
+    int refreshing -> refreshing
+    int release_refresh -> release_refresh
+    int rename -> rename
+    int rename_faild -> rename_faild
+    int reset_default -> reset_default
+    int scaning -> scaning
+    int sdcard_unmounted -> sdcard_unmounted
+    int sdcarderror -> sdcarderror
+    int search -> search
+    int self_rec_title -> self_rec_title
+    int server503 -> server503
+    int setup -> setup
+    int setupactivity_page_animation_1 -> setupactivity_page_animation_1
+    int setupactivity_page_animation_2 -> setupactivity_page_animation_2
+    int setupactivity_page_animation_3 -> setupactivity_page_animation_3
+    int setupactivity_page_animation_4 -> setupactivity_page_animation_4
+    int setupactivity_page_autofitbookinfo -> setupactivity_page_autofitbookinfo
+    int setupactivity_page_clear_history -> setupactivity_page_clear_history
+    int setupactivity_page_compact -> setupactivity_page_compact
+    int setupactivity_page_fullscreen -> setupactivity_page_fullscreen
+    int setupactivity_page_openlastfile -> setupactivity_page_openlastfile
+    int setupactivity_page_passwordenable -> setupactivity_page_passwordenable
+    int setupactivity_page_renren -> setupactivity_page_renren
+    int setupactivity_page_reset_software -> setupactivity_page_reset_software
+    int setupactivity_page_setfont -> setupactivity_page_setfont
+    int setupactivity_page_setfont_defaut -> setupactivity_page_setfont_defaut
+    int setupactivity_page_sina -> setupactivity_page_sina
+    int setupactivity_page_smart_composing_2 -> setupactivity_page_smart_composing_2
+    int setupactivity_page_smart_composing_3 -> setupactivity_page_smart_composing_3
+    int setupactivity_page_smart_composing_4 -> setupactivity_page_smart_composing_4
+    int setupactivity_page_tencent -> setupactivity_page_tencent
+    int setupactivity_page_underline -> setupactivity_page_underline
+    int setupactivity_page_usevolumekey -> setupactivity_page_usevolumekey
+    int setupactivity_title_1 -> setupactivity_title_1
+    int setupactivity_title_2 -> setupactivity_title_2
+    int setupactivity_title_3 -> setupactivity_title_3
+    int setupactivity_toast_clear_ok -> setupactivity_toast_clear_ok
+    int setupactivity_toast_no_ttf -> setupactivity_toast_no_ttf
+    int setupactivity_toast_reset_ok -> setupactivity_toast_reset_ok
+    int share -> share
+    int shucang_cn -> shucang_cn
+    int shucang_zh -> shucang_zh
+    int shupeng_board -> shupeng_board
+    int shupeng_category -> shupeng_category
+    int shupeng_cn -> shupeng_cn
+    int shupeng_hot_author -> shupeng_hot_author
+    int shupeng_hot_books -> shupeng_hot_books
+    int shupeng_hot_tags -> shupeng_hot_tags
+    int shupeng_new_book -> shupeng_new_book
+    int shupeng_top -> shupeng_top
+    int shupeng_zh -> shupeng_zh
+    int sns_bind -> sns_bind
+    int sns_bind_success -> sns_bind_success
+    int sns_publish -> sns_publish
+    int success -> success
+    int sure_delete_history -> sure_delete_history
+    int takecareus -> takecareus
+    int title_dialog_confirm -> title_dialog_confirm
+    int title_dialog_prompt -> title_dialog_prompt
+    int toast_has_add_task -> toast_has_add_task
+    int use_default_brightness -> use_default_brightness
+    int user_comment -> user_comment
+    int username -> username
+    int username_text -> username_text
+    int version -> version
+    int view -> view
+    int voice_install -> voice_install
+    int wifi_hint_text -> wifi_hint_text
+    int wifi_off -> wifi_off
+    int wifi_on -> wifi_on
+    int wifi_transf -> wifi_transf
+org.socool.socoolreader.mcnxs.R$style -> org.socool.socoolreader.mcnxs.R$style:
+    int DetailsLabel -> DetailsLabel
+    int DetailsLabel_Large -> DetailsLabel_Large
+    int DetailsLabel_Medium -> DetailsLabel_Medium
+    int DetailsLabel_Small -> DetailsLabel_Small
+    int PopupAnimation -> PopupAnimation
+    int Theme_Shelves -> Theme_Shelves
+    int setting_text_for_button -> setting_text_for_button
+    int transparent -> transparent
+org.socool.socoolreader.mcnxs.R$xml -> org.socool.socoolreader.mcnxs.R$xml:
+    int searchable -> searchable
 org.socool.zlibrary.filesystem.ZLFile -> org.socool.b.a.a:
     java.util.HashMap ourCachedFiles -> a
     java.lang.String myExtension -> c

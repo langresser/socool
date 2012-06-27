@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.mcnxs" android:versionCode="100000" android:versionName="1.0.0" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="10"/>
+	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
