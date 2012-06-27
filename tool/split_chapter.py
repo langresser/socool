@@ -1,44 +1,75 @@
 import re,os,struct,glob;
 
-def is_juan_title(line):
-    if re.search('.*第[壹贰叁肆伍陆柒捌玖拾佰零一二三四五六七八九十百0-9]+卷', line):
-        return True;
+g_config_juan = {};
+g_config_zhang = {};
+
+def load_config():
+    fp = open('split.cfg', 'r');
+    current_section = "";
+    current_data = [];
+    for line in fp:
+        if re.search('^\[.+\]$', line):
+            current_section = line[line.find('[') + 1 : line.find(']')];
+            if current_section not in g_config_juan:
+                g_config_juan[current_section] = [];
+            if current_section not in g_config_zhang:
+                g_config_zhang[current_section] = [];
+            continue;
+
+        if re.search('卷=', line):
+            data = line[line.find('=') + 1:].strip();
+            g_config_juan[current_section].append(data);
+            continue;
+
+        if re.search('章=', line):
+            data = line[line.find('=') + 1:].strip();
+            g_config_zhang[current_section].append(data);
+            continue;
+
+
+
+def is_juan_title(line, file):
+    if len(line) > 30:
+        return False;
+    data = g_config_juan['公共'];
+    for each in data:
+        if re.search(each, line):
+            return True;
+
+    if file in g_config_juan:
+        data_ex = g_config_juan[file];
+        for each in data_ex:
+            if re.search(each, line):
+                return True;
 
     return False;
-def is_chapter_title(line):
-    #无限恐怖
-    if re.search('.*半部.*第.*集.*第.*章', line):
-        return True;
+def is_chapter_title(line, file):
+    if len(line) > 30:
+        return False;
+    data = g_config_zhang['公共'];
+    for each in data:
+        if re.search(each, line):
+            return True;
 
-    #明朝那些事儿
-    if re.search('.*第[壹贰叁肆伍陆柒捌玖拾佰零一二三四五六七八九十百0-9]+章', line):
-        return True;
-
-    if re.search('\s*前言\s*$', line):
-        return True;
-    if re.search('\s*引子\s*$', line):
-        return True;
-    if re.search('朱.{1,2}篇$', line):
-        return True;
-    if re.search('^后记$', line):
-        return True;
+    if file in g_config_zhang:
+        data_ex = g_config_zhang[file];
+        for each in data_ex:
+            if re.search(each, line):
+                return True;
 
     return False;
+
 def get_juan_chapter(each):
-    if False:
-        title_line = each[0][each[0].find('第') :].strip();
-        first_di = title_line.find('第');
-        second_di = title_line.find('第', first_di + 1);
-        juan = title_line[:second_di];
-        zhang = title_line[title_line.rfind('第'):];
-    else:
-        title_line = each[0].strip().split('@@');
+    print(each[0])
+    title_line = each[0].strip().split('@@');
 
-        juan = title_line[0];
-        zhang = title_line[1];
-
+    juan = title_line[0];
+    zhang = title_line[1];
     return juan,zhang
 def split_file(file):
+    print(file);
+    file_name = os.path.basename(file);
+    file_name = file_name[:file_name.rfind('.')];
     fp = open(file, 'r');
     dir_name = file[:file.rfind('.')];
 
@@ -53,15 +84,16 @@ def split_file(file):
         if line == '\n':
             continue;
 
-        if is_juan_title(line):
+        if is_juan_title(line, file_name):
             current_juan = line.strip();
             continue;
 
-        if is_chapter_title(line):
+        if is_chapter_title(line, file_name):
             if len(data_text) > 0:
                 all_text.append(data_text);
 
             data_text = [];
+            print(current_juan + '@@' + line)
             data_text.append(current_juan + '@@' + line);
             continue;
 
@@ -131,6 +163,8 @@ def split_file(file):
     fpws.close();
 
 
+load_config();
+print(g_config_juan);
 file_list = glob.glob('*.TXT')
 for file in file_list:
     split_file(file);
