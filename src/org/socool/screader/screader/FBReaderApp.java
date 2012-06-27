@@ -1795,6 +1795,30 @@ public final class FBReaderApp {
 		}
 	}
 	
+	public void showHelpDialog(final Context context)
+	{
+		final String m_tips = 
+				"    点击屏幕中部可以显示系统菜单，通过设置选项可以进行更多的个性化设置。\n\n"+
+				"    点击屏幕两侧或者拖动均可实现翻页，长按屏幕文字可以进行文本选择。\n\n" +
+				"    如果您喜欢本应用，可以通过下载或打开精品推荐中您所喜欢的应用的方式来支持我们。有您的支持，我们可以为您提供出更多更好的精品电子书。"; 
+		Dialog dialog = new AlertDialog.Builder(context).setTitle("帮助信息").setMessage(m_tips)
+				.setPositiveButton("确定",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								FBReaderApp.Instance().EnableTipOption.setValue(false);
+								dialog.cancel();
+							}
+						}).setNegativeButton("精品推荐",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								showOfferWall(context);
+								dialog.cancel();
+							}
+						}).create();// 创建按钮
+		dialog.show();
+	}
+	
 	public void importBook(final Context context, String pathBook, String pathTo, String destFile)
 	{
 		String sdStatus = Environment.getExternalStorageState();

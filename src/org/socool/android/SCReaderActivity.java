@@ -128,20 +128,7 @@ public final class SCReaderActivity extends Activity {
 		
 //		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
 		if (true) {
-			final Thread runner = new Thread() {
-				public void run() {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							startActivity(new Intent(
-									TipsActivity.SHOW_TIP_ACTION, null, SCReaderActivity.this, TipsActivity.class
-								));
-						}
-					});
-				}
-			};
-			
-			runner.setPriority(Thread.MIN_PRIORITY);
-			runner.start();
+			FBReaderApp.Instance().showHelpDialog(this);
 		}
 	}
 	

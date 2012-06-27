@@ -50,8 +50,6 @@ import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.screader.*;
 
 import org.socool.android.SCReaderActivity;
-import org.socool.android.TipsActivity;
-import org.socool.android.util.UIUtil;
 
 //import com.guohead.sdk.GHView;
 //import com.guohead.sdk.GHView.OnAdLoadedListener;
@@ -406,6 +404,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 					FBReaderApp.Instance().removeAds(PreferenceActivity.this);
 					return true;
 				} else if (preference == fbPreferenceAbout) {
+					MobclickAgent.onEvent(PreferenceActivity.this, "about", "aboutus");
 					final String text = "原书作者：当年明月\n" +
 				"研发团队：Banana Studio\n" +
 				//"官方网站：" +;
@@ -430,20 +429,8 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 					dialog.show();
 					return true;
 				} else if (preference == fbPreferenceHelp) {
-					final Thread runner = new Thread() {
-						public void run() {
-							runOnUiThread(new Runnable() {
-								public void run() {
-									startActivity(new Intent(
-											TipsActivity.SHOW_TIP_ACTION, null, PreferenceActivity.this, TipsActivity.class
-										));
-								}
-							});
-						}
-					};
-					
-					runner.setPriority(Thread.MIN_PRIORITY);
-					runner.start();
+					MobclickAgent.onEvent(PreferenceActivity.this, "about", "help");
+					FBReaderApp.Instance().showHelpDialog(PreferenceActivity.this);
 					return true;
 				}
 				return false;

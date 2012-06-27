@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/dialog_bg_color"
+		android:background="@drawable/bg_main_bottom"
+		android:layout_gravity="center"
 		android:orientation="vertical">
 	<TextView
 		android:id="@+id/tip_text_title"
@@ -11,47 +12,34 @@
 		android:layout_height="wrap_content"
 		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textColor="#ff000000"
+		android:textColor="#ffffffff"
 		android:text="帮助信息"
 		android:gravity="center"
+		android:layout_marginTop="10dip"
 		android:layout_marginBottom="10dip"
-		android:layout_weight="2"
 	/>
 	<TextView
 		android:id="@+id/tip_text"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textColor="#ff000000"
+		android:textColor="#ffffffff"
 		android:layout_marginLeft="25dip"
 		android:layout_marginRight="25dip"
 		android:layout_below="@id/tip_text_title"
 		android:scrollbars="vertical"   
 		android:maxLines="15"
-		android:layout_weight="10"
 	/>
-	
-	<CheckBox
-	    android:id="@+id/tip_checkbox"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="20dip"
-	    android:checked="true"
-	    android:gravity="center"
-	    android:text="不再提示"
-	    android:textAppearance="?android:attr/textAppearanceSmall"
-	    android:layout_weight="1"
-	    android:textColor="#ff000000" />
 
 	<LinearLayout
 	    android:id="@+id/buttonset_tip"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_weight="1"
+		android:layout_marginTop="10dip"
 		android:layout_marginBottom="5dip"
 		android:orientation="horizontal">
 		<LinearLayout
-			android:layout_weight="0.21"
+			android:layout_weight="0.31"
 			android:layout_width="0dip"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
@@ -62,10 +50,11 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:text = "确定"
+	    android:textColor="#ffffffff" 
 			android:singleLine="true"
-			android:background="@drawable/bun_common_0"/>
+			android:background="@drawable/black_btn_common"/>
 		<LinearLayout
-			android:layout_weight="0.21"
+			android:layout_weight="0.41"
 			android:layout_width="0dip"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
@@ -76,10 +65,11 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:text = "精品推荐"
+	    android:textColor="#ffffffff" 
 			android:singleLine="true"
-			android:background="@drawable/bun_common_0"/>
+			android:background="@drawable/black_btn_common"/>
 		<LinearLayout
-			android:layout_weight="0.21"
+			android:layout_weight="0.31"
 			android:layout_width="0dip"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
