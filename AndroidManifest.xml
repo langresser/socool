@@ -76,12 +76,7 @@
 			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
 		</activity>
 		<activity android:name="org.socool.android.ImageViewActivity" android:configChanges="orientation|keyboardHidden"/>
-		<activity android:name="org.socool.android.BookInfoActivity" android:configChanges="orientation|keyboardHidden">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
+		
 		<activity android:name="org.socool.android.LibrarySearchActivity" android:theme="@android:style/Theme.NoDisplay">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
@@ -194,9 +189,17 @@
 		</activity>
 
 		<activity android:name="org.socool.android.TipsActivity" 
-		    android:configChanges="orientation|keyboardHidden" 
+		    android:configChanges="orientation|keyboardHidden"
 		    android:theme="@style/transparent"/>
 
+
+		<activity android:name="org.socool.android.BookInfoActivity" android:configChanges="orientation|keyboardHidden"
+		    android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
 
 	<!--有米-->
 	<meta-data android:name="YOUMI_CHANNEL" android:value="10050"/>
