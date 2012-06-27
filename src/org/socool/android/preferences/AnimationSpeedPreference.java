@@ -30,7 +30,7 @@ import android.widget.SeekBar;
 import org.socool.zlibrary.filesystem.ZLResource;
 import org.socool.zlibrary.options.ZLIntegerRangeOption;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 class AnimationSpeedPreference extends DialogPreference {
 	private final ZLIntegerRangeOption myOption;

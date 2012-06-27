@@ -32,7 +32,7 @@ import org.socool.zlibrary.options.ZLColorOption;
 import org.socool.zlibrary.util.ZLAndroidColorUtil;
 import org.socool.zlibrary.util.ZLColor;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 class ZLColorPreference extends DialogPreference {
 	private final ZLColorOption myOption;

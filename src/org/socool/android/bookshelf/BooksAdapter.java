@@ -20,7 +20,7 @@ import org.socool.zlibrary.image.ZLImage;
 import org.socool.zlibrary.image.ZLImageData;
 import org.socool.zlibrary.image.ZLImageManager;
 import org.socool.zlibrary.image.ZLLoadableImage;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 class BooksAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;

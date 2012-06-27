@@ -19,7 +19,6 @@
 
 package org.socool.screader.library;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import org.socool.android.util.SQLiteUtil;
@@ -35,7 +34,6 @@ import org.socool.zlibrary.util.ZLConfig;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 

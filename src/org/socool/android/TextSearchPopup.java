@@ -21,7 +21,7 @@ package org.socool.android;
 
 import android.widget.RelativeLayout;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 import org.socool.screader.screader.ActionCode;
 import org.socool.screader.screader.FBReaderApp;

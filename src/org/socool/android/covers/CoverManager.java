@@ -52,7 +52,7 @@ import org.socool.zlibrary.image.ZLLoadableImage;
 import org.socool.android.bookshelf.FastBitmapDrawable;
 import org.socool.screader.FBTree;
 import org.socool.screader.Paths;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 public class CoverManager {
 	final CoverCache Cache = new CoverCache();

@@ -35,7 +35,7 @@ import org.socool.screader.screader.FBReaderApp;
 import org.socool.screader.library.Book;
 import org.socool.zlibrary.filesystem.ZLFile;
 import org.socool.zlibrary.filesystem.ZLResource;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 public class ShelvesActivity extends Activity implements FBReaderApp.ChangeListener {
     private boolean mPendingCoversUpdate;

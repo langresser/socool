@@ -9,7 +9,7 @@ import android.graphics.RectF;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 /**
  * TextView that draws a bubble behind the text. We cannot use a LineBackgroundSpan

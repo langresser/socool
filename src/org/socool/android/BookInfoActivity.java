@@ -30,7 +30,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.*;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 import org.socool.android.util.UIUtil;
 import org.socool.screader.Paths;
@@ -64,7 +64,7 @@ public class BookInfoActivity extends Activity {
 
 		m_currentBookPath = getIntent().getStringExtra(CURRENT_BOOK_PATH_KEY);
 		if (m_currentBookPath == null) {
-			m_currentBookPath = "book/mcnxs";
+			m_currentBookPath = "book/yhyxcs";
 		}
 		
 

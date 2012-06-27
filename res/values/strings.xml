@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="empty_string"></string>
-	<string name="app_name">明朝那些事儿</string>
+	<string name="app_name">银河英雄传说</string>
     <string name="real_exit_tip">再按一次返回键将退出阅读器</string>
     <string name="delete">删除</string>
     <string name="delete_sure">确定删除</string>

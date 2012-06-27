@@ -13,7 +13,7 @@ import android.graphics.Rect;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.view.View;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 public class SpotlightDrawable extends Drawable {
     private final Bitmap mBitmap;

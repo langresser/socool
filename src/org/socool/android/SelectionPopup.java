@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 
 import org.socool.screader.screader.ActionCode;
 import org.socool.screader.screader.FBReaderApp;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 public class SelectionPopup extends ButtonsPopupPanel {
 	public final static String ID = "SelectionPopup";

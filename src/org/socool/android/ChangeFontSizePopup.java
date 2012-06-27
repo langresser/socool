@@ -11,7 +11,7 @@ import android.widget.TextView;
 import org.socool.zlibrary.options.ZLIntegerRangeOption;
 import org.socool.zlibrary.text.ZLTextStyleCollection;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 import org.socool.screader.screader.FBReaderApp;
 

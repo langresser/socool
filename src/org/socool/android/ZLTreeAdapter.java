@@ -26,7 +26,7 @@ import android.widget.*;
 
 import org.socool.zlibrary.util.ZLTree;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	private final ListView myParent;

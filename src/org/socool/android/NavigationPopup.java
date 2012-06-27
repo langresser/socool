@@ -32,7 +32,7 @@ import org.socool.zlibrary.filesystem.ZLResource;
 import org.socool.zlibrary.text.ZLTextView;
 import org.socool.zlibrary.text.ZLTextWordCursor;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 import org.socool.screader.bookmodel.BookChapter;
 import org.socool.screader.bookmodel.BookModel;

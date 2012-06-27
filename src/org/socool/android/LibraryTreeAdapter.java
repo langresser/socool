@@ -25,7 +25,7 @@ import android.widget.*;
 
 import org.socool.zlibrary.filesystem.ZLFile;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.yhyxcs.R;
 
 
 import org.socool.android.tree.TreeAdapter;
