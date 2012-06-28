@@ -69,24 +69,20 @@ public class BookChapter {
 	{
 		int chapterIndex = getChapterIndexByParagraph(paragraph);
 		if (chapterIndex < 0) {
-//			Log.e("chapterIndex", String.format("%1d  %2d  %3d", paragraph, chapterIndex, m_chapterData.size()));
 			chapterIndex = 0;
 		}
 		
 		if (chapterIndex > m_chapterData.size() - 1) {
-//			Log.e("chapterIndex", String.format("%1d  %2d  %3d", paragraph, chapterIndex, m_chapterData.size()));
 			chapterIndex = m_chapterData.size() - 1;
 		}
 
 		final BookChapterData data = m_chapterData.get(chapterIndex);
 		int paragraphIndex = paragraph - data.m_startOffset;
 		if (paragraphIndex < 0) {
-//			Log.e("paragraphIndex", String.format("%1d  chapter:%2d  %3d  para:%4d %5d", paragraph, chapterIndex, m_chapterData.size(), paragraphIndex, data.paragraphOffset.size()));
 			paragraphIndex = 0;
 		}
 		
 		if (paragraphIndex > data.paragraphOffset.size() - 1) {
-//			Log.e("paragraphIndex", String.format("%1d  chapter:%2d  %3d  para:%4d %5d", paragraph, chapterIndex, m_chapterData.size(), paragraphIndex, data.paragraphOffset.size()));
 			paragraphIndex = data.paragraphOffset.size() - 1;
 		}
 
@@ -118,8 +114,6 @@ public class BookChapter {
 		final int paragraph = getParagraphIndexByTxtOffset(chapter, offset);
 		final int paragraphStart = m_chapterData.get(chapter).paragraphOffset.get(paragraph);
 		final int word = offset - paragraphStart;
-
-		Log.d("goto", String.format("%1d   %2d  %3d", offset, paragraph + chapterStart, word));
 		FBReaderApp.Instance().BookTextView.gotoPosition(paragraph + chapterStart, word, 0);
 	}
 	
@@ -156,10 +150,6 @@ public class BookChapter {
 			if (low == 0) {
 				return 0;
 			} else {
-				final int lloffset = paraOffset.get(low - 1);
-				if (offset < lloffset) {
-					Log.e("errorl", String.format("getChapterByTxtOffset: offset: %1d  ll:%2d  l:%3d", offset, lloffset, loffset));
-				}
 				return low - 1;
 			}
 		} else {
@@ -168,7 +158,6 @@ public class BookChapter {
 			} else {
 				final int hoffset = paraOffset.get(low + 1);
 				if (offset >= hoffset) {
-					Log.e("errorh", String.format("getChapterByTxtOffset: offset %1d h: %2d  l:%3d", offset, hoffset, loffset));
 					return low + 1;
 				} else {
 					return low;
@@ -218,10 +207,6 @@ public class BookChapter {
 			if (low == 0) {
 				return 0;
 			} else {
-				final int lloffset = m_chapterData.get(low - 1).m_startTxtOffset;
-				if (offset < lloffset) {
-					Log.e("errorl", String.format("getChapterByTxtOffset: offset: %1d  ll:%2d  l:%3d", offset, lloffset, loffset));
-				}
 				return low - 1;
 			}
 		} else {
@@ -230,7 +215,6 @@ public class BookChapter {
 			} else {
 				final int hoffset = m_chapterData.get(low + 1).m_startTxtOffset;
 				if (offset >= hoffset) {
-					Log.e("errorh", String.format("getChapterByTxtOffset: offset %1d h: %2d  l:%3d", offset, hoffset, loffset));
 					return low + 1;
 				} else {
 					return low;

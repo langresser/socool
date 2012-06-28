@@ -97,8 +97,6 @@ public final class ZLTextWord extends ZLTextElement {
 			myWidth = width;
 		}
 		
-//		String text = new String(Data, Offset, Length);
-//		Log.d("word width", String.format("word:%1s   width:%d", text, myWidth));
 		return width;
 	}
 

@@ -107,8 +107,7 @@ public final class ZLTextParagraphCursor {
 			if (ourBreaks.length < length) {
 				ourBreaks = new byte[length];
 			}
-//			String text = new String(data, offset, length);
-//			Log.d("processTextEntry", text);
+
 			final byte[] breaks = ourBreaks;
 			LineBreaker.setLineBreaks(data, offset, length, breaks);
 			
@@ -163,8 +162,6 @@ public final class ZLTextParagraphCursor {
 		}
 
 		private final void addWord(char[] data, int offset, int len, int paragraphOffset, ZLTextHyperlink hyperlink) {
-//			String text = new String(data, offset, len);
-//			Log.d("addWord", text);
 			ZLTextWord word = new ZLTextWord(data, offset, len, paragraphOffset);
 			for (int i = myFirstMark; i < myLastMark; ++i) {
 				final ZLTextMark mark = (ZLTextMark)myMarks.get(i);
@@ -226,8 +223,6 @@ public final class ZLTextParagraphCursor {
 	}
 	
 	public boolean isEndOfSection() {
-//		final byte kind = Model.m_paragraph.getParagraphKind(Index);
-//		Log.d("isEndOfSection", String.format("%1d  %2d  %3d", kind, Index, BookModel.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH));
 		return (Model.m_paragraph.getParagraphKind(Index) == BookParagraph.PARAGRAPH_KIND_END_OF_SECTION_PARAGRAPH);
 	}
 

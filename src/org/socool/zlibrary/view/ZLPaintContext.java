@@ -430,9 +430,6 @@ public class ZLPaintContext {
 			}
 		}
 		if (!containsSoftHyphen) {
-//			// TODO delete it  wangjia
-//			String word = new String(string, offset, length);
-//			Log.e("drawString", String.format("word: %1s   x: %1d  y:%1d", word, x, y));
 			myCanvas.drawText(string, offset, length, x, y, myTextPaint);
 		} else {
 			final char[] corrected = new char[length];

@@ -229,7 +229,6 @@ public final class TxtChapterReader extends BookReader {
 
 	public void readDocument(int paraNumber)
 	{
-//		Log.d("readDocument", "read:" + paragraph);
 		m_bookModel.m_paragraph.clearParagraphData();
 		int fileNum = m_bookModel.m_chapter.getChapterIndexByParagraph(paraNumber);
 		
@@ -246,8 +245,6 @@ public final class TxtChapterReader extends BookReader {
 		if (fileNum < lastFile - 1) {
 			readChapter(fileNum + 1);
 		}
-	
-//		Log.d("readDocument", String.format("readover:%1d    begin:%2d    end:%3d", paragraph, m_bookModel.m_beginParagraph, m_bookModel.m_endParagraph));
 	}
 
 	protected void startDocumentHandler()
@@ -268,8 +265,6 @@ public final class TxtChapterReader extends BookReader {
 	
 	protected boolean characterDataHandler(char[] ch, int start, int length)
 	{
-//		String text = new String(ch, start, length);
-//		Log.d("characterDataHandler", String.format(" %1d  %2d   %3s", start, length, text));
 		addData(ch, start, length, false);
 		return true;
 	}

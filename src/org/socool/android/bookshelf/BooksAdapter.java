@@ -38,7 +38,6 @@ class BooksAdapter extends BaseAdapter {
     		Bitmap bitmap = BitmapFactory.decodeResource(mActivity.getResources(), 0);
     		final int width = bitmap.getWidth();
         	final int height = bitmap.getHeight();
-        	Log.d("Bitmap:" + i, String.format("width:%1d  height:%2d", width, height));
 
     		Matrix matrix = new Matrix();   
     	    matrix.postScale(120.0f / width, 160.0f / height);   
