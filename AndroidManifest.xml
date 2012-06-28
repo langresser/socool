@@ -167,7 +167,7 @@
 	
 	<!--友盟-->
 	<meta-data android:value="4fe4926e5270156649000081" android:name="UMENG_APPKEY"/>
-	<meta-data android:value="91nd" android:name="UMENG_CHANNEL"/>
+	<meta-data android:value="appChina" android:name="UMENG_CHANNEL"/>
 	<activity android:name="com.umeng.fb.ui.SendFeedback" android:windowSoftInputMode="adjustResize" />
 	<activity android:name="com.umeng.fb.ui.FeedbackConversations" />
 	<activity android:name="com.umeng.fb.ui.FeedbackConversation" android:configChanges="keyboard" />
