@@ -34,6 +34,12 @@ public class PopupWindow extends LinearLayout {
 
 	private final Activity myActivity;
 
+	public PopupWindow(Context context)
+	{
+		super(context);
+		myActivity = null;
+	}
+
 	public PopupWindow(Activity activity, RelativeLayout root, Location location, boolean fillWidth) {
 		super(activity);
 		myActivity = activity;

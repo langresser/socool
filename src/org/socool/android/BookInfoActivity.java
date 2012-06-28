@@ -25,6 +25,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -51,7 +52,6 @@ public class BookInfoActivity extends Activity {
 		
 		// ”—√À
 		try {
-			MobclickAgent.updateOnlineConfig(this);
 			MobclickAgent.onError(this);
 			
 			// ÕÚ∆’
@@ -66,7 +66,6 @@ public class BookInfoActivity extends Activity {
 		if (m_currentBookPath == null) {
 			m_currentBookPath = "book/mcnxs";
 		}
-		
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.book_info);
@@ -157,6 +156,7 @@ public class BookInfoActivity extends Activity {
 		btnImport.setOnClickListener(listener);
 		
 		final Book book = Book.getByPath(m_currentBookPath);
+		
 		ZLTextPosition position = book.getStoredPosition();
 		if (position != null) {
 			startActivity(

@@ -1,5 +1,6 @@
 package org.socool.screader.formats.txt;
 
+import android.annotation.SuppressLint;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -9,9 +10,6 @@ import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.bookmodel.BookParagraph;
 import org.socool.screader.bookmodel.BookReader;
 import org.socool.screader.screader.FBReaderApp;
-
-import android.util.Log;
-
 
 public final class TxtChapterReader extends BookReader {
 	public final static int BREAK_PARAGRAPH_AT_NEW_LINE = 1;
@@ -41,7 +39,7 @@ public final class TxtChapterReader extends BookReader {
 		}
 
 		try {
-			long startTime = System.currentTimeMillis();
+//			long startTime = System.currentTimeMillis();
 
 			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/chapter.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
@@ -94,7 +92,7 @@ public final class TxtChapterReader extends BookReader {
 			chapter.m_allParagraphNumber = paraCount;
 			chapter.m_allTextSize = textSize;
 			
-			long time1 = System.currentTimeMillis() - startTime;
+//			long time1 = System.currentTimeMillis() - startTime;
 			
 			input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.db");
 			int size = input.available();
@@ -137,14 +135,15 @@ public final class TxtChapterReader extends BookReader {
 				}
 			}
 			
-			long time2 = System.currentTimeMillis() - startTime;
+//			long time2 = System.currentTimeMillis() - startTime;
 			
-			Log.d("init cost:", String.format("%1d   %2d", time1, time2));
+//			Log.d("init cost:", String.format("%1d   %2d", time1, time2));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	@SuppressLint({ "ParserError", "ParserError" })
 	public void readChapter(int fileNum)
 	{
 		startDocumentHandler();

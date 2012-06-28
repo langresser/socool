@@ -1,9 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!-- Chinese FBReaderJ resources, by http://shucang.com/ -->
 <resources>
-	<node name="library" value="FBReader 书库" >
+	<node name="library" value="SCReader 书库" >
 		<node name="unknownAuthor" value="佚名" />
-		<node name="demo" value="试读本" />
 		<node name="byAuthor" value="作者">
 			<node name="summary" value="按作者排序" />
 		</node>
@@ -22,123 +20,11 @@
 		<node name="fileTreeCard" value="SD存储卡">
 			<node name="summary" value="插入设备的存储卡"/>
 		</node>
-		<node name="menu">
-			<node name="localSearch" value="本地搜索" />
-		</node>
 		<node name="openBook" value="打开阅读" />
 		<node name="showBookInfo" value="书文信息"/>
-		<node name="shareBook" value="Share book" toBeTranslated="true"/>
 		<node name="deleteBook" value="删除本书" />
 		<node name="addToFavorites" value="收藏到我的超爱"/>
 		<node name="removeFromFavorites" value="从收藏列表中移除"/>
-	</node>
-	<node name="networkLibrary" value="FBReader 网络书库" >
-		<node name="byAuthor" value="作者">
-			<node name="summary" value="按作者排序" />
-		</node>
-		<node name="byTitle" value="按书名" >
-			<node name="summary" value="按书名排序" />
-		</node>
-		<node name="byDate" value="按日期" >
-			<node name="summary" value="按购买日期排序" />
-		</node>
-		<node name="bySeries" value="按系列" >
-			<node name="summary" value="按系列排序" />
-		</node>
-		<node name="search" value="搜索">
-			<node name="summary" value="在 %s 上搜索图书" />
-			<node name="summaryAllCatalogs" value="搜索书库" />
-			<node name="summaryInProgress" value="搜索中..." />
-		</node>
-		<node name="found" value="搜索结果">
-			<node name="summary" value="搜索结果: %s" />
-		</node>
-		<node name="openCatalog" value="打开书库" />
-		<node name="networkSearch" value="搜索"/>
-		<node name="showResults" value="显示结果"/>
-		<node name="showBooks" value="显示书籍"/>
-		<node name="download" value="下载" />
-		<node name="read" value="阅读" />
-		<node name="delete" value="删除" />
-		<node name="readDemo" value="试读" />
-		<node name="deleteDemo" value="删除试读本" />
-		<node name="downloadDemo" value="下载试读本" />
-		<node name="buy" value="购买(%s)" />
-		<node name="addToBasket" value="添加到购物篮" />
-		<node name="removeFromBasket" value="从购物篮中删除" />
-		<node name="openBasket" value="打开购物篮" />
-		<node name="clearBasket" value="清空购物篮" />
-		<node name="buyAllBooks" value="购买所有书籍" />
-		<node name="openInBrowser" value="在浏览器中打开" />
-		<node name="stopLoading" value="停止加载" />
-		<node name="stopSearching" value="停止搜索" />
-		<node name="signIn" value="登录"/>
-		<node name="signOut" value="退出 (%s)"/>
-		<node name="topup" value="重新输入账号(目前: %s)" />
-		<node name="topupTitle" value="重新输入账号"/>
-		<node name="topupViaBrowser" value="在浏览器中打开页面"/>
-		<node name="authorizationMenuTitle" value="选择操作" />
-		<node name="topupSummary" value="当前: %s"/>
-		<node name="basket" value="购物篮" />
-		<node name="basketSummaryEmpty" value="没有书籍" />
-		<node name="basketSummaryCountOnly" value="%0 本书" />
-		<node name="basketSummary" value="%0 本书 (%1)"/>
-		<node name="alreadyDownloading" value="正在下载" />
-		<node name="alreadyDownloadingDemo" value="正在下载试读本" />
-		<node name="stoppingCatalogLoading" value="停止加载" />
-		<node name="stoppingNetworkSearch" value="停止搜索" />
-		<node name="editCustomCatalog" value="编辑书库目录"/>
-		<node name="removeCustomCatalog" value="移除书库"/>
-		<node name="addCustomCatalog" value="增加书库"/>
-		<node name="addCustomCatalogSummary" value="手工添加自有的OPDS书库"/>
-		<node name="confirmQuestions">
-			<node name="read" value="是否本地阅读" />
-			<node name="download" value="是否下载本图书?" />
-			<node name="readDemo" value="是否试读?" />
-			<node name="downloadDemo" value="是否下载试读本?" />
-			<node name="buy" value="是否购买本书? (%s)" />
-			<node name="openInBrowser" value="是否在浏览器中打开?" />
-		</node>
-		<node name="downloadingCatalogs" value="书库目录下载" /> <!-- used as notification title -->
-		<node name="searchingNetwork" value="搜索书库"/> <!-- used as notification title -->
-		<node name="addCatalog">
-			<node name="title" value="Add catalog" toBeTranslated="true"/>
-			<node name="editUrl" value="Enter URL manually" toBeTranslated="true"/>
-		</node>
-		<node name="menu">
-			<node name="networkSearch" value="网络搜索" />
-			<node name="reload" value="重新加载" />
-			<node name="signIn" value="登录"/>
-			<node name="signUp" value="注册" />
-			<node name="signOut" value="退出 (%s)"/>
-			<node name="topup" value="重新输入账号"/>
-			<node name="addCustomCatalog" value="添加书库"/>
-			<node name="refreshCatalogsList" value="刷新书库"/>
-			<node name="languages" value="语言过滤"/>
-			<node name="clearBasket" value="清空购物篮" />
-			<node name="buyAllBooks" value="购买所有图书" />
-		</node>
-	</node>
-	<node name="buyBook">
-		<node name="title" value="购买书籍" />
-		<node name="titleSeveralBooks" value="购买书籍" />
-		<node name="confirm" value="确认购买%s书籍?" />
-		<node name="confirmSeveralBooks" value="确认购买%s书籍?" />
-		<node name="alreadyBought" value="该书已经买过" />
-		<node name="notAuthorized" value="需要授权" />
-		<node name="noAccountInformation" value="无法加载账号状态" />
-		<node name="unsufficientFunds" value="你这次买了 %0 ，但是你现在只有 %1" />
-		<node name="zeroFunds" value="你这次买了 %0" />
-	</node>
-	<node name="bookDownloader">
-		<node name="tickerSuccess" value="下载成功" />
-		<node name="tickerError" value="下载出错" />
-		<node name="contentSuccess" value="下载完成" />
-		<node name="contentError" value="下载失败" />
-		<node name="downloadingStarted" value="开始下载" />
-		<node name="alreadyDownloading" value="已在下载" />
-		<node name="cannotCreateDirectory" value="无法创建文件夹 %s" />
-		<node name="cannotCreateFile" value="无法创建文件 %s" />
 	</node>
 	<node name="selection" value="选择">
 		<node name="copyToClipboard" value="复制到剪贴板" />
@@ -179,18 +65,9 @@
 			<node name="openBook" value="阅读" />
 			<node name="editInfo" value="编辑" />
 			<node name="reloadInfo" value="重新加载" />
-			<node name="shareBook" value="Share" toBeTranslated="true"/>
-			<node name="topup" value="重新输入账号"/>
 			<node name="pay" value="支付" />
 			<node name="refresh" value="刷新" />
 			<node name="authorize" value="授权" />
-			<node name="resetPosition" value="Reset position" toBeTranslated="true"/>
-			<node name="sendReport" value="Send report" toBeTranslated="true"/>
-		</node>
-		<node name="plugin">
-			<node name="installTitle" value="安装插件" />
-			<node name="updateTitle" value="更新插件" />
-			<node name="dontAskAgain" value="别再问了" />
 		</node>
 		<node name="installDictionary">
 			<node name="title" value="安装字典" />
@@ -429,21 +306,6 @@
             <node name="about" value="关于">
                 <node name="summary" value="检查更新，意见反馈等"/>
             </node>
-			<node name="dictionary" value="字典设定">
-				<node name="summary" value="设置字典及其对应操作"/>
-				<node name="dictionary" value="字典"/>
-				<node name="translator" value="译者" />
-				<node name="tappingAction" value="长按动作设定">
-					<node name="doNothing" value="长按不做任何事"/>
-					<node name="selectSingleWord" value="长按选择词语"/>
-					<node name="startSelecting" value="长按选择内容" />
-					<node name="openDictionary" value="长按选择词语，放开后打开字典"/>
-				</node>
-				<node name="navigateOverAllWords" value="导航键访问词句设定">
-					<node name="summaryOn" value="导航键访问所有的词句"/>
-					<node name="summaryOff" value="导航键仅访问超链接词句"/>
-				</node>
-			</node>
 		</node>
 		<node name="deleteBookBox">
 			<node name="message" value="确认删除该文件?" />
@@ -467,41 +329,6 @@
 			<node name="loadingNetworkBookInfo" value="书籍信息加载中，请等待&#8230;"  />
 			<node name="updatingCatalogsList" value="更新书库列表中，请稍待..."/>
 			<node name="updatingAccountInformation" value="正在更新账户信息，请等待&#8230;" />
-		</node>
-		<node name="networkError">
-			<node name="internalError" value="内部服务器出错" />
-			<node name="purchaseNotEnoughMoney" value="金额不足" />
-			<node name="purchaseMissingBook" value="图书缺失" />
-			<node name="purchaseAlreadyPurchased" value="已购买书籍" />
-			<node name="bookNotPurchased" value="未购买书籍" />
-			<node name="downloadLimitExceeded" value="超过下载限制" />
-			<node name="noUserEmail" value="你的电子邮箱可以注册&#10;" />
-			<node name="unsupportedOperation" value="非法操作" />
-			<node name="notAnOPDS" value="没有OPDS书库" />
-			<node name="noRequiredInformation" value="书库目录中必须的信息没有定义" />
-			<node name="cacheDirectoryError" value="无法创建缓存目录" />
-		</node>
-		<node name="AuthenticationDialog">
-			<node name="title" value="鉴定" />
-			<node name="unencryptedWarning" value="你的密码将明文传送" />
-			<node name="login" value="登录" />
-			<node name="password" value="密码" />
-			<node name="loginIsEmpty" value="用户名不允许为空" />
-			<node name="register" value="注册" />
-		</node>
-		<node name="CustomCatalogDialog">
-			<node name="title" value="FBReader: 添加自设书库"  />
-			<node name="catalogTitle" value="书库名称" />
-			<node name="catalogUrl" value="书库网址" />
-			<node name="catalogSummary" value="简介" />
-			<node name="catalogTitleExample" value="例如: 古滕堡项目书库目录" />
-			<node name="catalogUrlExample" value="例如: http://m.gutenberg.org/" />
-			<node name="catalogSummaryExample" value="例如: 公版图书" />
-			<node name="titleIsEmpty" value="名称不能为空" />
-			<node name="urlIsEmpty" value="书库网址不能为空" />
-			<node name="invalidUrl" value="无效的URL地址" />
-			<node name="titleAlreadyExists" value="该名称已经在用" />
-			<node name="siteAlreadyExists" value="该书库已经在用" />
 		</node>
 	</node>
 	<node name="errorMessage">
@@ -529,22 +356,6 @@
 			<node name="no" value="否" />
 			<node name="apply" value="应用" />
 		</node>
-		<node name="networkError">
-			<node name="title" value="网络错误" />
-			<node name="unknownErrorMessage" value="未知错误" />
-			<node name="operationTimedOutMessage" value="操作超时" />
-			<node name="somethingWrongMessage" value="出错 %s" />
-			<node name="couldntCreateDirectoryMessage" value="无法创建目录 %s" />
-			<node name="couldntCreateFileMessage" value="无法创建文件 %s" />
-			<node name="couldntConnectToNetworkMessage" value="无法连接到网络" />
-			<node name="couldntConnectMessage" value="无法连接到主机%s" />
-			<node name="couldntResolveHostMessage" value="无法解析主机 %s" />
-			<node name="authenticationFailed" value="无法辨识" />
-			<node name="unsupportedProtocol" value="不支持的协议" />
-			<node name="invalidURL" value="无效网址" />
-			<node name="hostCantBeReached" value="网站无法访问 %s" />
-			<node name="connectionRefused" value="连接被拒绝&#10;%s" />
-		</node>
 	</node>
 	<node name="color">
 		<node name="red" value="红色" />
@@ -566,29 +377,7 @@
 		<node name="custom..." value="定制..." />
 	</node>
 	<node name="language">
-		<node name="ar" value="阿拉伯语" />
-		<node name="cs" value="捷克语" />
-		<node name="de" value="德语" />
-		<node name="el" value="希腊语" />
 		<node name="en" value="英语" />
-		<node name="eo" value="世界语" />
-		<node name="es" value="西班牙语" />
-		<node name="fi" value="芬兰语" />
-		<node name="fr" value="法语" />
-		<node name="he" value="希伯来语" />
-		<node name="hu" value="匈牙利语" />
-		<node name="id" value="印度语" />
-		<node name="it" value="意大利语" />
-		<node name="lt" value="立陶宛语" />
-		<node name="nl" value="荷兰语" />
-		<node name="no" value="挪威语" />
-		<node name="pl" value="波兰语" />
-		<node name="pt" value="葡萄牙语" />
-		<node name="ru" value="俄罗斯语" />
-		<node name="sv" value="瑞典语" />
-		<node name="tr" value="土耳其语" />
-		<node name="uk" value="乌克兰语" />
-		<node name="vi" value="越南语" />
 		<node name="zh" value="中文" />
 		<node name="other" value="其他" />
 		<node name="multi" value="多语言" />
@@ -597,8 +386,5 @@
 		<node name="on" value="开" />
 		<node name="off" value="关" />
 		<node name="unchanged" value="不变" />
-	</node>
-	<node name="keyOptionView">
-		<node name="actionFor" value="按键设置快捷操作" />
 	</node>
 </resources>

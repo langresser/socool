@@ -324,7 +324,7 @@ public class HtmlReader extends BookReader implements ZLHtmlReader {
 			case HtmlTag.LI:
 				startNewParagraph();
 				if (myOrderedListIsStarted) {
-					char[] number = (new Integer(++myOLCounter)).toString().toCharArray();
+					char[] number = (Integer.valueOf(++myOLCounter)).toString().toCharArray();
 					addData(number);
 					addData(new char[] {'.', ' '});
 				} else {

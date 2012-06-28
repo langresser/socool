@@ -97,7 +97,7 @@ public class ColorProfile {
 	{
 		if (theme == null) {
 			// 单色模式
-			BaseThemeOption.setValue("");
+			BaseThemeOption.setValue("null");
 			WallpaperOption.setValue("");
 			BackgroundOption.setValue(new ZLColor(255, 255, 255));
 			RegularTextOption.setValue(new ZLColor(0, 0, 0));

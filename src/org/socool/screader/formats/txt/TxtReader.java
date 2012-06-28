@@ -12,6 +12,7 @@ import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.bookmodel.BookParagraph;
 import org.socool.screader.bookmodel.BookReader;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 public final class TxtReader extends BookReader {
@@ -166,6 +167,7 @@ public final class TxtReader extends BookReader {
 		return 0;
 	}
 		
+	@SuppressLint({ "ParserError", "ParserError" })
 	public void readDocument(int paragraph)
 	{
 		startDocumentHandler();
@@ -300,7 +302,7 @@ public final class TxtReader extends BookReader {
 
 		for (int i = parBegin; i < maxLength; ++i) {
 			final char c = text[i];
-			if (c == '\n' || c == '\r') {
+			if (c == '\n' || c == '\r' ) {
 				boolean skipNewLine = false;
 				if (c == '\r' && (i + 1) != maxLength && text[i + 1] == '\n') {
 					skipNewLine = true;
