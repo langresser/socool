@@ -46,7 +46,8 @@ public class BookmarksActivity extends Activity {
 		m_bookmark = (ListView)findViewById(R.id.boomark_list);
 		m_bookComment = (ListView)findViewById(R.id.bookcomment_list);
 		
-		BookChapterJuanAdapter adapter = new BookChapterJuanAdapter(this);
+		BookChapterJuanAdapter adapter = new BookChapterJuanAdapter(this, 
+				FBReaderApp.Instance().Model.m_chapter, FBReaderApp.Instance().BookTextView.getCurrentChapter());
 		m_chapter.setAdapter(adapter);
 		m_chapter.setOnChildClickListener(adapter);
 		

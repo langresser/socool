@@ -17,16 +17,18 @@ import android.widget.TextView;
 public class BookChapterJuanAdapter extends BaseExpandableListAdapter
 		implements ExpandableListView.OnChildClickListener {
 	private LayoutInflater mInflater;
-	final private BookChapter m_chapter = FBReaderApp.Instance().Model.m_chapter;
-	final public int m_currentChapter = FBReaderApp.Instance().BookTextView
-			.getCurrentChapter();
+	final private BookChapter m_chapter;
+	final public int m_currentChapter;
 	final public int m_currentGroup;
 	final Activity m_baseActivity;
 
-	public BookChapterJuanAdapter(Activity activity) {
+	public BookChapterJuanAdapter(Activity activity, BookChapter chapter, int currentChapter) {
 		// Cache the LayoutInflate to avoid asking for a new one each time.
 		mInflater = LayoutInflater.from(activity);
 		m_baseActivity = activity;
+		
+		m_chapter = chapter;
+		m_currentChapter = currentChapter;
 		m_currentGroup = m_chapter.getChapter(m_currentChapter).m_juanIndex;
 	}
 

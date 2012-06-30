@@ -45,6 +45,12 @@ import com.umeng.analytics.MobclickAgent;
 public class BookInfoActivity extends Activity {
 	public static final String CURRENT_BOOK_PATH_KEY = "CurrentBookPath";
 	private String m_currentBookPath;
+	ExpandableListView m_chapter;
+	Button m_btnChapter;
+	Button m_btnIntro;
+	
+	static final int BOOK_INFO_CHAPTER = 0;
+	static final int BOOK_INFO_INTRO = 1;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -166,8 +172,45 @@ public class BookInfoActivity extends Activity {
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 				);
 		}
+		
+		m_chapter = (ExpandableListView)findViewById(R.id.book_info_chapterjuan);
+		BookChapterJuanAdapter adapter = new BookChapterJuanAdapter(this);
+		m_chapter.setAdapter(adapter);
+		m_chapter.setOnChildClickListener(adapter);
+		
+		m_chapter.expandGroup(adapter.m_currentGroup);
+		m_chapter.setSelectedGroup(adapter.m_currentGroup);
+		
+		m_btnChapter = (Button)findViewById(R.id.book_info_btn_chapter);
+		m_btnIntro = (Button)findViewById(R.id.book_info_btn_intro);
+		
+		m_btnChapter.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				gotoPage(BOOK_INFO_CHAPTER);
+			}
+		});
+		m_btnIntro.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				gotoPage(BOOK_INFO_INTRO);
+			}
+		});
 	}
 	
+	public void gotoPage(int page)
+	{
+		if (page == BOOK_INFO_CHAPTER) {
+			m_btnChapter.setSelected(true);
+			m_btnIntro.setSelected(false);
+			m_chapter.setVisibility(View.VISIBLE);
+		} else if (page == BOOK_INFO_INTRO) {
+			m_btnChapter.setSelected(false);
+			m_btnIntro.setSelected(true);
+			m_chapter.setVisibility(View.INVISIBLE);
+		}
+	}
+
 	public void onDestroy()
 	{
 		FBReaderApp.Instance().releaseOfferWall(this);
