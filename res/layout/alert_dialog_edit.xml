@@ -14,6 +14,7 @@
 		android:layout_marginLeft="5dip"/>
 	<EditText
 		android:id="@+id/alert_dialog_edit"
+		android:inputType="text"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginLeft="5dip"
@@ -31,6 +32,7 @@
 		android:layout_marginLeft="5dip"/>
 	<EditText
 		android:id="@+id/alert_dialog_edit_file"
+		android:inputType="text"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginLeft="5dip"

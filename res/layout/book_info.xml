@@ -10,10 +10,11 @@
 		android:id="@+id/book_info_button_panel"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
+		android:layout_alignParentTop="true"
 		android:orientation="horizontal"
 		android:paddingLeft="2dip"
 		android:paddingRight="2dip"
+		android:paddingTop="20dip"
 		android:paddingBottom="20dip"
 		android:baselineAligned="false"
 	>

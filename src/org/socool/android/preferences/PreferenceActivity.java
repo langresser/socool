@@ -405,8 +405,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 					return true;
 				} else if (preference == fbPreferenceAbout) {
 					MobclickAgent.onEvent(PreferenceActivity.this, "about", "aboutus");
-					final String text = "原书作者：当年明月\n" +
-				"研发团队：Banana Studio\n" +
+					final String text = "研发团队：Banana Studio\n" +
 				//"官方网站：" +;
 				"邮箱:bananastudio@sina.cn\n" +
 				"微博: http://weibo.com/u/2605635545\n\n" +

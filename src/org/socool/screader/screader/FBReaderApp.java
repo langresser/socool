@@ -376,7 +376,6 @@ public final class FBReaderApp {
 
 	public void changeTheme(String name) {
 		if (name.length() == 0) {
-			isNightModeOption.setValue(false);
 			final ColorProfile color = getColorProfile();
 			color.ChangeTheme(null);
 			return;

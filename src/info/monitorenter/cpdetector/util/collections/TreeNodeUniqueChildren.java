@@ -203,14 +203,14 @@ public class TreeNodeUniqueChildren
 
     System.out.println("Assuming tree:\n" + prettyPrint.toString());
 
-    ITreeNode root = new TreeNodeUniqueChildren(new Integer(0), new ITreeNode[] {
-        new DefaultTreeNode(new Integer(1), new ITreeNode[] {new DefaultTreeNode(new Integer(4)),
-            new DefaultTreeNode(new Integer(5)) }),
-        new DefaultTreeNode(new Integer(2)),
-        new DefaultTreeNode(new Integer(1), new ITreeNode[] {
-            new DefaultTreeNode(new Integer(6), new ITreeNode[] {
-                new DefaultTreeNode(new Integer(8)), new DefaultTreeNode(new Integer(9)),
-                new DefaultTreeNode(new Integer(10)) }), new DefaultTreeNode(new Integer(7)) })
+    ITreeNode root = new TreeNodeUniqueChildren(Integer.valueOf(0), new ITreeNode[] {
+        new DefaultTreeNode(Integer.valueOf(1), new ITreeNode[] {new DefaultTreeNode(Integer.valueOf(4)),
+            new DefaultTreeNode(Integer.valueOf(5)) }),
+        new DefaultTreeNode(Integer.valueOf(2)),
+        new DefaultTreeNode(Integer.valueOf(1), new ITreeNode[] {
+            new DefaultTreeNode(Integer.valueOf(6), new ITreeNode[] {
+                new DefaultTreeNode(Integer.valueOf(8)), new DefaultTreeNode(Integer.valueOf(9)),
+                new DefaultTreeNode(Integer.valueOf(10)) }), new DefaultTreeNode(Integer.valueOf(7)) })
 
     });
     System.out.println("The tree:");

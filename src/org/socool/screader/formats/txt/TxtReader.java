@@ -12,6 +12,7 @@ import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.bookmodel.BookParagraph;
 import org.socool.screader.bookmodel.BookReader;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 public final class TxtReader extends BookReader {
@@ -68,8 +69,6 @@ public final class TxtReader extends BookReader {
 	// TODO 考虑全是\r形式的换行符文件 测试 \n和\r\n形式的文件
 	private void initParagraphData()
 	{
-		long startTime = System.currentTimeMillis();
-		int count = 0;
 		try {
 
 		final long size = m_streamReader.size();
@@ -83,7 +82,6 @@ public final class TxtReader extends BookReader {
 		
 		ByteBuffer mapBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
 		do {
-			++count;
 			int readSize = (int)size / BUFFER_SIZE == 0 ? (int)size % BUFFER_SIZE : BUFFER_SIZE;
 			mapBuffer.clear();
 			readSize = m_streamReader.read(mapBuffer);
@@ -150,11 +148,6 @@ public final class TxtReader extends BookReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		double lastTime = (System.currentTimeMillis() - startTime) / 1000.0;
-		Log.d("ProfileTime", "init1: " + lastTime + "count:" + count);
-		Log.d("InitPara", "Para: " + m_paraOffset.size() + "lastOffset: " + m_paraOffset.get(m_paraOffset.size() - 1));
 	}
 	
 	public int getParagraphByOffset(int offset)
@@ -167,7 +160,6 @@ public final class TxtReader extends BookReader {
 
 		for (int i = 0; i < size; ++i) {
 			if (m_paraOffset.get(i) > offset) {
-				Log.d("getParagraphByOffset", "para:" + (i - 1) + "offset:" + offset);
 				return i - 1;
 			}
 		}
@@ -175,9 +167,9 @@ public final class TxtReader extends BookReader {
 		return 0;
 	}
 		
+	@SuppressLint({ "ParserError", "ParserError" })
 	public void readDocument(int paragraph)
 	{
-		Log.d("readDocument", "read:" + paragraph);
 		startDocumentHandler();
 
 		try {
@@ -310,7 +302,7 @@ public final class TxtReader extends BookReader {
 
 		for (int i = parBegin; i < maxLength; ++i) {
 			final char c = text[i];
-			if (c == '\n' || c == '\r') {
+			if (c == '\n' || c == '\r' ) {
 				boolean skipNewLine = false;
 				if (c == '\r' && (i + 1) != maxLength && text[i + 1] == '\n') {
 					skipNewLine = true;

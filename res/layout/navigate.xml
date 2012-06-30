@@ -14,7 +14,7 @@
 		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:ellipsize="end"
-		android:paddingTop="4px"
+		android:paddingTop="4dip"
 	/>
 
 	<LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content">
