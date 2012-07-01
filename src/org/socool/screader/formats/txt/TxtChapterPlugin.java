@@ -121,6 +121,10 @@ public class TxtChapterPlugin extends FormatPlugin {
 	public void detectLanguageAndEncoding(Book book) {
 		try {
 			InputStream input = FBReaderApp.Instance().getBookFile(book.m_filePath + "/encoding.txt");
+			if (input == null) {
+				book.setEncoding("gbk");
+				return;
+			}
 			BufferedReader reader = new BufferedReader(new InputStreamReader(input, "gbk"));
 			String encoding = reader.readLine();
 			book.setEncoding(encoding);
