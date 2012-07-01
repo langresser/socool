@@ -70,7 +70,7 @@ public class BooksDatabase {
 
 	private void updateDatabase() {
 		final int version = myDatabase.getVersion();
-		final int currentVersion = 1;
+		final int currentVersion = 2;
 		if (version >= currentVersion) {
 			return;
 		}
@@ -80,6 +80,9 @@ public class BooksDatabase {
 		switch (version) {
 			case 0:
 				createTables();
+				break;
+			case 1:
+				updateTable1();
 				break;
 		}
 		myDatabase.setTransactionSuccessful();
@@ -422,10 +425,10 @@ public class BooksDatabase {
 		myDeleteBookmarkStatement.execute();
 	}
 
-	protected ZLTextPosition getStoredPosition(long bookId) {
+	protected BookState getStoredPosition(long bookId) {
 		ZLTextPosition position = null;
 		Cursor cursor = myDatabase.rawQuery(
-			"SELECT paragraph,word,char FROM BookState WHERE book_id = " + bookId, null
+			"SELECT paragraph,word,char,title,percent FROM BookState WHERE book_id = " + bookId, null
 		);
 		if (cursor.moveToNext()) {
 			position = new ZLTextFixedPosition(
@@ -433,22 +436,32 @@ public class BooksDatabase {
 				(int)cursor.getLong(1),
 				(int)cursor.getLong(2)
 			);
+			
+			BookState state = new BookState();
+			state.m_textPosition = position;
+			state.m_lastReadChapter = cursor.getString(3);
+			state.m_lastReadPercent = (int)cursor.getLong(4);
+			cursor.close();
+			return state;
+		} else {
+			cursor.close();
+			return null;
 		}
-		cursor.close();
-		return position;
 	}
 
 	private SQLiteStatement myStorePositionStatement;
-	protected void storePosition(long bookId, ZLTextPosition position) {
+	protected void storePosition(long bookId, ZLTextPosition position, String title, int percent) {
 		if (myStorePositionStatement == null) {
 			myStorePositionStatement = myDatabase.compileStatement(
-				"INSERT OR REPLACE INTO BookState (book_id,paragraph,word,char) VALUES (?,?,?,?)"
+				"INSERT OR REPLACE INTO BookState (book_id,paragraph,word,char,title,percent) VALUES (?,?,?,?,?,?)"
 			);
 		}
 		myStorePositionStatement.bindLong(1, bookId);
 		myStorePositionStatement.bindLong(2, position.getParagraphIndex());
 		myStorePositionStatement.bindLong(3, position.getElementIndex());
 		myStorePositionStatement.bindLong(4, position.getCharIndex());
+		myStorePositionStatement.bindString(5, title);
+		myStorePositionStatement.bindLong(6, percent);
 		myStorePositionStatement.execute();
 	}
 
@@ -533,7 +546,8 @@ public class BooksDatabase {
 				"book_id INTEGER UNIQUE NOT NULL REFERENCES Books(book_id)," +
 				"paragraph INTEGER NOT NULL," +
 				"word INTEGER NOT NULL," +
-				"char INTEGER NOT NULL)");
+				"char INTEGER NOT NULL,"+
+				"title TEXT, percent INTEGER)");
 		
 		myDatabase.execSQL("CREATE TABLE IF NOT EXISTS Favorites(" +
 					"book_id INTEGER UNIQUE NOT NULL REFERENCES Books(book_id))");
@@ -542,5 +556,11 @@ public class BooksDatabase {
 					"book_id INTEGER NOT NULL REFERENCES Books(book_id)," +
 					"hyperlink_id TEXT NOT NULL," +
 					"CONSTRAINT VisitedHyperlinks_Unique UNIQUE (book_id, hyperlink_id))");
+	}
+	
+	private void updateTable1()
+	{
+		myDatabase.execSQL("ALTER TABLE BookState ADD COLUMN title TEXT");
+		myDatabase.execSQL("ALTER TABLE BookState ADD COLUMN percent INTEGER");
 	}
 }

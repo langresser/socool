@@ -19,6 +19,8 @@ import org.socool.zlibrary.filesystem.ZLFile;
 import org.socool.zlibrary.util.ZLColor;
 import org.socool.zlibrary.view.ZLPaintContext;
 
+import android.util.Log;
+
 public class ZLTextView {
 	// paint state
 	public static final int NOTHING_TO_PAINT = 0;
@@ -145,25 +147,30 @@ public class ZLTextView {
 	public int getCurrentPercent()
 	{
 		final ZLTextWordCursor startPosition = getStartCursor();
+		final ZLTextWordCursor endPosition = getEndCursor();
+		return getPagePercent(startPosition, endPosition);	
+	}
+	
+	public int getPagePercent(ZLTextWordCursor startPosition, ZLTextWordCursor endPosition)
+	{
 		final int paragraph = startPosition.getParagraphIndex();
 		final int word = startPosition.getElementIndex();
 		final int chara = startPosition.getCharIndex();
 		
 		final BookChapter chapter = FBReaderApp.Instance().Model.m_chapter;
 		
-		final int endIndex = getEndCursor().getParagraphIndex();
+		final int endIndex = endPosition.getParagraphIndex();
 		if (endIndex == chapter.m_allParagraphNumber - 1) {
 			return 10000;
 		}
 
-//		final int chapterIndex = chapter.getChapterIndexByParagraph(paragraph);
-//		final int startTextOffset = chapter.getChapterTextOffset(chapterIndex);
-//		final int startParagraph = chapter.getChapterOffset(chapterIndex);
 		final int textOffset = chapter.getParagraphTextOffset(paragraph) + word + chara;
 		final int percent = Math.round((float)textOffset / chapter.m_allTextSize * 10000);
 		if (percent == 0 && (paragraph != 0 || word != 0)) {
 			return 1;
 		}
+		
+		Log.d("getPagePercent", "" + percent);
 		return percent;
 	}
 	
@@ -218,6 +225,7 @@ public class ZLTextView {
 		}
 
 		int textOffset = (int)(myModel.m_chapter.m_allTextSize * (percent / 10000.0));
+		Log.d("gotoPercent", String.format("%1d  %2d", percent, textOffset));
 		myModel.m_chapter.gotoPositionByOffset(textOffset);
 	}
 
@@ -564,6 +572,7 @@ public class ZLTextView {
 		drawFooter(context, pageIndex);
 	}
 	
+	public String m_currentChapterTitle = "";
 	public synchronized void drawFooter(ZLPaintContext context, PageIndex pageIndex)
 	{
 		final BookModel model = myModel;
@@ -594,16 +603,20 @@ public class ZLTextView {
 		}
 
 		int currentParagraph = 0;
+		double percent = 0;
 		
 		switch (pageIndex) {
 			case current:
 				currentParagraph = myCurrentPage.StartCursor.getParagraphIndex();
+				percent = getPagePercent(myCurrentPage.StartCursor, myCurrentPage.EndCursor);
 				break;
 			case previous:
 				currentParagraph = myPreviousPage.StartCursor.getParagraphIndex();
+				percent = getPagePercent(myPreviousPage.StartCursor, myPreviousPage.EndCursor);
 				break;
 			case next:
 				currentParagraph = myNextPage.StartCursor.getParagraphIndex();
+				percent = getPagePercent(myNextPage.StartCursor, myNextPage.EndCursor);
 				break;
 			default:
 				break;
@@ -615,10 +628,10 @@ public class ZLTextView {
 		final int currentChapter = chapter.getChapterIndexByParagraph(currentParagraph);
 		final int chapterCount = chapter.getChapterCount();
 		final String chapterInfo = String.format("%1d/%2d", currentChapter + 1, chapterCount);
-		final double percent = getCurrentPercent();
 		final String percentInfo = String.format("%1$.2f%%", percent / 100);
 		
 		if (pageIndex == PageIndex.current) {
+			m_currentChapterTitle = chapter.getChapterTitle(currentChapter);
 			final int currentJuanIndex = chapter.getChapter(currentChapter).m_juanIndex;
 			if (currentJuanIndex != chapter.m_currentJuanIndex) {
 				chapter.m_currentJuanIndex = currentJuanIndex;

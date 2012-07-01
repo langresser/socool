@@ -37,14 +37,27 @@ public class TxtChapterPlugin extends FormatPlugin {
 				book.m_coverId = CoverManager.getCoverResIdByIndex(Integer.valueOf(infos[2]));
 			}
 			
-			book.m_bookIntro = reader.readLine();
-			book.m_bookAuthorIntro = reader.readLine();
+			book.m_bookIntro = ToDBC(reader.readLine());
+			book.m_bookAuthorIntro = ToDBC(reader.readLine());
 
 			input.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	 public String ToDBC(String input) {  
+	        char[] c = input.toCharArray();  
+	        for (int i = 0; i < c.length; i++) {  
+	            if (c[i] == 12288) {  
+	                c[i] = (char) 32;  
+	                continue;  
+	            }  
+	            if (c[i] > 65280 && c[i] < 65375)  
+	                c[i] = (char) (c[i] - 65248);  
+	        }  
+	        return new String(c);  
+	    } 
 	
 	@Override
 	public boolean supportStreamRead()						// 是否支持文件部分读取(暂时只有txt读取支持)
@@ -70,6 +83,13 @@ public class TxtChapterPlugin extends FormatPlugin {
 	@Override
 	public void readPercent(double percent)					// 读取文件百分比（部分读取）
 	{
+	}
+	
+	@Override
+	public void readBookData(BookModel model)
+	{
+		model.m_readType = BookModel.READ_TYPE_CHAPTER;
+		m_reader.setModel(model);
 	}
 
 	@Override

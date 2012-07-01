@@ -6,6 +6,7 @@ import org.socool.socoolreader.yhyxcs.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +18,38 @@ import android.widget.TextView;
 public class BookChapterJuanAdapter extends BaseExpandableListAdapter
 		implements ExpandableListView.OnChildClickListener {
 	private LayoutInflater mInflater;
-	final private BookChapter m_chapter = FBReaderApp.Instance().Model.m_chapter;
-	final public int m_currentChapter = FBReaderApp.Instance().BookTextView
-			.getCurrentChapter();
-	final public int m_currentGroup;
+	final private BookChapter m_chapter;
+	public int m_currentChapter;
+	public int m_currentGroup;
+	private String m_currentBookPath;
 	final Activity m_baseActivity;
 
-	public BookChapterJuanAdapter(Activity activity) {
+	public BookChapterJuanAdapter(Activity activity, BookChapter chapter, int currentChapter, String bookPath) {
 		// Cache the LayoutInflate to avoid asking for a new one each time.
 		mInflater = LayoutInflater.from(activity);
 		m_baseActivity = activity;
-		m_currentGroup = m_chapter.getChapter(m_currentChapter).m_juanIndex;
+		
+		m_currentBookPath = bookPath;
+		m_chapter = chapter;
+		
+		if (currentChapter == -1) {
+			m_currentChapter = -1;
+			m_currentGroup = -1;
+		} else {
+			m_currentChapter = currentChapter;
+			m_currentGroup = m_chapter.getChapter(m_currentChapter).m_juanIndex;	
+		}
+	}
+	
+	public void setCurrentChapter(int chapter)
+	{
+		if (chapter == -1) {
+			m_currentChapter = -1;
+			m_currentGroup = -1;
+		} else {
+			m_currentChapter = chapter;
+			m_currentGroup = m_chapter.getChapter(m_currentChapter).m_juanIndex;
+		}
 	}
 
 	public Object getChild(int groupPosition, int childPosition) {
@@ -70,7 +92,7 @@ public class BookChapterJuanAdapter extends BaseExpandableListAdapter
 
 		int chapterIndex = (Integer) getChild(groupPosition, childPosition);
 
-		if (m_currentChapter == chapterIndex) {
+		if (m_currentChapter != -1 && m_currentChapter == chapterIndex) {
 			holder.title.setTextColor(0xffffa500);
 			holder.percent.setTextColor(0xffffa500);
 		} else {
@@ -132,7 +154,7 @@ public class BookChapterJuanAdapter extends BaseExpandableListAdapter
 			holder = (GroupViewHolder) convertView.getTag();
 		}
 
-		if (m_currentGroup == groupPosition) {
+		if (m_currentGroup != -1 && m_currentGroup == groupPosition) {
 			holder.title.setTextColor(0xffffa500);
 		} else {
 			holder.title.setTextColor(0xff696969);
@@ -158,10 +180,22 @@ public class BookChapterJuanAdapter extends BaseExpandableListAdapter
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
 
+		
 		final int chapterIndex = (Integer) getChild(groupPosition,
 				childPosition);
-		m_baseActivity.finish();
-		FBReaderApp.Instance().BookTextView.gotoChapter(chapterIndex);
+		if (m_currentBookPath != null) {
+			m_baseActivity.startActivity(
+					new Intent(m_baseActivity.getApplicationContext(), SCReaderActivity.class)
+						.setAction(Intent.ACTION_VIEW)
+						.putExtra(SCReaderActivity.BOOK_PATH_KEY, m_currentBookPath)
+						.putExtra(SCReaderActivity.BOOK_OPEN_CHAPTER_INDEX, chapterIndex)
+						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+				);
+		} else {
+			m_baseActivity.finish();
+			FBReaderApp.Instance().BookTextView.gotoChapter(chapterIndex);
+		}
+		
 		return false;
 	}
 }

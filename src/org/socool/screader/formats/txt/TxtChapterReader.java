@@ -39,63 +39,12 @@ public final class TxtChapterReader extends BookReader {
 		}
 
 		try {
-//			long startTime = System.currentTimeMillis();
-
-			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/chapter.txt");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input, m_bookModel.Book.getEncoding()));
-			
-			String line = "";
-
-			int paraCount = 0;
-			int textSize = 0;
-			int currentJuanIndex = -1;
-			int currentChapterIndex = -1;
+			m_bookModel.m_chapter = FBReaderApp.Instance().loadChapter(m_bookModel.Book.m_filePath);
 			final BookChapter chapter = m_bookModel.m_chapter;
-			BookChapter.JuanData juanData = null;
-
-			while ((line = reader.readLine()) != null) {
-				if (line.charAt(0) == 'j') {
-					if (juanData != null) {
-						chapter.m_juanData.add(juanData);
-					}
-
-					juanData = new BookChapter.JuanData();
-					juanData.m_juanTitle = line.substring(1);
-					++currentJuanIndex;
-				} else {
-					++currentChapterIndex;
-
-					// 加1是补上隐藏的段落终结符
-					final int firstA = line.indexOf("@@");
-					final int count = Integer.parseInt(line.substring(0, firstA)) + 1;
-					BookChapter.BookChapterData data = new BookChapter.BookChapterData();
-					data.m_startOffset = paraCount;
-					data.m_paragraphCount = count;
-					final int secondA = line.indexOf("@@", firstA + 2);
-					data.m_textSize = Integer.parseInt(line.substring(firstA + 2, secondA));
-					data.m_startTxtOffset = textSize;
-					data.m_title = line.substring(secondA + 2);
-					data.m_juanIndex = currentJuanIndex;
-					chapter.addChapterData(data);
-					paraCount += count;
-					textSize += data.m_textSize;
-					
-					juanData.m_juanChapter.add(currentChapterIndex);
-				}
-			}
-			input.close();
 			
-			if (juanData != null) {
-				chapter.m_juanData.add(juanData);
-			}
-			
-			chapter.m_allParagraphNumber = paraCount;
-			chapter.m_allTextSize = textSize;
-			
-//			long time1 = System.currentTimeMillis() - startTime;
-			
-			input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.db");
+			InputStream input = FBReaderApp.Instance().getBookFile(m_bookModel.Book.m_filePath + "/data.db");
 			int size = input.available();
+			int currentChapterIndex = -1;
 			byte[] buffer = new byte[size];
 			BufferedInputStream bis = new BufferedInputStream(input, size);
 			bis.read(buffer);

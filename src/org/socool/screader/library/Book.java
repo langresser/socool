@@ -212,13 +212,13 @@ public class Book {
 		return true;
 	}
 
-	public ZLTextPosition getStoredPosition() {
+	public BookState getStoredPosition() {
 		return FBReaderApp.Instance().getDatabase().getStoredPosition(myId);
 	}
 
-	public void storePosition(ZLTextPosition position) {
+	public void storePosition(ZLTextPosition position, String title, int percent) {
 		if (myId != -1) {
-			FBReaderApp.Instance().getDatabase().storePosition(myId, position);
+			FBReaderApp.Instance().getDatabase().storePosition(myId, position, title, percent);
 		}
 	}
 

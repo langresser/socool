@@ -54,6 +54,12 @@ public abstract class FormatPlugin {
 	{
 	}
 
+	// 读取书籍章节信息（断章）
+	public void readBookData(BookModel model)
+	{
+		
+	}
+
 	public int getDefaultCoverId()
 	{
 		return 0;

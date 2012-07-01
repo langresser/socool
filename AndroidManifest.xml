@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.yhyxcs" android:versionCode="100000" android:versionName="1.0.0" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.yhyxcs" android:versionCode="100100" android:versionName="1.1.0" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -167,7 +167,7 @@
 	
 	<!--友盟-->
 	<meta-data android:value="4fe4926e5270156649000081" android:name="UMENG_APPKEY"/>
-	<meta-data android:value="appChina" android:name="UMENG_CHANNEL"/>
+	<meta-data android:value="common" android:name="UMENG_CHANNEL"/>
 	<activity android:name="com.umeng.fb.ui.SendFeedback" android:windowSoftInputMode="adjustResize" />
 	<activity android:name="com.umeng.fb.ui.FeedbackConversations" />
 	<activity android:name="com.umeng.fb.ui.FeedbackConversation" android:configChanges="keyboard" />
