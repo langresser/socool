@@ -1985,7 +1985,7 @@ public final class FBReaderApp {
 	    }  
 	}
 	
-	public final static int REMOVE_ADS_POINT = 1;
+	public final static int REMOVE_ADS_POINT = 50;
 	public final static int IMPORT_BOOK_POINT = 10;
 	public static final String GHeadId = "80d560a1d422636b8dff641f05e78d9f";
 	public static final String YoumiId = "ad320352e44e9759";

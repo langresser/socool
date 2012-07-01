@@ -160,7 +160,7 @@
 		    android:configChanges="orientation|keyboardHidden"/>
 
 	<!--有米-->
-	<meta-data android:name="YOUMI_CHANNEL" android:value="10050"/>
+	<meta-data android:name="YOUMI_CHANNEL" android:value="10020"/>
 	<activity android:configChanges="keyboard|keyboardHidden|orientation"
 		android:name="net.youmi.android.appoffers.YoumiOffersActivity" >
 	</activity>

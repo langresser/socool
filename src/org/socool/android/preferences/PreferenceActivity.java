@@ -332,7 +332,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		final Preference fbPreferenceUpdate = new Preference(this);
 		fbPreferenceUpdate.setTitle("检查更新");
 		fbPreferenceUpdate.setSummary("检查应用是否有新版本");
-		screenAbout.addPreference(fbPreferenceUpdate);
+//		screenAbout.addPreference(fbPreferenceUpdate);
 
 		final Preference fbPreferenceFeedback = new Preference(this);
 		fbPreferenceFeedback.setTitle("用户反馈");

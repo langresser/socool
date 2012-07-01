@@ -100,7 +100,7 @@ public class BookInfoActivity extends Activity {
 								.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 						);
 				} else if (v == btnApp) {
-					FBReaderApp.Instance().showFetureApp(BookInfoActivity.this);
+					FBReaderApp.Instance().showOfferWall(BookInfoActivity.this);
 				} else if (v == btnImport) {
 					MobclickAgent.onEvent(BookInfoActivity.this, "import", "onclickbtn");
 					final int currentPoints = FBReaderApp.Instance().getOfferPoints(BookInfoActivity.this);
