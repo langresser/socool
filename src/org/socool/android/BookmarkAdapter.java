@@ -9,7 +9,7 @@ import java.util.List;
 import org.socool.screader.screader.FBReaderApp;
 import org.socool.screader.library.Book;
 import org.socool.screader.library.Bookmark;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import android.app.Activity;
 import android.view.ContextMenu;

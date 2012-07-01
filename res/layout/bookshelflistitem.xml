@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" 
+      android:paddingTop="5.0dip" 
+      android:paddingBottom="5.0dip"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/general__shared_list_item_select"
+      android:orientation="horizontal"
+  	  xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/book_list_item_cover"
+        android:layout_width="60.0dip"
+        android:layout_height="80.0dip"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginTop="5.0dip"
+        android:src="@drawable/cover" />
+    
+    <LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5.0dip"
+			 android:layout_marginTop="5.0dip">
+			 <LinearLayout android:orientation="horizontal" 
+	            android:layout_width="fill_parent" 
+	            android:layout_height="wrap_content">
+	            <TextView android:textSize="18.0sp"
+		           android:textColor="#ff000000" 
+		           android:id="@+id/bookshelf_title"
+		           android:layout_width="0dip" 
+		           android:layout_height="wrap_content"
+		           android:layout_weight="2"
+		           android:text="书名"
+	           		android:singleLine="true"  />
+	            <TextView android:textSize="18.0sp"
+		           android:textColor="#ff000000" 
+		           android:id="@+id/bookshelf_author"
+		           android:layout_width="0dip" 
+		           android:gravity="right"
+		           android:layout_weight="1"
+		           android:text="作者"
+		           android:layout_height="wrap_content"
+		           android:singleLine="true"  />
+            </LinearLayout>
+    <TextView android:textSize="16.0sp"
+           android:textColor="#ff000000" 
+           android:id="@+id/bookshelf_last_read"
+           android:layout_width="wrap_content" 
+           android:layout_height="wrap_content"
+           android:paddingTop="5dip"
+           android:text="上次阅读"
+           android:singleLine="true"  />
+    <TextView android:textSize="16.0sp" 
+          android:textColor="#ff000000" 
+          android:id="@+id/bookshelf_new_chapter"
+		  android:singleLine="true"
+	      android:layout_width="wrap_content"
+	      android:text="最新章节"
+	      android:paddingTop="3dip"
+          android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

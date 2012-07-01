@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.mcnxs" android:versionCode="100001" android:versionName="1.0.1" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.socool.socoolreader.reader" android:versionCode="100001" android:versionName="1.0.1" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:anyDensity="true" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -149,6 +149,9 @@
 
 
 		<activity android:name="org.socool.android.BookInfoActivity" android:configChanges="orientation|keyboardHidden"
+		    android:screenOrientation="portrait">
+		</activity>
+		<activity android:name="org.socool.android.bookshelf.BookshelfListActivity" android:configChanges="orientation|keyboardHidden"
 		    android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

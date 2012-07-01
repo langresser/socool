@@ -30,7 +30,7 @@ import org.socool.zlibrary.filesystem.ZLFile;
 import org.socool.zlibrary.filesystem.ZLResource;
 import org.socool.zlibrary.options.ZLStringOption;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import org.socool.screader.FBTree;
 import org.socool.screader.screader.FBReaderApp;

@@ -2,7 +2,7 @@ package org.socool.android;
 
 import org.socool.screader.bookmodel.BookChapter;
 import org.socool.screader.screader.FBReaderApp;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import android.app.Activity;
 import android.content.Context;

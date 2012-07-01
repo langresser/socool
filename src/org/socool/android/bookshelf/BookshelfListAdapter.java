@@ -1,5 +1,7 @@
 package org.socool.android.bookshelf;
 
+import java.util.ArrayList;
+
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -22,17 +25,21 @@ import org.socool.zlibrary.image.ZLImageManager;
 import org.socool.zlibrary.image.ZLLoadableImage;
 import org.socool.socoolreader.reader.R;
 
-class BooksAdapter extends BaseAdapter {
+public class BookshelfListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
-    private final ShelvesActivity mActivity;
+    private final Activity mActivity;
+    public ArrayList<Book> m_bookList = new ArrayList<Book>();
     
     public static final int COVER_MAC_COUNT = 1;
 
     private final FastBitmapDrawable[] mDefaultCoverSet = new FastBitmapDrawable[COVER_MAC_COUNT];
     
-    BooksAdapter(ShelvesActivity activity) {
-    	mActivity = activity;
+    BookshelfListAdapter(Activity activity) {
+    	mActivity = (ShelvesActivity)activity;
         mInflater = LayoutInflater.from(activity);
+           
+        Book book1 = Book.getByPath("book/wxkb");
+        m_bookList.add(book1);
         
         for (int i = 0; i < COVER_MAC_COUNT; ++i) {
     		Bitmap bitmap = BitmapFactory.decodeResource(mActivity.getResources(), 0);
@@ -51,12 +58,12 @@ class BooksAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return mActivity.m_bookList.size();
+		return m_bookList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mActivity.m_bookList.get(position);
+		return m_bookList.get(position);
 	}
 
 	@Override
@@ -65,15 +72,18 @@ class BooksAdapter extends BaseAdapter {
 	}
 
 	class BookViewHolder {
-	    BubbleTextView title;
-	    String bookId;
+	    TextView title;
+	    TextView author;
+	    ImageView cover;
+	    TextView lastRead;
+	    TextView newRead;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		BookViewHolder holder = null;
 		if (convertView == null) {
-			convertView = (BubbleTextView) mInflater.inflate(R.layout.shelf_book, parent, false);
+			convertView = (BubbleTextView) mInflater.inflate(R.layout.bookshelflistitem, parent, false);
 			holder = new BookViewHolder();
 			convertView.setTag(holder);
 		} else {

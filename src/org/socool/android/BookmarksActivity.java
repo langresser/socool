@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import org.socool.screader.screader.FBReaderApp;
 import org.socool.screader.library.Bookmark;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import com.umeng.analytics.MobclickAgent;
 

@@ -37,7 +37,7 @@ import org.socool.zlibrary.text.ZLTextView;
 import org.socool.zlibrary.view.ZLGLWidget;
 import org.socool.zlibrary.view.ZLViewWidget;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import org.socool.screader.screader.ActionCode;
 import org.socool.screader.screader.FBReaderApp;

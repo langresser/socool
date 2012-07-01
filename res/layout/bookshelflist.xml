@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <ListView android:id="@+id/bookshelf_list" 
+	        android:paddingLeft="10.0dip" 
+	        android:paddingRight="10.0dip" 
+	        android:layout_width="fill_parent" 
+	        android:layout_height="fill_parent" 
+	        android:cacheColorHint="@android:color/transparent" 
+	        android:divider="@color/listview_divider_color" 
+	        android:dividerHeight="3.0px" 
+	        android:background="#ffeeeeee"
+	        android:fastScrollEnabled="true" />
+
+</LinearLayout>

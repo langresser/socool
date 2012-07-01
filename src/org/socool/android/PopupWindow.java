@@ -24,7 +24,7 @@ import android.content.Context;
 import android.view.*;
 import android.widget.*;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 public class PopupWindow extends LinearLayout {
 	public static enum Location {

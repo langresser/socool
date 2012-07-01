@@ -25,7 +25,7 @@ import org.socool.zlibrary.image.ZLImage;
 
 import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.library.Book;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 public abstract class FormatPlugin {
 	private final String myFileType;

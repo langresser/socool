@@ -37,7 +37,7 @@ import android.widget.CheckBox;
 import org.socool.zlibrary.filesystem.ZLResource;
 import org.socool.zlibrary.options.ZLBooleanOption;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 public abstract class PackageUtil {
 	private static Uri marketUri(String pkg) {

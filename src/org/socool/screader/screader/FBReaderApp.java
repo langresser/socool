@@ -71,7 +71,7 @@ import org.socool.screader.bookmodel.BookChapter;
 import org.socool.screader.bookmodel.BookModel;
 import org.socool.screader.bookmodel.TOCTree;
 import org.socool.screader.library.*;
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import com.umeng.analytics.MobclickAgent;
 //import com.waps.AppConnect;

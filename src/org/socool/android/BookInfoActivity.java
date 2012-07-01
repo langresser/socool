@@ -32,7 +32,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.*;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import org.socool.android.util.UIUtil;
 import org.socool.screader.Paths;

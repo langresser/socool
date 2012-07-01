@@ -7,7 +7,7 @@ import android.widget.SeekBar;
 
 import org.socool.zlibrary.options.ZLIntegerRangeOption;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import org.socool.screader.screader.FBReaderApp;
 

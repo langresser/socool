@@ -30,7 +30,7 @@ import android.view.ViewConfiguration;
 import org.socool.android.bookshelf.SpotlightDrawable;
 import org.socool.android.bookshelf.TransitionDrawable;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 public class ShelvesView extends GridView {
     private Bitmap mShelfBackground;

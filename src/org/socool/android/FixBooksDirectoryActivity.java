@@ -29,7 +29,7 @@ import org.socool.zlibrary.filesystem.ZLResource;
 
 import org.socool.screader.Paths;
 
-import org.socool.socoolreader.mcnxs.R;
+import org.socool.socoolreader.reader.R;
 
 import org.socool.android.SCReaderActivity;
 
