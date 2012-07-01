@@ -85,6 +85,9 @@ public class BookInfoActivity extends Activity {
 		final ImageButton btnApp = (ImageButton)findViewById(R.id.book_info_button_app);
 		final Button btnImport = (Button)findViewById(R.id.book_info_button_import);
 		
+		m_currentBook = Book.getByPath(currentBookPath);
+		BookState state = m_currentBook.getStoredPosition();
+		
 		View.OnClickListener listener = new View.OnClickListener() {
 			
 			@Override
@@ -126,7 +129,7 @@ public class BookInfoActivity extends Activity {
 				        final EditText edit = (EditText)view.findViewById(R.id.alert_dialog_edit);
 				        edit.setText(Paths.BooksDirectoryOption().getValue());
 				        final EditText editFile = (EditText)view.findViewById(R.id.alert_dialog_edit_file);
-				        editFile.setText("明朝那些事儿.txt");
+				        editFile.setText(m_currentBook.myTitle + ".txt");
 				        
 						Dialog dialog = new AlertDialog.Builder(BookInfoActivity.this).setTitle(text).setView(view)
 								.setPositiveButton("确定",
@@ -165,9 +168,6 @@ public class BookInfoActivity extends Activity {
 		btnApp.setOnClickListener(listener);
 		btnImport.setOnClickListener(listener);
 		
-		m_currentBook = Book.getByPath(currentBookPath);
-		
-		BookState state = m_currentBook.getStoredPosition();
 		m_bookChapter = FBReaderApp.Instance().loadChapter(currentBookPath);
 		if (state != null) {
 			startActivity(new Intent(getApplicationContext(), SCReaderActivity.class)

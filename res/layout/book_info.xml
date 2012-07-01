@@ -134,4 +134,4 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="bottom|right"
-            android:src="@drawable/action_down_app_selector"/></RelativeLayout>
+            android:src="@drawable/more_app_selector"/></RelativeLayout>

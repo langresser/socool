@@ -326,7 +326,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		final Preference fbPreferenceRemove = new Preference(this);
 		final int currentPoints = FBReaderApp.Instance().getOfferPoints(PreferenceActivity.this);
 		fbPreferenceRemove.setTitle("去除广告");
-		fbPreferenceRemove.setSummary("消耗50积分，永久去除广告，当前积分("+currentPoints+")");
+		fbPreferenceRemove.setSummary(String.format("消耗%1d积分，永久去除广告(当前积分%2d)", FBReaderApp.REMOVE_ADS_POINT, currentPoints));
 		
 		if (enableAds) {
 //			addPreference(fbPreferenceRemove);
@@ -337,7 +337,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		final Preference fbPreferenceUpdate = new Preference(this);
 		fbPreferenceUpdate.setTitle("检查更新");
 		fbPreferenceUpdate.setSummary("检查应用是否有新版本");
-		screenAbout.addPreference(fbPreferenceUpdate);
+//		screenAbout.addPreference(fbPreferenceUpdate);
 
 		final Preference fbPreferenceFeedback = new Preference(this);
 		fbPreferenceFeedback.setTitle("用户反馈");
