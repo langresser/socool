@@ -144,6 +144,8 @@ public final class FBReaderApp {
 	public volatile BookModel Model;
 	private static FBReaderApp ourInstance;
 
+	public HashMap<String, BookChapter> m_bookChapterCache = new HashMap<String, BookChapter>();
+
 	public static final String NoAction = "none";
 
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
@@ -1827,6 +1829,12 @@ public final class FBReaderApp {
 	
 	public BookChapter loadChapter(final String pathBook)
 	{
+		// 如果已经有缓存过书本章节信息，则无需重新读取
+		BookChapter chapterCache = m_bookChapterCache.get(pathBook);
+		if (chapterCache != null) {
+			return chapterCache;
+		}
+
 		final BookChapter chapter = new BookChapter();
 
 		try {
@@ -1881,6 +1889,7 @@ public final class FBReaderApp {
 			
 			chapter.m_allParagraphNumber = paraCount;
 			chapter.m_allTextSize = textSize;
+			m_bookChapterCache.put(pathBook, chapter);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
