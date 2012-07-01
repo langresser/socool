@@ -35,6 +35,7 @@ import java.io.StringWriter;
 import java.util.*;
 
 import net.youmi.android.appoffers.YoumiOffersManager;
+import net.youmi.android.appoffers.YoumiPointsManager;
 
 import org.socool.zlibrary.filesystem.ZLFile;
 import org.socool.zlibrary.filesystem.ZLPhysicalFile;
@@ -1701,7 +1702,7 @@ public final class FBReaderApp {
 	
 	// 广告模块相关内容
 	// 控制是否显示广告，每个电子书对应一个标识
-	public final ZLBooleanOption EnableAdsOption = new ZLBooleanOption("Options", "enableAdsMcnxs", false);
+	public final ZLBooleanOption EnableAdsOption = new ZLBooleanOption("Options", "enableAds", true);
 	public int m_adsHeight = 0;
 	public boolean m_initOfferWall = false;
 	public void initOfferWall(Context context)
@@ -1712,7 +1713,7 @@ public final class FBReaderApp {
 //			AppConnect.getInstance("7281ebff5a5dae5d199636a7b6c8ecc2","appChina", context);
 			
 			// 有米
-			YoumiOffersManager.init(context, "8293ee0143c779e7", "53af3575317e0e36");
+			YoumiOffersManager.init(context, YoumiId, YoumiPassword);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "initOfferWall error");
@@ -1726,6 +1727,22 @@ public final class FBReaderApp {
 //		AppConnect.getInstance(context).finalize();
 	}
 	
+	public void showFetureApp(Context context)
+	{
+		if (!m_initOfferWall) {
+			initOfferWall(context);
+			m_initOfferWall = true;
+		}
+		
+		try {
+			MobclickAgent.onEvent(context, "moreApp", "app");
+			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_FEATUREDAPP);
+		} catch (Exception e) {
+			e.printStackTrace();
+			MobclickAgent.reportError(context, "showApp error");
+		}	
+	}
+	
 	public void showOfferWall(Context context)
 	{
 		if (!m_initOfferWall) {
@@ -1734,9 +1751,9 @@ public final class FBReaderApp {
 		}
 		
 		try {
-			MobclickAgent.onEvent(context, "moreApp");
+			MobclickAgent.onEvent(context, "moreApp", "wall");
 //			AppConnect.getInstance(context).showOffers(context);
-			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
+			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARD_OFFERS);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "showOfferWall error");
@@ -1758,17 +1775,14 @@ public final class FBReaderApp {
 	
 	public int getOfferPoints(Context context)
 	{
-//		return YoumiPointsManager.queryPoints(context);
-		return 0;
+		return YoumiPointsManager.queryPoints(context);
 	}
 	
 	public void costOfferPoints(Context context, int points)
 	{
-//		YoumiPointsManager.spendPoints(context, points);
+		YoumiPointsManager.spendPoints(context, points);
 	}
 	
-	public final static int REMOVE_ADS_POINT = 0;
-	public final static int IMPORT_BOOK_POINT = 0;
 	public void removeAds(final Context context)
 	{
 		if (EnableAdsOption.getValue() == false) {
@@ -1777,7 +1791,7 @@ public final class FBReaderApp {
 
 		final int currentPoints = getOfferPoints(context);
 		if (currentPoints < REMOVE_ADS_POINT) {
-			String text = String.format("移除广告需要 %1d积分，当前积分%2d，您可以通过下载推荐应用的方式免费获取积分", REMOVE_ADS_POINT, currentPoints);
+			String text = String.format("移除广告需要 %1d积分(当前积分%2d)，您可以通过下载推荐应用的方式免费获取积分", REMOVE_ADS_POINT, currentPoints);
 			Dialog dialog = new AlertDialog.Builder(context).setTitle("积分不足").setMessage(text)
 					.setPositiveButton("确定",
 							new DialogInterface.OnClickListener() {
@@ -1807,8 +1821,7 @@ public final class FBReaderApp {
 	{
 		final String m_tips = 
 				"    点击屏幕中部可以显示系统菜单，通过设置选项可以进行更多的个性化设置。\n\n"+
-				"    点击屏幕两侧或者拖动均可实现翻页，长按屏幕文字可以进行文本选择。\n\n" +
-				"    如果您喜欢本应用，可以通过下载或打开精品推荐中您所喜欢的应用的方式来支持我们。有您的支持，我们可以为您提供出更多更好的精品电子书。"; 
+				"    点击屏幕两侧或者拖动均可实现翻页，长按屏幕文字可以进行文本选择。\n\n"; 
 		Dialog dialog = new AlertDialog.Builder(context).setTitle("帮助信息").setMessage(m_tips)
 				.setPositiveButton("确定",
 						new DialogInterface.OnClickListener() {
@@ -1971,4 +1984,10 @@ public final class FBReaderApp {
 	        e.printStackTrace();  
 	    }  
 	}
+	
+	public final static int REMOVE_ADS_POINT = 1;
+	public final static int IMPORT_BOOK_POINT = 10;
+	public static final String GHeadId = "80d560a1d422636b8dff641f05e78d9f";
+	public static final String YoumiId = "ad320352e44e9759";
+	public static final String YoumiPassword = "15489cde3513fe64";
 }

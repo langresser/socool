@@ -165,6 +165,13 @@
 		android:name="net.youmi.android.appoffers.YoumiOffersActivity" >
 	</activity>
 	
+	<!-- 聚赢 -->
+	<activity android:name="com.tencent.mobwin.MobinWINBrowserActivity" > </activity>
+	
+	<!-- 多盟  -->
+	<activity android:name="cn.domob.android.ads.DomobActivity"
+	    android:theme="@android:style/Theme.Translucent" />
+	
 	<!--友盟-->
 	<meta-data android:value="4fe4926e5270156649000081" android:name="UMENG_APPKEY"/>
 	<meta-data android:value="common" android:name="UMENG_CHANNEL"/>

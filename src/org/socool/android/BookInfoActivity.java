@@ -85,6 +85,9 @@ public class BookInfoActivity extends Activity {
 		final ImageButton btnApp = (ImageButton)findViewById(R.id.book_info_button_app);
 		final Button btnImport = (Button)findViewById(R.id.book_info_button_import);
 		
+		m_currentBook = Book.getByPath(currentBookPath);	
+		BookState state = m_currentBook.getStoredPosition();
+		
 		View.OnClickListener listener = new View.OnClickListener() {
 			
 			@Override
@@ -97,7 +100,7 @@ public class BookInfoActivity extends Activity {
 								.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 						);
 				} else if (v == btnApp) {
-					FBReaderApp.Instance().showOfferWall(BookInfoActivity.this);
+					FBReaderApp.Instance().showFetureApp(BookInfoActivity.this);
 				} else if (v == btnImport) {
 					MobclickAgent.onEvent(BookInfoActivity.this, "import", "onclickbtn");
 					final int currentPoints = FBReaderApp.Instance().getOfferPoints(BookInfoActivity.this);
@@ -119,15 +122,15 @@ public class BookInfoActivity extends Activity {
 										}).create();// 创建按钮
 						dialog.show();
 					} else {
-						String text = "导出电子书";
-//						String text = String.format("导出电子书将会消耗%1d积分（当前积分%2d）", FBReaderApp.IMPORT_BOOK_POINT, currentPoints);
+//						String text = "导出电子书";
+						String text = String.format("导出电子书将会消耗%1d积分（当前积分%2d）", FBReaderApp.IMPORT_BOOK_POINT, currentPoints);
 						LayoutInflater inflater = LayoutInflater.from(BookInfoActivity.this);
 				        final View view = inflater.inflate(R.layout.alert_dialog_edit, null);
 				        final EditText edit = (EditText)view.findViewById(R.id.alert_dialog_edit);
 				        edit.setText(Paths.BooksDirectoryOption().getValue());
 				        final EditText editFile = (EditText)view.findViewById(R.id.alert_dialog_edit_file);
-				        editFile.setText("银河英雄传说.txt");
-				        
+				        editFile.setText(m_currentBook.myTitle + ".txt");
+
 						Dialog dialog = new AlertDialog.Builder(BookInfoActivity.this).setTitle(text).setView(view)
 								.setPositiveButton("确定",
 										new DialogInterface.OnClickListener() {
@@ -165,9 +168,6 @@ public class BookInfoActivity extends Activity {
 		btnApp.setOnClickListener(listener);
 		btnImport.setOnClickListener(listener);
 		
-		m_currentBook = Book.getByPath(currentBookPath);
-		
-		BookState state = m_currentBook.getStoredPosition();
 		m_bookChapter = FBReaderApp.Instance().loadChapter(currentBookPath);
 		if (state != null) {
 			startActivity(new Intent(getApplicationContext(), SCReaderActivity.class)
@@ -185,6 +185,8 @@ public class BookInfoActivity extends Activity {
 		
 		bookInfoTitle.setText("书名：" + m_currentBook.myTitle);
 		bookInfoAuthor.setText("作者：" + m_currentBook.m_bookAuthor);
+		
+		MobclickAgent.onEvent(this, "openBook", m_currentBook.myTitle);
 		
 		m_bookIntro.setText(m_currentBook.m_bookIntro + '\n' + m_currentBook.m_bookAuthorIntro);
 		m_bookIntro.setMovementMethod(ScrollingMovementMethod.getInstance());

@@ -170,7 +170,7 @@ public class ZLTextView {
 			return 1;
 		}
 		
-		Log.d("getPagePercent", "" + percent);
+//		Log.d("getPagePercent", "" + percent);
 		return percent;
 	}
 	
@@ -225,7 +225,7 @@ public class ZLTextView {
 		}
 
 		int textOffset = (int)(myModel.m_chapter.m_allTextSize * (percent / 10000.0));
-		Log.d("gotoPercent", String.format("%1d  %2d", percent, textOffset));
+//		Log.d("gotoPercent", String.format("%1d  %2d", percent, textOffset));
 		myModel.m_chapter.gotoPositionByOffset(textOffset);
 	}
 

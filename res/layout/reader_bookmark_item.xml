@@ -24,7 +24,7 @@
 			 style="?android:attr/textAppearanceSmall" />
     </LinearLayout>
     <TextView android:textSize="16.0sp" 
-        android:textColor="#ff000000"
+        android:textColor="#ffffffff"
          android:id="@+id/reader_bookmark_item_content" 
          android:paddingTop="5.0dip" 
          android:paddingBottom="5.0dip" 

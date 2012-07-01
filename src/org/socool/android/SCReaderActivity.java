@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.socool.zlibrary.filesystem.ZLFile;
@@ -51,6 +52,9 @@ import org.socool.android.util.UIUtil;
 //import com.guohead.sdk.GHView;
 //import com.guohead.sdk.GHView.OnAdClosedListener;
 //import com.guohead.sdk.GHView.OnAdLoadedListener;
+import com.guohead.sdk.GHView;
+import com.guohead.sdk.GHView.OnAdClosedListener;
+import com.guohead.sdk.GHView.OnAdLoadedListener;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -96,8 +100,8 @@ public final class SCReaderActivity extends Activity {
 		m_mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT));
 		createBookView();
-
 		setContentView(m_mainLayout);
+		createBannerAds();
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -178,11 +182,6 @@ public final class SCReaderActivity extends Activity {
 				m_bookViewGL = null;
 			}
 		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
@@ -313,6 +312,8 @@ public final class SCReaderActivity extends Activity {
 				setButtonLight(false);
 			}
 		}
+		
+		removeAds();
 
 		MobclickAgent.onResume(this);
 	}
@@ -554,4 +555,68 @@ public final class SCReaderActivity extends Activity {
 					.getValue() < level);
 		}
 	};
+	
+	// 创建广告条
+ 	public GHView m_adsView = null;
+	final public void createBannerAds()
+	{
+		final boolean enableAds = FBReaderApp.Instance().EnableAdsOption.getValue();
+		if (!enableAds) {
+			return;
+		}
+
+		m_adsView =new GHView(this); 
+		//您可以根据布局需求，对布局参数params设定具体的值 
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) ;
+		params.topMargin = 0;
+		params.gravity = Gravity.TOP;
+		addContentView(m_adsView, params);
+		m_adsView.setAdUnitId(FBReaderApp.GHeadId);
+		
+		m_adsView.setOnAdLoadedListener(new OnAdLoadedListener() {
+			
+			@Override
+			public void OnAdLoaded(GHView arg0) {
+				final double height = arg0.getAdHeight() * FBReaderApp.Instance().getDensity();
+				FBReaderApp.Instance().m_adsHeight = (int)height;
+				FBReaderApp.Instance().resetWidget();
+				FBReaderApp.Instance().repaintWidget(true);
+			}
+		});
+		
+		m_adsView.setOnAdClosedListener(new OnAdClosedListener() {
+			
+			@Override
+			public void OnAdClosed(GHView arg0) {
+				FBReaderApp.Instance().m_adsHeight = 0;
+				FBReaderApp.Instance().resetWidget();
+				FBReaderApp.Instance().repaintWidget(true);
+			}
+		});
+		m_adsView.startLoadAd();
+	}
+	
+	// 清理广告条资源
+	final public void clearAds()
+	{
+		if (m_adsView != null) {
+			m_adsView.destroy();
+			m_adsView = null;
+		}
+	}
+	
+	final public void removeAds()
+	{
+		final boolean enableAds = FBReaderApp.Instance().EnableAdsOption.getValue();
+		if (!enableAds && m_adsView != null) {
+			m_adsView.setVisibility(View.GONE);
+			clearAds();
+		}
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		clearAds();
+	}
 }

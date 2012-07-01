@@ -96,8 +96,8 @@ public class BookChapterJuanAdapter extends BaseExpandableListAdapter
 			holder.title.setTextColor(0xffffa500);
 			holder.percent.setTextColor(0xffffa500);
 		} else {
-			holder.title.setTextColor(0xff000000);
-			holder.percent.setTextColor(0xff000000);
+			holder.title.setTextColor(0xffffffff);
+			holder.percent.setTextColor(0xffffffff);
 		}
 
 		BookChapter.BookChapterData data = m_chapter.getChapter(chapterIndex);
@@ -157,7 +157,7 @@ public class BookChapterJuanAdapter extends BaseExpandableListAdapter
 		if (m_currentGroup != -1 && m_currentGroup == groupPosition) {
 			holder.title.setTextColor(0xffffa500);
 		} else {
-			holder.title.setTextColor(0xff696969);
+			holder.title.setTextColor(0xffffffff);
 		}
 
 		holder.expand.setSelected(isExpanded);

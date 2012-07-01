@@ -20,27 +20,24 @@
 			android:layout_marginLeft="5.0dip"
 			 android:layout_marginTop="36.0dip">
             <TextView android:textSize="18.0sp" 
-                    android:textColor="#ff000000"
+                    android:textColor="#ffffffff"
                      android:id="@+id/book_info_title"
                       android:paddingRight="0.0dip" 
                       android:layout_width="wrap_content" 
                       android:layout_height="wrap_content"
-                      android:singleLine="false"
-                      android:text="书名：" />
+                      android:singleLine="false"/>
             <TextView android:textSize="18.0sp" 
-                    android:textColor="#ff000000" 
+                    android:textColor="#ffffffff" 
                     android:id="@+id/book_info_author" 
                     android:paddingTop="5.0dip"
                      android:layout_width="wrap_content" 
-                     android:layout_height="wrap_content"
-                      android:text="作者：" />
+                     android:layout_height="wrap_content"/>
             <TextView android:textSize="18.0sp" 
-                    android:textColor="#ff000000" 
+                    android:textColor="#ffffffff" 
                     android:id="@+id/book_info_progress"
                      android:paddingTop="5.0dip" 
                      android:layout_width="wrap_content" 
-                     android:layout_height="wrap_content"
-                      android:text="阅读进度：" />
+                     android:layout_height="wrap_content"/>
             
              <LinearLayout android:orientation="horizontal" 
             android:layout_width="fill_parent" 
@@ -52,18 +49,18 @@
 					android:layout_width="0dip"
 					android:layout_marginLeft="0.0dip"
 					android:text="开始阅读"
-					android:textColor="#ff623821"
+					android:textColor="#ffffffff"
 					android:layout_weight="1"
-					android:background="@drawable/big_normal_button_selector"
+					android:background="@drawable/black_btn_common"
 					android:layout_height="wrap_content"/>
             <Button
 					android:id="@+id/book_info_button_import"
 					android:layout_width="0dip"
 					android:layout_marginLeft="15.0dip"
 					android:text="导出书籍"
-					android:textColor="#ff623821"
+					android:textColor="#ffffffff"
 					android:layout_weight="1"
-					android:background="@drawable/big_normal_button_selector"
+					android:background="@drawable/black_btn_common"
 					android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
@@ -72,8 +69,7 @@
 			android:orientation="vertical" 
 			android:layout_width="fill_parent"
 			 android:layout_height="fill_parent">
-        <LinearLayout android:orientation="horizontal" 
-           android:id="@+id/table_view"
+        <LinearLayout android:orientation="horizontal"
             android:layout_width="fill_parent" 
             android:layout_height="50.0dip"
             android:layout_marginTop="191.0dip" 
@@ -115,7 +111,7 @@
            <TextView android:textSize="18.0sp" 
                android:paddingLeft="20.0dip" 
 		        android:paddingRight="20.0dip" 
-                    android:textColor="#ff000000" 
+                    android:textColor="#ffffffff" 
                     android:id="@+id/book_info_intro_text"
                      android:paddingTop="5.0dip" 
                      android:layout_width="wrap_content" 
@@ -123,15 +119,14 @@
                      android:scrollbars="vertical"
                      android:singleLine="false"
 					android:maxLines="12" />
+           <ImageButton
+	            android:id="@+id/book_info_button_app"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="#00000000"
+	            android:scaleType="fitCenter"
+	            android:layout_gravity="bottom|right"
+	            android:src="@drawable/more_app_selector"/>
        </FrameLayout>
     </LinearLayout>
-    <ImageButton
-            android:id="@+id/book_info_button_app"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:scaleType="fitCenter"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="bottom|right"
-            android:src="@drawable/action_down_app_selector"/></RelativeLayout>
+</RelativeLayout>

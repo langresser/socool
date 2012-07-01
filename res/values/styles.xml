@@ -33,7 +33,7 @@
     
     <style name="setting_text_for_button">
         <item name="android:textSize">16.0sp</item>
-        <item name="android:textColor">#ff333333</item>
+        <item name="android:textColor">#ffffffff</item>
         <item name="android:shadowColor">#bbffffff</item>
         <item name="android:shadowDx">0.0</item>
         <item name="android:shadowDy">-1.0</item>

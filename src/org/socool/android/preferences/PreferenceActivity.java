@@ -28,10 +28,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
@@ -51,8 +48,6 @@ import org.socool.screader.screader.*;
 
 import org.socool.android.SCReaderActivity;
 
-//import com.guohead.sdk.GHView;
-//import com.guohead.sdk.GHView.OnAdLoadedListener;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.UMFeedbackService;
 import com.umeng.update.UmengUpdateAgent;
@@ -326,10 +321,10 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		final Preference fbPreferenceRemove = new Preference(this);
 		final int currentPoints = FBReaderApp.Instance().getOfferPoints(PreferenceActivity.this);
 		fbPreferenceRemove.setTitle("去除广告");
-		fbPreferenceRemove.setSummary("消耗50积分，永久去除广告，当前积分("+currentPoints+")");
+		fbPreferenceRemove.setSummary(String.format("消耗%1d积分，永久去除广告(当前积分%2d)", FBReaderApp.REMOVE_ADS_POINT, currentPoints));
 		
 		if (enableAds) {
-//			addPreference(fbPreferenceRemove);
+			addPreference(fbPreferenceRemove);
 		}
 		
 		final Screen screenAbout = createPreferenceScreen("about");
@@ -559,43 +554,4 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		}
 
 	}
-	
-//	// 创建广告条
-// 	public GHView m_adsView = null;
-//	final public void createBannerAds()
-//	{		
-//		m_adsView =new GHView(this); 
-//		//您可以根据布局需求，对布局参数params设定具体的值 
-//		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) ;
-//		params.bottomMargin = 0;
-//		params.gravity = Gravity.BOTTOM;
-//		addContentView(m_adsView, params);
-//		m_adsView.setAdUnitId("6fc147213f9cd78e216e8e4ecfaf5352");
-//		m_adsView.startLoadAd();
-//	}
-//	
-//	// 清理广告条资源
-//	final public void clearAds()
-//	{
-//		if (m_adsView != null) {
-//			m_adsView.destroy();
-//			m_adsView = null;
-//		}
-//	}
-//	
-//	final public void removeAds()
-//	{
-////		final boolean enableAds = fbReader.EnableAdsOption.getValue();
-////		if (!enableAds && m_adsView != null) {
-////			m_adsView.setVisibility(View.GONE);
-////			clearAds();
-////		}
-//	}
-//	
-//	@Override
-//	public void onDestroy()
-//	{
-//		super.onDestroy();
-//		clearAds();
-//	}
 }
