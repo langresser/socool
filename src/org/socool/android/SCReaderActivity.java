@@ -56,7 +56,8 @@ import com.umeng.analytics.MobclickAgent;
 import android.app.Activity;
 
 public final class SCReaderActivity extends Activity {
-	public static final String BOOK_PATH_KEY = "BookPath";
+	public static final String BOOK_PATH_KEY = "org.socool.socoolreader.BookPath";
+	public static final String BOOK_OPEN_CHAPTER_INDEX = "org.socool.socoolreader.BookChapterIndex";
 
 	public static final int REQUEST_PREFERENCES = 1;
 	public static final int REQUEST_BOOK_INFO = 2;
@@ -99,6 +100,25 @@ public final class SCReaderActivity extends Activity {
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+		initActions();
+		
+		final int chapterIndex = getIntent().getIntExtra(BOOK_OPEN_CHAPTER_INDEX, -1);
+		if (chapterIndex >= 0) {
+			fbReader.openFile(fileFromIntent(getIntent()), chapterIndex);
+		} else {
+			fbReader.openFile(fileFromIntent(getIntent()), null);
+		}
+		
+		
+		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
+//		if (true) {
+			FBReaderApp.Instance().showHelpDialog(this);
+		}
+	}
+	
+	private void initActions()
+	{
+		final FBReaderApp fbReader = FBReaderApp.Instance();
 //		fbReader.addAction(ActionCode.SHOW_LIBRARY, new ShowLibraryAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_PREFERENCES, new ShowPreferencesAction(this, fbReader));
 		fbReader.addAction(ActionCode.SHOW_BOOK_INFO, new ShowBookInfoAction(this, fbReader));
@@ -124,12 +144,6 @@ public final class SCReaderActivity extends Activity {
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_PORTRAIT));
 		fbReader.addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new SetOrientationAction(this, fbReader, FBReaderApp.SCREEN_ORIENTATION_LANDSCAPE));
 	
-		fbReader.openFile(fileFromIntent(getIntent()), null);
-		
-		if (fbReader.EnableTipOption.getValue() == true && fbReader.m_hasShowTip == false) {
-//		if (true) {
-			FBReaderApp.Instance().showHelpDialog(this);
-		}
 	}
 	
 	// ¥¥Ω® ÈºÆview

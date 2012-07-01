@@ -564,6 +564,7 @@ public class ZLTextView {
 		drawFooter(context, pageIndex);
 	}
 	
+	public String m_currentChapterTitle = "";
 	public synchronized void drawFooter(ZLPaintContext context, PageIndex pageIndex)
 	{
 		final BookModel model = myModel;
@@ -644,14 +645,14 @@ public class ZLTextView {
 		context.drawString(right - infoWidth, offsetY, infoString);
 
 		// ÏÔÊ¾ÕÂ½ÚÃû³Æ
-		final String title = chapter.getChapterTitle(currentChapter);
-		final int titleWidth = context.getStringWidth(title);
+		m_currentChapterTitle = chapter.getChapterTitle(currentChapter);
+		final int titleWidth = context.getStringWidth(m_currentChapterTitle);
 		final int maxTitleWidth = right - left - infoWidth - chapterWidth - 6;
 		if (titleWidth < maxTitleWidth) {
-			context.drawString(left + chapterWidth + 3 + Math.max((maxTitleWidth - titleWidth) / 2, 0), offsetY, title);
+			context.drawString(left + chapterWidth + 3 + Math.max((maxTitleWidth - titleWidth) / 2, 0), offsetY, m_currentChapterTitle);
 		} else {
 			final int dotWidth = context.getStringWidth("...");
-			char[] charArray = title.toCharArray();
+			char[] charArray = m_currentChapterTitle.toCharArray();
 			final int len = charArray.length;
 			int currentWidth = 0;
 			for (int i = 0; i < len; ++i) {

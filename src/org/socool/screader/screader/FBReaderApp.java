@@ -146,7 +146,6 @@ public final class FBReaderApp {
 
 	public static final String NoAction = "none";
 
-	private volatile ZLTextView myView;
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 	
 	private BooksDatabase m_booksDatabase;
@@ -157,13 +156,21 @@ public final class FBReaderApp {
 		
 		m_booksDatabase = new BooksDatabase(application);
 		
-//		new FavoritesTree(myRootTree, ROOT_FAVORITES);
 		new FirstLevelTree(myRootTree, ROOT_RECENT);
-//		new FirstLevelTree(myRootTree, ROOT_BY_AUTHOR);
-//		new FirstLevelTree(myRootTree, ROOT_BY_TITLE);
-//		new FirstLevelTree(myRootTree, ROOT_BY_TAG);
-//		new FileFirstLevelTree(myRootTree, ROOT_FILE_TREE);
 
+		initActions();
+
+		BookTextView = new ZLTextView();
+	
+		// 自动检测编码格式
+		CodepageDetectorProxy detector =   CodepageDetectorProxy.getInstance();
+		detector.add(UnicodeDetector.getInstance());
+		detector.add(ASCIIDetector.getInstance());
+		detector.add(JChardetFacade.getInstance());
+	}
+	
+	private void initActions()
+	{
 		addAction(ActionCode.FIND_NEXT, new FindNextAction(this));
 		addAction(ActionCode.FIND_PREVIOUS, new FindPreviousAction(this));
 		addAction(ActionCode.CLEAR_FIND_RESULTS, new ClearFindResultsAction(this));
@@ -184,15 +191,6 @@ public final class FBReaderApp {
 		
 		addAction(ActionCode.VOLUME_KEY_SCROLL_FORWARD, new VolumeKeyTurnPageAction(this, true));
 		addAction(ActionCode.VOLUME_KEY_SCROLL_BACK, new VolumeKeyTurnPageAction(this, false));
-
-		BookTextView = new ZLTextView();
-
-		setView(BookTextView);
-		
-		CodepageDetectorProxy detector =   CodepageDetectorProxy.getInstance();
-		detector.add(UnicodeDetector.getInstance());
-		detector.add(ASCIIDetector.getInstance());
-		detector.add(JChardetFacade.getInstance());
 	}
 	
 	public BooksDatabase getDatabase()
@@ -202,19 +200,11 @@ public final class FBReaderApp {
 
 	public void openBook(Book book, final Bookmark bookmark, final Runnable postAction) {
 		if (book == null) {
-			if (Model == null) {
-				book = getRecentBook();
-				if (book == null) {
-//					book = Book.getByFile(getHelpFile());
-					return;
-				}
-			}
-			if (book == null) {
-				return;
-			}
+			return;
 		}
+
 		if (Model != null) {
-			if (bookmark == null & book.m_filePath.equals(Model.Book.m_filePath)) {
+			if (bookmark == null && book.m_filePath.equals(Model.Book.m_filePath)) {
 				return;
 			}
 		}
@@ -429,7 +419,6 @@ public final class FBReaderApp {
 	
 	public int getFooterHeight()
 	{
-		// TODO display
 		if (FooterHeightOption == null) {
 			final int defaultHeight = (int)(12 * getDensity());
 			FooterHeightOption = new ZLIntegerRangeOption("Options", "footerheight", 0, 40, defaultHeight);
@@ -445,7 +434,6 @@ public final class FBReaderApp {
 			if (label != null) {
 				if (label.ModelId == null) {
 					BookTextView.gotoPosition(label.ParagraphIndex, 0, 0);
-					setView(BookTextView);
 				}
 				resetWidget();
 			}
@@ -457,39 +445,40 @@ public final class FBReaderApp {
 	}
 
 	synchronized void openBookInternal(Book book, Bookmark bookmark) {
-		if (book != null) {
-			onViewChanged();
-
-			if (Model != null) {
-				Model.Book.storePosition(BookTextView.getStartCursor());
-			}
-			BookTextView.setModel(null);
-			clearTextCaches();
-
-			Model = null;
-			System.gc();
-			System.gc();
-
-			Model = BookModel.createModel(book);
-			BookTextView.setModel(Model);
-			
-			if (bookmark == null) {
-				setView(BookTextView);
-				
-				final ZLTextPosition position = book.getStoredPosition();
-				if (position != null) {
-					BookTextView.gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
-				}
-
-				resetWidget();
-				repaintWidget(true);
-			} else {
-				gotoBookmark(bookmark);
-			}
-			
-			addBookToRecentList(book);
-			setTitle(book.authors().toString());
+		if (book == null) {
+			return;
 		}
+
+		onViewChanged();
+
+		if (Model != null) {
+			Model.Book.storePosition(BookTextView.getStartCursor(),
+					BookTextView.m_currentChapterTitle, BookTextView.getCurrentPercent());
+		}
+		BookTextView.setModel(null);
+		clearTextCaches();
+
+		Model = null;
+		System.gc();
+
+		Model = BookModel.createModel(book, true);
+		BookTextView.setModel(Model);
+		
+		if (bookmark == null) {
+			final BookState state = book.getStoredPosition();
+			if (state != null) {
+				final ZLTextPosition position = state.m_textPosition;
+				BookTextView.gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
+			}
+
+			resetWidget();
+			repaintWidget(true);
+		} else {
+			gotoBookmark(bookmark);
+		}
+		
+		addBookToRecentList(book);
+		setTitle(book.authors().toString());
 	}
 
 	public void gotoBookmark(Bookmark bookmark) {
@@ -497,14 +486,9 @@ public final class FBReaderApp {
 		final ZLTextPosition position = bookmark.m_posCurrentPage;
 		if (modelId == null & position != null) {
 			BookTextView.gotoPosition(position.getParagraphIndex(), position.getElementIndex(), position.getCharIndex());
-			setView(BookTextView);
 			resetWidget();
 			repaintWidget(true);
 		}
-	}
-
-	public void showBookTextView() {
-		setView(BookTextView);
 	}
 
 	private Book createBookForFile(ZLFile file) {
@@ -529,10 +513,40 @@ public final class FBReaderApp {
 	public void openFile(ZLFile file, Runnable postAction) {
 		openBook(createBookForFile(file), null, postAction);
 	}
+	
+	public void openFile(ZLFile file, int chapterIndex)
+	{
+		final Book book = createBookForFile(file);
+		if (book == null) {
+			return;
+		}
+
+		onViewChanged();
+
+		if (Model != null) {
+			Model.Book.storePosition(BookTextView.getStartCursor(),
+					BookTextView.m_currentChapterTitle, BookTextView.getCurrentPercent());
+		}
+		BookTextView.setModel(null);
+		clearTextCaches();
+
+		Model = null;
+		System.gc();
+
+		Model = BookModel.createModel(book, true);
+		BookTextView.setModel(Model);
+		
+		BookTextView.gotoChapter(chapterIndex);
+		repaintWidget(true);
+		
+		addBookToRecentList(book);
+		setTitle(book.authors().toString());
+	}
 
 	public void onWindowClosing() {
 		if (Model != null && BookTextView != null) {
-			Model.Book.storePosition(BookTextView.getStartCursor());
+			Model.Book.storePosition(BookTextView.getStartCursor(),
+					BookTextView.m_currentChapterTitle, BookTextView.getCurrentPercent());
 		}
 	}
 
@@ -575,15 +589,8 @@ public final class FBReaderApp {
 		return ourInstance;
 	}
 
-	protected final void setView(ZLTextView view) {
-		if (view != null) {
-			myView = view;
-			onViewChanged();
-		}
-	}
-
 	public final ZLTextView getCurrentView() {
-		return myView;
+		return BookTextView;
 	}
 
 	public final void onRepaintFinished() {
@@ -1818,40 +1825,36 @@ public final class FBReaderApp {
 		dialog.show();
 	}
 	
-	public void importBook(final Context context, String pathBook, String pathTo, String destFile)
+	public BookChapter loadChapter(final String pathBook)
 	{
-		String sdStatus = Environment.getExternalStorageState();
-	    if(!sdStatus.equals(Environment.MEDIA_MOUNTED)) {  
-	        UIUtil.showMessageText(context, "发生错误，SD卡未找到。");
-	        return;  
-	    }
+		final BookChapter chapter = new BookChapter();
 
-	    try {
-	    	// 读取书籍信息
+		try {
+			// 读取书籍信息
 			InputStream input = FBReaderApp.Instance().getBookFile(pathBook + "/chapter.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(input, "gbk"));
 			
 			String line = "";
-
+	
 			int paraCount = 0;
 			int textSize = 0;
 			int currentJuanIndex = -1;
 			int currentChapterIndex = -1;
-			final BookChapter chapter = new BookChapter();
+			
 			BookChapter.JuanData juanData = null;
-
+	
 			while ((line = reader.readLine()) != null) {
 				if (line.charAt(0) == 'j') {
 					if (juanData != null) {
 						chapter.m_juanData.add(juanData);
 					}
-
+	
 					juanData = new BookChapter.JuanData();
 					juanData.m_juanTitle = line.substring(1);
 					++currentJuanIndex;
 				} else {
 					++currentChapterIndex;
-
+	
 					// 加1是补上隐藏的段落终结符
 					final int firstA = line.indexOf("@@");
 					final int count = Integer.parseInt(line.substring(0, firstA)) + 1;
@@ -1876,6 +1879,26 @@ public final class FBReaderApp {
 				chapter.m_juanData.add(juanData);
 			}
 			
+			chapter.m_allParagraphNumber = paraCount;
+			chapter.m_allTextSize = textSize;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return chapter;
+	}
+	
+	public void importBook(final Context context, String pathBook, String pathTo, String destFile)
+	{
+		String sdStatus = Environment.getExternalStorageState();
+	    if(!sdStatus.equals(Environment.MEDIA_MOUNTED)) {  
+	        UIUtil.showMessageText(context, "发生错误，SD卡未找到。");
+	        return;  
+	    }
+
+	    try {
+	    	final BookChapter chapter = loadChapter(pathBook);
+			
 			// 拷贝书籍内容
 	        File path = new File(pathTo);  
 	        File file = new File(pathTo + "/" + destFile);  
@@ -1889,7 +1912,7 @@ public final class FBReaderApp {
 
 	        FileOutputStream outputStream = new FileOutputStream(file);  
 
-	        currentJuanIndex = -1;
+	        int currentJuanIndex = -1;
 	        final int bufferSize = 1024 * 500;
 	        byte[] buffer = new byte[bufferSize];
 	        final int chapterCount = chapter.m_chapterData.size();

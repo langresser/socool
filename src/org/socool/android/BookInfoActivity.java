@@ -36,6 +36,7 @@ import org.socool.socoolreader.mcnxs.R;
 import org.socool.android.util.UIUtil;
 import org.socool.screader.Paths;
 import org.socool.screader.screader.FBReaderApp;
+import org.socool.screader.bookmodel.BookChapter;
 import org.socool.screader.library.*;
 import org.socool.zlibrary.text.ZLTextPosition;
 
@@ -46,8 +47,14 @@ public class BookInfoActivity extends Activity {
 	public static final String CURRENT_BOOK_PATH_KEY = "CurrentBookPath";
 	private String m_currentBookPath;
 	ExpandableListView m_chapter;
+	BookChapterJuanAdapter m_adapter;
+	TextView m_bookIntro;
+	TextView m_bookProgress;
 	Button m_btnChapter;
 	Button m_btnIntro;
+	
+	BookChapter m_bookChapter;
+	Book m_currentBook;
 	
 	static final int BOOK_INFO_CHAPTER = 0;
 	static final int BOOK_INFO_INTRO = 1;
@@ -77,7 +84,7 @@ public class BookInfoActivity extends Activity {
 		setContentView(R.layout.book_info);
 		
 		final Button btnOpen = (Button)findViewById(R.id.book_info_button_open);
-		final Button btnApp = (Button)findViewById(R.id.book_info_button_app);
+		final ImageButton btnApp = (ImageButton)findViewById(R.id.book_info_button_app);
 		final Button btnImport = (Button)findViewById(R.id.book_info_button_import);
 		
 		View.OnClickListener listener = new View.OnClickListener() {
@@ -161,10 +168,10 @@ public class BookInfoActivity extends Activity {
 		btnApp.setOnClickListener(listener);
 		btnImport.setOnClickListener(listener);
 		
-		final Book book = Book.getByPath(m_currentBookPath);
+		m_currentBook = Book.getByPath(m_currentBookPath);
 		
-		ZLTextPosition position = book.getStoredPosition();
-		if (position != null) {
+		BookState state = m_currentBook.getStoredPosition();
+		if (state != null) {
 			startActivity(
 					new Intent(getApplicationContext(), SCReaderActivity.class)
 						.setAction(Intent.ACTION_VIEW)
@@ -173,13 +180,40 @@ public class BookInfoActivity extends Activity {
 				);
 		}
 		
+		m_bookChapter = FBReaderApp.Instance().loadChapter(m_currentBookPath);
 		m_chapter = (ExpandableListView)findViewById(R.id.book_info_chapterjuan);
-		BookChapterJuanAdapter adapter = new BookChapterJuanAdapter(this);
-		m_chapter.setAdapter(adapter);
-		m_chapter.setOnChildClickListener(adapter);
+		m_bookIntro = (TextView)findViewById(R.id.book_info_intro_text);
 		
-		m_chapter.expandGroup(adapter.m_currentGroup);
-		m_chapter.setSelectedGroup(adapter.m_currentGroup);
+		TextView bookInfoTitle = (TextView)findViewById(R.id.book_info_title);
+		TextView bookInfoAuthor = (TextView)findViewById(R.id.book_info_author);
+		m_bookProgress = (TextView)findViewById(R.id.book_info_progress);
+		bookInfoTitle.setText("书名：" + m_currentBook.myTitle);
+		bookInfoAuthor.setText("作者：" + m_currentBook.m_bookAuthor);
+		
+		m_bookIntro.setText(m_currentBook.m_bookIntro);
+		
+		int chapterIndex = -1;
+		if (state != null) {
+			final int paragraphIndex = state.m_textPosition.getParagraphIndex();
+			chapterIndex = m_bookChapter.getChapterIndexByParagraph(paragraphIndex);
+			btnOpen.setText("继续阅读");
+			m_bookProgress.setText(String.format("阅读进度：%1$.2f%%", state.m_lastReadPercent / 100.0));
+		} else {
+			btnOpen.setText("开始阅读");
+			m_bookProgress.setText("阅读进度：0%");
+		}
+		
+		m_adapter = new BookChapterJuanAdapter(this, m_bookChapter, chapterIndex, m_currentBookPath);
+		m_chapter.setAdapter(m_adapter);
+		m_chapter.setOnChildClickListener(m_adapter);
+		
+		if (m_adapter.m_currentGroup != -1) {
+			m_chapter.expandGroup(m_adapter.m_currentGroup);
+			m_chapter.setSelectedGroup(m_adapter.m_currentGroup);
+		} else {
+			m_chapter.expandGroup(0);
+			m_chapter.setSelectedGroup(0);
+		}
 		
 		m_btnChapter = (Button)findViewById(R.id.book_info_btn_chapter);
 		m_btnIntro = (Button)findViewById(R.id.book_info_btn_intro);
@@ -196,7 +230,11 @@ public class BookInfoActivity extends Activity {
 				gotoPage(BOOK_INFO_INTRO);
 			}
 		});
+		
+		gotoPage(BOOK_INFO_CHAPTER);
 	}
+	
+	
 	
 	public void gotoPage(int page)
 	{
@@ -204,10 +242,12 @@ public class BookInfoActivity extends Activity {
 			m_btnChapter.setSelected(true);
 			m_btnIntro.setSelected(false);
 			m_chapter.setVisibility(View.VISIBLE);
+			m_bookIntro.setVisibility(View.INVISIBLE);
 		} else if (page == BOOK_INFO_INTRO) {
 			m_btnChapter.setSelected(false);
 			m_btnIntro.setSelected(true);
 			m_chapter.setVisibility(View.INVISIBLE);
+			m_bookIntro.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -219,6 +259,20 @@ public class BookInfoActivity extends Activity {
 	
 	public void onResume() {
 	    super.onResume();
+	    
+	    BookState state = m_currentBook.getStoredPosition();
+	    if (state != null) {
+	    	final int paragraphIndex = state.m_textPosition.getParagraphIndex();
+			final int chapterIndex = m_bookChapter.getChapterIndexByParagraph(paragraphIndex);
+			
+			if (m_adapter.m_currentChapter != chapterIndex) {
+				m_adapter.setCurrentChapter(chapterIndex);
+				m_chapter.expandGroup(m_adapter.m_currentGroup);
+				m_chapter.setSelectedGroup(m_adapter.m_currentGroup);
+				m_adapter.notifyDataSetChanged();
+			}
+	    }
+		
 	    MobclickAgent.onResume(this);
 	}
 	public void onPause() {

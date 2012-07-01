@@ -4,7 +4,7 @@
 	android:id="@+id/book_info_root"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:background="@drawable/book_bg">
+	android:background="@drawable/idxbg">
 	    <LinearLayout android:orientation="horizontal" 
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent">
@@ -20,7 +20,7 @@
 			android:layout_marginLeft="5.0dip"
 			 android:layout_marginTop="36.0dip">
             <TextView android:textSize="20.0sp" 
-                    android:textColor="#eefddba5"
+                    android:textColor="#ff000000"
                      android:id="@+id/book_info_title"
                       android:paddingRight="0.0dip" 
                       android:layout_width="wrap_content" 
@@ -28,14 +28,14 @@
                       android:singleLine="false"
                       android:text="书名：" />
             <TextView android:textSize="20.0sp" 
-                    android:textColor="#eefddba5" 
+                    android:textColor="#ff000000" 
                     android:id="@+id/book_info_author" 
                     android:paddingTop="5.0dip"
                      android:layout_width="wrap_content" 
                      android:layout_height="wrap_content"
                       android:text="作者：" />
             <TextView android:textSize="20.0sp" 
-                    android:textColor="#eefddba5" 
+                    android:textColor="#ff000000" 
                     android:id="@+id/book_info_progress"
                      android:paddingTop="5.0dip" 
                      android:layout_width="wrap_content" 
@@ -99,7 +99,7 @@
                    style="@style/setting_text_for_button" />
        </LinearLayout>
        <FrameLayout
-           android:layout_width="wrap_content"
+           android:layout_width="fill_parent"
 		   android:layout_height="wrap_content">
            <ExpandableListView android:id="@+id/book_info_chapterjuan" 
 		        android:paddingLeft="5.0dip" 
@@ -115,7 +115,7 @@
            <TextView android:textSize="20.0sp" 
                android:paddingLeft="20.0dip" 
 		        android:paddingRight="20.0dip" 
-                    android:textColor="#eefddba5" 
+                    android:textColor="#ff000000" 
                     android:id="@+id/book_info_intro_text"
                      android:paddingTop="5.0dip" 
                      android:layout_width="wrap_content" 

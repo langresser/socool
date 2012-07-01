@@ -71,6 +71,13 @@ public class TxtChapterPlugin extends FormatPlugin {
 	public void readPercent(double percent)					// 读取文件百分比（部分读取）
 	{
 	}
+	
+	@Override
+	public void readBookData(BookModel model)
+	{
+		model.m_readType = BookModel.READ_TYPE_CHAPTER;
+		m_reader.setModel(model);
+	}
 
 	@Override
 	public void readModel(BookModel model) {

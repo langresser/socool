@@ -85,19 +85,29 @@ public class BookModel {
 	public static final byte ALIGN_JUSTIFY = 4;
 	public static final byte ALIGN_LINESTART = 5; // left for LTR languages and right for RTL
 	
-	public static BookModel createModel(Book book) {
+	public static BookModel createModel(Book book, boolean loadBook) {
 		final FormatPlugin plugin = book.getPlugin();
 		final BookModel model = new BookModel(book);
 
-//		Debug.startMethodTracing("socoolreader.trace");//calc为文件生成名
-		plugin.readModel(model);
-//		Debug.stopMethodTracing();
+		if (loadBook) {
+//			Debug.startMethodTracing("socoolreader.trace");//calc为文件生成名
+			plugin.readModel(model);
+//			Debug.stopMethodTracing();
+		} else {
+			plugin.readBookData(model);
+		}
+
 		return model;
 	}
 
 	protected BookModel(Book book) {
 		Book = book;
 		myId = null;
+	}
+	
+	public void readBookData()
+	{
+		
 	}
 	
 	public Book Book = null;
