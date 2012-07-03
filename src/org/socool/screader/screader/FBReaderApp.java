@@ -34,7 +34,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
-import net.youmi.android.appoffers.YoumiOffersManager;
 
 import org.socool.zlibrary.filesystem.ZLFile;
 import org.socool.zlibrary.filesystem.ZLPhysicalFile;
@@ -1712,7 +1711,6 @@ public final class FBReaderApp {
 //			AppConnect.getInstance("7281ebff5a5dae5d199636a7b6c8ecc2","appChina", context);
 			
 			// 有米
-			YoumiOffersManager.init(context, "8293ee0143c779e7", "53af3575317e0e36");
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "initOfferWall error");
@@ -1736,7 +1734,6 @@ public final class FBReaderApp {
 		try {
 			MobclickAgent.onEvent(context, "moreApp");
 //			AppConnect.getInstance(context).showOffers(context);
-			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_APPLIST);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "showOfferWall error");
@@ -1807,8 +1804,7 @@ public final class FBReaderApp {
 	{
 		final String m_tips = 
 				"    点击屏幕中部可以显示系统菜单，通过设置选项可以进行更多的个性化设置。\n\n"+
-				"    点击屏幕两侧或者拖动均可实现翻页，长按屏幕文字可以进行文本选择。\n\n" +
-				"    如果您喜欢本应用，可以通过下载或打开精品推荐中您所喜欢的应用的方式来支持我们。有您的支持，我们可以为您提供出更多更好的精品电子书。"; 
+				"    点击屏幕两侧或者拖动均可实现翻页，长按屏幕文字可以进行文本选择。\n\n";
 		Dialog dialog = new AlertDialog.Builder(context).setTitle("帮助信息").setMessage(m_tips)
 				.setPositiveButton("确定",
 						new DialogInterface.OnClickListener() {
