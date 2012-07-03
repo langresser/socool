@@ -29,8 +29,14 @@ def load_config():
 
 
 def is_juan_title(line, file):
-    if len(line) > 30:
+    if len(line) > 40:
         return False;
+    if line.find('。') != -1:
+        return False;
+    #如果是章节名，则不是卷名
+    if is_chapter_title(line, file):
+        return False;
+
     data = g_config_juan['公共'];
     for each in data:
         if re.search(each, line):
@@ -44,8 +50,12 @@ def is_juan_title(line, file):
 
     return False;
 def is_chapter_title(line, file):
-    if len(line) > 30:
+    if len(line) > 40:
         return False;
+    
+    if line.find('。') != -1:
+        return False;
+    
     data = g_config_zhang['公共'];
     for each in data:
         if re.search(each, line):
@@ -60,11 +70,13 @@ def is_chapter_title(line, file):
     return False;
 
 def get_juan_chapter(each):
-    print(each[0])
     title_line = each[0].strip().split('@@');
 
     juan = title_line[0];
     zhang = title_line[1];
+ #去除章节名称中的卷名
+    zhang=zhang.replace(juan, "");
+    zhang=zhang.strip();
     return juan,zhang
 def split_file(file):
     print(file);
@@ -93,7 +105,7 @@ def split_file(file):
                 all_text.append(data_text);
 
             data_text = [];
-            print(current_juan + '@@' + line)
+ #           print(current_juan + '@@' + line)
             data_text.append(current_juan + '@@' + line);
             continue;
 
@@ -126,19 +138,12 @@ def split_file(file):
             textLen = len(eee);
             fpwdata.write('{0}\n'.format(textLen));
 
-            if textLen >=512:
-                print(eee);
-
-            if textLen >= 255:
+            leftData = textLen
+            while leftData >= 255:
                 paragra_data.append(255);
-                if textLen - 255 >= 255:
-                    paragra_data.append(255);
-                    paragra_data.append(textLen - 255 - 255);
-                else:
-                    paragra_data.append(textLen - 255);
-            else:
-                paragra_data.append(textLen);
-            
+                leftData -= 255;
+            paragra_data.append(leftData);
+
             size += textLen;
             paragraph += 1;
 
@@ -164,7 +169,7 @@ def split_file(file):
 
 
 load_config();
-print(g_config_juan);
 file_list = glob.glob('*.TXT')
 for file in file_list:
     split_file(file);
+
