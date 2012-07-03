@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.AbsListView;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.graphics.Paint;
 import org.socool.android.covers.CoverManager;
 import org.socool.screader.screader.FBReaderApp;
 import org.socool.screader.library.Book;
+import org.socool.screader.library.BookState;
 import org.socool.zlibrary.image.ZLImage;
 import org.socool.zlibrary.image.ZLImageData;
 import org.socool.zlibrary.image.ZLImageManager;
@@ -83,63 +85,34 @@ public class BookshelfListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		BookViewHolder holder = null;
 		if (convertView == null) {
-			convertView = (BubbleTextView) mInflater.inflate(R.layout.bookshelflistitem, parent, false);
+			convertView = (LinearLayout) mInflater.inflate(R.layout.bookshelflistitem, parent, false);
 			holder = new BookViewHolder();
+			holder.title = (TextView)convertView.findViewById(R.id.bookshelf_title);
+			holder.author = (TextView)convertView.findViewById(R.id.bookshelf_author);
+			holder.cover = (ImageView)convertView.findViewById(R.id.bookshelf_cover);
+			holder.lastRead = (TextView)convertView.findViewById(R.id.bookshelf_last_read);
+			holder.newRead = (TextView)convertView.findViewById(R.id.bookshelf_new_chapter);
 			convertView.setTag(holder);
 		} else {
 			holder = (BookViewHolder)convertView.getTag();
 		}
         
-        holder.title = (BubbleTextView) convertView;
-        String bookId = "";
-        holder.bookId = bookId;
-
-        holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, mDefaultCoverSet[position % 4]);
-        Book book = mActivity.m_bookList.get(position);
-        holder.title.setText(book.myTitle);
-		return convertView;
-	}
-	
-	void updateBookButton(ImageView button, int index)
-	{
-	  	button.setTag(index);
-	  	
-	  	if (index >= mActivity.m_bookList.size()) {
-	  		// 先清空原button书籍
-	      	button.setVisibility(View.GONE);
-	  		button.setImageDrawable(null);
-	  		return;
-	  	}
-	
-	  	Book book = mActivity.m_bookList.get(index);
-
-		final ZLImage image = book.getCover();
-
-		if (image == null) {
-			return;
-		}
-
-		if (image instanceof ZLLoadableImage) {
-			final ZLLoadableImage loadableImage = (ZLLoadableImage)image;
-			if (!loadableImage.isSynchronized()) {
-				loadableImage.synchronize();
-			}
-		}
-		final ZLImageData data = ZLImageManager.Instance().getImageData(image);
+		Book book = (Book)getItem(position);
 		
-		if (data == null) {
-			return;
-		}
+        holder.title.setText(book.myTitle);
+        holder.author.setText(book.m_bookAuthor);
 
-		button.measure(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		int width = button.getWidth();
-		int height = button.getHeight();
-		final Bitmap coverBitmap = data.getBitmap(width, height);
-		if (coverBitmap == null) {
-			return;
-		}
+        holder.cover.setImageResource(book.m_coverId);
+        
+        BookState bookstate = book.getStoredPosition();
+        if (bookstate == null) {
+        	holder.lastRead.setText("未阅读");
+        	holder.newRead.setText("阅读进度： 0%");
+        } else {
+        	holder.lastRead.setText("上次阅读： " + bookstate.m_lastReadChapter);
+        	holder.newRead.setText(String.format("阅读进度： %1$.2f%%", bookstate.m_lastReadPercent / 100.0));
+        }
 
-		button.setVisibility(View.VISIBLE);
-		button.setImageBitmap(coverBitmap);
+		return convertView;
 	}
 }

@@ -97,7 +97,7 @@ public class Book {
 	public String m_bookAuthor = "";		// 作者名字
 	public String m_bookAuthorIntro = "";	// 作者简介
 	public String m_bookIntro = "";			// 书籍简介
-	public int m_coverId = 0;
+	public int m_coverId = 0;				// 封面resid
 
 	public volatile long myId;
 
