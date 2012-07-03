@@ -84,6 +84,7 @@ public class BookmarksActivity extends Activity {
 		m_btnBookmark.setOnClickListener(listener);
 		m_btnComment.setOnClickListener(listener);
 		m_btnApp.setOnClickListener(listener);
+		m_btnApp.setVisibility(View.GONE);
 
 		gotoPage(PAGE_CHAPTER);
 	}

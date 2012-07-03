@@ -324,7 +324,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 		fbPreferenceRemove.setSummary(String.format("消耗%1d积分，永久去除广告(当前积分%2d)", FBReaderApp.REMOVE_ADS_POINT, currentPoints));
 		
 		if (enableAds) {
-			addPreference(fbPreferenceRemove);
+//			addPreference(fbPreferenceRemove);
 		}
 		
 		final Screen screenAbout = createPreferenceScreen("about");

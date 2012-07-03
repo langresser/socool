@@ -34,9 +34,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
-import net.youmi.android.appoffers.YoumiOffersManager;
-import net.youmi.android.appoffers.YoumiPointsManager;
-
 import org.socool.zlibrary.filesystem.ZLFile;
 import org.socool.zlibrary.filesystem.ZLPhysicalFile;
 import org.socool.zlibrary.filesystem.ZLResource;
@@ -1707,18 +1704,6 @@ public final class FBReaderApp {
 	public boolean m_initOfferWall = false;
 	public void initOfferWall(Context context)
 	{
-		// ÍòÆÕ
-		try {
-//			AppConnect.getInstance(context);
-//			AppConnect.getInstance("7281ebff5a5dae5d199636a7b6c8ecc2","appChina", context);
-			
-			// ÓÐÃ×
-			YoumiOffersManager.init(context, YoumiId, YoumiPassword);
-		} catch (Exception e) {
-			e.printStackTrace();
-			MobclickAgent.reportError(context, "initOfferWall error");
-		}
-		
 		
 	}
 	
@@ -1736,7 +1721,6 @@ public final class FBReaderApp {
 		
 		try {
 			MobclickAgent.onEvent(context, "moreApp", "app");
-			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARDLESS_FEATUREDAPP);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "showApp error");
@@ -1753,7 +1737,6 @@ public final class FBReaderApp {
 		try {
 			MobclickAgent.onEvent(context, "moreApp", "wall");
 //			AppConnect.getInstance(context).showOffers(context);
-			YoumiOffersManager.showOffers(context, YoumiOffersManager.TYPE_REWARD_OFFERS);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MobclickAgent.reportError(context, "showOfferWall error");
@@ -1775,12 +1758,11 @@ public final class FBReaderApp {
 	
 	public int getOfferPoints(Context context)
 	{
-		return YoumiPointsManager.queryPoints(context);
+		return 0;
 	}
 	
 	public void costOfferPoints(Context context, int points)
 	{
-		YoumiPointsManager.spendPoints(context, points);
 	}
 	
 	public void removeAds(final Context context)
@@ -1985,8 +1967,8 @@ public final class FBReaderApp {
 	    }  
 	}
 	
-	public final static int REMOVE_ADS_POINT = 50;
-	public final static int IMPORT_BOOK_POINT = 10;
+	public final static int REMOVE_ADS_POINT = 0;
+	public final static int IMPORT_BOOK_POINT = 0;
 	public static final String GHeadId = "80d560a1d422636b8dff641f05e78d9f";
 	public static final String YoumiId = "ad320352e44e9759";
 	public static final String YoumiPassword = "15489cde3513fe64";
